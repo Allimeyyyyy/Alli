@@ -1,0 +1,952 @@
+<title>Grass Lawn Mowing RAC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#eef1ec; --card:#ffffff; --card-2:#f6f8f4;
+    --ink:#1a2420; --ink-soft:#33403a; --muted:#5c6b63; --faint:#84968c;
+    --muted-2:#71827a;
+    --line:#dde3dc; --line-strong:#c7d1c6;
+    --accent:#1d4ed8; --accent-soft:#2563eb; --accent-wash:#e8effe;
+    --grass:#3f7d3a; --grass-dk:#2f5f2c; --grass-lt:#5a9a54;
+    --green:#15803d; --green-chip-bg:#dcfce7; --green-chip-ink:#14622f; --green-cell:#e7f6ea;
+    --amber:#b45309; --amber-chip-bg:#fdecc8; --amber-chip-ink:#8a4b06;
+    --red:#b91c1c; --red-chip-bg:#fde2e0; --red-chip-ink:#8f1b17;
+    --blue-chip-bg:#e2ecfe; --blue-chip-ink:#1a49b8;
+    --grey-chip-bg:#e7ece7; --grey-chip-ink:#4a574f;
+    --shadow:0 1px 2px rgba(20,40,30,.05),0 6px 20px rgba(20,40,30,.06);
+    --shadow-lg:0 2px 6px rgba(20,40,30,.06),0 18px 44px rgba(20,40,30,.10);
+    --radius:16px; --radius-sm:10px;
+    --maxw:1060px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,system-ui,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  :root:not([data-theme="light"]){}
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#10140d; --card:#191e13; --card-2:#212818;
+      --ink:#e9efe3; --ink-soft:#cdd6c6; --muted:#9bab97; --muted-2:#8b9c87;
+      --line:#2b3422; --line-strong:#3a4530;
+      --accent:#6f9dff; --accent-soft:#89b0ff; --accent-wash:#1a2540;
+      --grass:#6ab35f; --grass-dk:#3d6d37; --grass-lt:#8fce85;
+      --green:#5fd07f; --green-chip-bg:#173726; --green-chip-ink:#8fe6a8; --green-cell:#16301f;
+      --amber:#e6a13c; --amber-chip-bg:#3a2c11; --amber-chip-ink:#f0c079;
+      --red:#f0857c; --red-chip-bg:#3a1815; --red-chip-ink:#f4a89f;
+      --blue-chip-bg:#182642; --blue-chip-ink:#9cbcff;
+      --grey-chip-bg:#232a1c; --grey-chip-ink:#a9b8a3;
+      --accent-wash:#17233d;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35);
+      --shadow-lg:0 2px 6px rgba(0,0,0,.45),0 18px 44px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10140d; --card:#191e13; --card-2:#212818;
+    --ink:#e9efe3; --ink-soft:#cdd6c6; --muted:#9bab97; --muted-2:#8b9c87;
+    --line:#2b3422; --line-strong:#3a4530;
+    --accent:#6f9dff; --accent-soft:#89b0ff; --accent-wash:#17233d;
+    --grass:#6ab35f; --grass-dk:#3d6d37; --grass-lt:#8fce85;
+    --green:#5fd07f; --green-chip-bg:#173726; --green-chip-ink:#8fe6a8; --green-cell:#16301f;
+    --amber:#e6a13c; --amber-chip-bg:#3a2c11; --amber-chip-ink:#f0c079;
+    --red:#f0857c; --red-chip-bg:#3a1815; --red-chip-ink:#f4a89f;
+    --blue-chip-bg:#182642; --blue-chip-ink:#9cbcff;
+    --grey-chip-bg:#232a1c; --grey-chip-ink:#a9b8a3;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.45),0 18px 44px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.62;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px 96px}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:30px 32px; margin:22px 0;
+  }
+  section{scroll-margin-top:16px}
+  h1,h2,h3,h4{line-height:1.2; text-wrap:balance; margin:0}
+  h2{font-size:1.55rem; letter-spacing:-.01em; color:var(--ink)}
+  h3{font-size:1.16rem; letter-spacing:-.005em; margin:26px 0 8px}
+  h4{font-size:1rem; margin:18px 0 6px}
+  p{margin:12px 0}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  strong{color:var(--ink)}
+  .eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 6px}
+  .lead{font-size:1.06rem; color:var(--ink-soft)}
+  .muted{color:var(--muted)}
+  .small{font-size:.86rem}
+  .tnum{font-variant-numeric:tabular-nums}
+  hr{border:0; border-top:1px solid var(--line); margin:26px 0}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden; border-radius:var(--radius);
+    box-shadow:var(--shadow-lg); margin:22px 0 10px; border:1px solid var(--line);
+    background:
+      linear-gradient(180deg, rgba(10,30,12,.06), rgba(10,30,12,.44)),
+      repeating-linear-gradient(115deg, var(--grass) 0 46px, var(--grass-dk) 46px 92px);
+    min-height:300px; display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(115deg, rgba(255,255,255,.06) 0 46px, rgba(0,0,0,.05) 46px 92px);
+    mix-blend-mode:overlay; pointer-events:none;
+  }
+  .hero .mower{position:absolute; right:26px; top:26px; width:78px; height:78px; opacity:.9}
+  .hero-body{position:relative; padding:30px 34px 28px; color:#f4faf2}
+  .hero .kicker{font-size:.74rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#d4eccf; margin:0 0 10px}
+  .hero h1{font-family:var(--serif); font-size:2.9rem; font-weight:700; letter-spacing:-.02em; color:#fff; text-shadow:0 2px 18px rgba(0,0,0,.35)}
+  .hero .sub{margin:12px 0 2px; max-width:60ch; color:#eef6ec; font-size:1.04rem; text-shadow:0 1px 10px rgba(0,0,0,.3)}
+  .hero .meta{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px 10px}
+  .hero .htag{background:rgba(8,24,10,.42); border:1px solid rgba(255,255,255,.2); color:#eef6ec; font-size:.8rem; padding:4px 11px; border-radius:999px; backdrop-filter:blur(2px)}
+
+  /* ---------- Chips ---------- */
+  .chip{display:inline-flex; align-items:center; gap:5px; font-size:.74rem; font-weight:700;
+    letter-spacing:.02em; padding:2px 9px; border-radius:999px; white-space:nowrap; line-height:1.5;
+    vertical-align:middle;}
+  .chip.green{background:var(--green-chip-bg); color:var(--green-chip-ink)}
+  .chip.amber{background:var(--amber-chip-bg); color:var(--amber-chip-ink)}
+  .chip.red{background:var(--red-chip-bg); color:var(--red-chip-ink)}
+  .chip.blue{background:var(--blue-chip-bg); color:var(--blue-chip-ink)}
+  .chip.grey{background:var(--grey-chip-bg); color:var(--grey-chip-ink)}
+  .chip .dot{width:6px; height:6px; border-radius:50%; background:currentColor}
+
+  /* ---------- Confidentiality banner ---------- */
+  .banner{
+    background:var(--card-2); border:1px solid var(--line-strong); border-left:4px solid var(--amber);
+    border-radius:var(--radius-sm); padding:14px 18px; margin:22px 0; font-size:.9rem; color:var(--ink-soft);
+  }
+  .banner b{color:var(--ink)}
+
+  /* ---------- TOC ---------- */
+  .toc{columns:2; column-gap:34px}
+  .toc ol{margin:0; padding-left:20px}
+  .toc li{margin:5px 0; break-inside:avoid}
+  @media(max-width:640px){.toc{columns:1}}
+
+  /* ---------- Verdict box ---------- */
+  .verdict{
+    background:linear-gradient(180deg,var(--green-cell),var(--card));
+    border:1px solid var(--green); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:26px 30px; margin:22px 0;
+  }
+  .verdict .pick{font-family:var(--serif); font-size:1.7rem; color:var(--ink); margin:6px 0 4px; letter-spacing:-.01em}
+  .verdict .row{display:flex; flex-wrap:wrap; gap:22px; margin-top:14px}
+  .verdict .col{flex:1 1 240px; min-width:0}
+  .verdict .lbl{font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+
+  /* ---------- Stat cards ---------- */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:420px){.stats{grid-template-columns:1fr}}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 16px; box-shadow:var(--shadow)}
+  .stat .big{font-size:1.5rem; font-weight:800; letter-spacing:-.01em; color:var(--ink); font-variant-numeric:tabular-nums}
+  .stat .cap{font-size:.78rem; color:var(--muted); margin-top:3px; line-height:1.4}
+  .stat .foot{font-size:.72rem; color:var(--muted-2); margin-top:8px; border-top:1px dashed var(--line); padding-top:7px}
+
+  /* ---------- Callout ---------- */
+  .callout{
+    border-radius:var(--radius); padding:22px 26px; margin:20px 0; box-shadow:var(--shadow);
+    background:var(--accent-wash); border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-left:5px solid var(--accent);
+  }
+  .callout.reframe{background:var(--accent-wash)}
+  .callout h3{margin:0 0 6px; color:var(--ink)}
+  .callout .tag{font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent)}
+
+  .note{border-left:4px solid var(--line-strong); padding:4px 0 4px 16px; margin:16px 0; color:var(--ink-soft)}
+  .rule-box{background:var(--card-2); border:1px dashed var(--line-strong); border-radius:var(--radius-sm); padding:16px 20px; margin:18px 0}
+  .rule-box .lbl{font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--red)}
+
+  /* ---------- Sources ---------- */
+  .src{font-size:.82rem; color:var(--muted); margin:8px 0 4px; padding-left:12px; border-left:2px solid var(--line-strong)}
+  .src b{color:var(--ink-soft); font-weight:600}
+  .src em{display:block; color:var(--muted-2); font-style:italic; margin-top:2px; line-height:1.45}
+
+  /* ---------- Tables ---------- */
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:16px 0; border:1px solid var(--line); border-radius:var(--radius-sm)}
+  table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:640px}
+  th,td{text-align:left; padding:10px 13px; border-bottom:1px solid var(--line); vertical-align:top}
+  thead th{background:var(--card-2); font-size:.74rem; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); position:sticky; top:0; font-weight:700}
+  tbody tr:last-child td{border-bottom:0}
+  th[scope="row"]{font-weight:700; color:var(--ink); background:var(--card-2); position:sticky; left:0}
+  td.win{background:var(--green-cell)}
+  td.win::after{content:" ✓"; color:var(--green); font-weight:800}
+  tr.verdict-row td, tr.verdict-row th{background:var(--card-2); font-weight:700; border-top:2px solid var(--line-strong)}
+  td.num{font-variant-numeric:tabular-nums; white-space:nowrap}
+  .matrix th[scope="row"]{min-width:150px}
+
+  /* ---------- Profiles ---------- */
+  .rank{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:50%;
+    background:var(--accent); color:#fff; font-weight:800; font-size:.9rem; margin-right:10px; flex:0 0 auto}
+  .profile-head{display:flex; align-items:center; gap:4px; flex-wrap:wrap}
+  .factsheet{background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px 16px; margin:12px 0; font-size:.9rem}
+  .quote{border-left:3px solid var(--grass); padding:6px 0 6px 16px; margin:12px 0; color:var(--ink-soft); font-style:italic}
+  .quote .attr{display:block; font-style:normal; font-size:.8rem; color:var(--muted); margin-top:4px}
+  .against{background:var(--red-chip-bg); border-radius:var(--radius-sm); padding:12px 16px; margin:12px 0; font-size:.9rem; border:1px solid color-mix(in srgb,var(--red) 22%,transparent)}
+  .against b{color:var(--red-chip-ink)}
+
+  /* ---------- Email ---------- */
+  .email{background:var(--card-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); margin:18px 0; overflow:hidden}
+  .email-top{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; background:var(--card); border-bottom:1px solid var(--line)}
+  .email-top .to{font-size:.86rem; color:var(--muted)}
+  .email-top .to b{color:var(--ink)}
+  .copybtn{font-family:var(--sans); font-size:.8rem; font-weight:700; color:#fff; background:var(--accent); border:0; border-radius:8px; padding:6px 13px; cursor:pointer; transition:background .15s}
+  .copybtn:hover{background:var(--accent-soft)}
+  .copybtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .copybtn.done{background:var(--green)}
+  .email pre{margin:0; padding:16px 18px; white-space:pre-wrap; font-family:var(--mono); font-size:.82rem; line-height:1.6; color:var(--ink-soft); overflow-x:auto}
+
+  ol.refs{padding-left:22px}
+  ol.refs li{margin:12px 0; padding-left:4px}
+  ol.refs .rt{font-size:.82rem; color:var(--muted-2); font-style:italic; display:block; margin-top:2px}
+  .grp{font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin:22px 0 4px}
+
+  .assess p{font-size:1.02rem}
+  .assess .short{max-width:64ch}
+
+  .final{
+    background:linear-gradient(180deg,var(--green-cell),var(--card));
+    border:2px solid var(--green); border-radius:var(--radius); box-shadow:var(--shadow-lg);
+    padding:30px 34px; margin:26px 0 0;
+  }
+  .final h2{color:var(--ink)}
+  .final .decree{font-family:var(--serif); font-size:1.5rem; line-height:1.35; color:var(--ink); margin:10px 0 4px}
+  .elim{border-bottom:1px solid var(--line); padding:12px 0}
+  .elim:last-child{border-bottom:0}
+  .elim b{color:var(--ink)}
+
+  .legend{display:flex; flex-wrap:wrap; gap:8px 14px; font-size:.82rem; color:var(--muted); margin:10px 0 0}
+  .legend span{display:inline-flex; align-items:center; gap:6px}
+
+  .backtotop{font-size:.82rem}
+  @media print{
+    body{background:#fff; font-size:11.5pt}
+    .card,.verdict,.final,.hero{box-shadow:none; break-inside:avoid}
+    .copybtn{display:none}
+    .table-scroll{overflow:visible}
+    a{color:#123}
+    .hero{min-height:180px}
+  }
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="top">
+    <svg class="mower" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <rect x="6" y="30" width="34" height="14" rx="3" fill="#f4faf2" opacity=".92"/>
+      <circle cx="15" cy="48" r="7" fill="#1a2420" stroke="#f4faf2" stroke-width="2"/>
+      <circle cx="34" cy="48" r="7" fill="#1a2420" stroke="#f4faf2" stroke-width="2"/>
+      <path d="M40 34 L54 20" stroke="#f4faf2" stroke-width="4" stroke-linecap="round"/>
+      <path d="M50 20 h10" stroke="#f4faf2" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <div class="hero-body">
+      <p class="kicker">RAC · Research · Assessment · Comparison</p>
+      <h1>Grass Lawn Mowing RAC</h1>
+      <p class="sub">Who should mow the lawn at 5818 Killarney Circle, San Jose, CA 95138 — local gardeners, managed marketplaces, and TaskRabbit-style gig labor, weighed against what actually protects you.</p>
+      <div class="meta">
+        <span class="htag">📍 95138 · Silver Creek / South San Jose</span>
+        <span class="htag">🗓 Facts read 11 Aug 2026</span>
+        <span class="htag">🌱 Recurring weekly / biweekly mow</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= CONFIDENTIALITY BANNER ================= -->
+  <div class="banner" role="note">
+    <b>Confidential — prepared for you, 11 August 2026.</b> Every fact in this report was read on <b>11 Aug 2026</b> and is date-stamped where it appears. One methodology limit, stated plainly up front because it colours every citation: this session's network policy <b>blocked direct page-fetching for every external site</b> (government, vendor, and review platforms alike returned an egress-policy denial). All sources were therefore read <b>server-side through web search</b>, one step removed from opening the page myself. That means <b>no license, rating, or legal figure below is independently "Verified" against a page I opened</b> — everything checkable is marked <span class="chip amber"><span class="dot"></span>Unconfirmed</span> with the exact link and phone number for you (or me, in an unblocked session) to close it. This is a decision framework built on well-triangulated search reads, not a substitute for the two phone calls and one CSLB lookup noted at the end.
+  </div>
+
+  <!-- ================= TOC ================= -->
+  <nav class="card toc" aria-label="Contents">
+    <p class="eyebrow" style="columns:1">Contents</p>
+    <ol>
+      <li><a href="#call">The call — verdict, stats & the reframe</a></li>
+      <li><a href="#evidence">What we're working with</a></li>
+      <li><a href="#matrix">Comparison matrix</a></li>
+      <li><a href="#ratings">Ratings — every platform</a></li>
+      <li><a href="#profiles">Candidate profiles, ranked</a></li>
+      <li><a href="#cost">What this should cost</a></li>
+      <li><a href="#policy">The policy layer</a></li>
+      <li><a href="#audit">Claim-by-claim audit — LawnStarter</a></li>
+      <li><a href="#assessment">My assessment, in plain English</a></li>
+      <li><a href="#emails">Copy-paste outreach emails</a></li>
+      <li><a href="#sources">Numbered sources (incl. dead ends)</a></li>
+      <li><a href="#final">Final verdict</a></li>
+    </ol>
+  </nav>
+
+  <!-- ================= 1. THE CALL ================= -->
+  <section id="call">
+    <div class="verdict">
+      <p class="eyebrow" style="color:var(--green)">The call</p>
+      <div class="profile-head">
+        <span class="chip green"><span class="dot"></span>THE PICK</span>
+      </div>
+      <div class="pick">LawnStarter — a managed weekly mow, price set by the platform, backed by $2M property protection.</div>
+      <p class="muted" style="margin-top:4px">Chosen because for a recurring mow the thing that can actually cost you money isn't a missing licence — it's an uninsured worker breaking a window or getting hurt in your yard. LawnStarter is the one option whose downside protection is <em>published in writing</em> and whose pros are documented as criminal-background-checked. <span class="chip amber"><span class="dot"></span>Catch</span> its BBB file shows a "pattern of complaints" on cancellations & support — so lock the recurring schedule and get the guarantee terms in writing before you rely on it.</p>
+      <div class="row">
+        <div class="col">
+          <div class="lbl">Runner-up</div>
+          <p style="margin:4px 0"><strong>Lawn Love</strong> — the only BBB-accredited platform of the set, with a 100% money-back guarantee. Flips to the pick if LawnStarter's $2M fine print excludes routine mowing damage.</p>
+        </div>
+        <div class="col">
+          <div class="lbl">Special-role vendor</div>
+          <p style="margin:4px 0"><strong>A local exempt gardener</strong> (e.g. Tracy's Landscaping, physically in 95138) <em>or</em> a <strong>TaskRabbit Tasker</strong> — the cheapest cash-basis route, valid <em>only</em> if you'll self-insure the downside and verify their liability cover yourself. This is the "if price were the only thing" seat.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats" aria-label="Key statistics">
+      <div class="stat">
+        <div class="big">$55–$65</div>
+        <div class="cap">Most-likely per-visit price, small-to-average San Jose lawn</div>
+        <div class="foot">≈ $160–$200 / month weekly · Angi/HousecallPro/Swivl, read 11 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">$0</div>
+        <div class="cap">Contractor licence legally required for routine mowing in CA</div>
+        <div class="foot">Gardener carve-out, B&amp;P §7026.1 · read 11 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">$1,000</div>
+        <div class="cap">Minor-work licence threshold — up from $500</div>
+        <div class="foot">AB 2622, eff. 1 Jan 2025 · B&amp;P §7048 · read 11 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">You</div>
+        <div class="cap">Who pays if an uninsured worker is hurt in your yard</div>
+        <div class="foot">Your homeowner's policy or you personally · Labor Code §3352(h) · read 11 Aug 2026</div>
+      </div>
+    </div>
+
+    <div class="callout reframe">
+      <span class="tag">The finding that reframes everything</span>
+      <h3>You've been sold on "licensed & insured." For a weekly mow, half of that is legally irrelevant.</h3>
+      <p style="margin-bottom:6px">In California, <strong>routine lawn mowing, edging, weeding and blowing is not "contracting" at all</strong> — the Business &amp; Professions Code explicitly carves gardeners out of the CSLB licence system, and even licensable landscape <em>construction</em> only needs a licence once a single job hits <strong>$1,000</strong> (raised from $500 on 1 Jan 2025). So a vendor waving a "licensed" banner for a $55 mow is answering a question you didn't ask.</p>
+      <p style="margin-bottom:0">The real exposure is money and bodies: if a worker with no insurance is injured on your property, <strong>you</strong> can be treated as their employer and the bill lands on your homeowner's policy — or on you. That flips the whole screen. The filter isn't "who's licensed." It's <strong>"whose liability coverage and recourse can I put in writing before they set foot on my lawn."</strong></p>
+      <p class="src" style="margin-top:12px"><b>Source: CA Business &amp; Professions Code §7026.1 & §7048; Labor Code §3352(h)</b> · leginfo.legislature.ca.gov <em>(California's enacted statutes — §7026.1 defines "contractor" and carves out routine gardening; §7048 sets the minor-work licence exemption; §3352(h) governs when a casual worker is your employee. The controlling primary authorities. Read via web search 11 Aug 2026; pages not directly openable this session — see Dead Ends.)</em></p>
+    </div>
+  </section>
+
+  <!-- ================= 2. WHAT WE'RE WORKING WITH ================= -->
+  <section class="card" id="evidence">
+    <p class="eyebrow">The evidence, read closely</p>
+    <h2>What we're working with</h2>
+    <p>You asked for grass-lawn mowing vendors for a home in the <strong>Silver Creek / Blossom Valley area of south San Jose (95138)</strong>, and asked me specifically to fold in <strong>TaskRabbit workers and similar</strong> gig options. That pairing — established gardeners on one side, gig-labour marketplaces on the other — is the whole tension in this decision, so I researched both as peers.</p>
+
+    <p>Your stated priority is not written as a single line, so I've read it from the shape of the request: a lawn that is <strong>reliably mown on a schedule without you having to manage it week to week</strong>, at a fair price, <strong>without you carrying the risk if a worker damages something or gets hurt.</strong> Hands-off reliability plus a covered downside. I'll argue below why that priority should beat chasing the lowest gig rate.</p>
+
+    <p>The candidate field splits into three natural tiers, each with a different risk shape:</p>
+    <ul>
+      <li><strong>Managed marketplaces</strong> — LawnStarter, Lawn Love. The platform sets the price, assigns a background-checked pro, handles recurring scheduling, and publishes a guarantee. Most hands-off; the pro is an independent contractor, not the platform's employee. <span class="chip blue"><span class="dot"></span>Best model fit</span></li>
+      <li><strong>Bidding / lead-gen marketplaces</strong> — GreenPal, Thumbtack, Angi. You still choose and manage the pro; price is a quote. Cheaper leads, thinner protection.</li>
+      <li><strong>Gig labour & local gardeners</strong> — TaskRabbit (one-off hourly Taskers) and independent San Jose gardeners (the classic flat-rate "mow-and-blow"). Cheapest per dollar; you carry the vetting, scheduling and insurance risk yourself.</li>
+    </ul>
+
+    <p>A hard constraint on this whole report, stated once here so you can weight everything accordingly: <strong>I could not open a single primary page this session.</strong> The network policy returned an egress denial for CSLB, Yelp, BBB, every vendor site, and every review platform. So all vendor licence numbers, star ratings and legal citations below were read through web search, not on the source page. I've labelled every checkable claim, and every dead end carries the link or phone number to close it yourself. <strong>A licence I couldn't confirm is not proof the vendor is unlicensed; an empty review page is not a red flag</strong> — it's a page I couldn't open. I've held to that throughout.</p>
+
+    <div class="rule-box">
+      <div class="lbl">The single rule that eliminates candidates</div>
+      <p style="margin:6px 0 0"><strong>If a vendor's downside protection can't be put in writing before work starts, they're out of the top spot.</strong> Not "unlicensed → out" (mowing needs no licence). The disqualifier is: no certificate of insurance you can obtain, no guarantee in writing, and no recourse you can name. Everything a vendor <em>can</em> document — coverage, background checks, a money-back promise — is exactly what closes the gap the reframing finding opened. Vendors I simply could not audit this session (unreadable reviews, unconfirmable licence) can't be the pick on evidence I don't have — they stay as verify-then-hire options, not the recommendation.</p>
+    </div>
+  </section>
+
+  <!-- ================= 3. COMPARISON MATRIX ================= -->
+  <section class="card" id="matrix">
+    <p class="eyebrow">Head to head</p>
+    <h2>Comparison matrix</h2>
+    <p class="muted small">Criteria down the left, candidates across. The winning cell in each row is shaded green. All data read 11 Aug 2026 via web search; platform coverage confirmed at San Jose city level, not verified to ZIP 95138.</p>
+    <div class="legend" aria-hidden="true">
+      <span><span class="chip green"><span class="dot"></span>Verified / strong</span></span>
+      <span><span class="chip amber"><span class="dot"></span>Unconfirmed / caveat</span></span>
+      <span><span class="chip red"><span class="dot"></span>Weak / not verified</span></span>
+    </div>
+    <div class="table-scroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th scope="col">Criterion</th>
+            <th scope="col">LawnStarter</th>
+            <th scope="col">Lawn Love</th>
+            <th scope="col">GreenPal</th>
+            <th scope="col">TaskRabbit</th>
+            <th scope="col">Local gardener</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Recurring model (hands-off)</th>
+            <td class="win">Managed, auto-scheduled recurring</td>
+            <td>Managed, recurring</td>
+            <td>Recurring after you pick a bidder</td>
+            <td>One-off tasks; no auto weekly</td>
+            <td>Flat monthly "mow-and-blow"; you arrange</td>
+          </tr>
+          <tr>
+            <th scope="row">Who sets the price</th>
+            <td class="win">Platform (fixed instant quote)</td>
+            <td>Platform (fixed instant quote)</td>
+            <td>Pro bids (≈5 bids/24h)</td>
+            <td>Tasker sets hourly rate</td>
+            <td>Gardener quotes flat rate</td>
+          </tr>
+          <tr>
+            <th scope="row">Typical San Jose price</th>
+            <td class="win num">$39–$55/visit +$3.99</td>
+            <td class="num">$44–$72/visit</td>
+            <td class="num">$50–$70/visit</td>
+            <td class="num">~$55/hr + fee</td>
+            <td class="num">~$120–$200/mo flat</td>
+          </tr>
+          <tr>
+            <th scope="row">Worker vetting (claimed)</th>
+            <td class="win">Criminal check, Checkr-class (nat/fed/state/county)</td>
+            <td>Background checks (scope unstated)</td>
+            <td>Equipment + bank check; criminal check unclear</td>
+            <td>"Background-checked" (scope unstated)</td>
+            <td>You vet directly</td>
+          </tr>
+          <tr>
+            <th scope="row">Damage / injury protection</th>
+            <td class="win">$2M property protection published</td>
+            <td>Money-back only; no $ damage figure</td>
+            <td>Pay-after-photo-approval; no $ figure</td>
+            <td>"Not an insurer"; Pledge ≤$10k, negligence-only, secondary</td>
+            <td>Only if they carry & prove CGL</td>
+          </tr>
+          <tr>
+            <th scope="row">Guarantee</th>
+            <td class="win">Done Right: re-mow or refund, 5-day window</td>
+            <td>100% money-back satisfaction</td>
+            <td>Approve-before-you-pay</td>
+            <td>No-show refund; quality disclaimed</td>
+            <td>Handshake / whatever you negotiate</td>
+          </tr>
+          <tr>
+            <th scope="row">Auditable from public record (this session)</th>
+            <td>Terms published & search-readable</td>
+            <td>Terms published & search-readable</td>
+            <td>Terms published & search-readable</td>
+            <td class="win">Terms published & search-readable</td>
+            <td>Reviews/licence unreadable — could not audit</td>
+          </tr>
+          <tr>
+            <th scope="row">Licence relevance for a mow</th>
+            <td colspan="5" style="text-align:center; color:var(--muted); font-style:italic">None — routine mowing is exempt in CA (B&amp;P §7026.1). This row is a non-issue for every candidate; it only matters if you add installation/hardscape work ≥$1,000.</td>
+          </tr>
+          <tr class="verdict-row">
+            <th scope="row">Verdict</th>
+            <td class="win"><span class="chip green"><span class="dot"></span>PICK</span> Best-documented protection + price</td>
+            <td><span class="chip blue"><span class="dot"></span>Runner-up</span> Accredited, money-back</td>
+            <td><span class="chip amber"><span class="dot"></span>Value</span> No damage cover</td>
+            <td><span class="chip red"><span class="dot"></span>Wrong tool</span> One-off, not weekly</td>
+            <td><span class="chip amber"><span class="dot"></span>Cheapest</span> If you verify insurance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src"><b>Sources: official platform pages (LawnStarter, Lawn Love, GreenPal, TaskRabbit) & BBB profiles, all read via web search 11 Aug 2026.</b> <em>(Each platform's own terms/pricing/guarantee pages plus the Better Business Bureau's accreditation records. Pages not directly openable this session; figures are as surfaced by web search — treat as directional and confirm fine print before hiring.)</em></p>
+  </section>
+
+  <!-- ================= 4. RATINGS ================= -->
+  <section class="card" id="ratings">
+    <p class="eyebrow">The receipts</p>
+    <h2>Ratings — every platform</h2>
+    <p class="muted small">All figures read 11 Aug 2026 via web search from BBB / Trustpilot / Yelp listing metadata. Where the search tool could not expose a numeric value, the cell says so — that is a dead end, not a zero. Review <em>counts</em> in listing titles are real metadata; surrounding summaries are lower-confidence.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Platform</th>
+            <th scope="col">BBB</th>
+            <th scope="col">Trustpilot</th>
+            <th scope="col">Yelp</th>
+            <th scope="col">Other</th>
+            <th scope="col">Signal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">LawnStarter</th>
+            <td class="num">1.74★ · not accredited · "pattern of complaints"</td>
+            <td class="num">~4.7★ (6,266)</td>
+            <td>—</td>
+            <td>Done Right + $2M</td>
+            <td><span class="chip amber"><span class="dot"></span>Split</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Lawn Love</th>
+            <td>Accredited (rating not exposed)</td>
+            <td class="num">~4.7★ (978)</td>
+            <td class="num">~2.5★ (2,855)</td>
+            <td>Money-back</td>
+            <td><span class="chip amber"><span class="dot"></span>Split</span></td>
+          </tr>
+          <tr>
+            <th scope="row">GreenPal</th>
+            <td class="num">~3.8★ (77) · not accredited</td>
+            <td class="num">~4.6★</td>
+            <td>—</td>
+            <td>Approve-to-pay</td>
+            <td><span class="chip green"><span class="dot"></span>Consistent</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Thumbtack</th>
+            <td class="num">~1.7★ · not accredited</td>
+            <td class="num">~4.2★</td>
+            <td>—</td>
+            <td>$100k / $2.5k guarantee</td>
+            <td><span class="chip amber"><span class="dot"></span>Split</span></td>
+          </tr>
+          <tr>
+            <th scope="row">TaskRabbit</th>
+            <td class="num">1.11★ · not accredited</td>
+            <td class="num">~3.6★ (~2,700)</td>
+            <td>—</td>
+            <td>Pledge ≤$10k</td>
+            <td><span class="chip red"><span class="dot"></span>Weak</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Angi</th>
+            <td>Not accredited · rating withheld</td>
+            <td class="num">~2.2★</td>
+            <td>—</td>
+            <td>FTC settlement 2023</td>
+            <td><span class="chip red"><span class="dot"></span>Weak</span></td>
+          </tr>
+          <tr class="verdict-row">
+            <th scope="row">Total reviews (approx., where exposed)</th>
+            <td class="num">~6,600</td>
+            <td class="num">~16,900</td>
+            <td class="num">~2,855</td>
+            <td colspan="2">Trustpilot skews positive; BBB skews negative — read both, trust neither alone</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note small">Read the BBB-vs-Trustpilot gaps honestly. High Trustpilot + low BBB is the normal signature of a big consumer marketplace: happy routine customers get nudged to Trustpilot, disputes escalate to BBB. It doesn't make LawnStarter a scam — but its BBB "pattern of complaints" on <em>cancellations and support</em> maps onto exactly the reliability you care about, so it's a real caveat, not noise. Lawn Love's Yelp 2.5 vs Trustpilot 4.7 split is the same story from the other platform.</p>
+    <p class="src"><b>Sources: BBB business profiles (TaskRabbit/Roswell GA; Thumbtack/San Francisco; GreenPal/Nashville; Lawn Love/San Diego; LawnStarter/Austin; Angi/Denver); Trustpilot & Yelp listing pages; U.S. FTC press release, Angi settlement, Apr 2023.</b> <em>(BBB is a business-accreditation and complaint-mediation non-profit; Trustpilot and Yelp are open consumer-review platforms; the FTC is the federal consumer-protection regulator. All read via web search 11 Aug 2026; numeric ratings are as surfaced, not confirmed on-page.)</em></p>
+  </section>
+
+  <!-- ================= 5. PROFILES ================= -->
+  <section id="profiles">
+    <div class="card">
+      <p class="eyebrow">Ranked, best fit first</p>
+      <h2>Candidate profiles</h2>
+      <p class="muted small">Ranked against your read priority — hands-off reliability with a covered downside. A note kept honest throughout: I could not open review pages this session, so the customer voice below is <strong>paraphrased review themes surfaced by web search, clearly labelled — never invented verbatim quotes with fake names or dates.</strong> The real quotes are behind the linked pages; go read them.</p>
+    </div>
+
+    <!-- 1 LawnStarter -->
+    <div class="card">
+      <div class="profile-head"><span class="rank">1</span><h3 style="margin:0">LawnStarter</h3><span class="chip green"><span class="dot"></span>THE PICK</span></div>
+      <div class="factsheet"><strong>Factsheet.</strong> Managed lawn-care marketplace · instant platform-set quote · auto-matched, criminal-background-checked independent pro · recurring scheduling in-app · San Jose <span class="chip amber"><span class="dot"></span>city-level confirmed, ZIP unconfirmed</span> · ~$39–$55/visit + $3.99/visit fee, $19 first-mow promo · Done Right guarantee + $2M property protection.</div>
+      <p><strong>Why it's first.</strong> It is the only candidate that answers the reframing finding on paper: <strong>documented criminal background checks</strong> ("the third-party screening company used by Uber, DoorDash…" — national, federal, state, county criminal + sex-offender + watchlist), a <strong>$2M property-protection</strong> figure attached to every visit, and a <strong>Done Right re-mow-or-refund guarantee</strong> with a 5-day reporting window — plus the lowest per-visit price in the set. For a hands-off weekly mow with recourse in writing, nothing else in the field matches all four.</p>
+      <p class="muted small">The customer voice (paraphrased themes, web search 11 Aug 2026 — not verbatim):</p>
+      <div class="quote">Positive themes cluster on convenient booking and reliable routine mows at a fair price; the ~4.7★ Trustpilot average across 6,266 reviews is the strongest positive volume in the set.<span class="attr">— Trustpilot theme summary, trustpilot.com/review/lawnstarter.com · read 11 Aug 2026 · not independently opened</span></div>
+      <div class="quote">Negative themes cluster on <em>cancellations, pro turnover and slow customer support</em> — the BBB explicitly flags a "pattern of complaints" it says the company "has failed to resolve."<span class="attr">— BBB profile (Austin TX), bbb.org · read 11 Aug 2026 · not independently opened</span></div>
+      <p><strong>How the owner/platform responds.</strong> Could not confirm this session (BBB response threads not openable). LawnStarter operates a support desk and the Done Right claims process rather than an owner replying to reviews.</p>
+      <div class="against"><b>The honest case against.</b> The BBB record is genuinely poor — a formal "pattern of complaints" on <em>the exact axis you care about</em> (cancellations, continuity, support). You don't choose your specific pro, so the "same person every week" ideal isn't guaranteed and pro turnover can disrupt it. The $3.99 fee rides every visit, and the fine print of the "$2M property protection" wasn't openable — confirm what it actually covers before you lean on it.</p>
+      <p class="src"><b>Source: LawnStarter — FAQ, "The LawnStarter Background Check," "Done Right Guarantee," San Jose service page · lawnstarter.com; BBB Austin TX profile.</b> <em>(The vendor's own published policy and pricing pages, plus the BBB's independent complaint record. Read via web search 11 Aug 2026; not directly openable — treat protection figures as directional pending confirmation.)</em></p>
+    </div>
+
+    <!-- 2 Lawn Love -->
+    <div class="card">
+      <div class="profile-head"><span class="rank">2</span><h3 style="margin:0">Lawn Love</h3><span class="chip blue"><span class="dot"></span>RUNNER-UP</span></div>
+      <div class="factsheet"><strong>Factsheet.</strong> Managed marketplace · instant satellite-measured platform quote (no bidding) · matched independent, background-checked pro · San Jose <span class="chip amber"><span class="dot"></span>city-level confirmed</span> · ~$44–$72/visit · 100% money-back satisfaction guarantee · payment held ~3 days post-service · <strong>the only BBB-accredited platform in the set.</strong></div>
+      <p><strong>Why it's second, not first.</strong> Structurally it's a near-twin of LawnStarter and it carries the one trust badge none of the others do — <strong>BBB accreditation</strong> — plus a clean 100% money-back guarantee and a 3-day payment hold that gives you a real window to object. What keeps it in second: <strong>no published property-damage dollar figure.</strong> Against the reframing finding, "money back if you're unhappy" covers a bad mow but not a smashed window or an injury — LawnStarter's explicit $2M edges it.</p>
+      <div class="quote">Positive: ~4.7★ Trustpilot (978 reviews, 78% five-star). Negative: a striking Yelp average of ~2.5★ across 2,855 reviews — a genuine split pointing to inconsistent assigned-pro quality, communication and cancellations.<span class="attr">— Trustpilot & Yelp listing metadata · read 11 Aug 2026 · not independently opened</span></div>
+      <div class="against"><b>The honest case against.</b> The Yelp 2.5 vs Trustpilot 4.7 gap is the widest in the set — real-world experience appears uneven. The guarantee is money-back/re-do, <em>not</em> liability insurance, and the quoted price is an estimate until you enter the exact address. Background-check scope wasn't stated on the pages web search could read.</p>
+      <p class="src"><b>Source: Lawn Love — San Jose service page, pricing page, satisfaction-guarantee terms · lawnlove.com; BBB San Diego CA profile (accredited); Yelp & Trustpilot listings.</b> <em>(Vendor's own pages plus independent BBB accreditation and open review platforms. Read via web search 11 Aug 2026; not directly openable.)</em></p>
+    </div>
+
+    <!-- 3 GreenPal -->
+    <div class="card">
+      <div class="profile-head"><span class="rank">3</span><h3 style="margin:0">GreenPal</h3><span class="chip amber"><span class="dot"></span>VALUE PICK</span></div>
+      <div class="factsheet"><strong>Factsheet.</strong> Bidding marketplace ("Uber for lawn care") · ~5 local pros bid within 24h, quotes informed by satellite imagery · you approve a photo of the finished job before payment releases · San Jose live market, avg ~$35/visit, most jobs $50–$70 · free to homeowners (~5% pro commission).</div>
+      <p><strong>Why it ranks here.</strong> The <strong>pay-after-photo-approval</strong> mechanic is a genuinely strong protection against no-shows and bad mows — arguably better than a guarantee you have to claim — and the bidding gives you price competition. Trustpilot ~4.6★ and BBB ~3.8★ are the most <em>consistent</em> ratings in the set (no wild platform split).</p>
+      <div class="quote">Negative themes cluster on dispute resolution when a job goes wrong and pros arriving late — the exact risks in an ongoing weekly arrangement.<span class="attr">— BBB (Nashville TN) & review summaries · read 11 Aug 2026 · not independently opened</span></div>
+      <div class="against"><b>The honest case against.</b> <strong>No clear criminal background check</strong> (vetting emphasises equipment photos and a bank check) and <strong>no property-damage or liability figure</strong> — protection is essentially "don't pay until you approve," which does nothing for damage or injury on your property. Continuity depends on whichever individual pro wins the bid staying active.</p>
+      <p class="src"><b>Source: GreenPal — San Jose market page & how-it-works · yourgreenpal.com; BBB Nashville TN profile; Trustpilot listing.</b> <em>(Vendor's own pages plus independent BBB/Trustpilot records. Read via web search 11 Aug 2026; not directly openable.)</em></p>
+    </div>
+
+    <!-- 4 Local gardener -->
+    <div class="card">
+      <div class="profile-head"><span class="rank">4</span><h3 style="margin:0">A local San Jose gardener</h3><span class="chip amber"><span class="dot"></span>CHEAPEST — IF VERIFIED</span></div>
+      <div class="factsheet"><strong>Factsheet.</strong> The classic California flat-rate "mow-and-blow," typically <strong>~$120–$200/month</strong> for weekly or biweekly — usually cheaper than 4.3 × a marketplace per-visit price. Named candidates surfaced this session: <strong>Tracy's Landscaping &amp; Tree Service</strong> (437 Danna Ct — physically inside 95138, (408) 629-5007), <strong>R&amp;J Landscaping</strong> (claimed CSLB C-27 #946599, "since 1999", most reviews), <strong>The Lawn Ranger</strong> (weekly-billed-monthly model — best structural fit — but claimed licence shows <em>inactive</em> and zero verifiable reviews).</div>
+      <p><strong>Why it ranks below the platforms despite being cheapest.</strong> Not because local gardeners are worse — a good one is the best value on this page and the CA norm for a reason. It's because <strong>I could not audit a single one this session.</strong> Licence numbers came only from a third-party aggregator (never CSLB), no star rating was exposed, no review was openable. Against your priority — protection you can put in writing — an option I can't verify can't be the recommendation. That's a limit of my evidence, not a mark against the vendor.</p>
+      <div class="quote">Tracy's: paraphrased reviews describe "hard-working, dependable, professional, competitively priced." R&amp;J: positive "professional and thorough" themes, but one critical account of a gardener repeatedly ignoring specific written instructions.<span class="attr">— Yelp/Angi/Nextdoor summaries · read 11 Aug 2026 · paraphrase, not verbatim · pages not openable</span></div>
+      <div class="against"><b>The honest case against (as a category).</b> Unauditable from public record this session. Licence status unconfirmed (and, for a pure mow, legally irrelevant anyway). Crucially, a solo cash gardener is the <em>most likely</em> to carry <strong>no general-liability or workers'-comp cover</strong> — which is precisely where your homeowner-policy exposure lives. R&amp;J skews toward pricier design/install work and shows an internally inconsistent "Best Landscaper — 5 vs 13 consecutive years" award claim; The Lawn Ranger's licence reads inactive; Tracy's has a "CLOSED" duplicate listing to resolve.</p>
+      <p class="src"><b>Source: BuildZoom contractor profiles (CSLB-data aggregator); Yelp / Angi / Nextdoor / Birdeye listings; vendor sites.</b> <em>(BuildZoom republishes CSLB licence data but is not the board itself; the review platforms are open consumer sites. All read via web search 11 Aug 2026 — none directly openable, so every licence number is Unconfirmed. Close each via CSLB Check-a-Licence and the phone numbers listed under Dead Ends.)</em></p>
+    </div>
+
+    <!-- 5 TaskRabbit -->
+    <div class="card">
+      <div class="profile-head"><span class="rank">5</span><h3 style="margin:0">TaskRabbit</h3><span class="chip red"><span class="dot"></span>THE ONE YOU ASKED ABOUT — WRONG TOOL FOR THIS JOB</span></div>
+      <div class="factsheet"><strong>Factsheet.</strong> Self-serve labour marketplace · you browse Taskers and book by the hour · "Lawn Mowing", "Lawn Care", "Landscaping", "Gardening" are live San Jose categories · Taskers set their own rate, ~$55/hr for mowing + a separate Trust &amp; Support fee · Taskers are independent contractors, "background-checked" (scope unstated).</div>
+      <p><strong>Why I researched it and why it's last.</strong> You asked for it by name, so here's the straight answer: TaskRabbit is built for <strong>one-off tasks, not a standing weekly service.</strong> There's no automatic weekly scheduling with the same vetted person, no re-mow guarantee, no platform-set price, and — in its own words — <strong>"TaskRabbit does not insure or provide insurance against any losses sustained by Users."</strong> The Happiness Pledge is discretionary compensation, capped at $10,000, negligence-only, secondary to your own homeowner's insurance, and must be claimed within 14 days.</p>
+      <div class="quote">Complaint themes as surfaced by search: "grossly overcharged by time with no accountability"; the Trust &amp; Support fee "billed hourly… more than $50 just for that fee"; a Tasker "marking a task as complete and charging over $100 despite never showing up."<span class="attr">— Trustpilot/BBB review content via web search · read 11 Aug 2026 · not independently opened</span></div>
+      <div class="against"><b>The honest case against.</b> BBB customer rating 1.11★. The worst-reviewed failure mode — overbilling and marked-complete-but-not-done — maps directly onto a routine mowing relationship. You self-manage a contractor the platform explicitly disclaims. Damage claims are capped, depreciated, secondary and time-boxed. <strong>Where it's genuinely fine:</strong> a <em>one-time</em> yard blitz — an overgrown clean-up, a haul-away, a single pre-party mow — booked hourly, eyes-on. Not your weekly.</p>
+      <p class="src"><b>Source: TaskRabbit — Terms of Service, Happiness Pledge, San Jose location pages, no-show policy · taskrabbit.com & support.taskrabbit.com; BBB Roswell GA profile.</b> <em>(The platform's own binding terms and insurance language, plus the BBB's independent rating. Read via web search 11 Aug 2026; not directly openable — the "does not provide insurance" wording is as surfaced, confirm on the live Pledge page.)</em></p>
+    </div>
+  </section>
+
+  <!-- ================= 6. COST ================= -->
+  <section class="card" id="cost">
+    <p class="eyebrow">The money</p>
+    <h2>What this should cost</h2>
+    <p>The San Jose standard mow already <strong>bundles four things into one price</strong> — mowing, string-trimming, edging along hard surfaces, and blowing the clippings. Those are not separate line items on an honest quote; the add-ons below are what's genuinely extra. Every figure read 11 Aug 2026 via web search.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">Line item</th><th scope="col">Range</th><th scope="col">Scope</th><th scope="col">Source (read 11 Aug 2026)</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Standard mow package</th><td class="num">$45–$90/visit</td><td>Mow + trim + edge + blow, bundled</td><td>HousecallPro</td></tr>
+          <tr><th scope="row">— San Jose local, mid-size lawn</th><td class="num">$70–$105 (avg ~$85)</td><td>Local premium band</td><td>Lawnager (San Jose)</td></tr>
+          <tr><th scope="row">— National baseline</th><td class="num">$44–$72 (most ~$57)</td><td>Average lot</td><td>Angi</td></tr>
+          <tr><th scope="row">String-trim / edge / blow</th><td class="num">included</td><td>Part of the base mow, not billed separately</td><td>HousecallPro / Angi</td></tr>
+          <tr><th scope="row">Bag & haul clippings</th><td class="num">+$10–$25/visit</td><td>Add-on (most crews mulch by default)</td><td>HousecallPro / Thumbtack</td></tr>
+          <tr><th scope="row">Fertilization / weed control</th><td class="num">$90–$140/application</td><td>Add-on, mid-size SJ lawn</td><td>Lawnager (San Jose)</td></tr>
+          <tr><th scope="row">Aeration</th><td class="num">$170–$270/service</td><td>Add-on, mid-size SJ lawn</td><td>Lawnager (San Jose)</td></tr>
+          <tr><th scope="row">Leaf removal / fall cleanup</th><td class="num">$140–$270/visit</td><td>Seasonal add-on</td><td>Lawnager / Swivl (San Jose)</td></tr>
+          <tr><th scope="row">Hedge / bush trimming</th><td class="num">$40–$100/hr</td><td>Add-on labour</td><td>Angi</td></tr>
+          <tr><th scope="row">Overgrown-grass surcharge</th><td class="num">+$20–$60</td><td>If grass exceeds ~10″</td><td>GreenPal</td></tr>
+          <tr><th scope="row">TaskRabbit hourly (yard work)</th><td class="num">from ~$55/hr</td><td>Tasker-set + Trust & Support fee</td><td>TaskRabbit (San Jose)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Two-sided sanity check on the weekly total</h3>
+    <p class="muted small">Assumes a small-to-average, flat 1/8–1/4-acre lot, standard bundled mow, weekly (~4.3 visits/month).</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">Scenario</th><th scope="col">Per visit</th><th scope="col">Per month</th><th scope="col">Anchored to (read 11 Aug 2026)</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Low</th><td class="num">~$40</td><td class="num">~$150–$175</td><td>GreenPal 1/4-acre $38–$52; Lawnager SJ "$25–$50/cut"</td></tr>
+          <tr class="verdict-row"><th scope="row">Most likely</th><td class="num">~$55–$65</td><td class="num">~$160–$200</td><td>Angi $57 + Bay-Area premium; Swivl SJ "mow & blow $160–$200+/mo"</td></tr>
+          <tr><th scope="row">High</th><td class="num">~$85</td><td class="num">~$300–$365</td><td>Lawnager SJ mid-size $70–$105/visit × 4.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>The read:</strong> budget <strong>~$160–$200/month</strong> for a reliable weekly mow — the band where a local flat-rate gardener and the managed platforms actually overlap. LawnStarter's $39–$55/visit sits at the low end; a local gardener's flat month can undercut it further; anything quoted "from $19–$29" is a minimum-lot teaser, not your price, and anything north of ~$105/visit implies a bigger or overgrown lot or bundled add-ons.</p>
+    <p class="src"><b>Sources: HousecallPro, Angi, GreenPal, Thumbtack, TaskRabbit; and San Jose-specific pages Lawnager & Swivl.</b> <em>(HousecallPro/Angi are established field-service and home-services references; the San Jose pages are local marketplace/cost-guide sites — directional, not independent surveys. Marketplace figures reflect the platforms' own booked jobs. All read via web search 11 Aug 2026; SEO/lead-gen cost pages such as homeyou and homeblue were explicitly excluded as non-credible.)</em></p>
+  </section>
+
+  <!-- ================= 7. POLICY LAYER ================= -->
+  <section class="card" id="policy">
+    <p class="eyebrow">The rules that govern this</p>
+    <h2>The policy layer</h2>
+
+    <h3>The governing law, and what you lose if it goes wrong</h3>
+    <p>The single most important legal fact, and the one that reframes the whole decision: <strong>routine lawn mowing is not "contracting" in California and needs no contractor licence.</strong> The gardener carve-out is written into the definition of "contractor" itself, and even licensable landscape <em>construction</em> only trips the licence requirement at <strong>$1,000</strong> per job (raised from $500 on 1 Jan 2025). <span class="chip amber"><span class="dot"></span>Correction to a common belief</span> the "$500 rule" you may have heard is outdated.</p>
+    <p class="src"><b>Source: CA Business & Professions Code §7026.1 (gardener carve-out), §7048 (minor-work exemption); AB 2622 (2024), eff. 1 Jan 2025 · leginfo.legislature.ca.gov; CSLB "AB 2622 Implementation" bulletin · cslb.ca.gov.</b> <em>(The enacted California statutes and the state licensing board's own implementation guidance — the controlling authorities on when a licence is required. Read via web search 11 Aug 2026; not directly openable — confirm the $1,000 figure on the leginfo §7048 page.)</em></p>
+
+    <p><strong>What you lose if you get the licence question wrong</strong> (relevant only if you add construction/hardscape ≥$1,000, not for a mow): if you hire an unlicensed person for licensable work and they're injured on your property, <strong>you can be deemed their employer</strong> — the bill for injury and rehab lands on your homeowner's policy or on you personally, with no bond and no CSLB complaint process to fall back on. Unlicensed contracting is itself a misdemeanour.</p>
+    <p class="src"><b>Source: CA Labor Code §2750.5; CSLB "The Downside of Being an Owner-Builder" · cslb.ca.gov.</b> <em>(§2750.5 is the enacted statute recharacterising unlicensed workers as employees; the CSLB page is the board's official consumer warning. Read via web search 11 Aug 2026; not directly openable.)</em></p>
+
+    <h3>Vendor policies, side by side</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">Protection</th><th scope="col">LawnStarter</th><th scope="col">Lawn Love</th><th scope="col">GreenPal</th><th scope="col">TaskRabbit</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Property-damage cover</th><td class="win">$2M protection (fine print unconfirmed)</td><td>None published</td><td>None published</td><td>Pledge ≤$10k, negligence-only, secondary</td></tr>
+          <tr><th scope="row">Satisfaction guarantee</th><td>Re-mow or refund, 5-day</td><td class="win">100% money-back</td><td>Approve-before-pay</td><td>None (quality disclaimed)</td></tr>
+          <tr><th scope="row">Claim window</th><td class="num">5 days</td><td>~3-day payment hold</td><td>Before you release payment</td><td class="num">14 days</td></tr>
+          <tr><th scope="row">Background check</th><td class="win">Criminal, Checkr-class</td><td>Yes (scope unstated)</td><td>Equipment/bank; criminal unclear</td><td>Yes (scope unstated)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Third-party risk & your insurance exposure</h3>
+    <p>On every marketplace here the worker is an <strong>independent contractor, not the platform's employee</strong> — so if things go badly the platform's guarantee is your first recourse, not an employer's liability. Your own exposure is governed by California's residential-employee rules: a gardener working outside your home <strong>≥10 hrs/week</strong> is treated as a full-time employee (Labor Code §3351(d)); below the casual-worker thresholds — <strong>&lt;52 hours in the prior 90 days or &lt;$100 earned</strong> — there's no statutory workers'-comp claim, but the worker can still sue you in ordinary negligence, where there's no cap. Since 1977, California homeowner policies are <strong>deemed to include workers'-comp for qualifying residential employees</strong> (Insurance Code §11590) — but short-duration and casual workers typically fall outside it, leaving you personally exposed. <strong>This is the whole reason the reframing finding points at insurance, not licences.</strong></p>
+    <p class="src"><b>Source: CA Labor Code §3351(d), §3352(h); Insurance Code §11590 · leginfo.legislature.ca.gov; CA DIR/DWC · dir.ca.gov.</b> <em>(Enacted statutes defining residential-employee status, the casual-worker exclusion, and the imputed homeowner-policy workers'-comp coverage; DIR administers workers' comp. Read via web search 11 Aug 2026; not directly openable — confirm §11590 on leginfo.)</em></p>
+
+    <h3>Gig-worker classification (AB 5) & warranty terms</h3>
+    <p>Under AB 5 and the ABC test (Labor Code §2775; <em>Dynamex</em>, 2018), a worker is presumed an employee unless the hirer proves all three prongs. Hiring an <strong>established, business-licensed, insured operator</strong> keeps employer status on the vendor; directing a lone individual with your equipment on your schedule can flip it onto you. On warranties: the only genuine written warranty in the set is a service guarantee (re-mow/refund) — none is a manufacturer-style product warranty, and none of the money-back promises is a substitute for the vendor's own liability insurance.</p>
+    <p class="src"><b>Source: CA Labor Code §§2775–2787; Dynamex Operations West v. Superior Court (2018) 4 Cal.5th 903; CA DIR/DLSE independent-contractor FAQ · dir.ca.gov.</b> <em>(The enacted AB 5 statutes, the controlling California Supreme Court decision, and the labour agency's official guidance. Read via web search 11 Aug 2026; not directly openable.)</em></p>
+
+    <h3>Your contract protections</h3>
+    <p>For anything solicited or signed at your door for $25+, California gives you a <strong>3-day right to cancel</strong> (5 days if you're 65+; 7 for disaster repair) under Civil Code §1689.6, and the seller must hand you the written cancellation notice (§1689.7). Note: a service <em>you</em> initiate by calling a listed business may fall outside "home solicitation." Insist on: a written scope + flat price + schedule; a <strong>certificate of insurance sent by the vendor's broker</strong>, not a photo of a card; the guarantee in writing; and payment by a traceable method. Keep any deposit small — the CSLB benchmark for licensed home-improvement work caps it at $1,000 or 10%.</p>
+    <p class="src"><b>Source: CA Civil Code §1689.6 & §1689.7 · leginfo.legislature.ca.gov; CA DCA / CSLB consumer guidance.</b> <em>(The enacted home-solicitation cancellation statutes and the state consumer-affairs agencies' guidance. Read via web search 11 Aug 2026; not directly openable.)</em></p>
+  </section>
+
+  <!-- ================= 8. CLAIM AUDIT ================= -->
+  <section class="card" id="audit">
+    <p class="eyebrow">Marketing vs. record</p>
+    <h2>Claim-by-claim audit — LawnStarter</h2>
+    <p>The recommendation rests on LawnStarter's marketing, so its claims are the ones that most need checking. Each is verified against the strongest independent record I could reach — and every one carries the same caveat: read server-side, not confirmed on-page, so each is <span class="chip amber"><span class="dot"></span>Unconfirmed</span> until you open the source.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">Marketing claim</th><th scope="col">Independent check</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">"Pros are background-checked"</th><td>LawnStarter's own "Background Check" page describes a Checkr-class criminal screen (national/federal/state/county + watchlist). No independent audit of coverage rate exists.</td><td><span class="chip amber"><span class="dot"></span>Unconfirmed</span> plausible, vendor-sourced</td></tr>
+          <tr><th scope="row">"$2 million property protection"</th><td>Stated on LawnStarter service/FAQ pages; the actual policy terms, cap conditions and exclusions were not openable this session.</td><td><span class="chip amber"><span class="dot"></span>Unconfirmed</span> get it in writing</td></tr>
+          <tr><th scope="row">"Done Right Guarantee"</th><td>Re-mow, credit or refund with a 5-day reporting window — consistently described across LawnStarter pages and third-party summaries.</td><td><span class="chip green"><span class="dot"></span>Consistent</span> across sources</td></tr>
+          <tr><th scope="row">"$19 first mow" / low price</th><td>A promo teaser; recurring price is ~$39–$55/visit + a $3.99/visit fee. Real, but the headline number isn't your ongoing rate.</td><td><span class="chip amber"><span class="dot"></span>True but partial</span></td></tr>
+          <tr><th scope="row">"Reliable / hassle-free"</th><td><strong>Contradicted</strong> by the BBB, which flags a "pattern of complaints" on cancellations and unresponsive support that it says the company "has failed to resolve."</td><td><span class="chip red"><span class="dot"></span>Contradicted by BBB</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">For completeness, the two checkable <em>local-vendor</em> marketing contradictions surfaced this session: <strong>R&amp;J Landscaping</strong> renders its Mercury News "Best Landscaper" award as both "5 consecutive years" and "13 consecutive years" across its own copy; <strong>Planted Landscaping</strong> claims "Established 2021" and "over 15 years of experience" in the same listing while advertising licensable hardscape (concrete/pavers/decks) with no surfaced licence. Both are worth pinning before trusting the rest of their marketing.</p>
+    <p class="src"><b>Source: LawnStarter FAQ/background-check/guarantee pages · lawnstarter.com; BBB Austin TX profile; BuildZoom & Yelp listings (R&amp;J, Planted).</b> <em>(Vendor's own claims tested against the BBB's independent complaint record and third-party listings. Read via web search 11 Aug 2026; not directly openable.)</em></p>
+  </section>
+
+  <!-- ================= 9. ASSESSMENT ================= -->
+  <section class="card assess" id="assessment">
+    <p class="eyebrow">No jargon</p>
+    <h2>My assessment, in plain English</h2>
+
+    <h3>The situation, simply</h3>
+    <p class="short">You need the grass cut every week or two. You can hire a neighbourhood gardener for cash, book a gig worker by the hour, or use a service that sends someone and stands behind the job. They cost roughly the same per month. The difference isn't the mowing — it's what happens on a bad day.</p>
+
+    <h3>Why your priority beats price</h3>
+    <p class="short">The cheapest option saves you maybe $30–$50 a month. But if an uninsured worker trips on your step, or a mower flings a rock through a window, the person legally on the hook can be <strong>you</strong> — and that bill is measured in thousands, not dollars. Paying a little more for someone who carries insurance and stands behind the work isn't overpaying. It's buying out the one risk that can actually hurt you. That's why "covered and reliable" beats "cheapest."</p>
+
+    <h3>The recommendation</h3>
+    <p class="short"><strong>Go with LawnStarter.</strong> One headline reason: it's the only option that puts real damage protection — $2 million — and documented background checks in writing, which is exactly the risk that matters here.</p>
+    <p class="short">Three more, ranked:</p>
+    <ol class="short">
+      <li><strong>It's genuinely hands-off</strong> — set price, automatic weekly scheduling, no managing anyone.</li>
+      <li><strong>It has a real guarantee</strong> — a bad mow gets redone or refunded within five days.</li>
+      <li><strong>It's the cheapest per visit</strong> in the managed tier, so you're not paying a premium for the protection.</li>
+    </ol>
+    <p class="short"><strong>The honest catch:</strong> its complaint record is about cancellations and slow support. So you might occasionally have to chase a rescheduled visit. That's an annoyance, not a financial risk — and it's the trade I'd make.</p>
+
+    <h3>The runner-up</h3>
+    <p class="short"><strong>Lawn Love</strong> — same hands-off model, the only one BBB-accredited, with a clean money-back guarantee. The only reason it's second is that it doesn't publish a damage-cover number, and that number is the whole point here.</p>
+
+    <h3>Who you didn't pick, and why</h3>
+    <p class="short"><strong>GreenPal</strong> — clever "approve before you pay" protection and consistent ratings, but no background check and no damage cover. <strong>A local gardener</strong> — probably the best value on the street, but I couldn't verify a single one this session, and the cheap cash operator is the most likely to carry no insurance. <strong>TaskRabbit</strong> — you asked about it; it's built for one-off jobs and openly says it isn't an insurer, so it's the wrong tool for a standing weekly mow (fine for a one-time cleanup). <strong>Angi</strong> — weakest trust signals of all and an FTC settlement on its record.</p>
+
+    <h3>The uncomfortable part you should know</h3>
+    <p class="short">I built this whole report without being able to open a single web page directly — a network block meant everything was read second-hand through search. The logic is sound and the sources are real, but <strong>before you commit, two clicks and one call close the gap</strong>: check LawnStarter serves 95138, and read what its "$2 million protection" actually covers. Don't skip those.</p>
+
+    <h3>What you'd actually do, in order</h3>
+    <ol class="short">
+      <li>Enter your address on <strong>lawnstarter.com</strong> and <strong>lawnlove.com</strong> to confirm 95138 service and get real quotes.</li>
+      <li>Send the two emails below (identical scope, so the quotes compare).</li>
+      <li>Get LawnStarter's <strong>$2M protection terms and the Done Right guarantee in writing</strong>; ask Lawn Love the same.</li>
+      <li>Book LawnStarter's <strong>$19 first mow</strong> as a no-risk trial. If a visit is missed or support drags, switch to Lawn Love — you've lost nothing.</li>
+      <li>Optionally, get one local gardener quote for price comparison — but only hire if they email you a <strong>certificate of insurance from their broker.</strong></li>
+    </ol>
+  </section>
+
+  <!-- ================= 10. EMAILS ================= -->
+  <section class="card" id="emails">
+    <p class="eyebrow">Ready to send</p>
+    <h2>Copy-paste outreach emails</h2>
+    <p>Identical scope in every email, so the quotes are directly comparable. Each asks for itemized pricing, an insurance certificate sent <strong>directly by their broker</strong>, and the guarantee in writing. Fill in the two bracketed contact fields before sending.</p>
+
+    <div class="email">
+      <div class="email-top">
+        <span class="to">To: <b>LawnStarter</b> (via lawnstarter.com quote / support)</span>
+        <button class="copybtn" type="button" data-copy="e1">Copy</button>
+      </div>
+      <pre id="e1">Subject: Weekly mow quote — 5818 Killarney Circle, San Jose 95138
+
+Hello,
+
+I'd like a quote for recurring lawn mowing at 5818 Killarney Circle,
+San Jose, CA 95138. Please confirm you service this ZIP.
+
+Scope (please price exactly this so I can compare vendors):
+  • Weekly mowing of the lawn, standard bundle:
+    mow + string-trim + edge along hard surfaces + blow/cleanup
+  • Clippings mulched by default; please quote bag-and-haul as a
+    separate optional line item
+  • Ongoing weekly service, with a biweekly price as an alternative
+
+Please send me, in writing:
+  1. Itemized pricing — per-visit base, the per-visit service fee,
+     any add-ons, and the effective monthly total (weekly & biweekly)
+  2. A Certificate of Insurance sent directly by your insurance
+     broker/carrier, showing general liability limits — plus written
+     confirmation of the "$2 million property protection," including
+     what it covers and its exclusions
+  3. Your Done Right Guarantee terms in writing (re-mow/refund window)
+  4. Confirmation your pros are background-checked, and whether the
+     same pro is assigned to recurring visits
+
+Thank you,
+[Your name] — [phone / email]</pre>
+    </div>
+
+    <div class="email">
+      <div class="email-top">
+        <span class="to">To: <b>Lawn Love</b> (via lawnlove.com quote / support)</span>
+        <button class="copybtn" type="button" data-copy="e2">Copy</button>
+      </div>
+      <pre id="e2">Subject: Weekly mow quote — 5818 Killarney Circle, San Jose 95138
+
+Hello,
+
+I'd like a quote for recurring lawn mowing at 5818 Killarney Circle,
+San Jose, CA 95138. Please confirm you service this ZIP.
+
+Scope (please price exactly this so I can compare vendors):
+  • Weekly mowing of the lawn, standard bundle:
+    mow + string-trim + edge along hard surfaces + blow/cleanup
+  • Clippings mulched by default; please quote bag-and-haul as a
+    separate optional line item
+  • Ongoing weekly service, with a biweekly price as an alternative
+
+Please send me, in writing:
+  1. Itemized pricing — per-visit base, any fees or add-ons, and the
+     effective monthly total (weekly & biweekly)
+  2. A Certificate of Insurance sent directly by your insurance
+     broker/carrier, showing general liability limits, and written
+     detail of any property-damage coverage that applies to a visit
+  3. Your 100% satisfaction / money-back guarantee terms in writing,
+     including the claim window and the payment-hold period
+  4. Confirmation your pros are background-checked (and the scope of
+     that check), and whether the same pro handles recurring visits
+
+Thank you,
+[Your name] — [phone / email]</pre>
+    </div>
+
+    <div class="email">
+      <div class="email-top">
+        <span class="to">To: <b>A local gardener</b> (e.g. Tracy's Landscaping · optional price benchmark)</span>
+        <button class="copybtn" type="button" data-copy="e3">Copy</button>
+      </div>
+      <pre id="e3">Subject: Weekly mow quote — 5818 Killarney Circle, San Jose 95138
+
+Hi,
+
+I'm looking for regular lawn mowing at 5818 Killarney Circle,
+San Jose, CA 95138, and would like a quote.
+
+Scope (please price exactly this so I can compare):
+  • Weekly mowing, standard: mow + trim + edge + blow/cleanup
+  • Please quote a flat monthly rate for weekly service, and an
+    alternative flat monthly rate for biweekly service
+  • Note separately any charge for bagging and hauling clippings
+
+Because the work is on my property, please also send:
+  1. A Certificate of Insurance sent directly by your insurance
+     broker — showing general liability, and workers' compensation
+     if you bring any helpers/employees
+  2. Confirmation of what's included, and your rate for a one-time
+     cleanup if the lawn is overgrown on the first visit
+  3. Whether you'll put the scope and price in a short written
+     agreement
+
+Thanks very much,
+[Your name] — [phone / email]</pre>
+    </div>
+  </section>
+
+  <!-- ================= 11. SOURCES ================= -->
+  <section class="card" id="sources">
+    <p class="eyebrow">Show your work</p>
+    <h2>Numbered sources</h2>
+    <p class="muted small">Grouped by tier, highest authority first. Every entry carries its retrieval date (11 Aug 2026) and a one-line note on what it is and why it's credible. <strong>Universal caveat:</strong> this session's network policy blocked direct page access, so all were read server-side via web search — no page below was opened on-screen, and the failed direct-fetch attempts are logged in the Dead Ends group so you can close them.</p>
+
+    <p class="grp">A · Government & regulatory (primary law)</p>
+    <ol class="refs">
+      <li>CA Business & Professions Code §7026.1 — definition of "contractor" / gardener carve-out. leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">Enacted California statute; the controlling text on whether mowing is "contracting." Authoritative primary law.</span></li>
+      <li>CA Business & Professions Code §7048 — minor-work licence exemption ($1,000). leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">Enacted statute setting the licence-exemption dollar threshold. Primary law.</span></li>
+      <li>AB 2622 (2024) & CSLB "AB 2622 Implementation" bulletin — raises threshold $500→$1,000, eff. 1 Jan 2025. cslb.ca.gov · read 11 Aug 2026.<span class="rt">The state licensing board's own guidance implementing the statute. Authoritative.</span></li>
+      <li>CA Labor Code §2750.5 — unlicensed worker deemed employee. leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">Enacted statute governing employer recharacterisation. Primary law.</span></li>
+      <li>CA Labor Code §§3351(d), 3352(h) — residential-employee status & casual-worker exclusion. leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">Enacted statutes defining your workers'-comp exposure for household help. Primary law.</span></li>
+      <li>CA Insurance Code §11590 — homeowner policies deemed to include workers'-comp for residential employees. leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">Enacted statute; the basis for homeowner-policy coverage of qualifying workers. Primary law.</span></li>
+      <li>CA Labor Code §§2775–2787 (AB 5) & Dynamex Operations West v. Superior Court (2018) 4 Cal.5th 903 — ABC test. leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">The enacted gig-classification statutes and the controlling CA Supreme Court decision. Authoritative.</span></li>
+      <li>CA Civil Code §§1689.6–1689.7 — 3-day home-solicitation cancellation right & notice. leginfo.legislature.ca.gov · read 11 Aug 2026.<span class="rt">Enacted consumer-protection statutes. Primary law.</span></li>
+      <li>CSLB — "The Downside of Being an Owner-Builder" & "Check a License." cslb.ca.gov · read 11 Aug 2026.<span class="rt">The state contractor board's official consumer guidance and the authoritative licence-status tool.</span></li>
+      <li>City of San José — Business Tax & Registration (SJMC Ch. 4.76). sanjoseca.gov · read 11 Aug 2026.<span class="rt">The city's official requirement that operators hold a business-tax certificate. Authoritative municipal source.</span></li>
+      <li>U.S. FTC — press release, Angi (HomeAdvisor) deceptive-marketing settlement, Apr 2023. ftc.gov · read 11 Aug 2026.<span class="rt">The federal consumer-protection regulator's official enforcement record. Authoritative.</span></li>
+    </ol>
+
+    <p class="grp">B · Vendors' own published material</p>
+    <ol class="refs" start="12">
+      <li>LawnStarter — San Jose service page, FAQ, "The LawnStarter Background Check," "Done Right Guarantee." lawnstarter.com · read 11 Aug 2026.<span class="rt">The vendor's own pricing, vetting and guarantee pages. Primary for its claims; self-published, so audited against BBB (#22).</span></li>
+      <li>Lawn Love — San Jose page, pricing, satisfaction-guarantee terms. lawnlove.com · read 11 Aug 2026.<span class="rt">Vendor's own pages. Primary for its claims; self-published.</span></li>
+      <li>GreenPal — San Jose market page & how-it-works. yourgreenpal.com · read 11 Aug 2026.<span class="rt">Vendor's own pages. Primary for its bidding model and pricing.</span></li>
+      <li>TaskRabbit — Terms of Service, Happiness Pledge, San Jose location & no-show pages. taskrabbit.com / support.taskrabbit.com · read 11 Aug 2026.<span class="rt">The platform's binding terms and insurance language. Primary; the "not an insurer" wording is load-bearing — confirm on the live Pledge page.</span></li>
+      <li>Thumbtack — Guarantee & San Jose lawn-care page. thumbtack.com · read 11 Aug 2026.<span class="rt">Platform's own guarantee terms and category page. Primary for its claims.</span></li>
+      <li>Angi — how-it-works, background-check FAQ, national cost guide. angi.com · read 11 Aug 2026.<span class="rt">Platform's own vetting and pricing content. Primary; national, not San-Jose-specific.</span></li>
+    </ol>
+
+    <p class="grp">C · Review & accreditation platforms</p>
+    <ol class="refs" start="18">
+      <li>BBB — TaskRabbit (Roswell GA), Thumbtack (San Francisco), GreenPal (Nashville), Lawn Love (San Diego, accredited), LawnStarter (Austin), Angi (Denver). bbb.org · read 11 Aug 2026.<span class="rt">Business-accreditation & complaint-mediation non-profit; the independent record used to audit vendor claims. Ratings as surfaced, not opened on-page.</span></li>
+      <li>Trustpilot — LawnStarter, Lawn Love, GreenPal, Thumbtack, TaskRabbit, Angi listings. trustpilot.com · read 11 Aug 2026.<span class="rt">Open consumer-review platform; large volume, skews positive for marketplaces. Directional.</span></li>
+      <li>Yelp — Lawn Love; local vendors (R&amp;J, Tracy's, Planted, San Jose Yard Cleanup). yelp.com · read 11 Aug 2026.<span class="rt">Open review platform (with a hidden "not recommended" queue I could not check this session). Review counts real; star values mostly not exposed.</span></li>
+      <li>BuildZoom — contractor profiles for R&amp;J (#946599), The Lawn Ranger (#995709), Jose's (#798198). buildzoom.com · read 11 Aug 2026.<span class="rt">Third-party aggregator that republishes CSLB licence data — <strong>not</strong> the board itself. Every licence number here is Unconfirmed until checked on CSLB (#9).</span></li>
+      <li>Nextdoor / Birdeye / Bay Area Consumers' Checkbook — local vendor listings. read 11 Aug 2026.<span class="rt">Local-service listing/review sites; thin data this session. Supporting colour only.</span></li>
+    </ol>
+
+    <p class="grp">D · Industry & cost references</p>
+    <ol class="refs" start="23">
+      <li>HousecallPro — "How much to charge for lawn mowing." housecallpro.com · read 11 Aug 2026.<span class="rt">Field-service software vendor advising contractors on pricing; good for pricing structure. Vendor content, directional.</span></li>
+      <li>Lawnager & Swivl — San Jose lawn-care cost pages. lawnager.com / swivl.tech · read 11 Aug 2026.<span class="rt">Local marketplace/cost-guide pages; the San-Jose-specific figures. Directional, not independent surveys; internal inconsistencies noted in text.</span></li>
+    </ol>
+
+    <p class="grp">E · Dead ends — attempted and blocked (close these yourself)</p>
+    <ol class="refs" start="25">
+      <li><strong>Direct page-fetch of every source above</strong> — returned an organization egress-policy denial (HTTP 403 at the proxy) for cslb.ca.gov, leginfo.legislature.ca.gov, dir.ca.gov, sanjoseca.gov, and all vendor/review domains. Attempted 11 Aug 2026.<span class="rt">The root reason nothing is independently "Verified." Re-run in an unblocked session to confirm on-page.</span></li>
+      <li><strong>CSLB Check-a-License</strong> — cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx. Could not open. Run #946599 (R&amp;J), #995709 (The Lawn Ranger), #798198 (Jose's), and name-search Tracy's / Planted.<span class="rt">The authoritative licence-status record; the only way to confirm the BuildZoom numbers.</span></li>
+      <li><strong>95138 service confirmation</strong> — only Tracy's Landscaping is physically in-ZIP; for all others, coverage of 5818 Killarney Circle is city-level only. Phones to confirm directly: R&amp;J (408) 444-5068 · Tracy's (408) 629-5007 · San Jose Yard Cleanup (408) 438-1157 · Planted (669) 899-8400 · The Lawn Ranger info@thelawnranger.us.<span class="rt">A phone call closes each; none was verifiable from public pages this session.</span></li>
+      <li><strong>Yelp "not recommended" hidden queue</strong> & verbatim customer quotes — behind the review pages, not openable this session.<span class="rt">Needed for real quotes, owner responses, and the filtered-review check. Go read them on the live pages before hiring.</span></li>
+    </ol>
+  </section>
+
+  <!-- ================= 12. FINAL VERDICT ================= -->
+  <section class="final" id="final">
+    <p class="eyebrow" style="color:var(--green)">The closing argument</p>
+    <h2>Final verdict</h2>
+    <p class="decree">Hire <strong>LawnStarter</strong> for the weekly mow. Book the $19 first mow this week as a no-risk trial, and before the second visit get the $2M property-protection terms and the Done Right guarantee emailed to you in writing.</p>
+
+    <h3>Why I chose it</h3>
+    <p>Your priority, read from the request, is a lawn reliably cut without you managing it and without you carrying the risk when something goes wrong. The research turned up one fact that decides the whole thing: for a mow, a <em>licence</em> is legally irrelevant, so the real question is who can hand you <em>protection in writing</em>. Only two candidates are structurally built for hands-off recurring service — LawnStarter and Lawn Love — and of those, only LawnStarter publishes both a <strong>$2 million property-protection figure</strong> and <strong>documented criminal background checks</strong>, at the <strong>lowest per-visit price</strong> in that tier. I weighted damage/injury protection heaviest, because it's the only failure mode that costs real money; the guarantee and price came next; and I discounted its poor BBB record to a caveat, because "cancellations and slow support" is an inconvenience you can manage, not a bill you can't.</p>
+
+    <h3>Why I eliminated the others</h3>
+    <div class="elim"><b>Lawn Love</b> — genuinely good: the only BBB-accredited platform, clean money-back guarantee, same hands-off model. Knocked out by one thing — it publishes no property-damage figure, and that number is the exact risk driving this decision. <span class="chip blue"><span class="dot"></span>Stays as back-up</span>, and my named runner-up.</div>
+    <div class="elim"><b>GreenPal</b> — good at price competition and its "approve before you pay" protection is clever. Out because it shows no criminal background check and no damage cover — it protects the transaction, not your property. <span class="chip grey"><span class="dot"></span>Back-up for price only</span>.</div>
+    <div class="elim"><b>A local gardener</b> — likely the best value on the street and the California norm. Out as the <em>pick</em> because I could not verify one this session and the cheap cash operator is the most likely to carry no insurance. <span class="chip amber"><span class="dot"></span>Stays as a price benchmark</span> — hire only against a broker-issued insurance certificate.</div>
+    <div class="elim"><b>TaskRabbit</b> — the one you asked about; good for a one-off cleanup or haul. Out because it's built for single tasks, has no recurring schedule, and states outright it is not an insurer. <span class="chip grey"><span class="dot"></span>Keep for one-time jobs</span>, not the weekly.</div>
+    <div class="elim"><b>Thumbtack & Angi</b> — real reach, but self-managed lead-gen with weaker vetting; Angi additionally carries the worst trust signals and an FTC settlement. <span class="chip red"><span class="dot"></span>Not retained</span>.</div>
+
+    <h3>What would change my mind</h3>
+    <p>One fact: if LawnStarter's "$2 million property protection" turns out, in writing, to <strong>exclude routine mowing damage or sit behind unworkable conditions</strong>, its single decisive advantage over Lawn Love evaporates — and I flip the recommendation to <strong>Lawn Love</strong>, whose BBB accreditation then becomes the deciding edge. Get that fine print before the second mow.</p>
+
+    <h3>Confidence, and what's still open underneath it</h3>
+    <p><strong>Confidence: moderate-to-high on the framework, lower on the specifics.</strong> The legal reframe (mowing needs no licence; insurance is the real exposure) and the structural ranking are well-triangulated and I'd stake the recommendation on them. What remains unconfirmed sits entirely under the network limitation: no page was opened on-screen, so LawnStarter's 95138 coverage, the $2M fine print, and every review rating are read second-hand and marked Unconfirmed. None of that changes the <em>choice</em> — it changes only how much you should verify before the second visit. Two clicks and one email close it. Then mow the lawn.</p>
+  </section>
+
+  <p class="backtotop" style="text-align:center;margin-top:24px"><a href="#top">↑ Back to top</a></p>
+</div>
+
+<script>
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = document.getElementById(btn.getAttribute('data-copy'));
+      if(!pre) return;
+      var text = pre.innerText;
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1800);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+      } else { fallback(text, done); }
+    });
+  });
+  function fallback(text, cb){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta); cb();
+  }
+</script>
