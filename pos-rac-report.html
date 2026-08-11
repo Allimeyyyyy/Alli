@@ -219,6 +219,29 @@
   .deadend{font-size:12.5px; color:var(--muted); border:1px dashed var(--line); border-radius:9px; padding:10px 13px; margin-top:12px; background:var(--card2)}
   .deadend b{color:var(--warn)}
 
+  /* brand banner (in-page SVG logo tile + official link) */
+  .brandbanner{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    border-radius:12px; padding:0 22px; min-height:92px; margin:0 0 16px;
+    overflow:hidden; position:relative;
+    background:linear-gradient(135deg,var(--bc,#333),var(--bc2,#111));
+    box-shadow:var(--shadow); flex-wrap:wrap;
+  }
+  .brandbanner .bb-logo{display:flex; align-items:center; padding:14px 0}
+  .brandbanner svg.wm{height:40px; width:auto; display:block}
+  .bb-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding:14px 0}
+  .bb-tag{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.72); font-weight:700}
+  .bb-link{
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.4); color:#fff;
+    font-size:12.5px; font-weight:650; padding:8px 14px; border-radius:8px; white-space:nowrap;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .bb-link:hover{background:rgba(255,255,255,.3); text-decoration:none}
+  .bb-link .u{font-family:var(--mono); font-size:11px; opacity:.85; font-weight:500}
+  .hdrlink{display:block; font-size:11px; font-weight:500; margin-top:3px}
+  .hdrlink a{font-family:var(--mono)}
+  @media (max-width:520px){ .bb-right{align-items:flex-start} .brandbanner{padding:14px 18px} }
+
   ul.tick{list-style:none; margin:6px 0 14px; padding:0}
   ul.tick li{position:relative; padding-left:24px; margin-bottom:7px; font-size:14.5px; color:var(--ink2)}
   ul.tick li::before{content:""; position:absolute; left:2px; top:8px; width:9px; height:9px; border-radius:2px; background:var(--accent)}
@@ -494,11 +517,11 @@
         <thead>
           <tr>
             <th class="crit">Criterion</th>
-            <th>Square <span class="chip plain" style="font-size:10px">current</span></th>
-            <th>Helcim</th>
-            <th>Clover</th>
-            <th>Toast</th>
-            <th>Stripe Terminal</th>
+            <th>Square <span class="chip plain" style="font-size:10px">current</span><span class="hdrlink"><a href="https://squareup.com/us/en/hardware/terminal" target="_blank" rel="noopener">squareup.com ↗</a></span></th>
+            <th>Helcim<span class="hdrlink"><a href="https://www.helcim.com/smart-terminal/" target="_blank" rel="noopener">helcim.com ↗</a></span></th>
+            <th>Clover<span class="hdrlink"><a href="https://www.clover.com/" target="_blank" rel="noopener">clover.com ↗</a></span></th>
+            <th>Toast<span class="hdrlink"><a href="https://pos.toasttab.com/" target="_blank" rel="noopener">toasttab.com ↗</a></span></th>
+            <th>Stripe Terminal<span class="hdrlink"><a href="https://stripe.com/terminal" target="_blank" rel="noopener">stripe.com ↗</a></span></th>
           </tr>
         </thead>
         <tbody>
@@ -677,10 +700,23 @@
   <section id="profiles">
     <div class="sec-eyebrow"><span class="n">05</span> The field, ranked</div>
     <h2 class="sec-title">Candidate profiles</h2>
-    <p class="sec-sub">Each with a one-line factsheet, the honest case against, and a dead-end note where I couldn't read the primary reviews. No customer quotes are fabricated.</p>
+    <p class="sec-sub">Each with its official link, a one-line factsheet, the honest case against, and a dead-end note where I couldn't read the primary reviews. No customer quotes are fabricated.</p>
+    <p class="tnote" style="margin:-8px 0 4px"><em>Note on the images:</em> the tiles below are simplified in-page SVG logos in each vendor's own brand colours — the artifact's security sandbox blocks external images, and this environment couldn't fetch the real product photos. Tap each <strong>Visit ↗</strong> link to see the official product page and photography.</p>
 
     <!-- Helcim -->
     <div class="card">
+      <div class="brandbanner" style="--bc:#ff6a3d;--bc2:#e8482a">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 210 44" role="img" aria-label="Helcim logo">
+            <circle cx="21" cy="22" r="15" fill="#fff"/><circle cx="21" cy="22" r="6" fill="#ef4a2b"/>
+            <text x="48" y="32" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="28" font-weight="700" fill="#fff" letter-spacing="-.5">helcim</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official page</span>
+          <a class="bb-link" href="https://www.helcim.com/smart-terminal/" target="_blank" rel="noopener">Visit <span class="u">helcim.com ↗</span></a>
+        </div>
+      </div>
       <div class="prof-head"><span class="rankbadge">1</span><h3>Helcim</h3><span class="chip good">The pick</span><span class="chip warn">Search-derived pricing</span></div>
       <div class="factsheet"><strong>Factsheet:</strong> Interchange-plus (cost-plus) processor, Calgary-based, US entity in Seattle · in-person <strong>IC + 0.40% + 8¢</strong> with automatic 5-tier volume discounts · <strong>$0</strong> monthly / PCI / setup / cancellation · $99 card reader, $349 Smart Terminal · next-day free deposits (instant via RTP/FedNow) · built-in tipping · month-to-month.</div>
       <ul class="tick g">
@@ -701,6 +737,19 @@
 
     <!-- Square -->
     <div class="card">
+      <div class="brandbanner" style="--bc:#2b2b2b;--bc2:#000">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 240 44" role="img" aria-label="Square logo">
+            <rect x="3" y="7" width="30" height="30" rx="8" fill="none" stroke="#fff" stroke-width="4"/>
+            <rect x="14" y="18" width="8" height="8" rx="2" fill="#fff"/>
+            <text x="46" y="32" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="-.5">Square</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official page · current system</span>
+          <a class="bb-link" href="https://squareup.com/us/en/hardware/terminal" target="_blank" rel="noopener">Visit <span class="u">squareup.com ↗</span></a>
+        </div>
+      </div>
       <div class="prof-head"><span class="rankbadge">2</span><h3>Square Terminal</h3><span class="chip plain">Incumbent</span><span class="chip warn">Search-derived pricing</span></div>
       <div class="factsheet"><strong>Factsheet:</strong> Block, Inc.'s flagship SMB POS · in-person <strong>2.6% + 15¢</strong> (raised from +10¢ on 25 Feb 2025), keyed 3.5% + 15¢ · $0 base plan (Plus $49 / Premium $149 per location) · $299 hardware · next-day free deposits, instant 1.95% · 1-year warranty · no contract, no PCI fee.</div>
       <ul class="tick">
@@ -720,6 +769,18 @@
 
     <!-- Toast -->
     <div class="card">
+      <div class="brandbanner" style="--bc:#ff5a1f;--bc2:#e23c00">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 200 44" role="img" aria-label="Toast logo">
+            <rect x="4" y="9" width="28" height="26" rx="11" fill="#fff"/><circle cx="18" cy="22" r="5" fill="#e84010"/>
+            <text x="44" y="32" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="-.5">Toast</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official page · restaurants</span>
+          <a class="bb-link" href="https://pos.toasttab.com/" target="_blank" rel="noopener">Visit <span class="u">toasttab.com ↗</span></a>
+        </div>
+      </div>
       <div class="prof-head"><span class="rankbadge">3</span><h3>Toast</h3><span class="chip good">Runner-up — restaurants</span><span class="chip warn">Search-derived pricing</span></div>
       <div class="factsheet"><strong>Factsheet:</strong> Restaurant-first POS · in-person <strong>2.49% + 15¢</strong> on the $69/mo plan (custom rates negotiable; 2.99%+15¢ pay-as-you-go on the $0 starter) · restaurant-grade tipping & on-screen signature out-of-the-box · term contract, auto-renews yearly, early-termination fee applies.</div>
       <ul class="tick">
@@ -739,6 +800,18 @@
 
     <!-- Stripe -->
     <div class="card">
+      <div class="brandbanner" style="--bc:#7a73ff;--bc2:#635bff">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 230 44" role="img" aria-label="Stripe logo">
+            <g fill="#fff"><rect x="4" y="12" width="26" height="6" rx="3" transform="skewX(-16)"/><rect x="1" y="20" width="26" height="6" rx="3" transform="skewX(-16)"/><rect x="4" y="28" width="26" height="6" rx="3" transform="skewX(-16)"/></g>
+            <text x="46" y="32" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="-.5">stripe</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official page · developer POS</span>
+          <a class="bb-link" href="https://stripe.com/terminal" target="_blank" rel="noopener">Visit <span class="u">stripe.com ↗</span></a>
+        </div>
+      </div>
       <div class="prof-head"><span class="rankbadge">4</span><h3>Stripe Terminal</h3><span class="chip ask">Special role</span><span class="chip warn">Search-derived pricing</span></div>
       <div class="factsheet"><strong>Factsheet:</strong> Developer-first in-person payments · <strong>2.7% + 5¢</strong> card-present, no monthly fee, no minimum, no ETF · readers $59–$299 · tipping & signature supported via SDK, not out-of-the-box · requires custom integration.</div>
       <ul class="tick">
@@ -758,6 +831,18 @@
 
     <!-- Clover -->
     <div class="card">
+      <div class="brandbanner" style="--bc:#3fbf5f;--bc2:#22a24a">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 210 44" role="img" aria-label="Clover logo">
+            <g fill="#fff"><circle cx="19" cy="13" r="8"/><circle cx="28" cy="22" r="8"/><circle cx="19" cy="31" r="8"/><circle cx="10" cy="22" r="8"/></g>
+            <text x="48" y="32" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="-.5">Clover</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official page · via resellers</span>
+          <a class="bb-link" href="https://www.clover.com/" target="_blank" rel="noopener">Visit <span class="u">clover.com ↗</span></a>
+        </div>
+      </div>
       <div class="prof-head"><span class="rankbadge">5</span><h3>Clover (Fiserv)</h3><span class="chip bad">Eliminated</span><span class="chip bad">Pricing not verified</span></div>
       <div class="factsheet"><strong>Factsheet:</strong> Fiserv-owned POS sold through 3,000+ resellers/banks · in-person ~2.3–2.6% + 10¢ (third-party) · monthly $14.95–$179 (reseller-set) · hardware ~$599–$1,799 · strong native tips & signature · Rapid Deposit 1.75% · reseller contracts commonly 36–48 mo with $295–$595 ETFs.</div>
       <ul class="tick">
