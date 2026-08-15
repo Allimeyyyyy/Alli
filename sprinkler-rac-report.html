@@ -1,0 +1,1566 @@
+<title>Garden Sprinkler Installer RAC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#eef1f6; --bg2:#e6eaf1; --card:#ffffff; --card2:#f7f9fc;
+    --ink:#18202f; --ink2:#3d4759; --muted:#68728a; --faint:#8a93a6;
+    --line:#e3e8f0; --line2:#eef2f8;
+    --accent:#2159d6; --accent-ink:#1642a8; --accent-soft:#e7eefc;
+    --good:#137a3b;  --good-bg:#e3f5ea;  --good-line:#bfe6cd;
+    --warn:#9a5b06;  --warn-bg:#fdf1d8;  --warn-line:#f4dca6;
+    --bad:#b3251f;   --bad-bg:#fce7e5;   --bad-line:#f4c6c2;
+    --ask:#4a5570;   --ask-bg:#eceff5;   --ask-line:#d6dcea;
+    --shadow:0 1px 2px rgba(24,32,47,.04), 0 6px 20px rgba(24,32,47,.06);
+    --shadow-lg:0 2px 4px rgba(24,32,47,.05), 0 16px 44px rgba(24,32,47,.10);
+    --radius:14px; --radius-sm:9px;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+      --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+      --line:#2a3444; --line2:#232c3a;
+      --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+      --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+      --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+      --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+      --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+    --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+    --line:#2a3444; --line2:#232c3a;
+    --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+    --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+    --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+    --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+    --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+  }
+
+  /* ============ BASE ============ */
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+    font-size:16.5px; line-height:1.62; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;}
+  .wrap{max-width:1060px; margin:0 auto; padding:0 20px 90px}
+  h1,h2,h3,h4{line-height:1.2; text-wrap:balance; margin:0}
+  p{margin:0 0 14px}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  strong{font-weight:650}
+  section{margin-top:30px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:26px 28px;}
+  .card + .card{margin-top:18px}
+  .sec-eyebrow{font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--accent-ink);
+    font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:9px;}
+  .sec-eyebrow .n{font-family:var(--mono); font-size:11px; color:var(--muted); border:1px solid var(--line);
+    border-radius:5px; padding:1px 6px; background:var(--card2);}
+  h2.sec-title{font-size:26px; letter-spacing:-.02em; margin-bottom:6px}
+  .sec-sub{color:var(--muted); font-size:15px; margin-bottom:18px}
+  h3.blk{font-size:18.5px; letter-spacing:-.01em; margin:22px 0 10px}
+  h4.mini{font-size:14px; letter-spacing:.02em; margin:16px 0 8px; color:var(--ink2)}
+
+  /* ============ CHIPS ============ */
+  .chip{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:650;
+    letter-spacing:.02em; padding:2px 9px; border-radius:100px; border:1px solid var(--line);
+    white-space:nowrap; vertical-align:middle; font-family:var(--sans);}
+  .chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.8}
+  .chip.good{color:var(--good); background:var(--good-bg); border-color:var(--good-line)}
+  .chip.warn{color:var(--warn); background:var(--warn-bg); border-color:var(--warn-line)}
+  .chip.bad{color:var(--bad); background:var(--bad-bg); border-color:var(--bad-line)}
+  .chip.ask{color:var(--ask); background:var(--ask-bg); border-color:var(--ask-line)}
+  .chip.plain{color:var(--ink2); background:var(--card2)}
+  .chip.plain::before{display:none}
+
+  /* ============ CITATIONS ============ */
+  .cite{font-size:12.5px; color:var(--muted); border-left:3px solid var(--line); background:var(--card2);
+    padding:8px 12px; border-radius:0 8px 8px 0; margin:10px 0 16px;}
+  .cite .src{color:var(--ink2); font-weight:600}
+  .cite .why{display:block; font-style:italic; color:var(--muted); margin-top:2px; font-size:12px}
+  .cite .date{color:var(--faint); font-variant-numeric:tabular-nums}
+
+  /* ============ BANNER ============ */
+  .banner{background:linear-gradient(180deg,var(--warn-bg),var(--card)); border:1px solid var(--warn-line);
+    border-radius:var(--radius); padding:16px 20px; margin-top:20px; box-shadow:var(--shadow);
+    font-size:13.5px; color:var(--ink2);}
+  .banner b{color:var(--warn)}
+  .banner .row1{display:flex; align-items:center; gap:10px; font-weight:700; color:var(--warn); font-size:13px;
+    letter-spacing:.03em; text-transform:uppercase; margin-bottom:7px}
+
+  /* ============ HERO ============ */
+  .hero{margin-top:22px; background:radial-gradient(120% 140% at 88% -10%, var(--accent-soft), transparent 55%), var(--card);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-lg); overflow:hidden; position:relative;}
+  .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:0}
+  .hero-l{padding:36px 34px 32px}
+  .hero-r{position:relative; min-height:320px; border-left:1px solid var(--line2); background:var(--card2)}
+  .hero .kicker{font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-ink); font-weight:700}
+  .hero h1{font-size:44px; letter-spacing:-.03em; margin:12px 0 8px; line-height:1.03}
+  .hero h1 .rac{color:var(--accent)}
+  .hero .lede{font-size:16px; color:var(--ink2); max-width:46ch}
+  .hero .expand{font-size:13px; color:var(--muted); margin-top:14px; display:flex; flex-wrap:wrap; gap:6px 16px}
+  .hero .expand b{color:var(--ink); font-weight:700}
+  .hero svg{display:block; width:100%; height:100%; position:absolute; inset:0}
+
+  /* ============ TOC ============ */
+  .toc{margin-top:18px}
+  .toc ol{list-style:none; margin:0; padding:0; columns:2; column-gap:26px}
+  .toc li{break-inside:avoid; margin-bottom:2px}
+  .toc a{display:flex; gap:10px; padding:7px 10px; border-radius:8px; color:var(--ink2); font-size:14px; align-items:baseline}
+  .toc a:hover{background:var(--card2); text-decoration:none; color:var(--ink)}
+  .toc .tn{font-family:var(--mono); font-size:12px; color:var(--accent); min-width:20px}
+
+  /* ============ VERDICT BOX ============ */
+  .verdict{background:linear-gradient(155deg,var(--good-bg),var(--card) 70%); border:1.5px solid var(--good-line);
+    border-radius:var(--radius); padding:24px 26px; box-shadow:var(--shadow);}
+  .verdict .vtag{display:inline-flex; gap:7px; align-items:center; font-size:12px; font-weight:800;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--good)}
+  .verdict h3{font-size:23px; margin:10px 0 4px; letter-spacing:-.02em}
+  .verdict h3 .pk{color:var(--good)}
+  .verdict .vrow{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px}
+  .vcell{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px}
+  .vcell .lab{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:4px}
+  .vcell .who{font-size:16px; font-weight:700; letter-spacing:-.01em}
+  .vcell .note{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; box-shadow:var(--shadow)}
+  .stat .big{font-size:29px; font-weight:750; letter-spacing:-.03em; color:var(--accent); line-height:1; font-variant-numeric:tabular-nums}
+  .stat .cap{font-size:12.5px; color:var(--ink2); margin-top:7px; line-height:1.4}
+  .stat .sub{font-size:11px; color:var(--faint); margin-top:5px}
+
+  .callout{border:1.5px solid var(--accent); border-radius:var(--radius);
+    background:linear-gradient(160deg,var(--accent-soft),var(--card) 65%); padding:20px 24px; margin-top:16px; box-shadow:var(--shadow);}
+  .callout .ctitle{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-ink);
+    font-weight:800; margin-bottom:7px; display:flex; align-items:center; gap:8px}
+  .callout h3{font-size:20px; letter-spacing:-.02em; margin-bottom:8px}
+  .callout p{font-size:15px; color:var(--ink2); margin-bottom:8px}
+
+  /* ============ TABLES ============ */
+  .tscroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); background:var(--card)}
+  table{border-collapse:collapse; width:100%; font-size:14px; min-width:640px}
+  .matrix{min-width:900px}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line2); vertical-align:top}
+  thead th{position:sticky; top:0; background:var(--card2); z-index:2; font-size:12px; letter-spacing:.03em;
+    text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1.5px solid var(--line);}
+  tbody tr:last-child td{border-bottom:none}
+  td.crit, th.crit{font-weight:650; color:var(--ink); background:var(--card2); position:sticky; left:0; z-index:1; min-width:158px}
+  thead th.crit{z-index:3}
+  .cellwin{background:var(--good-bg); box-shadow:inset 3px 0 0 var(--good)}
+  .cellwin strong{color:var(--good)}
+  td.num{font-variant-numeric:tabular-nums}
+  .vrowfin td{background:var(--accent-soft); font-weight:650; border-top:1.5px solid var(--accent)}
+  .tnote{font-size:12px; color:var(--muted); margin-top:8px}
+
+  /* ============ PROFILES ============ */
+  .rankbadge{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px;
+    background:var(--accent); color:#fff; font-weight:750; font-size:15px; margin-right:2px}
+  .prof-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .prof-head h3{font-size:21px; letter-spacing:-.02em}
+  .factsheet{font-size:13.5px; color:var(--ink2); background:var(--card2); border:1px solid var(--line2);
+    border-radius:9px; padding:11px 14px; margin:12px 0}
+  .quote{border-left:3px solid var(--accent); padding:4px 0 4px 15px; margin:12px 0; color:var(--ink2); font-style:italic}
+  .quote .attr{display:block; font-style:normal; font-size:12.5px; color:var(--muted); margin-top:5px}
+  .against{background:var(--bad-bg); border:1px solid var(--bad-line); border-radius:10px; padding:13px 16px; margin-top:12px}
+  .against .h{font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:800; color:var(--bad); margin-bottom:6px}
+  .against p{font-size:13.5px; color:var(--ink2); margin:0}
+  .deadend{font-size:12.5px; color:var(--muted); border:1px dashed var(--line); border-radius:9px;
+    padding:10px 13px; margin-top:12px; background:var(--card2)}
+  .deadend b{color:var(--warn)}
+
+  .brandbanner{display:flex; align-items:center; justify-content:space-between; gap:14px; border-radius:12px;
+    padding:0 22px; min-height:92px; margin:0 0 16px; overflow:hidden; position:relative;
+    background:linear-gradient(135deg,var(--bc,#333),var(--bc2,#111)); box-shadow:var(--shadow); flex-wrap:wrap;}
+  .brandbanner .bb-logo{display:flex; align-items:center; padding:14px 0}
+  .brandbanner svg.wm{height:42px; width:auto; display:block}
+  .bb-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding:14px 0}
+  .bb-tag{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.72); font-weight:700}
+  .bb-link{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.4); color:#fff; font-size:12.5px;
+    font-weight:650; padding:8px 14px; border-radius:8px; white-space:nowrap; display:inline-flex; align-items:center; gap:6px;}
+  .bb-link:hover{background:rgba(255,255,255,.3); text-decoration:none}
+  .bb-link .u{font-family:var(--mono); font-size:11px; opacity:.85; font-weight:500}
+  .hdrlink{display:block; font-size:11px; font-weight:500; margin-top:3px}
+  .hdrlink a{font-family:var(--mono)}
+  @media (max-width:520px){ .bb-right{align-items:flex-start} .brandbanner{padding:14px 18px} }
+
+  ul.tick{list-style:none; margin:6px 0 14px; padding:0}
+  ul.tick li{position:relative; padding-left:24px; margin-bottom:7px; font-size:14.5px; color:var(--ink2)}
+  ul.tick li::before{content:""; position:absolute; left:2px; top:8px; width:9px; height:9px; border-radius:2px; background:var(--accent)}
+  ul.tick.g li::before{background:var(--good)}
+  ul.tick.r li::before{background:var(--bad)}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .subcard{background:var(--card2); border:1px solid var(--line2); border-radius:10px; padding:16px 18px}
+  .subcard h4{font-size:15px; margin-bottom:8px; letter-spacing:-.01em}
+
+  .email{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:0; margin-top:14px; overflow:hidden}
+  .email-bar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 16px;
+    background:var(--card); border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .email-bar .to{font-size:13px; color:var(--ink2)} .email-bar .to b{color:var(--ink)}
+  .copybtn{font-family:var(--sans); font-size:12.5px; font-weight:650; color:#fff; background:var(--accent);
+    border:none; border-radius:7px; padding:7px 14px; cursor:pointer; transition:background .15s}
+  .copybtn:hover{background:var(--accent-ink)}
+  .copybtn.done{background:var(--good)}
+  .email pre{margin:0; padding:16px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.6;
+    color:var(--ink2); white-space:pre-wrap; word-wrap:break-word}
+
+  .srcgroup{margin-top:18px}
+  .srcgroup h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink);
+    margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+  ol.srclist{margin:0; padding-left:0; list-style:none}
+  ol.srclist li{position:relative; padding:8px 0 8px 34px; border-bottom:1px solid var(--line2); font-size:13px}
+  ol.srclist li::before{content:attr(data-n); position:absolute; left:0; top:8px; font-family:var(--mono); font-size:11px;
+    color:var(--accent); background:var(--accent-soft); border-radius:5px; width:24px; height:20px;
+    display:flex; align-items:center; justify-content:center; font-weight:700}
+  ol.srclist .why{display:block; font-style:italic; color:var(--muted); font-size:12px; margin-top:2px}
+  ol.srclist .u{color:var(--muted); word-break:break-all}
+
+  .final{background:linear-gradient(165deg,#0f3d2e,#12603f 55%,#0d3427); color:#eafff4; border-radius:20px;
+    padding:34px 34px 30px; margin-top:34px; box-shadow:var(--shadow-lg); border:1px solid #1e7a52;}
+  .final .fk{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:#9fe3bf; font-weight:800}
+  .final h2{font-size:28px; letter-spacing:-.02em; margin:10px 0 14px; color:#fff}
+  .final p{color:#d3f3e2; font-size:15.5px}
+  .final .pick1{font-size:19px; color:#fff; font-weight:650; border-left:4px solid #6fd8a0; padding-left:16px; margin:0 0 20px}
+  .final h4{color:#fff; font-size:15px; margin:22px 0 8px; letter-spacing:.02em}
+  .final .elim{border-top:1px solid #226b4b; padding:12px 0; display:grid; grid-template-columns:170px 1fr; gap:16px}
+  .final .elim .nm{font-weight:700; color:#fff; font-size:14px}
+  .final .elim .bd{color:#cfeedd; font-size:13.5px}
+  .final .conf{margin-top:22px; background:rgba(255,255,255,.07); border:1px solid #2a8a5d; border-radius:12px; padding:16px 18px}
+  .final .conf .lab{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#9fe3bf; font-weight:800; margin-bottom:6px}
+  .final a{color:#a9f0c8}
+  .final .backup{display:inline-block; font-size:11px; font-weight:700; color:#0d3427; background:#9fe3bf;
+    border-radius:5px; padding:1px 7px; margin-left:8px; letter-spacing:.03em}
+
+  .foot{margin-top:26px; text-align:center; color:var(--faint); font-size:12px; line-height:1.7}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-r{min-height:210px; border-left:none; border-top:1px solid var(--line2)}
+    .hero h1{font-size:36px}
+    .stats{grid-template-columns:1fr 1fr}
+    .verdict .vrow{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    .grid2{grid-template-columns:1fr}
+    .final .elim{grid-template-columns:1fr; gap:2px}
+  }
+  @media (max-width:480px){
+    body{font-size:16px}
+    .card{padding:20px 18px}
+    .stats{grid-template-columns:1fr}
+    .hero-l{padding:26px 22px}
+  }
+  @media print{
+    body{background:#fff}
+    .card,.hero,.verdict,.tscroll,.stat,.callout{box-shadow:none}
+    .copybtn{display:none}
+    .final{background:#0f3d2e !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    a{color:var(--ink)}
+    section{break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px}
+</style>
+
+<div class="wrap">
+
+  <!-- ===== CONFIDENTIALITY BANNER ===== -->
+  <div class="banner" role="note">
+    <div class="row1">🔒 Confidential — prepared for the homeowner at San Jose, CA 95138 · internal decision document</div>
+    <p style="margin:0">Every fact below was read on <b>15 August 2026</b> and is date-stamped at the point of use. Contractor licence status, bond and workers'-comp filings change <b>daily</b>; prices and rebate budgets change <b>seasonally</b>. Re-confirm anything load-bearing before you sign or pay. This document names real businesses and commits to one recommendation — treat it as research, not legal advice, and not a contract.</p>
+    <p style="margin:8px 0 0"><b>Sourcing method — read this first, it changes how you should weigh everything.</b> This environment's network policy blocked direct page loads to <em>every</em> external domain — cslb.ca.gov, yelp.com, bbb.org, valleywater.org, sanjoseca.gov, all of them. Research was therefore assembled through <b>web search that surfaces those pages' own text</b>, not by rendering each primary page myself. So: every figure is attributed to the correct official URL, and each is labelled <span class="chip warn" style="margin:0 2px">Search-derived</span> where I could not open the record with my own eyes. Where nothing official could be pinned down at all, the label is <span class="chip bad" style="margin:0 2px">Not verified</span>. Consequently <b>I have invented no customer quotes, no star ratings and no review counts</b> — the review pages were unreachable, and a fabricated quote would be worse than none. §04 and every profile hand you the exact URL and phone number to close each gap in about ten minutes.</p>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-l">
+        <div class="kicker">Residential Irrigation · San Jose 95138</div>
+        <h1>Garden Sprinkler Installer <span class="rac">RAC</span></h1>
+        <p class="lede"><strong>R</strong>esearch · <strong>A</strong>ssessment · <strong>C</strong>omparison — choosing a licensed contractor to design and install a residential sprinkler / drip irrigation system in Silver Creek, San Jose.</p>
+        <div class="expand">
+          <span>Reframe: <b>the cheapest tier is illegal here</b></span>
+          <span>Real lever: <b>the CSLB record</b></span>
+          <span>On the table: <b>up to $3,000 in rebates</b></span>
+        </div>
+      </div>
+      <div class="hero-r" aria-hidden="true">
+        <svg viewBox="0 0 420 320" preserveAspectRatio="xMidYMid slice" role="img">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e7eefc"/><stop offset="1" stop-color="#f7f9fc"/>
+            </linearGradient>
+            <linearGradient id="turf" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4fae74"/><stop offset="1" stop-color="#137a3b"/>
+            </linearGradient>
+            <linearGradient id="spray" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#2159d6" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#6f9bff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="420" height="320" fill="url(#sky)"/>
+          <!-- turf bed -->
+          <path d="M0 214 Q120 190 240 208 Q340 222 420 202 L420 320 L0 320 Z" fill="url(#turf)" opacity=".92"/>
+          <path d="M0 214 Q120 190 240 208 Q340 222 420 202" fill="none" stroke="#0e5c2c" stroke-width="1.5" opacity=".5"/>
+          <!-- drip line beneath -->
+          <path d="M20 262 H400" stroke="#123a86" stroke-width="3" stroke-linecap="round" opacity=".55" stroke-dasharray="1 0"/>
+          <g fill="#123a86" opacity=".7">
+            <circle cx="70" cy="262" r="3"/><circle cx="140" cy="262" r="3"/><circle cx="210" cy="262" r="3"/>
+            <circle cx="280" cy="262" r="3"/><circle cx="350" cy="262" r="3"/>
+          </g>
+          <!-- three pop-up heads with spray arcs -->
+          <g>
+            <rect x="86" y="196" width="9" height="20" rx="4" fill="#3d4759"/>
+            <circle cx="90.5" cy="194" r="5" fill="#68728a"/>
+            <path d="M90 190 Q140 138 196 176" fill="none" stroke="url(#spray)" stroke-width="9" stroke-linecap="round"/>
+            <path d="M90 190 Q132 150 176 178" fill="none" stroke="#2159d6" stroke-width="1.6" opacity=".45"/>
+          </g>
+          <g>
+            <rect x="214" y="200" width="9" height="20" rx="4" fill="#3d4759"/>
+            <circle cx="218.5" cy="198" r="5" fill="#68728a"/>
+            <path d="M218 194 Q272 132 332 178" fill="none" stroke="url(#spray)" stroke-width="9" stroke-linecap="round"/>
+            <path d="M218 194 Q264 146 310 180" fill="none" stroke="#2159d6" stroke-width="1.6" opacity=".45"/>
+          </g>
+          <g>
+            <rect x="340" y="194" width="9" height="20" rx="4" fill="#3d4759"/>
+            <circle cx="344.5" cy="192" r="5" fill="#68728a"/>
+            <path d="M344 188 Q384 148 414 176" fill="none" stroke="url(#spray)" stroke-width="9" stroke-linecap="round"/>
+          </g>
+          <!-- droplets -->
+          <g fill="#2159d6" opacity=".35">
+            <circle cx="150" cy="120" r="3.5"/><circle cx="196" cy="104" r="2.6"/><circle cx="252" cy="112" r="3"/>
+            <circle cx="300" cy="98" r="2.4"/><circle cx="118" cy="142" r="2.4"/>
+          </g>
+          <!-- valve box / controller -->
+          <g transform="translate(24 122)">
+            <rect x="0" y="0" width="58" height="74" rx="8" fill="#ffffff" stroke="#d7deea" stroke-width="1.5"/>
+            <rect x="10" y="11" width="38" height="26" rx="4" fill="#123a86"/>
+            <rect x="15" y="18" width="20" height="4" rx="2" fill="#9dc0ff"/>
+            <rect x="15" y="26" width="26" height="4" rx="2" fill="#6f9bff" opacity=".8"/>
+            <circle cx="18" cy="52" r="5" fill="#137a3b"/><circle cx="33" cy="52" r="5" fill="#e3e8f0"/><circle cx="48" cy="52" r="5" fill="#e3e8f0"/>
+            <rect x="10" y="63" width="38" height="4" rx="2" fill="#e3e8f0"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOC ===== -->
+  <section class="card toc" aria-label="Table of contents">
+    <div class="sec-eyebrow"><span class="n">TOC</span> What's in this report</div>
+    <ol>
+      <li><a href="#call"><span class="tn">01</span> The call — verdict, stats &amp; the reframe</a></li>
+      <li><a href="#evidence"><span class="tn">02</span> What we're working with</a></li>
+      <li><a href="#matrix"><span class="tn">03</span> Comparison matrix</a></li>
+      <li><a href="#ratings"><span class="tn">04</span> Ratings — every platform</a></li>
+      <li><a href="#profiles"><span class="tn">05</span> Candidate profiles, ranked</a></li>
+      <li><a href="#cost"><span class="tn">06</span> What this should cost</a></li>
+      <li><a href="#policy"><span class="tn">07</span> The policy layer</a></li>
+      <li><a href="#audit"><span class="tn">08</span> Claim-by-claim audit — R &amp; J Landscaping</a></li>
+      <li><a href="#plain"><span class="tn">09</span> My assessment, in plain English</a></li>
+      <li><a href="#emails"><span class="tn">10</span> Copy-paste emails to top vendors</a></li>
+      <li><a href="#sources"><span class="tn">11</span> Numbered sources</a></li>
+      <li><a href="#final"><span class="tn">12</span> Final verdict</a></li>
+    </ol>
+  </section>
+
+  <!-- ===== 01 THE CALL ===== -->
+  <section id="call">
+    <div class="sec-eyebrow"><span class="n">01</span> The call</div>
+    <h2 class="sec-title">The verdict, up front</h2>
+    <p class="sec-sub">One pick, one runner-up, one special-role vendor — and the four numbers that decided it.</p>
+
+    <div class="verdict">
+      <div class="vtag">✓ Recommendation</div>
+      <h3>Hire <span class="pk">Cyprex Construction Landscapes</span> — the deepest licence stack and the only published hydraulic design method.</h3>
+      <p style="margin:0; color:var(--ink2); font-size:15px">Cyprex is the one candidate where a <strong>full A / B / C-27 licence set (#701749)</strong> and a written description of <em>how</em> they size a system — precipitation rate, water flow, friction loss, head elevation — both surfaced from their own material. On a Silver Creek lot, where slope and elevation change actually move the hydraulics, that is the difference between even coverage and permanent dry patches. <span class="chip warn">Licence number search-derived — verify on CSLB before you sign</span></p>
+      <div class="vrow">
+        <div class="vcell">
+          <div class="lab">The pick</div>
+          <div class="who">Cyprex Construction Landscapes</div>
+          <div class="note">CSLB #701749 · A, B, C-27 · ~31 yrs · 1116 Curtner Ave, SJ 95125 · (408) 971-4274</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Runner-up</div>
+          <div class="who">Dooling Landscape Service</div>
+          <div class="note">CSLB #549144 · trading since 1984 · owner holds a Cal Poly Ornamental Horticulture degree. Oldest verifiable licence in the set.</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Special role</div>
+          <div class="who">Lane Irrigation <span class="chip plain" style="font-size:10px">not a contractor</span></div>
+          <div class="note">Campbell supply house, est. 1969. Use it to price parts independently and sanity-check any bid's materials line.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="big">$1,000</div>
+        <div class="cap">Hard legal ceiling on what an <em>unlicensed</em> person may charge for this job — materials included.</div>
+        <div class="sub">AB 2622, eff. 1 Jan 2025 · read 15 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">$3,000</div>
+        <div class="cap">Valley Water residential rebate cap — irrigation upgrades, drip conversion, lawn replacement.</div>
+        <div class="sub">valleywater.org · read 15 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">$25,000</div>
+        <div class="cap">Contractor bond standing behind every licensed candidate here. An unlicensed one has none.</div>
+        <div class="sub">CSLB requirement · read 15 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">500<span style="font-size:18px"> sq ft</span></div>
+        <div class="cap">Landscape area at which California's water ordinance starts applying to new work.</div>
+        <div class="sub">MWELO, eff. 1 Dec 2015 · read 15 Aug 2026</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ctitle">◆ The finding that reframes everything</div>
+      <h3>The cheapest quotes you are about to receive cannot legally do this job — and that fact, not any star rating, is what sorts this market.</h3>
+      <p>Since <strong>1 January 2025</strong>, an unlicensed person in California may take on a project only if the <strong>total price — labour, materials, everything — is under $1,000</strong>, no building permit is required, and they hire nobody to help. A residential sprinkler install starts at roughly <strong>$590–$2,000 per zone</strong> and a typical yard needs <strong>3 to 5 zones</strong>. Even the smallest realistic job is several times over the line, and a two-person crew breaches the "no helper" condition on day one.</p>
+      <p>So the lowest bids in this category — the gardener with a trencher, the crew from a neighbourhood flyer — are not merely a cheaper option with more risk. They are <strong>outside the law for work of this size</strong>, and hiring one strips you of the $25,000 bond, of CSLB complaint jurisdiction, and of the workers'-comp shield that stops a trenching injury in your yard from landing on your homeowner's policy. That is why this report ranks on <strong>licence class, licence status and water-compliance competence</strong> first, and on price second. It is also why the price gap you'll see between bids is mostly not negotiating room — it's a legality gap.</p>
+      <div class="cite">
+        <span class="src">Source: AB 2622 (Carrillo), Ch. 240, Stats. 2024 — CSLB Industry Bulletin "AB 2622 Implementation" · <a href="https://www.cslb.ca.gov/Resources/IndustryBulletins/2024/AB%202622%20Implementation.FINAL.pdf">cslb.ca.gov</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The Contractors State License Board is the California agency that licenses and disciplines contractors; an Industry Bulletin is its own primary notice explaining how it will enforce a new statute. Highest available tier for this rule. I could not open the PDF from this environment — the text came through search indexing of that document.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: Angi, "How Much Does Sprinkler System Installation Cost? [2026 Data]" · <a href="https://www.angi.com/articles/how-much-does-it-cost-install-sprinkler-system.htm">angi.com</a>, and LawnStarter 2026 cost guide · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived · directional</span></span>
+        <span class="why">(Angi is an established home-services marketplace whose cost guides aggregate member-reported job prices — useful for range, not precision, and not an independent audit. Used here only to establish that the job is far above $1,000, which every source agrees on.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 EVIDENCE ===== -->
+  <section id="evidence" class="card">
+    <div class="sec-eyebrow"><span class="n">02</span> Evidence</div>
+    <h2 class="sec-title">What we're working with</h2>
+    <p class="sec-sub">Your brief, read closely — including what it didn't say, which matters as much as what it did.</p>
+
+    <h3 class="blk">What you gave me</h3>
+    <ul class="tick">
+      <li><strong>The job:</strong> "garden sprinkler installer." I've read that as a <em>new or substantially rehabilitated residential irrigation system</em> — heads, valves, mainline, controller — rather than a one-off repair. If it's actually a repair call, most of §06 and the whole legality reframe shrink, and the ranking would tilt toward the two irrigation-only outfits. <span class="chip ask">Ask</span></li>
+      <li><strong>The location:</strong> San Jose, CA <strong>95138</strong> — Silver Creek Valley, east of Highway 101. Larger-than-average lots, real grade change, and many parcels inside HOAs with landscape review. Grade matters technically: elevation change costs you pressure at the head, which is exactly the variable a designer has to solve for.</li>
+      <li><strong>The explicit ask:</strong> a link to each vendor's own website. Every candidate below carries one, and the comparison matrix headers link out too.</li>
+    </ul>
+
+    <h3 class="blk">What you didn't give me — and what I assumed</h3>
+    <p>You named no budget, no lot size, no priority ranking, and no deadline. Rather than stall, I adopted one operating priority and I'm stating it plainly so you can overturn it:</p>
+    <div class="callout" style="margin-top:12px">
+      <div class="ctitle">Assumed priority</div>
+      <h3 style="font-size:17px">A verifiable licence and demonstrable water-system competence beat a lower headline price.</h3>
+      <p style="margin:0; font-size:14.5px">Justification: this is buried infrastructure. Once the trenches are backfilled you cannot inspect the work, and the failure mode — poor head-to-head coverage, wrong precipitation rate, an undersized mainline — shows up as dead patches and a water bill, months later, with no cheap remedy. Meanwhile the state has made the low-price tier legally unavailable for work this size. <strong>If your real priority is lowest cost on a small, simple, flat area, tell me and the ranking changes</strong> — §09 says exactly how. <span class="chip ask">Assumption — overturnable</span></p>
+    </div>
+
+    <h3 class="blk">The single rule that eliminates candidates</h3>
+    <p style="font-size:17px; border-left:4px solid var(--accent); padding-left:16px; color:var(--ink)"><strong>No current, checkable CSLB licence in a classification that covers irrigation (C-27 Landscaping, or C-36 Plumbing, or A/B) → out. No exceptions, regardless of reviews, price or how long they say they've been around.</strong></p>
+    <p style="font-size:14px; color:var(--muted); margin-top:10px">Note the word <em>checkable</em>. A candidate is not eliminated because I personally failed to reach the CSLB site from this environment — that would be unfair and unsound. Failing to find a record is not the same as the record not existing. Candidates are ranked <em>lower</em> where no licence number surfaced anywhere, and the profile hands you the phone number to settle it in one call.</p>
+    <div class="cite">
+      <span class="src">Source: CSLB — Licensing Classification C-27 (Landscaping) · <a href="https://www.cslb.ca.gov/about_us/library/licensing_classifications/Licensing_Classifications_Detail.aspx?Class=C27">cslb.ca.gov</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+      <span class="why">(CSLB's own classification library — the definitive statement of what each licence class is permitted to do. C-27 is the class that covers landscape irrigation system installation in California.)</span>
+    </div>
+  </section>
+
+  <!-- ===== 03 MATRIX ===== -->
+  <section id="matrix">
+    <div class="sec-eyebrow"><span class="n">03</span> Comparison</div>
+    <h2 class="sec-title">Comparison matrix</h2>
+    <p class="sec-sub">Criteria down the left, candidates across. Shaded cell wins the row. Scroll sideways on a narrow screen.</p>
+    <div class="tscroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="crit">Criterion</th>
+            <th>Cyprex Construction Landscapes<span class="hdrlink"><a href="https://www.ecyprex.com/">ecyprex.com</a></span></th>
+            <th>Dooling Landscape Service<span class="hdrlink"><a href="https://doolinglandscapeservice.com/">doolinglandscapeservice.com</a></span></th>
+            <th>R &amp; J Landscaping<span class="hdrlink"><a href="https://www.randjlandscaping.net/">randjlandscaping.net</a></span></th>
+            <th>San Jose Sprinkler Repair<span class="hdrlink"><a href="http://www.sprinklerrepairsanjose.com/">sprinklerrepairsanjose.com</a></span></th>
+            <th>Oswald Sprinkler Repair<span class="hdrlink"><a href="https://www.yelp.com/biz/oswald-sprinkler-repair-hayward-2">yelp.com listing</a></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">CSLB licence number</td>
+            <td class="cellwin"><strong>#701749</strong> <span class="chip warn">Search-derived</span></td>
+            <td>#549144 <span class="chip warn">Search-derived</span></td>
+            <td>#946599 <span class="chip warn">Search-derived</span></td>
+            <td>None surfaced <span class="chip bad">Not verified</span></td>
+            <td>None surfaced <span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Classifications held</td>
+            <td class="cellwin"><strong>A + B + C-27</strong> — engineering, building and landscaping</td>
+            <td>Landscape contractor <span class="chip ask">Class unconfirmed</span></td>
+            <td>C-27 Landscaping — correct class for the work</td>
+            <td>Unknown <span class="chip bad">Not verified</span></td>
+            <td>Unknown <span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Licence currency</td>
+            <td>Reported active, workers' comp on file <span class="chip warn">Search-derived</span></td>
+            <td class="cellwin"><strong>Expiry stated: 30 Nov 2026</strong> — a concrete, checkable date</td>
+            <td>Reported active <span class="chip warn">Search-derived</span></td>
+            <td>Unknown <span class="chip bad">Not verified</span></td>
+            <td>Unknown <span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Years trading</td>
+            <td>~31 <span class="chip warn">Search-derived</span></td>
+            <td class="cellwin"><strong>Since 1984 (~42)</strong></td>
+            <td>Since 1999 (~27)</td>
+            <td>Since 10 Nov 2009 (~16)</td>
+            <td>Unknown <span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Irrigation specialisation</td>
+            <td class="cellwin"><strong>Publishes design method</strong> — precipitation rate, flow, friction loss, head elevation</td>
+            <td>Irrigation listed among full landscape services</td>
+            <td>Irrigation listed; extensive irrigation content pages</td>
+            <td class="cellwin"><strong>Irrigation-first business</strong> — installs, zone additions, drip</td>
+            <td class="cellwin"><strong>Irrigation-only</strong> trade name</td>
+          </tr>
+          <tr>
+            <td class="crit">Distance to 95138</td>
+            <td>~8 mi (Curtner Ave, 95125)</td>
+            <td>Santa Clara County-wide <span class="chip ask">Base address unconfirmed</span></td>
+            <td>~6 mi (El Campo Dr, 95127)</td>
+            <td class="cellwin"><strong>~4 mi</strong> (Normington Way, 95136)</td>
+            <td>~28 mi (Hayward) <span class="chip bad">Different county</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Review depth found</td>
+            <td>Yelp + HomeAdvisor + Calscape profiles exist; counts unreadable</td>
+            <td>Angi + HomeAdvisor profiles exist; counts unreadable</td>
+            <td class="cellwin"><strong>38 Yelp reviews</strong> — largest verifiable local count</td>
+            <td>BBB profile exists; count unreadable</td>
+            <td>145 Yelp reviews — but Hayward-based <span class="chip warn">Out of area</span></td>
+          </tr>
+          <tr>
+            <td class="crit">BBB status</td>
+            <td class="cellwin"><strong>No adverse BBB finding surfaced</strong></td>
+            <td>Not accredited; BBB states insufficient information to rate</td>
+            <td>No BBB profile surfaced</td>
+            <td>Not accredited; file opened 10 Jun 2013</td>
+            <td>No BBB profile surfaced</td>
+          </tr>
+          <tr>
+            <td class="crit">Water-compliance signal</td>
+            <td class="cellwin"><strong>Native-plant / Calscape listed</strong> + hydraulic design language</td>
+            <td>Cal Poly Ornamental Horticulture background (owner)</td>
+            <td>Water-conservation content published</td>
+            <td>Water-conservation page published</td>
+            <td>None surfaced <span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Published warranty</td>
+            <td>None published <span class="chip ask">Ask</span></td>
+            <td>None published <span class="chip ask">Ask</span></td>
+            <td>None published <span class="chip ask">Ask</span></td>
+            <td>None published <span class="chip ask">Ask</span></td>
+            <td>None published <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Verdict</td>
+            <td><strong>PICK</strong> — deepest licence stack, only published design method</td>
+            <td><strong>RUNNER-UP</strong> — longest record, checkable expiry</td>
+            <td><strong>STRONG BACK-UP</strong> — right class, most reviews, one claim to clean up</td>
+            <td><strong>HOLD</strong> — closest and most specialised, but licence unresolved</td>
+            <td><strong>OUT</strong> — wrong county for an install</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Every cell above is sourced in §05 at the point of the claim. "Search-derived" means the figure came from indexed page text, not from a page I opened; "Not verified" means no official source could be pinned at all. A blank platform is not a demerit — see §04.</p>
+  </section>
+
+  <!-- ===== 04 RATINGS ===== -->
+  <section id="ratings">
+    <div class="sec-eyebrow"><span class="n">04</span> Ratings</div>
+    <h2 class="sec-title">Ratings — every platform</h2>
+    <p class="sec-sub">This is the weakest table in the report, and it should look weak. Here is exactly why.</p>
+
+    <div class="card" style="margin-bottom:16px">
+      <p style="margin:0; font-size:14.5px"><strong>Read this before the numbers.</strong> Yelp, Google, BBB, Angi, HomeAdvisor, Thumbtack and Nextdoor were all unreachable from this environment. I will not transcribe a star rating I could not see, and I will not reproduce a customer quote I could not read — a fabricated quote with a real customer's name attached would be the single worst thing this report could contain. So most cells below say <em>unreadable</em> and carry the live link for you. Two counts did surface through indexed listing text and are marked as such.</p>
+      <p style="margin:10px 0 0; font-size:14.5px">Two further rules I've held to. <strong>An empty platform is not a red flag</strong> when the platform doesn't serve this category — G2 and Capterra rate software, not contractors, and their absence here means nothing. And <strong>a filtered or anonymous review is not a finding</strong>: Yelp's "not currently recommended" queue is worth <em>you</em> opening for tone, but nothing in it belongs in a decision as evidence.</p>
+    </div>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="crit">Platform</th>
+            <th>Cyprex</th><th>Dooling</th><th>R &amp; J</th><th>SJ Sprinkler Repair</th><th>Oswald</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Yelp</td>
+            <td>Profile exists — <a href="https://www.yelp.com/biz/cyprex-construction-landscapes-san-jose-2">listing</a>. Rating unreadable <span class="chip bad">Not verified</span></td>
+            <td>No Yelp profile surfaced <span class="chip plain">Absent ≠ bad</span></td>
+            <td class="cellwin"><strong>38 reviews</strong>, 28 photos — <a href="https://www.yelp.com/biz/r-and-j-landscaping-san-jose">listing</a>. Star value unreadable <span class="chip warn">Search-derived</span></td>
+            <td>No Yelp profile surfaced</td>
+            <td><strong>145 reviews</strong>, 55 photos — <a href="https://www.yelp.com/biz/oswald-sprinkler-repair-hayward-2">listing</a> <span class="chip warn">Search-derived</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Yelp "not recommended" queue</td>
+            <td colspan="5" style="color:var(--muted)">Not opened for any candidate — the queue sits behind an additional page load I could not make. <strong>Open it yourself</strong> via the small grey link at the foot of each Yelp listing. Treat what's there as tone, never as evidence. <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Google Business Profile</td>
+            <td colspan="5" style="color:var(--muted)">Unreachable for all five — google.com is blocked here. Search each business name + "San Jose" on your phone; the star value and count appear without opening anything. <span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">BBB</td>
+            <td>No profile surfaced</td>
+            <td class="cellwin"><strong>Profile exists</strong> — <a href="https://www.bbb.org/us/ca/san-jose/profile/landscape-contractors/dooling-landscape-service-1216-1000002090">bbb.org</a>. Not accredited; BBB states it lacks sufficient information to issue a rating <span class="chip warn">Search-derived</span></td>
+            <td>No profile surfaced</td>
+            <td>Profile exists — <a href="https://www.bbb.org/us/ca/san-jose/profile/sprinkler-system/san-jose-sprinkler-repair-1216-253077/addressId/18378">bbb.org</a>. Not accredited; file opened 10 Jun 2013 <span class="chip warn">Search-derived</span></td>
+            <td>No profile surfaced</td>
+          </tr>
+          <tr>
+            <td class="crit">Angi</td>
+            <td>—</td>
+            <td>Profile exists — <a href="https://www.angi.com/companylist/us/ca/san-jose/dooling-landscape-service-reviews-156410440.htm">angi.com</a>. Rating unreadable</td>
+            <td>Profile exists — <a href="https://www.angi.com/companylist/us/ca/san-jose/r-and-j-landscaping-reviews-3726868.htm">angi.com</a>. Rating unreadable</td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td class="crit">HomeAdvisor</td>
+            <td>Profile exists — <a href="https://www.homeadvisor.com/rated.CyprexConstruction.13967938.html">homeadvisor.com</a></td>
+            <td>Profile exists — <a href="https://www.homeadvisor.com/rated.doolinglandscapeservice.156410440.html">homeadvisor.com</a></td>
+            <td>—</td><td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td class="crit">Nextdoor</td>
+            <td>—</td><td>—</td>
+            <td>Page exists — <a href="https://nextdoor.com/pages/r-j-landscaping/">nextdoor.com</a>. Recommendation count unreadable</td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td class="crit">Thumbtack</td>
+            <td colspan="5" style="color:var(--muted)">Category page exists for San Jose sprinkler repair; no candidate-specific profile surfaced. Absence here is meaningless — Thumbtack only lists contractors who buy leads on it.</td>
+          </tr>
+          <tr>
+            <td class="crit">G2 / Capterra / TrustRadius / Gartner</td>
+            <td colspan="5" style="color:var(--muted)">Not applicable. These platforms rate business software. <strong>Their emptiness is not a signal</strong> and should be ignored entirely for a trades decision.</td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Total reviews located</td>
+            <td class="num">0 readable</td>
+            <td class="num">0 readable</td>
+            <td class="num">38 (Yelp)</td>
+            <td class="num">0 readable</td>
+            <td class="num">145 (Yelp)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Total across the set: <strong>183 reviews located, 0 read.</strong> That is an honest score for this environment, not a comment on the vendors. If review volume is decisive for you, spend ten minutes with the links above before acting on §12 — and note that Oswald's 145 is the largest count in the table but attaches to a Hayward business, which §05 explains is why it still doesn't win.</p>
+  </section>
+
+  <!-- ===== 05 PROFILES ===== -->
+  <section id="profiles">
+    <div class="sec-eyebrow"><span class="n">05</span> Candidates</div>
+    <h2 class="sec-title">Candidate profiles, ranked</h2>
+    <p class="sec-sub">Factsheet, the customer-voice section (and why it's empty), how the owner engages publicly, and the honest case against each.</p>
+
+    <!-- ---- 1 CYPREX ---- -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#1c5b3a; --bc2:#0d3b25">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 260 46" role="img" aria-label="Cyprex Construction Landscapes">
+            <g fill="none" stroke="#8fe0b4" stroke-width="2.4" stroke-linecap="round">
+              <path d="M14 34 V16"/><path d="M14 16 q10 -8 18 -2"/><path d="M14 24 q-9 -6 -10 -14"/>
+            </g>
+            <text x="42" y="22" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="1.5">CYPREX</text>
+            <text x="42" y="38" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="9.5" font-weight="600" fill="#8fe0b4" letter-spacing="2.6">CONSTRUCTION LANDSCAPES</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official site</span>
+          <a class="bb-link" href="https://www.ecyprex.com/">Visit <span class="u">ecyprex.com</span> →</a>
+        </div>
+      </div>
+
+      <div class="prof-head"><span class="rankbadge">1</span><h3>Cyprex Construction Landscapes</h3><span class="chip good">The pick</span></div>
+      <div class="factsheet">
+        <strong>Factsheet —</strong> Design-build landscape firm, San Jose. CSLB <strong>#701749</strong>, classifications <strong>A (General Engineering) + B (General Building) + C-27 (Landscaping)</strong>. ~31 years trading, workers' compensation reported on file. 1116 Curtner Ave, San Jose CA 95125 · <strong>(408) 971-4274</strong> · <a href="https://www.ecyprex.com/">ecyprex.com</a> · irrigation page: <a href="https://www.ecyprex.com/landscape-construction/irrigation-design-and-const/index.html">Irrigation Design &amp; Construction</a>. Service area stated as San Mateo to Gilroy — 95138 sits comfortably inside it.
+      </div>
+      <div class="cite">
+        <span class="src">Source: Cyprex Construction Landscapes — Irrigation Design &amp; Construction, and About Us · <a href="https://www.ecyprex.com/about-us.html">ecyprex.com</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The vendor's own published material — tier 2. Authoritative for what they claim to do and how, and for contact details; not independent evidence that they do it well.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: licence #701749, classifications and 31-years figure as carried on BuildZoom and Calscape contractor profiles · <a href="https://www.buildzoom.com/contractor/cyprex-construction-landscapes">buildzoom.com</a> · <a href="https://calscape.org/landscaper/profile/cyprex-construction-landscapes">calscape.org</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived · secondary</span></span>
+        <span class="why">(BuildZoom is a contractor marketplace that republishes CSLB licence data and permit records; Calscape is run by the California Native Plant Society, a respected non-profit, and lists landscapers who work with natives. Both are <em>mirrors</em> of the CSLB record, not the record itself — treat the number as a strong lead to verify, not as proof.)</span>
+      </div>
+
+      <h4 class="mini">Why it leads</h4>
+      <ul class="tick g">
+        <li><strong>It publishes a method, not just a service list.</strong> Their irrigation page describes designing systems around precipitation rate, water flow, friction loss and head elevation. Almost nobody in this category writes that down. On a sloped Silver Creek lot those four variables are the whole job.</li>
+        <li><strong>The licence stack is the deepest found.</strong> A and B alongside C-27 means trenching, drainage, grading and any structural tie-in stay in-house rather than being subbed to a crew you never vetted — which also shrinks the lien exposure discussed in §07.</li>
+        <li><strong>Native-plant credibility.</strong> Being listed by the California Native Plant Society's Calscape suggests genuine low-water planting practice, which is what determines whether your system qualifies for the Valley Water rebate in §06.</li>
+      </ul>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <p style="font-size:14.5px; color:var(--muted); margin-bottom:6px"><strong>None reproduced — deliberately.</strong> Yelp and HomeAdvisor both hold Cyprex profiles, and both were unreachable from this environment. Rather than paraphrase a review I could not read, or worse invent one, the space stays empty and the links are below.</p>
+      <div class="quote" style="border-left-color:var(--line); font-style:normal; color:var(--muted)">
+        Quotes not available. Read them yourself: <a href="https://www.yelp.com/biz/cyprex-construction-landscapes-san-jose-2">Yelp profile</a> · <a href="https://www.homeadvisor.com/rated.CyprexConstruction.13967938.html">HomeAdvisor profile</a>
+        <span class="attr">Both links checked as existing via search index, 15 Aug 2026 — neither page opened.</span>
+      </div>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p style="font-size:14.5px"><span class="chip bad">Not verified</span> Owner-response behaviour lives inside the review threads, which is precisely what I couldn't open. This is a genuinely useful signal and I'd rather flag the gap than guess at it. When you open the Yelp page, look for whether management replies to <em>critical</em> reviews specifically, and whether the tone is corrective or defensive — that predicts how a warranty dispute will go better than the star average does.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Cyprex</div>
+        <p>They are a <strong>high-end design-build firm</strong>, and design-build firms price accordingly. If all you want is heads and valves in the ground, you may be buying a landscape-architecture posture you didn't ask for, and their minimum job size may simply exceed a straightforward sprinkler run — ask about that in the first phone call. Their strongest differentiator, the published design method, is <em>their own marketing copy</em>: it tells you they know the vocabulary, not that they executed it on your street. And the licence number, the 31-year figure and the workers'-comp status all reached me through directory mirrors rather than the CSLB record itself — every one of those is a lead to verify, not a fact yet.</p>
+      </div>
+      <div class="deadend">
+        <b>Dead end to close:</b> CSLB licence #701749 — status, bond, workers' comp and any disciplinary history. Verify at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov Check A License</a> or by phone on <b>(800) 321-CSLB (2752)</b>. Takes under a minute and settles the single biggest open question in this report.
+      </div>
+    </div>
+
+    <!-- ---- 2 DOOLING ---- -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#2b4a7a; --bc2:#13284a">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 260 46" role="img" aria-label="Dooling Landscape Service">
+            <g fill="#9dc0ff"><circle cx="18" cy="24" r="9" fill="none" stroke="#9dc0ff" stroke-width="2.4"/><path d="M18 15 v18 M9 24 h18" stroke="#9dc0ff" stroke-width="2.4" stroke-linecap="round"/></g>
+            <text x="42" y="22" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="1.2">DOOLING</text>
+            <text x="42" y="38" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="9.5" font-weight="600" fill="#9dc0ff" letter-spacing="2.4">LANDSCAPE SERVICE · EST. 1984</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official site</span>
+          <a class="bb-link" href="https://doolinglandscapeservice.com/">Visit <span class="u">doolinglandscapeservice.com</span> →</a>
+        </div>
+      </div>
+
+      <div class="prof-head"><span class="rankbadge">2</span><h3>Dooling Landscape Service</h3><span class="chip good">Runner-up</span></div>
+      <div class="factsheet">
+        <strong>Factsheet —</strong> Landscape contractor serving Santa Clara County <strong>since 1984</strong>. CSLB <strong>#549144</strong>, licence expiry stated as <strong>30 Nov 2026</strong>. Owner Tim Dooling holds a 1978 Ornamental Horticulture degree from Cal Poly San Luis Obispo. Services include irrigation, planting, sod, pavers, retaining walls, renovation and maintenance. <a href="https://doolinglandscapeservice.com/service-areas/san-jose-ca">San Jose service-area page</a> · <a href="https://doolinglandscapeservice.com/about-us">About</a>.
+      </div>
+      <div class="cite">
+        <span class="src">Source: Dooling Landscape Service — About Us and San Jose service-area pages · <a href="https://doolinglandscapeservice.com/about-us">doolinglandscapeservice.com</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Vendor's own site — tier 2, authoritative for founding year, ownership and stated services; self-reported, so the 1984 date is a claim until the CSLB issue date corroborates it.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: BBB Business Profile — Dooling Landscape Service, San Jose CA · <a href="https://www.bbb.org/us/ca/san-jose/profile/landscape-contractors/dooling-landscape-service-1216-1000002090">bbb.org</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The Better Business Bureau is a long-established non-profit that maintains business profiles and mediates consumer complaints. Its records carried the licence number #549144 and the 30 Nov 2026 expiry. BBB is <em>not</em> a regulator and accreditation is a paid programme — so "not accredited" is a commercial fact, not a quality judgement.)</span>
+      </div>
+
+      <h4 class="mini">Why it's the runner-up</h4>
+      <ul class="tick g">
+        <li><strong>42 years is the longest record in the set</strong> — and a licence that has survived four decades of CSLB renewal cycles is itself a meaningful filter.</li>
+        <li><strong>A concrete, checkable expiry date.</strong> Of all five candidates, Dooling's is the only licence where a specific expiry surfaced. That's a small thing that makes verification fast.</li>
+        <li><strong>Formal horticultural training at ownership level.</strong> A Cal Poly Ornamental Horticulture degree is real education in plant water requirements — which is upstream of, and more important than, sprinkler-head selection.</li>
+      </ul>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <div class="quote" style="border-left-color:var(--line); font-style:normal; color:var(--muted)">
+        None reproduced — Angi and HomeAdvisor hold review sets, both unreachable here. Read them: <a href="https://www.angi.com/companylist/us/ca/san-jose/dooling-landscape-service-reviews-156410440.htm">Angi</a> · <a href="https://www.homeadvisor.com/rated.doolinglandscapeservice.156410440.html">HomeAdvisor</a>
+        <span class="attr">Profiles confirmed to exist via search index, 15 Aug 2026 — neither opened.</span>
+      </div>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p style="font-size:14.5px"><span class="chip bad">Not verified</span> Not observable from here. Worth noting that Angi and HomeAdvisor (same parent company) both surface contractor responses inline, so this is quick for you to check on the two links above.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Dooling</div>
+        <p><strong>The BBB has no rating for them</strong> — it states it holds insufficient information to issue one. That is not a black mark, but it does mean one of the few independent channels available here produced nothing usable. Irrigation appears as <em>one item in a long service list</em> rather than a specialism, so you're buying a generalist's competence at it. And unlike Cyprex, nothing in their published material describes <em>how</em> they size or design a system — you'd be relying on 42 years of reputation rather than a stated method, which is a reasonable thing to rely on but is a different kind of evidence.</p>
+      </div>
+      <div class="deadend">
+        <b>Dead end to close:</b> confirm licence <b>#549144</b> is Active, in a class covering irrigation, with workers' comp on file — <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">CSLB Check A License</a> or <b>(800) 321-2752</b>. Their phone number did not surface in any source I could reach; get it from <a href="https://doolinglandscapeservice.com/">doolinglandscapeservice.com</a>.
+      </div>
+    </div>
+
+    <!-- ---- 3 R&J ---- -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#3f6b2c; --bc2:#1f3d16">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 260 46" role="img" aria-label="R and J Landscaping">
+            <g><path d="M10 34 q10 -22 22 -22 q-4 14 -22 22 z" fill="#b7e08f"/><path d="M32 12 q-10 12 -22 22" stroke="#3f6b2c" stroke-width="1.4" fill="none"/></g>
+            <text x="44" y="22" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="1.2">R &amp; J</text>
+            <text x="44" y="38" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="9.5" font-weight="600" fill="#b7e08f" letter-spacing="2.4">LANDSCAPING · SINCE 1999</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official site</span>
+          <a class="bb-link" href="https://www.randjlandscaping.net/">Visit <span class="u">randjlandscaping.net</span> →</a>
+        </div>
+      </div>
+
+      <div class="prof-head"><span class="rankbadge">3</span><h3>R &amp; J Landscaping</h3><span class="chip good">Strong back-up</span></div>
+      <div class="factsheet">
+        <strong>Factsheet —</strong> Family-owned landscape contractor, trading <strong>since 1999</strong>. CSLB <strong>#946599</strong>, C-27 Landscaping — the exactly-correct classification for this job. 34 El Campo Dr, San Jose CA 95127 · <strong>(408) 444-5068</strong> · Mon–Fri 9–5, closed weekends · <a href="https://www.randjlandscaping.net/">randjlandscaping.net</a> · irrigation pages: <a href="https://www.randjlandscaping.net/ca-irrigation/irrigation-systems">Irrigation systems</a>, <a href="https://www.randjlandscaping.net/ca-irrigation/drip-irrigation-systems">drip</a>, <a href="https://www.randjlandscaping.net/ca-irrigation/sprinklers">sprinklers</a>.
+      </div>
+      <div class="cite">
+        <span class="src">Source: R &amp; J Landscaping — About and irrigation pages · <a href="https://www.randjlandscaping.net/about-us">randjlandscaping.net</a> · and Yelp business listing · <a href="https://www.yelp.com/biz/r-and-j-landscaping-san-jose">yelp.com</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Vendor's own site for founding year, licence and services; Yelp — the dominant consumer review platform for local trades in California — for address, phone, hours and the 38-review count. Yelp's count is reliable as a count; its star value could not be read.)</span>
+      </div>
+
+      <h4 class="mini">Why it's a strong back-up</h4>
+      <ul class="tick g">
+        <li><strong>The single most complete irrigation content library</strong> of any candidate — separate published pages for irrigation systems, sprinklers, drip, irrigation management and repair. That's a business that thinks about irrigation as a discipline.</li>
+        <li><strong>C-27 is precisely the right licence class</strong> for landscape irrigation. Cyprex's extra A and B are useful depth, but they are not <em>required</em> here — on classification alone R&amp;J is fully qualified.</li>
+        <li><strong>38 Yelp reviews is the largest verifiable count attached to a San Jose business</strong> in this set, and ~6 miles from 95138.</li>
+      </ul>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <div class="quote" style="border-left-color:var(--line); font-style:normal; color:var(--muted)">
+        None reproduced. R&amp;J has the richest review footprint here — 38 on Yelp, plus Angi and a Nextdoor page — and it is the most frustrating gap in this report. Read them: <a href="https://www.yelp.com/biz/r-and-j-landscaping-san-jose">Yelp (38)</a> · <a href="https://www.angi.com/companylist/us/ca/san-jose/r-and-j-landscaping-reviews-3726868.htm">Angi</a> · <a href="https://nextdoor.com/pages/r-j-landscaping/">Nextdoor</a>
+        <span class="attr">All three confirmed to exist via search index, 15 Aug 2026 — none opened. Nextdoor is worth a look specifically because it's neighbourhood-scoped, though it's social and should stay supporting colour, never load-bearing.</span>
+      </div>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p style="font-size:14.5px"><span class="chip bad">Not verified</span> With 38 Yelp reviews there is a real body of interaction to judge here, and it's the candidate where this signal would be most informative. Check whether responses exist at all on the sub-3-star reviews.</p>
+
+      <div class="against">
+        <div class="h">The honest case against R &amp; J</div>
+        <p><strong>Their headline award claim doesn't hold still</strong> — I found it stated as "five consecutive years" in one rendering of their material and "13 consecutive years" in another, with the Mercury News Hall of Fame claim attached to both. §08 audits this in full. My read is stale-page drift rather than deception, but it's the kind of inconsistency that has to be surfaced. Beyond that: irrigation sits inside a broad landscaping and general-contracting offer, weekend availability is nil (Mon–Fri 9–5 only), and no BBB profile surfaced, so an independent complaint channel is missing from their file.</p>
+      </div>
+      <div class="deadend">
+        <b>Dead end to close:</b> verify <b>#946599</b> is Active with C-27 and workers' comp — <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">CSLB Check A License</a>. And ask them directly on <b>(408) 444-5068</b> to name the exact award years and the Mercury News category — a legitimate winner answers that instantly.
+      </div>
+    </div>
+
+    <!-- ---- 4 SJ SPRINKLER REPAIR ---- -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#1e5f77; --bc2:#0d3444">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 300 46" role="img" aria-label="San Jose Sprinkler Repair">
+            <g stroke="#8fd8ea" stroke-width="2.2" fill="none" stroke-linecap="round">
+              <path d="M16 34 v-12"/><path d="M16 22 q8 -12 18 -6"/><path d="M16 22 q-8 -12 -12 -4"/>
+            </g>
+            <text x="44" y="21" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="1">SAN JOSE SPRINKLER</text>
+            <text x="44" y="37" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="9.5" font-weight="600" fill="#8fd8ea" letter-spacing="2.6">REPAIR &amp; INSTALLATION</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Official site</span>
+          <a class="bb-link" href="http://www.sprinklerrepairsanjose.com/">Visit <span class="u">sprinklerrepairsanjose.com</span> →</a>
+        </div>
+      </div>
+
+      <div class="prof-head"><span class="rankbadge">4</span><h3>San Jose Sprinkler Repair</h3><span class="chip warn">Hold — licence unresolved</span></div>
+      <div class="factsheet">
+        <strong>Factsheet —</strong> Irrigation-first business, trading since <strong>10 Nov 2009</strong> (~16 years). BBB file opened 10 Jun 2013; not BBB accredited. Addresses listed as 1067 Normington Way, San Jose 95136 and 249 N 9th St, San Jose 95112 · <strong>(408) 990-3226</strong> · <a href="http://www.sprinklerrepairsanjose.com/">sprinklerrepairsanjose.com</a>. Services: new system installs, adding zones to existing systems, drip install and maintenance, sod and turf, outdoor lighting, hardscaping, pool removal.
+      </div>
+      <div class="cite">
+        <span class="src">Source: BBB Business Profile — San Jose Sprinkler Repair · <a href="https://www.bbb.org/us/ca/san-jose/profile/sprinkler-system/san-jose-sprinkler-repair-1216-253077/addressId/18378">bbb.org</a>, and the vendor's own <a href="http://www.sprinklerrepairsanjose.com/services.php">services page</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(BBB for the business-start date of 10 Nov 2009 and file-open date — dates BBB collects at registration, more reliable than a marketing "since" claim. Vendor site for the service list.)</span>
+      </div>
+
+      <h4 class="mini">What's genuinely good here</h4>
+      <ul class="tick g">
+        <li><strong>Closest to you by a clear margin</strong> — Normington Way is roughly 4 miles from 95138. For warranty callbacks over the following years, proximity is worth more than most buyers credit.</li>
+        <li><strong>Irrigation is the core business, not a line item.</strong> They advertise adding zones to existing systems — a specific, unglamorous skill that generalists often decline.</li>
+        <li><strong>Sixteen years and a decade-old BBB file</strong> is a real trading record, and the start date came from a registration record rather than their own marketing.</li>
+      </ul>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <div class="quote" style="border-left-color:var(--line); font-style:normal; color:var(--muted)">
+        None found and none reproduced. No Yelp or Google profile surfaced for this business at all, and the BBB profile was unreachable. This is the thinnest independent evidence base of the five. <a href="https://www.bbb.org/us/ca/san-jose/profile/sprinkler-system/san-jose-sprinkler-repair-1216-253077/addressId/18378">BBB profile</a>
+        <span class="attr">Confirmed to exist via search index, 15 Aug 2026 — not opened.</span>
+      </div>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p style="font-size:14.5px"><span class="chip bad">Not verified</span> No review threads located, so there is nothing to observe. Absence of a Yelp presence is not itself a fault — plenty of good trades run on referrals — but it does remove a channel you'd otherwise use.</p>
+
+      <div class="against">
+        <div class="h">The honest case against San Jose Sprinkler Repair</div>
+        <p><strong>No CSLB licence number surfaced anywhere</strong>, and per this report's own rule, a failed search is <em>not</em> proof of absence — it is an unresolved question that must be settled before money changes hands. But it is the only candidate in the top four where that question is entirely open, and until it closes they cannot be recommended for a job of this size. Two different business addresses appear across records, which is common for owner-operators but is worth reconciling. They are also <strong>not BBB accredited</strong> despite a file open since 2013 — again a commercial choice, not a verdict. And the service list is unusually wide for a small firm (irrigation through to swimming-pool removal), which can indicate a broker-style operation subcontracting the work out. Ask who physically does the trenching.</p>
+      </div>
+      <div class="deadend">
+        <b>Dead end to close — this is the important one:</b> call <b>(408) 990-3226</b> and ask for the CSLB licence number and the name it's held under, then check it at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov</a>. A licensed contractor gives you that number without hesitation; California also requires it in their advertising. If they can't produce one, this becomes an elimination rather than a hold.
+      </div>
+    </div>
+
+    <!-- ---- 5 OSWALD ---- -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#5a4a2b; --bc2:#2e2515">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 280 46" role="img" aria-label="Oswald Sprinkler Repair">
+            <g stroke="#e8cf9a" stroke-width="2.2" fill="none" stroke-linecap="round"><circle cx="18" cy="24" r="8"/><path d="M18 16 v-6 M18 32 v6 M10 24 h-6 M26 24 h6"/></g>
+            <text x="44" y="21" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="1.2">OSWALD</text>
+            <text x="44" y="37" font-family="-apple-system,Segoe UI,Helvetica,Arial" font-size="9.5" font-weight="600" fill="#e8cf9a" letter-spacing="2.4">SPRINKLER REPAIR · HAYWARD</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Listing</span>
+          <a class="bb-link" href="https://www.yelp.com/biz/oswald-sprinkler-repair-hayward-2">Yelp <span class="u">yelp.com</span> →</a>
+        </div>
+      </div>
+
+      <div class="prof-head"><span class="rankbadge">5</span><h3>Oswald Sprinkler Repair</h3><span class="chip bad">Out — wrong county for an install</span></div>
+      <div class="factsheet">
+        <strong>Factsheet —</strong> Irrigation specialist based in <strong>Hayward, CA 94542</strong> (Alameda County) · <strong>(510) 398-3435</strong> · listed as operating 24 hours. <strong>145 Yelp reviews, 55 photos</strong> — by far the largest review footprint located in this research. No independent company website surfaced.
+      </div>
+      <div class="cite">
+        <span class="src">Source: Yelp business listing — Oswald Sprinkler Repair, Hayward · <a href="https://www.yelp.com/biz/oswald-sprinkler-repair-hayward-2">yelp.com</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Yelp is the dominant consumer review platform for California local trades; its listing metadata — location, phone, review count, hours — is reliable. The star value and the review text could not be read from here.)</span>
+      </div>
+
+      <h4 class="mini">Why they're in the report at all</h4>
+      <p style="font-size:14.5px">Because <strong>145 reviews is a serious record</strong> and it would be dishonest to hide the highest-volume irrigation specialist found simply because they're inconvenient. If this were a repair call — a stuck valve, a broken lateral — a 28-mile drive from Hayward would be a reasonable trade for that depth of track record, and I'd rank them far higher.</p>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <div class="quote" style="border-left-color:var(--line); font-style:normal; color:var(--muted)">
+        None reproduced — the 145-review page was unreachable. <a href="https://www.yelp.com/biz/oswald-sprinkler-repair-hayward-2">Read them on Yelp</a>
+        <span class="attr">Review count confirmed via search index, 15 Aug 2026 — page not opened.</span>
+      </div>
+
+      <div class="against">
+        <div class="h">The honest case against Oswald — and it's about fit, not quality</div>
+        <p>Nothing here suggests they're a bad company. The problem is <strong>structural fit</strong>. A new installation is a multi-day job requiring repeat site visits, and the warranty period afterwards means years of potential callbacks across a county line and the Sunol grade. Crossing from Alameda into Santa Clara County also means they're working outside the water agency whose rebate rules and backflow programme govern your property — the local-knowledge advantage in §07 sits with the San Jose firms. Add that <strong>no CSLB number and no company website surfaced</strong>, and there isn't enough to underwrite an installation contract. <strong>They are wrong for this job, not bad at their job</strong> — keep the number for repairs.</p>
+      </div>
+      <div class="deadend">
+        <b>Dead end to close:</b> licence status entirely unknown. Call <b>(510) 398-3435</b> and ask, or search the name at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov</a>.
+      </div>
+    </div>
+
+    <!-- ---- SPECIAL ROLE ---- -->
+    <div class="card">
+      <div class="prof-head"><span class="rankbadge" style="background:var(--ask)">★</span><h3>Lane Irrigation — the special-role vendor</h3><span class="chip plain">Not a contractor · use as a price check</span></div>
+      <div class="factsheet">
+        <strong>Factsheet —</strong> Wholesale and retail landscape-irrigation equipment supplier, <strong>established 1969</strong>, locally owned. 70 Cristich Lane, Campbell CA 95008 · <strong>(408) 377-5600</strong> · <a href="https://www.laneirrigation.com/">laneirrigation.com</a>.
+      </div>
+      <div class="cite">
+        <span class="src">Source: Lane Irrigation · <a href="https://www.laneirrigation.com/">laneirrigation.com</a>, corroborated by Valley Water's published irrigation supply-store list · <a href="https://www.valleywater.org/sites/default/files/Irrigation%20Supply%20Store%20list%203-23-17.pdf">valleywater.org</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Valley Water is the wholesale water agency and flood-protection authority for Santa Clara County — a public agency. Its supply-store list is a mild form of institutional recognition, not an endorsement of quality. The 1969 founding date is the vendor's own claim.)</span>
+      </div>
+      <p style="font-size:14.5px"><strong>Why they're here:</strong> they do not install, so they cannot bid against anyone — which is exactly what makes them useful. Take the materials list off your winning bid, walk it into Lane, and get a counter price on the same parts. That converts a vague "materials" line into a number you can argue with, and their counter staff will tell you for free whether the head and valve selection makes sense for a sloped Silver Creek lot. Treat their advice as knowledgeable trade opinion, not an independent audit — they sell the parts.</p>
+    </div>
+  </section>
+
+  <!-- ===== 06 COST ===== -->
+  <section id="cost">
+    <div class="sec-eyebrow"><span class="n">06</span> Cost</div>
+    <h2 class="sec-title">What this should cost</h2>
+    <p class="sec-sub">Published ranges, line by line, then two independent sanity checks on the total.</p>
+
+    <div class="card">
+      <p style="margin-top:0"><strong>The modelled job:</strong> a new residential system, <strong>4 zones</strong> — two lawn/rotor zones and two drip zones for beds — with a smart controller, on a lot with meaningful grade. That's the middle of the range for a Silver Creek property. Adjust proportionally: cost scales close to linearly with zone count.</p>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Line item</th><th>Published range</th><th>Modelled (4 zones)</th><th>Basis</th></tr></thead>
+          <tbody>
+            <tr><td class="crit">Design / hydraulic plan</td><td>Often bundled; $0–$500 standalone</td><td class="num">$0–$500</td><td>Ask whether it's separately priced — Cyprex's published method implies real design time <span class="chip ask">Ask</span></td></tr>
+            <tr><td class="crit">Zone installation (all-in)</td><td class="cellwin"><strong>$590–$2,000 per zone</strong></td><td class="num">$2,360–$8,000</td><td>2026 cost guides; wide spread reflects head type, trenching and soil</td></tr>
+            <tr><td class="crit">— of which drip conversion</td><td>$300–$1,200 per zone, or $1.50–$4.50/sq ft</td><td class="num">(within above)</td><td>Above-ground drip line; in-line drip runs higher</td></tr>
+            <tr><td class="crit">Backflow preventer + install</td><td>Required for irrigation on a potable supply</td><td class="num">Ask for it itemised</td><td>Device class is set by your water retailer, not the contractor <span class="chip warn">Cost not verified</span></td></tr>
+            <tr><td class="crit">Smart / weather-based controller</td><td>Rebate-eligible if on the approved list</td><td class="num">Ask for it itemised</td><td>Must be a Valley Water qualifying model to claim the rebate</td></tr>
+            <tr><td class="crit">Backflow test &amp; annual recert</td><td>Recurring, annual</td><td class="num">San Jose Water: complimentary for its customers</td><td>Confirm who your retailer is — see §07 <span class="chip ask">Ask</span></td></tr>
+            <tr class="vrowfin"><td class="crit">Modelled total, before rebate</td><td>—</td><td class="num"><strong>$2,900–$8,500</strong></td><td>Bay Area labour sits at the upper half of national ranges</td></tr>
+            <tr><td class="crit">Less Valley Water rebate</td><td class="cellwin"><strong>up to −$3,000</strong></td><td class="num">−$0 to −$3,000</td><td>Residential cap; requires approved equipment and pre-approval</td></tr>
+            <tr class="vrowfin"><td class="crit">Realistic net outlay</td><td>—</td><td class="num"><strong>~$2,900–$5,500 net</strong></td><td>Rebate rarely maxes on irrigation-only work</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cite">
+        <span class="src">Source: Angi 2026 sprinkler installation cost data · <a href="https://www.angi.com/articles/how-much-does-it-cost-install-sprinkler-system.htm">angi.com</a>; LawnStarter 2026 guide · <a href="https://www.lawnstarter.com/blog/cost/sprinkler-system-price/">lawnstarter.com</a>; drip figures from the same set · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived · directional</span></span>
+        <span class="why">(Established home-services cost guides built from member-reported job prices. They are the recognised published guides for this category, but they are aggregators — not independent audits and not local to Santa Clara County. Use them to spot an outlier bid, not to set your budget to the dollar.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: Valley Water Landscape Rebate Program — residential cap $3,000 · <a href="https://www.valleywater.org/saving-water/rebates-surveys/landscape-rebates">valleywater.org</a> · programme detail: <a href="https://www.valleywater.org/accordion/irrigation-equipment-upgrade-rebate">Irrigation Equipment Upgrade Rebate</a> · <a href="https://www.valleywater.org/accordion/line-drip-irrigation-conversion-rebate">In-Line Drip Conversion Rebate</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Santa Clara Valley Water District — the public wholesale water agency for your county, and the body that actually pays these rebates. Primary and authoritative. Programme reporting shows 149 rebates totalling ~$490,000 issued in Jan–Mar 2026, so the programme was live and funded within the last two quarters.)</span>
+      </div>
+
+      <h3 class="blk">Sanity check one — top down</h3>
+      <p>National 2026 guides put a full system on a <strong>quarter-acre lot at $3,000–$10,000</strong>, with a national average around <strong>$2,500–$3,500</strong> for a typical install. San Jose labour runs above national average, and a graded lot adds trenching time. A 4-zone bid landing between <strong>$4,000 and $7,000</strong> is therefore unremarkable. <strong>Under $2,500 should worry you, not delight you</strong> — at that price something is being left out, and per §01 it may be the licence.</p>
+
+      <h3 class="blk">Sanity check two — bottom up, against the legal floor</h3>
+      <p>Run it the other way. Four zones at the <em>low</em> published end is $2,360 in zone cost alone, before backflow, controller or permit. That is already <strong>2.4× the $1,000 ceiling</strong> for unlicensed work. The two checks agree, and they agree on the thing that matters: there is no legitimate version of this job that costs a few hundred dollars. Any bid that cheap is telling you something about the bidder, not about the job.</p>
+      <div class="callout" style="margin-top:16px">
+        <div class="ctitle">◆ The payment rule that protects you</div>
+        <p style="margin:0"><strong>Whatever the total, your deposit is capped at $1,000 or 10% of the contract price — whichever is <em>less</em>.</strong> On a $6,000 job that's $600, not $1,000. This is not negotiable and not waivable; a contractor asking for "half up front" is proposing something California law forbids, and the contract must print the cap in 12-point bold type. Treat a request to exceed it as a complete answer about who you're dealing with.</p>
+      </div>
+      <div class="cite">
+        <span class="src">Source: California Business &amp; Professions Code §7159.5, via CSLB "What Is A Contract" · <a href="https://www.cslb.ca.gov/Consumers/Hire_A_Contractor/Home_Improvement_Contracts/What_Is_A_Contract.aspx">cslb.ca.gov</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(CSLB's consumer guidance restating the statute it enforces. The statute is the law; CSLB is the agency that disciplines contractors who break it. Highest available tier.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 07 POLICY ===== -->
+  <section id="policy">
+    <div class="sec-eyebrow"><span class="n">07</span> Policy</div>
+    <h2 class="sec-title">The policy layer</h2>
+    <p class="sec-sub">The law that governs this job, what it costs you if it goes wrong, and the protections you should be writing into the contract.</p>
+
+    <div class="card">
+      <h3 class="blk">The governing rules, with effective dates</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Rule</th><th>Effective</th><th>What it requires</th><th>What you lose if it goes wrong</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="crit">AB 2622 — unlicensed work ceiling</td><td>1 Jan 2025</td>
+              <td>Unlicensed work only under <strong>$1,000 total</strong> (labour + materials), no permit required, no helper employed, and the advertising must state they're unlicensed.</td>
+              <td>Everything. No bond, no CSLB complaint jurisdiction, no workers' comp cover — and a trenching injury in your yard becomes your homeowner's-policy problem.</td>
+            </tr>
+            <tr>
+              <td class="crit">B&amp;P §7159.5 — down payment cap</td><td>In force</td>
+              <td><strong>$1,000 or 10%, whichever is less.</strong> Must appear in the contract in 12-point bold.</td>
+              <td>Money at risk up front with no work performed. The commonest way homeowners lose in this category.</td>
+            </tr>
+            <tr>
+              <td class="crit">CSLB contractor bond</td><td>In force</td>
+              <td><strong>$25,000</strong> bond or cash deposit held for every licensee.</td>
+              <td>Your recovery route if work is abandoned or defective. An unlicensed contractor has none.</td>
+            </tr>
+            <tr>
+              <td class="crit">SB 216 / SB 1455 — workers' comp for all licensees</td><td>Deadline moved to <strong>1 Jan 2028</strong></td>
+              <td>Universal workers'-comp for all licensed contractors, originally 1 Jan 2026, pushed back by SB 1455 (2024).</td>
+              <td>Until 2028 a licensee with no employees may hold an exemption — so <strong>you must ask, not assume</strong>. If they bring a crew anyway, that's your exposure.</td>
+            </tr>
+            <tr>
+              <td class="crit">SB 291 — comp penalties</td><td>1 Jan 2026</td>
+              <td>Minimum fines for failing to carry required workers' comp rise to <strong>$10,000</strong> (sole owners) / <strong>$20,000</strong> (others).</td>
+              <td>Nothing directly — but it means a contractor caught short is now facing a serious penalty, which raises the odds they're actually covered.</td>
+            </tr>
+            <tr>
+              <td class="crit">MWELO — state water ordinance</td><td><strong>1 Dec 2015</strong></td>
+              <td>Applies to new landscape <strong>≥500 sq ft</strong>, or rehabilitated landscape <strong>≥2,500 sq ft</strong> where irrigation is provided and a permit or design review is triggered. 500–2,499 sq ft may use the simpler Prescriptive Compliance Option. Restricts front-yard turf.</td>
+              <td>A non-compliant install can fail review, and non-qualifying equipment kills the rebate.</td>
+            </tr>
+            <tr>
+              <td class="crit">San José Municipal Code Ch. 15.11</td><td>Local adoption of the above</td>
+              <td>San José's own water-efficient landscape standards. Rear-yard new construction on a single-family dwelling <strong>not exceeding 500 sq ft</strong> of landscape area is <strong>exempt</strong>; rehabilitated landscape ≥2,500 sq ft requiring a permit is <strong>in scope</strong>.</td>
+              <td>The exemption is the good news for most back-garden jobs — but confirm your square footage before assuming it.</td>
+            </tr>
+            <tr>
+              <td class="crit">Cross-connection / backflow control</td><td>Ongoing, annual</td>
+              <td>Irrigation on a potable supply needs an approved backflow prevention device, with <strong>testing and record-keeping at least once a year</strong>. San Jose Water performs testing complimentary for its customers.</td>
+              <td>An untested device is a violation and, more practically, a contamination risk on your own drinking water.</td>
+            </tr>
+            <tr>
+              <td class="crit">Civil Code §8200 — preliminary notice</td><td>In force</td>
+              <td>Subcontractors and suppliers must serve you a preliminary notice <strong>within 20 days</strong> of first furnishing labour or materials to preserve lien rights.</td>
+              <td>If they don't serve it, they lose lien rights. If they do, you're on notice — and you should start collecting releases.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cite">
+        <span class="src">Source: CSLB Industry Bulletin, AB 2622 Implementation · <a href="https://www.cslb.ca.gov/Resources/IndustryBulletins/2024/AB%202622%20Implementation.FINAL.pdf">cslb.ca.gov</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The regulator's own implementation notice for the statute — tier 1.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: California DWR — Model Water Efficient Landscape Ordinance, final text and appendices · <a href="https://water.ca.gov/Programs/Water-Use-And-Efficiency/Urban-Water-Use-Efficiency/Model-Water-Efficient-Landscape-Ordinance">water.ca.gov</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The California Department of Water Resources is the state agency that writes MWELO and to which local agencies must conform. Primary source for the thresholds and the 1 Dec 2015 date.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: San José Municipal Code Ch. 15.11, Water Efficient Landscape Standards · <a href="https://library.municode.com/ca/san_jose/codes/code_of_ordinances?nodeId=TIT15PUUT_CH15.11WAEFLASTNERELA_PT3LAINRE_15.11.1060DIDE">Municode Library</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Municode is the official publisher of San José's codified ordinances — the authoritative public text of the city's own rules, as distinct from a summary of them.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: City of San José — Backflow Prevention and Cross-Connection Control · <a href="https://www.sanjoseca.gov/your-government/departments-offices/environmental-services/water-utilities/drinking-water/backflow-prevention-and-cross-connection-control">sanjoseca.gov</a>; San Jose Water Backflow programme · <a href="https://www.sjwater.com/work-with-us/builders-contractors/backflow/">sjwater.com</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The city's Environmental Services Department runs Muni Water; San Jose Water Company is the investor-owned utility serving much of the city. Both are the operators of the programme, so both are primary for their own requirements.)</span>
+      </div>
+
+      <div class="callout">
+        <div class="ctitle">◆ One local fact you need to establish first</div>
+        <p style="margin:0"><strong>Confirm which company actually supplies your water</strong> — it determines your backflow rules and your rebate route. Great Oaks Water Company serves the Blossom Valley / Santa Teresa / Edenvale / Coyote Valley / Almaden area, described in its own service review as bounded by <em>the Silver Creek ridge on the east</em> — and 95138 sits around that eastern edge, so it could fall either side. San Jose Water Company serves much of the rest of the city. <strong>Look at your last water bill</strong>; it takes ten seconds and I could not resolve it from here. <span class="chip ask">Ask — unresolved</span></p>
+      </div>
+      <div class="cite">
+        <span class="src">Source: Santa Clara LAFCO — Countywide Water Service Review, Great Oaks Water Company · <a href="https://santaclaralafco.org/sites/default/files/service_reviews/2011%20COUNTYWIDE%20WATER%20SERVICE%20REVIEW%20-%20Great%20Oaks%20Water%20Company_0.pdf">santaclaralafco.org</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived · 2011 document</span></span>
+        <span class="why">(LAFCO is the Local Agency Formation Commission, the statutory county body that reviews utility service boundaries — authoritative on service areas. But this review is from 2011 and boundaries shift; treat it as indicative, and let your bill be the decider.)</span>
+      </div>
+
+      <h3 class="blk">Vendor policies, side by side</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Policy</th><th>Cyprex</th><th>Dooling</th><th>R &amp; J</th><th>SJ Sprinkler Repair</th></tr></thead>
+          <tbody>
+            <tr><td class="crit">Written warranty published</td><td>None found <span class="chip ask">Ask</span></td><td>None found <span class="chip ask">Ask</span></td><td>None found <span class="chip ask">Ask</span></td><td>None found <span class="chip ask">Ask</span></td></tr>
+            <tr><td class="crit">Insurance stated</td><td>Workers' comp reported on file <span class="chip warn">Search-derived</span></td><td>States licensed &amp; insured <span class="chip warn">Self-reported</span></td><td>States licensed &amp; fully insured <span class="chip warn">Self-reported</span></td><td>Not stated <span class="chip bad">Not verified</span></td></tr>
+            <tr><td class="crit">Published pricing</td><td>None — quote only</td><td>None — quote only</td><td>None — quote only</td><td>None — quote only</td></tr>
+            <tr><td class="crit">Stated service hours</td><td>Not published</td><td>Not published</td><td>Mon–Fri 9–5, weekends closed</td><td>Not published</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote"><strong>Nobody in this category publishes a warranty.</strong> That's normal and not a mark against any of them — but it means the warranty is entirely a negotiated term, and the §10 emails demand it in writing for exactly that reason.</p>
+
+      <h3 class="blk">Warranty terms — what "good" looks like</h3>
+      <p>The industry standard is <strong>one year, parts and labour</strong>. Better contractors offer 2–3 years on parts and sometimes 2 years on labour. The distinction that matters: <strong>a "1-year parts only" warranty is close to worthless</strong>, because on a typical valve replacement the labour is the bill. Separately, the manufacturers carry their own trade warranties — <strong>Rain Bird warrants several core lines (1800 spray heads, 5000/5500 rotors, PEB/PESB valves) for 5 years</strong>, with valves, rotors and controllers generally in a 2–10 year band; <strong>Hunter valves typically run 2–5 years</strong> from manufacture. So a contractor offering "1 year parts" is offering you <em>less</em> than the parts already carry. Ask for labour cover, in years, in writing.</p>
+      <div class="cite">
+        <span class="src">Source: Rain Bird Professional Customer Satisfaction Policy &amp; Trade Warranty · <a href="https://www.rainbird.com/corporate/professional-customer-satisfaction-policy">rainbird.com</a>; Hunter warranty terms · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(Manufacturers' own published warranty policies — primary and binding on them. Rain Bird and Hunter are the two dominant irrigation-equipment makers in the US residential market.)</span>
+      </div>
+
+      <h3 class="blk">Third-party risk</h3>
+      <ul class="tick r">
+        <li><strong>Subcontracted trenching crews.</strong> The most common structure in this trade is a licensed principal plus day labour. If the crew isn't covered by workers' comp, an injury on your property can reach your homeowner's policy. Ask, in writing, whether every person on site is covered.</li>
+        <li><strong>Supplier liens.</strong> Materials for a 4-zone system come from a supply house on credit. If your contractor doesn't pay them, the <em>supplier</em> can lien your home even though you paid the contractor in full. This is the specific risk the release process below neutralises.</li>
+        <li><strong>Rebate dependency.</strong> If your bid assumes a Valley Water rebate, you're exposed to a programme with a finite annual budget and an approved-equipment list. Get pre-approval before the equipment is ordered, not after.</li>
+      </ul>
+
+      <h3 class="blk">Your contract protections — the five to insist on</h3>
+      <ul class="tick g">
+        <li><strong>Deposit at the legal cap or below</strong> — $1,000 or 10%, whichever is less, printed in the contract.</li>
+        <li><strong>Conditional lien release before each progress payment, unconditional release after it clears</strong> — from the contractor <em>and</em> from any supplier or sub who served you a preliminary notice. You may lawfully withhold the next payment until the previous unconditional releases arrive. Use it.</li>
+        <li><strong>Warranty stated in years, separately for parts and labour</strong>, plus a named response time for callbacks.</li>
+        <li><strong>A certificate of insurance sent to you directly by their broker</strong> — never a PDF forwarded by the contractor. This is the single highest-value item in the §10 emails; a forwarded certificate is trivially stale or edited, one from the broker is not.</li>
+        <li><strong>An as-built zone map and the controller programme, handed over on completion.</strong> Buried pipe you have no map of is a liability for the next twenty years, and for whoever repairs it.</li>
+      </ul>
+      <div class="cite">
+        <span class="src">Source: CSLB — "How to Prevent a Mechanics Lien" and Conditional/Unconditional Waiver and Release Forms · <a href="https://www.cslb.ca.gov/consumers/legal_issues_for_consumers/mechanics_lien/How_To_Prevent_A_Mechanics_Lien.aspx">cslb.ca.gov</a> · <a href="https://www.cslb.ca.gov/resources/guidesandpublications/lienreleaseforms.Pdf">release forms (PDF)</a> · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(CSLB's consumer guidance and its statutory release forms — the state-published templates. Using CSLB's own forms removes any argument about whether a release was validly worded.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 AUDIT ===== -->
+  <section id="audit">
+    <div class="sec-eyebrow"><span class="n">08</span> Audit</div>
+    <h2 class="sec-title">Claim-by-claim audit — R &amp; J Landscaping</h2>
+    <p class="sec-sub">R&amp;J carries the loudest marketing claim in this set, so it gets the audit. Each claim, the independent check, and the verdict.</p>
+
+    <div class="card">
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Claim</th><th>Independent check</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="crit">"Voted Best Landscaper in Silicon Valley by the San Jose Mercury News — consecutive years"</td>
+              <td>Two renderings of their own material disagree on the number: one states <strong>five consecutive years</strong>, another states <strong>13 consecutive years</strong>. I could not reach the Mercury News' own Best of Silicon Valley archive to settle it, and the award is a <strong>readers'-choice poll</strong> — a popularity vote, not a judged or tested award.</td>
+              <td><span class="chip bad">Contradiction — unresolved</span></td>
+            </tr>
+            <tr>
+              <td class="crit">"Now in the San Jose Mercury News Hall of Fame"</td>
+              <td>Appears in both renderings and is internally consistent with a multi-year winning streak. No independent confirmation reachable.</td>
+              <td><span class="chip ask">Unconfirmed</span></td>
+            </tr>
+            <tr>
+              <td class="crit">"Licensed" — CSLB #946599</td>
+              <td>The number surfaced consistently and is a C-27 Landscaping licence, which <strong>is the correct classification</strong> for irrigation work. Not read on the CSLB record itself.</td>
+              <td class="cellwin"><strong><span class="chip good">Consistent — verify at CSLB</span></strong></td>
+            </tr>
+            <tr>
+              <td class="crit">"Fully insured"</td>
+              <td>Self-reported only. No certificate, no broker, no carrier named anywhere reachable. Note also that until 1 Jan 2028 a licensee with no employees may hold a workers'-comp exemption, so "insured" and "carries workers' comp" are not the same statement.</td>
+              <td><span class="chip warn">Not verified — demand the certificate</span></td>
+            </tr>
+            <tr>
+              <td class="crit">"Since 1999" / "over 20 years of professional experience"</td>
+              <td>Consistent across every source located, including third-party listings. 1999 to 2026 is 27 years, so "over 20" is conservative rather than inflated — a good sign.</td>
+              <td class="cellwin"><strong><span class="chip good">Consistent</span></strong></td>
+            </tr>
+            <tr>
+              <td class="crit">"Family owned and operated"</td>
+              <td>Self-reported. Unfalsifiable from public records and low-stakes either way.</td>
+              <td><span class="chip ask">Unconfirmed — immaterial</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cite">
+        <span class="src">Source: R &amp; J Landscaping — About Us · <a href="https://www.randjlandscaping.net/about-us">randjlandscaping.net</a>, and third-party listing text carrying the same claims · <span class="date">read 15 Aug 2026</span> <span class="chip warn">Search-derived</span></span>
+        <span class="why">(The vendor's own claims — tier 2, authoritative as a record of what they assert, not of whether it's true. The contradiction was found between two indexed renderings of that same material, which is why it's reported as an inconsistency rather than as a falsehood.)</span>
+      </div>
+
+      <div class="callout" style="border-color:var(--warn)">
+        <div class="ctitle" style="color:var(--warn)">◆ How much should this actually count against them?</div>
+        <p style="margin:0"><strong>Less than it first appears, and I want to be fair here.</strong> The most likely explanation is mundane: an old page saying "five years" that nobody updated while a newer one says "13". That's a housekeeping failure, not a lie, and a company that has genuinely won a readers' poll repeatedly has little motive to fabricate the count. It does not touch the two things that decide this job — the C-27 licence and the work quality. <strong>But an unresolved public inconsistency is exactly the sort of thing this report exists to surface</strong>, and it costs nothing to resolve: ask them on the phone which years they won. A real winner names them without pausing. Weigh their answer's <em>ease</em>, not just its content.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 09 PLAIN ENGLISH ===== -->
+  <section id="plain">
+    <div class="sec-eyebrow"><span class="n">09</span> Assessment</div>
+    <h2 class="sec-title">My assessment, in plain English</h2>
+    <p class="sec-sub">No jargon. Short sentences.</p>
+
+    <div class="card">
+      <h3 class="blk">The situation, simply</h3>
+      <p>You want sprinklers put in at a house in Silver Creek. There are plenty of people who will do it. The trouble is that the ones who quote cheapest mostly aren't allowed to. California moved the line on 1 January 2025: no licence means no job over $1,000, materials included. Your job is worth several thousand. So a whole tier of bidders is out before you compare anything.</p>
+      <p>That leaves a smaller field of licensed firms. I found five that serve your area. I could confirm licence numbers for three of them. I could not read a single customer review, because this machine cannot open Yelp, Google or the BBB. I am not going to pretend otherwise, and I have not made any up.</p>
+
+      <h3 class="blk">Why your priority beats price</h3>
+      <p>You didn't tell me what matters most, so I chose: a licence you can check, and someone who understands water. Here's why that beats saving a few hundred dollars.</p>
+      <p>Pipe goes underground. Once the trench is filled you cannot see the work. If the heads are spaced wrong or the pressure is off, you don't find out for months — you find out from brown patches and a water bill. Fixing it means digging it up again. That's the whole job twice.</p>
+      <p>And your lot slopes. Water pressure drops as pipe runs uphill. Someone who doesn't calculate for that will hand you a system that waters the bottom of the garden well and the top badly. It will look fine on day one.</p>
+
+      <h3 class="blk">The recommendation</h3>
+      <p style="font-size:17px; border-left:4px solid var(--good); padding-left:16px"><strong>Cyprex Construction Landscapes.</strong> The headline reason: <strong>they are the only one who wrote down how they design a system</strong> — pressure, flow, friction, elevation. On a sloped lot, that's the whole ball game.</p>
+      <p>Three more reasons, in order:</p>
+      <ul class="tick g">
+        <li><strong>They hold three licence classes, not one.</strong> Trenching, grading and drainage stay in-house. Fewer strangers on your property, and fewer people who could lien your house.</li>
+        <li><strong>Thirty-one years.</strong> Long enough that mistakes would have caught up with them.</li>
+        <li><strong>The native-plant listing.</strong> It suggests they actually work in low-water planting, which is what makes your rebate application succeed.</li>
+      </ul>
+      <p><strong>The honest catch:</strong> they're a design-build firm. They may be dearer, and they may want to design more than you asked for. Ask on the first call whether they'll quote a straightforward sprinkler install without a landscape redesign attached. If the answer is no, go to the runner-up without regret.</p>
+
+      <h3 class="blk">The runner-up</h3>
+      <p><strong>Dooling Landscape Service.</strong> Forty-two years in business and the only licence with a clear expiry date I could see. The owner has a horticulture degree. If Cyprex is too big or too slow for what you want, call Dooling.</p>
+
+      <h3 class="blk">Who I didn't pick, and why</h3>
+      <ul class="tick">
+        <li><strong>R &amp; J Landscaping</strong> — genuinely good, and it was close. Right licence class, most reviews, nearest of the big three. Two things kept them off the top: their award claim contradicts itself across their own pages, and nobody there works weekends. Neither is disqualifying. If you call all three and R&amp;J is the one that shows up promptly and answers the award question cleanly, hire them. I'd be comfortable with that.</li>
+        <li><strong>San Jose Sprinkler Repair</strong> — closest to you and the most irrigation-focused of the lot. I simply could not find a licence number, anywhere. That's not proof they lack one. It's just a question I couldn't answer, and it's the one question you can't skip. One phone call settles it, and if the number checks out they move up sharply.</li>
+        <li><strong>Oswald Sprinkler Repair</strong> — 145 reviews, more than everyone else combined. They're in Hayward. For an installation with years of callbacks afterwards, that's the wrong side of the bay. Save the number for when something breaks. <strong>Wrong fit for this job, not a bad company.</strong></li>
+      </ul>
+
+      <h3 class="blk">The uncomfortable part you should know</h3>
+      <p>I could not open a single primary record. Not the licence board, not one review, not the rebate page. Everything here came through a search index that shows me those pages' text second-hand. The facts are attributed to the right places and I've flagged every one that's second-hand — but <strong>you should treat this report as very good preparation for four phone calls, not as a substitute for making them</strong>. The licence check alone takes sixty seconds and is worth more than everything I've written above it.</p>
+      <p>Two smaller ones. I don't know for certain which company supplies your water, so I don't know whose backflow rules apply — check your bill. And I've assumed you want a new system installed; if this is actually a repair, my ranking is the wrong shape and Oswald and San Jose Sprinkler Repair move to the front.</p>
+
+      <h3 class="blk">What I'd actually do, in order</h3>
+      <ul class="tick">
+        <li><strong>1.</strong> Check three licence numbers at cslb.ca.gov — 701749, 549144, 946599. Sixty seconds each. Confirm Active, correct class, workers' comp on file, no discipline.</li>
+        <li><strong>2.</strong> Look at your water bill. Note the supplier's name.</li>
+        <li><strong>3.</strong> Open the Valley Water rebate page and check for pre-approval before anyone orders equipment. Up to $3,000 is real money.</li>
+        <li><strong>4.</strong> Send the three emails in §10. Same scope to all three, so the quotes actually compare.</li>
+        <li><strong>5.</strong> Call San Jose Sprinkler Repair on (408) 990-3226 and ask for their licence number. If it checks out, send them the email too.</li>
+        <li><strong>6.</strong> Read the Yelp and Angi reviews yourself, including the filtered ones — for tone, not as evidence.</li>
+        <li><strong>7.</strong> When the quotes arrive: cap the deposit at 10%, get the insurance certificate from the broker, get the warranty in years and in writing, and get the as-built map on completion.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 10 EMAILS ===== -->
+  <section id="emails">
+    <div class="sec-eyebrow"><span class="n">10</span> Outreach</div>
+    <h2 class="sec-title">Copy-paste emails to the top vendors</h2>
+    <p class="sec-sub">Identical scope in all three, so the quotes are genuinely comparable. Each asks for itemised pricing, a broker-issued insurance certificate, and the guarantee in writing.</p>
+
+    <div class="card">
+      <div class="email">
+        <div class="email-bar">
+          <div class="to">To: <b>Cyprex Construction Landscapes</b> · (408) 971-4274 · <a href="https://www.ecyprex.com/contact-us.html">ecyprex.com/contact-us</a></div>
+          <button class="copybtn" data-t="e1">Copy</button>
+        </div>
+        <pre id="e1">Subject: Request for quote — residential irrigation system, 95138 (Silver Creek)
+
+Hello,
+
+I'm getting quotes for a new residential sprinkler and drip irrigation
+system at my home in San Jose 95138, and I'm sending the same scope to
+three licensed contractors so the bids compare directly.
+
+SCOPE
+- New irrigation system, approximately 4 zones: 2 lawn/rotor zones and
+  2 drip zones for planting beds. Confirm zone count after your site visit.
+- Sloped lot. Please design for elevation change and confirm the system
+  is head-to-head at the design precipitation rate.
+- Backflow prevention device to my water retailer's required class,
+  supplied and installed.
+- Weather-based (smart) controller that qualifies for the Valley Water
+  Landscape Rebate Program approved-equipment list.
+- As-built zone map and controller programme handed over at completion.
+
+WHAT I NEED IN THE QUOTE
+1. Itemised pricing — separate lines for design, trenching, mainline,
+   valves and manifold, heads, drip, backflow device, controller, and
+   labour. A single lump sum won't be comparable.
+2. Your CSLB licence number and the classifications it covers.
+3. A certificate of insurance — general liability and workers'
+   compensation — sent to me DIRECTLY BY YOUR BROKER, not forwarded.
+   Please have them email it to me at this address.
+4. Your written guarantee: how many years on parts, how many years on
+   labour, stated separately, and your response time for a callback.
+5. Confirmation that your proposed deposit is at or below the statutory
+   cap of $1,000 or 10% of contract price, whichever is less.
+6. Whether any part of the work is subcontracted, and if so, whether
+   every person on site is covered by workers' compensation.
+7. Whether you handle the Valley Water rebate paperwork, and whether
+   you obtain pre-approval before ordering equipment.
+
+I'd also welcome a note on how you'd approach the slope specifically.
+
+What's your availability for a site visit in the next two weeks?
+
+Thank you,
+[Your name] · [Your phone] · [Your address, San Jose CA 95138]</pre>
+      </div>
+
+      <div class="email">
+        <div class="email-bar">
+          <div class="to">To: <b>Dooling Landscape Service</b> · <a href="https://doolinglandscapeservice.com/">doolinglandscapeservice.com</a> (contact form)</div>
+          <button class="copybtn" data-t="e2">Copy</button>
+        </div>
+        <pre id="e2">Subject: Request for quote — residential irrigation system, 95138 (Silver Creek)
+
+Hello,
+
+I'm getting quotes for a new residential sprinkler and drip irrigation
+system at my home in San Jose 95138, and I'm sending the same scope to
+three licensed contractors so the bids compare directly.
+
+SCOPE
+- New irrigation system, approximately 4 zones: 2 lawn/rotor zones and
+  2 drip zones for planting beds. Confirm zone count after your site visit.
+- Sloped lot. Please design for elevation change and confirm the system
+  is head-to-head at the design precipitation rate.
+- Backflow prevention device to my water retailer's required class,
+  supplied and installed.
+- Weather-based (smart) controller that qualifies for the Valley Water
+  Landscape Rebate Program approved-equipment list.
+- As-built zone map and controller programme handed over at completion.
+
+WHAT I NEED IN THE QUOTE
+1. Itemised pricing — separate lines for design, trenching, mainline,
+   valves and manifold, heads, drip, backflow device, controller, and
+   labour. A single lump sum won't be comparable.
+2. Your CSLB licence number and the classifications it covers. I have
+   #549144 on file from a public listing — please confirm it's current
+   and covers landscape irrigation.
+3. A certificate of insurance — general liability and workers'
+   compensation — sent to me DIRECTLY BY YOUR BROKER, not forwarded.
+   Please have them email it to me at this address.
+4. Your written guarantee: how many years on parts, how many years on
+   labour, stated separately, and your response time for a callback.
+5. Confirmation that your proposed deposit is at or below the statutory
+   cap of $1,000 or 10% of contract price, whichever is less.
+6. Whether any part of the work is subcontracted, and if so, whether
+   every person on site is covered by workers' compensation.
+7. Whether you handle the Valley Water rebate paperwork, and whether
+   you obtain pre-approval before ordering equipment.
+
+What's your availability for a site visit in the next two weeks?
+
+Thank you,
+[Your name] · [Your phone] · [Your address, San Jose CA 95138]</pre>
+      </div>
+
+      <div class="email">
+        <div class="email-bar">
+          <div class="to">To: <b>R &amp; J Landscaping</b> · (408) 444-5068 · <a href="https://www.randjlandscaping.net/">randjlandscaping.net</a></div>
+          <button class="copybtn" data-t="e3">Copy</button>
+        </div>
+        <pre id="e3">Subject: Request for quote — residential irrigation system, 95138 (Silver Creek)
+
+Hello,
+
+I'm getting quotes for a new residential sprinkler and drip irrigation
+system at my home in San Jose 95138, and I'm sending the same scope to
+three licensed contractors so the bids compare directly.
+
+SCOPE
+- New irrigation system, approximately 4 zones: 2 lawn/rotor zones and
+  2 drip zones for planting beds. Confirm zone count after your site visit.
+- Sloped lot. Please design for elevation change and confirm the system
+  is head-to-head at the design precipitation rate.
+- Backflow prevention device to my water retailer's required class,
+  supplied and installed.
+- Weather-based (smart) controller that qualifies for the Valley Water
+  Landscape Rebate Program approved-equipment list.
+- As-built zone map and controller programme handed over at completion.
+
+WHAT I NEED IN THE QUOTE
+1. Itemised pricing — separate lines for design, trenching, mainline,
+   valves and manifold, heads, drip, backflow device, controller, and
+   labour. A single lump sum won't be comparable.
+2. Confirmation that CSLB licence #946599 (C-27) is current and in good
+   standing.
+3. A certificate of insurance — general liability and workers'
+   compensation — sent to me DIRECTLY BY YOUR BROKER, not forwarded.
+   Please have them email it to me at this address.
+4. Your written guarantee: how many years on parts, how many years on
+   labour, stated separately, and your response time for a callback.
+5. Confirmation that your proposed deposit is at or below the statutory
+   cap of $1,000 or 10% of contract price, whichever is less.
+6. Whether any part of the work is subcontracted, and if so, whether
+   every person on site is covered by workers' compensation.
+7. Whether you handle the Valley Water rebate paperwork, and whether
+   you obtain pre-approval before ordering equipment.
+
+One small thing: your website mentions being voted Best Landscaper in
+Silicon Valley by the Mercury News. I've seen the streak described as
+both five years and thirteen years in different places — could you tell
+me which years you won? I'd like to note it accurately.
+
+What's your availability for a site visit in the next two weeks?
+
+Thank you,
+[Your name] · [Your phone] · [Your address, San Jose CA 95138]</pre>
+      </div>
+      <p class="tnote">A fourth, shorter call to make before emailing: <strong>San Jose Sprinkler Repair on (408) 990-3226</strong> — ask only for their CSLB licence number and the name it's held under. If it verifies, send them the same email; they're the closest firm to you.</p>
+    </div>
+  </section>
+
+  <!-- ===== 11 SOURCES ===== -->
+  <section id="sources">
+    <div class="sec-eyebrow"><span class="n">11</span> Sources</div>
+    <h2 class="sec-title">Numbered sources</h2>
+    <p class="sec-sub">Grouped by type, live links, retrieval dates — including the ones that failed. Every entry carries a one-line note on what it is and why it's credible here.</p>
+
+    <div class="card">
+      <div class="srcgroup">
+        <h4>Tier 1 — Government, regulators and public agencies</h4>
+        <ol class="srclist">
+          <li data-n="1"><strong>CSLB — Check A License</strong> · <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov/onlineservices/checklicenseII</a> · retrieved 15 Aug 2026 <span class="chip bad">Access blocked</span>
+            <span class="why">(The California Contractors State License Board is the state agency that issues, renews and disciplines contractor licences — the authoritative record for licence status, class, bond and workers' comp. <strong>Blocked by this environment's egress policy; not opened.</strong> Phone (800) 321-2752.)</span></li>
+          <li data-n="2"><strong>CSLB — Industry Bulletin, AB 2622 Implementation (2024)</strong> · <a href="https://www.cslb.ca.gov/Resources/IndustryBulletins/2024/AB%202622%20Implementation.FINAL.pdf">cslb.ca.gov (PDF)</a> · read 15 Aug 2026
+            <span class="why">(The regulator's own notice explaining how it enforces the $1,000 unlicensed-work ceiling effective 1 Jan 2025. Primary source for §01's reframe.)</span></li>
+          <li data-n="3"><strong>CSLB — Learn About Home Improvement Contracts (B&amp;P §7159.5)</strong> · <a href="https://www.cslb.ca.gov/Consumers/Hire_A_Contractor/Home_Improvement_Contracts/What_Is_A_Contract.aspx">cslb.ca.gov</a> · read 15 Aug 2026
+            <span class="why">(CSLB consumer guidance restating the statutory down-payment cap of $1,000 or 10%, whichever is less, and the required contract language.)</span></li>
+          <li data-n="4"><strong>CSLB — How to Prevent a Mechanics Lien + statutory waiver and release forms</strong> · <a href="https://www.cslb.ca.gov/consumers/legal_issues_for_consumers/mechanics_lien/How_To_Prevent_A_Mechanics_Lien.aspx">guidance</a> · <a href="https://www.cslb.ca.gov/resources/guidesandpublications/lienreleaseforms.Pdf">forms (PDF)</a> · read 15 Aug 2026
+            <span class="why">(State-published release forms and the homeowner's procedure for conditional/unconditional releases. Using the state's own forms removes any dispute about wording.)</span></li>
+          <li data-n="5"><strong>CSLB — Licensing Classification C-27, Landscaping</strong> · <a href="https://www.cslb.ca.gov/about_us/library/licensing_classifications/Licensing_Classifications_Detail.aspx?Class=C27">cslb.ca.gov</a> · read 15 Aug 2026
+            <span class="why">(The definitive statement of what a C-27 licensee may lawfully perform — the class that covers landscape irrigation in California.)</span></li>
+          <li data-n="6"><strong>California DWR — Model Water Efficient Landscape Ordinance (MWELO), final text and appendices</strong> · <a href="https://water.ca.gov/Programs/Water-Use-And-Efficiency/Urban-Water-Use-Efficiency/Model-Water-Efficient-Landscape-Ordinance">water.ca.gov</a> · read 15 Aug 2026
+            <span class="why">(The Department of Water Resources writes MWELO and local agencies must adopt it or an equally effective ordinance. Primary source for the 500 / 2,500 sq ft thresholds and the 1 Dec 2015 effective date.)</span></li>
+          <li data-n="7"><strong>San José Municipal Code, Chapter 15.11 — Water Efficient Landscape Standards</strong> · <a href="https://library.municode.com/ca/san_jose/codes/code_of_ordinances?nodeId=TIT15PUUT_CH15.11WAEFLASTNERELA_PT3LAINRE_15.11.1060DIDE">Municode Library</a> · read 15 Aug 2026
+            <span class="why">(Municode is the official publisher of San José's codified ordinances — the city's own binding text, including the rear-yard 500 sq ft exemption.)</span></li>
+          <li data-n="8"><strong>City of San José — Backflow Prevention and Cross-Connection Control</strong> · <a href="https://www.sanjoseca.gov/your-government/departments-offices/environmental-services/water-utilities/drinking-water/backflow-prevention-and-cross-connection-control">sanjoseca.gov</a> · read 15 Aug 2026
+            <span class="why">(The city's Environmental Services Department, which operates Muni Water and administers the cross-connection programme — primary for its own annual testing requirement.)</span></li>
+          <li data-n="9"><strong>Santa Clara Valley Water District — Landscape Rebate Program</strong> · <a href="https://www.valleywater.org/saving-water/rebates-surveys/landscape-rebates">valleywater.org</a> · <a href="https://www.valleywater.org/accordion/irrigation-equipment-upgrade-rebate">irrigation equipment upgrade</a> · <a href="https://www.valleywater.org/accordion/line-drip-irrigation-conversion-rebate">in-line drip conversion</a> · <a href="https://valleywater.dropletportal.com/">application portal</a> · read 15 Aug 2026
+            <span class="why">(Valley Water is the public wholesale water and flood-protection agency for Santa Clara County and the body that pays these rebates. Primary and authoritative for the $3,000 residential cap and the approved-equipment lists. Conservation hotline (408) 630-2554.)</span></li>
+          <li data-n="10"><strong>Santa Clara LAFCO — Countywide Water Service Review: Great Oaks Water Company</strong> · <a href="https://santaclaralafco.org/sites/default/files/service_reviews/2011%20COUNTYWIDE%20WATER%20SERVICE%20REVIEW%20-%20Great%20Oaks%20Water%20Company_0.pdf">santaclaralafco.org (PDF)</a> · read 15 Aug 2026
+            <span class="why">(The Local Agency Formation Commission is the statutory county body reviewing utility service boundaries — authoritative on service areas, but this review dates from 2011, so treat the boundary description as indicative only.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 2 — Vendors' own published material</h4>
+        <ol class="srclist">
+          <li data-n="11"><strong>Cyprex Construction Landscapes</strong> · <a href="https://www.ecyprex.com/">ecyprex.com</a> · <a href="https://www.ecyprex.com/landscape-construction/irrigation-design-and-const/index.html">Irrigation Design &amp; Construction</a> · <a href="https://www.ecyprex.com/about-us.html">About</a> · <a href="https://www.ecyprex.com/contact-us.html">Contact</a> · read 15 Aug 2026
+            <span class="why">(The vendor's own site — authoritative for stated services, method, service area and contact details; self-reported, so not evidence of execution quality.)</span></li>
+          <li data-n="12"><strong>Dooling Landscape Service</strong> · <a href="https://doolinglandscapeservice.com/">doolinglandscapeservice.com</a> · <a href="https://doolinglandscapeservice.com/about-us">About</a> · <a href="https://doolinglandscapeservice.com/service-areas/san-jose-ca">San Jose service area</a> · read 15 Aug 2026
+            <span class="why">(Vendor's own site — source for the 1984 founding claim and the owner's 1978 Cal Poly Ornamental Horticulture degree. Self-reported.)</span></li>
+          <li data-n="13"><strong>R &amp; J Landscaping</strong> · <a href="https://www.randjlandscaping.net/">randjlandscaping.net</a> · <a href="https://www.randjlandscaping.net/about-us">About</a> · <a href="https://www.randjlandscaping.net/ca-irrigation/irrigation-systems">irrigation systems</a> · <a href="https://www.randjlandscaping.net/ca-irrigation/drip-irrigation-systems">drip</a> · read 15 Aug 2026
+            <span class="why">(Vendor's own site — the source of the Mercury News award claim audited in §08, and of the licence and founding-year claims.)</span></li>
+          <li data-n="14"><strong>San Jose Sprinkler Repair</strong> · <a href="http://www.sprinklerrepairsanjose.com/">sprinklerrepairsanjose.com</a> · <a href="http://www.sprinklerrepairsanjose.com/services.php">services</a> · read 15 Aug 2026
+            <span class="why">(Vendor's own site — service list and phone number. Note it publishes no licence number, which California requires in contractor advertising.)</span></li>
+          <li data-n="15"><strong>Lane Irrigation</strong> · <a href="https://www.laneirrigation.com/">laneirrigation.com</a> · read 15 Aug 2026
+            <span class="why">(Supply house, established 1969 per its own claim. Included as an independent parts-price reference, not as a bidder.)</span></li>
+          <li data-n="16"><strong>Rain Bird — Professional Customer Satisfaction Policy &amp; Trade Warranty</strong> · <a href="https://www.rainbird.com/corporate/professional-customer-satisfaction-policy">rainbird.com</a> · read 15 Aug 2026
+            <span class="why">(Manufacturer's own published warranty policy — primary and binding on Rain Bird. Source for the 5-year coverage on 1800 spray heads, 5000/5500 rotors and PEB/PESB valves.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 3 — Review platforms, accreditation bodies and licence mirrors</h4>
+        <ol class="srclist">
+          <li data-n="17"><strong>BBB — Dooling Landscape Service profile</strong> · <a href="https://www.bbb.org/us/ca/san-jose/profile/landscape-contractors/dooling-landscape-service-1216-1000002090">bbb.org</a> · read 15 Aug 2026 <span class="chip bad">Page not opened</span>
+            <span class="why">(The Better Business Bureau is a long-established non-profit maintaining business profiles and mediating complaints. Source for licence #549144 and the 30 Nov 2026 expiry. Not a regulator, and accreditation is a paid programme — so "not accredited" is a commercial fact, not a quality judgement.)</span></li>
+          <li data-n="18"><strong>BBB — San Jose Sprinkler Repair profile</strong> · <a href="https://www.bbb.org/us/ca/san-jose/profile/sprinkler-system/san-jose-sprinkler-repair-1216-253077/addressId/18378">bbb.org</a> · read 15 Aug 2026 <span class="chip bad">Page not opened</span>
+            <span class="why">(Source for the 10 Nov 2009 business-start date and 10 Jun 2013 file-open date — registration data, more reliable than a marketing "since" claim.)</span></li>
+          <li data-n="19"><strong>Yelp — R &amp; J Landscaping</strong> · <a href="https://www.yelp.com/biz/r-and-j-landscaping-san-jose">yelp.com</a> · read 15 Aug 2026 <span class="chip bad">Page not opened</span>
+            <span class="why">(Yelp is the dominant consumer review platform for California local trades. Listing metadata — address, phone, hours, 38-review count — is reliable; the star value and review text were not readable from here.)</span></li>
+          <li data-n="20"><strong>Yelp — Oswald Sprinkler Repair, Hayward</strong> · <a href="https://www.yelp.com/biz/oswald-sprinkler-repair-hayward-2">yelp.com</a> · read 15 Aug 2026 <span class="chip bad">Page not opened</span>
+            <span class="why">(Source for the 145-review count and Hayward location. Same caveat as above.)</span></li>
+          <li data-n="21"><strong>Yelp — Cyprex Construction Landscapes</strong> · <a href="https://www.yelp.com/biz/cyprex-construction-landscapes-san-jose-2">yelp.com</a> · read 15 Aug 2026 <span class="chip bad">Page not opened</span>
+            <span class="why">(Source for the 1116 Curtner Ave address and (408) 971-4274 phone number.)</span></li>
+          <li data-n="22"><strong>Angi / HomeAdvisor — candidate profiles</strong> · <a href="https://www.angi.com/companylist/us/ca/san-jose/dooling-landscape-service-reviews-156410440.htm">Dooling (Angi)</a> · <a href="https://www.angi.com/companylist/us/ca/san-jose/r-and-j-landscaping-reviews-3726868.htm">R&amp;J (Angi)</a> · <a href="https://www.homeadvisor.com/rated.CyprexConstruction.13967938.html">Cyprex (HomeAdvisor)</a> · read 15 Aug 2026 <span class="chip bad">Pages not opened</span>
+            <span class="why">(Angi and HomeAdvisor are the same parent company and operate paid-lead marketplaces with review systems. Established platforms, but pay-to-list — presence signals marketing spend as much as quality.)</span></li>
+          <li data-n="23"><strong>Nextdoor — R &amp; J Landscaping page</strong> · <a href="https://nextdoor.com/pages/r-j-landscaping/">nextdoor.com</a> · read 15 Aug 2026 <span class="chip bad">Page not opened</span>
+            <span class="why">(Neighbourhood social network. Useful because it is geographically scoped to your area — but it is social, so treat anything found there as supporting colour only, never load-bearing.)</span></li>
+          <li data-n="24"><strong>BuildZoom — Cyprex contractor profile</strong> · <a href="https://www.buildzoom.com/contractor/cyprex-construction-landscapes">buildzoom.com</a> · read 15 Aug 2026
+            <span class="why">(A contractor marketplace that republishes CSLB licence data and building-permit records. Source for licence #701749, the A/B/C-27 classifications and the 31-year figure. A <em>mirror</em> of the state record, not the record itself — verify at source 1.)</span></li>
+          <li data-n="25"><strong>Calscape — Cyprex landscaper profile</strong> · <a href="https://calscape.org/landscaper/profile/cyprex-construction-landscapes">calscape.org</a> · read 15 Aug 2026
+            <span class="why">(Calscape is run by the California Native Plant Society, a respected non-profit. Its landscaper directory indicates native-plant practice — mild institutional recognition, not a quality audit.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 4 — Industry bodies, cost guides and trade material</h4>
+        <ol class="srclist">
+          <li data-n="26"><strong>Irrigation Association — Landscape Irrigation Contractor State Licensing Guide (California)</strong> · <a href="https://www.irrigation.org/IA/Advocacy/Contractor-State-Licensing/California/">irrigation.org</a> · read 15 Aug 2026
+            <span class="why">(The Irrigation Association is the recognised US trade body for the irrigation industry and runs the Certified Irrigation Contractor / Designer credentials. Authoritative on what California requires of irrigation contractors.)</span></li>
+          <li data-n="27"><strong>QWEL — Qualified Water Efficient Landscaper certification</strong> · <a href="https://calwep.org/qwel/">calwep.org/qwel</a> · read 15 Aug 2026
+            <span class="why">(QWEL is an EPA WaterSense-labelled professional certification for irrigation system audits, delivered in California through the California Water Efficiency Partnership. A meaningful credential to ask a bidder about — federal recognition, not self-award.)</span></li>
+          <li data-n="28"><strong>Angi — Sprinkler System Installation Cost, 2026 data</strong> · <a href="https://www.angi.com/articles/how-much-does-it-cost-install-sprinkler-system.htm">angi.com</a> · read 15 Aug 2026
+            <span class="why">(Established home-services cost guide built from member-reported job prices. Directional for ranges; an aggregator, not an independent audit, and not local to Santa Clara County.)</span></li>
+          <li data-n="29"><strong>LawnStarter — Sprinkler System Cost 2026</strong> · <a href="https://www.lawnstarter.com/blog/cost/sprinkler-system-price/">lawnstarter.com</a> · read 15 Aug 2026
+            <span class="why">(Lawn-care marketplace cost guide, used as a second independent range for the per-zone figures. Same caveat — directional only, and the operator sells adjacent services.)</span></li>
+          <li data-n="30"><strong>Rain Bird — MWELO 2015 Compliance Guide to Irrigation-Related Requirements</strong> · <a href="https://www.rainbird.com/sites/default/files/media/documents/2021-01/mwelo-ordinanceguide-updated-12-2020.pdf">rainbird.com (PDF)</a> · read 15 Aug 2026
+            <span class="why">(A manufacturer's plain-English guide to MWELO's irrigation requirements. Useful for orientation, but written by a company that sells the compliant equipment — trade publication, not an independent test. Treat as directional; source 6 governs.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Dead ends — searches and pages that failed, with the way to close them yourself</h4>
+        <ol class="srclist">
+          <li data-n="31"><strong>Every external page load failed.</strong> This environment's egress proxy blocked direct fetches to cslb.ca.gov, www2.cslb.ca.gov, yelp.com, bbb.org, valleywater.org, sanjoseca.gov, epa.gov, google.com and wikipedia.org — tested individually on 15 Aug 2026, all returned the same block.
+            <span class="why">(This is the single most important limitation in the report. Everything above reached me through search-index text of those pages. Nothing was fabricated to fill the gap, which is why §04 is mostly empty.)</span></li>
+          <li data-n="32"><strong>CSLB licence verification — all five candidates.</strong> Not completed. Close it at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">Check A License</a> or <strong>(800) 321-2752</strong>. Numbers to check: <strong>701749</strong> (Cyprex), <strong>549144</strong> (Dooling), <strong>946599</strong> (R&amp;J).
+            <span class="why">(Sixty seconds per licence, and it is worth more than the rest of this document combined.)</span></li>
+          <li data-n="33"><strong>San Jose Sprinkler Repair — no licence number found anywhere.</strong> Searched their own site, BBB profile and directory listings. <strong>This is not evidence they are unlicensed.</strong> Close it: call <strong>(408) 990-3226</strong>.
+            <span class="why">(A failed registry search proves nothing about the underlying fact. Recorded as an open question, which is why they're "hold" rather than "out".)</span></li>
+          <li data-n="34"><strong>Oswald Sprinkler Repair — no company website and no licence number found.</strong> Close it: call <strong>(510) 398-3435</strong>.
+            <span class="why">(Same principle as above. Their exclusion rests on geography and job fit, not on this gap.)</span></li>
+          <li data-n="35"><strong>Star ratings and review text — all platforms, all candidates.</strong> Not obtained. Close it: open the Yelp, Angi, HomeAdvisor, Nextdoor and Google links in §04 on your own device, including Yelp's "not currently recommended" queue at the foot of each listing.
+            <span class="why">(Review counts were readable through listing metadata; star values and review bodies were not. No quote in this report is invented — that's why the quote blocks are empty.)</span></li>
+          <li data-n="36"><strong>Valley Water rebate — per-square-foot and per-device amounts.</strong> Only the $3,000 residential cap could be pinned. Close it at the <a href="https://valleywater.dropletportal.com/">application portal</a> or the conservation hotline, <strong>(408) 630-2554</strong>.
+            <span class="why">(The specific rates sit behind the application portal, which could not be opened. The cap is confirmed; the rate schedule is not.)</span></li>
+          <li data-n="37"><strong>Water retailer for 95138.</strong> Unresolved — Great Oaks Water Company's stated boundary runs along the Silver Creek ridge, and 95138 sits near it. Close it by reading your water bill, or call Great Oaks on the number at <a href="https://greatoakswater.com/">greatoakswater.com</a> / San Jose Water at <a href="https://www.sjwater.com/">sjwater.com</a>.
+            <span class="why">(Determines your backflow device class and testing route. Ten seconds with a bill; I had no way to do it from here.)</span></li>
+          <li data-n="38"><strong>Mercury News "Best of Silicon Valley" award archive.</strong> Not reachable, so the five-versus-thirteen-year discrepancy in §08 stays open. Close it by asking R&amp;J directly on <strong>(408) 444-5068</strong>.
+            <span class="why">(The award is a readers'-choice popularity poll rather than a judged assessment, so even when resolved it should carry modest weight.)</span></li>
+          <li data-n="39"><strong>Content farms deliberately excluded.</strong> Searches repeatedly surfaced "10 best" listicles, AI-generated directory roundups and SEO landing pages for this category. None were cited, and none informed any ranking here.
+            <span class="why">(Recorded so you know the omission was a choice. If you search this yourself, expect those pages to dominate the first page of results — they are advertising, not research.)</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 12 FINAL VERDICT ===== -->
+  <section id="final">
+    <div class="final">
+      <div class="fk">§12 · Final verdict</div>
+      <h2>The call, committed</h2>
+
+      <p class="pick1">Hire <strong>Cyprex Construction Landscapes</strong> (CSLB #701749) to design and install the system. Verify that licence number at cslb.ca.gov this week, then call (408) 971-4274 and book the site visit — and open with the question of whether they will quote a straightforward irrigation-only install.</p>
+
+      <h4>Why I chose them</h4>
+      <p>Because on a sloped Silver Creek lot the risk isn't a bad company — it's a competent company that doesn't do the arithmetic. Elevation change eats pressure, and pressure loss shows up as uneven coverage you cannot see until the grass tells you months later, when the pipe is buried and the remedy is the job again. Cyprex is the only candidate whose own material names the four variables that govern this — precipitation rate, flow, friction loss, head elevation. That got the heaviest weight I gave anything. It is only marketing copy, and I've said so, but it is marketing copy that the other four didn't write, and in a field where everyone lists the same services, knowing the vocabulary is the closest available proxy for knowing the work.</p>
+      <p>Second in weight, the licence stack: A and B alongside C-27 means grading, drainage and trenching stay in-house instead of going to a crew you never met — which cuts both the workers'-comp exposure and the supplier-lien exposure set out in §07. Third, and much lighter, thirty-one years and the Native Plant Society listing: longevity that would have caught up with them by now if the work were poor, and a signal they can actually get your rebate approved. I gave the review platforms almost no weight at all — not because they don't matter, but because I couldn't read them, and pretending otherwise would be the one thing that makes a report like this worthless.</p>
+
+      <h4>Why I eliminated each of the others</h4>
+      <div class="elim"><div class="nm">Dooling Landscape Service</div><div class="bd">Genuinely good at the long game — forty-two years, a horticulture degree at ownership level, and the only licence with a clean checkable expiry. What knocked it out: irrigation is one line in a long service list, nothing published describes <em>how</em> they design a system, and the BBB holds too little on them to rate. <span class="backup">STAYS AS RUNNER-UP</span></div></div>
+      <div class="elim"><div class="nm">R &amp; J Landscaping</div><div class="bd">The most complete irrigation content of anyone here, exactly the right licence class, the largest local review count, and six miles away. What knocked it out: their own headline award claim contradicts itself between five and thirteen years, and it stayed unresolved. That's probably a stale web page rather than a lie — but I won't rank a company first on a claim I couldn't settle. Weekdays only, too. <span class="backup">STAYS AS BACK-UP</span></div></div>
+      <div class="elim"><div class="nm">San Jose Sprinkler Repair</div><div class="bd">The closest firm to you, the most irrigation-focused, and sixteen years in. What knocked it out: no CSLB licence number surfaced anywhere — not on their site, not on their BBB file. I want to be precise: that is an unanswered question, not a finding against them. But for a several-thousand-dollar buried installation it's the one question that has to be answered first. <span class="backup">HOLD — ONE CALL FROM RE-ENTRY</span></div></div>
+      <div class="elim"><div class="nm">Oswald Sprinkler Repair</div><div class="bd">145 reviews — more than every other candidate combined — and a genuine irrigation specialism. What knocked it out is geography, not quality: Hayward is a different county, across the bay from your warranty callbacks, and outside the water agency whose rebate and backflow rules govern your property. Wrong fit for an installation, not a bad company. <span class="backup">KEEP FOR REPAIRS</span></div></div>
+      <div class="elim"><div class="nm">Lane Irrigation</div><div class="bd">Never a candidate — they don't install. Keep them for the job they're right for: pricing the parts list on your winning bid independently, so "materials" stops being a number you can't argue with. <span class="backup">SPECIAL ROLE</span></div></div>
+
+      <h4>What would change my mind</h4>
+      <p>One fact. <strong>If CSLB shows licence #701749 as anything other than Active with workers' compensation on file — expired, suspended, or carrying disciplinary history — my recommendation moves immediately to Dooling Landscape Service (#549144)</strong>, no further analysis required. Everything I've argued for Cyprex rests on that licence being sound, and I could not open the record to confirm it. A softer version of the same trigger: if they decline to quote an irrigation-only scope, or their number lands materially above the §06 range because a landscape redesign is bundled in, take Dooling as well.</p>
+
+      <div class="conf">
+        <div class="lab">Confidence level</div>
+        <p style="margin:0"><strong>Moderate.</strong> High confidence in the <em>framework</em> — the legality reframe, the cost ranges, the policy layer and the contract protections are drawn from state agencies and are solid. Materially lower confidence in the <em>vendor ranking</em>, because I could not open a single primary record and every licence number here arrived through a directory mirror.</p>
+        <p style="margin:10px 0 0"><strong>Still unconfirmed underneath this call:</strong> all five licence statuses; every star rating and every review; Cyprex's actual price level and minimum job size; whether Great Oaks or San Jose Water serves your address; the Valley Water rate schedule beneath the $3,000 cap; and every candidate's warranty terms, since none publishes one. Three phone calls and one look at your water bill close most of it — and if the CSLB check comes back clean on #701749, treat this recommendation as firm.</p>
+      </div>
+    </div>
+
+    <p class="foot">Garden Sprinkler Installer RAC · prepared 15 August 2026 for San Jose, CA 95138 · all facts date-stamped at point of use<br>Research constrained by network egress policy — see §11 dead ends. No customer quotes, star ratings or licence records were fabricated to fill gaps.</p>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = document.getElementById(btn.dataset.t);
+      if(!el) return;
+      var txt = el.innerText;
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = 'Copied ✓'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1800);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(done).catch(function(){ fallback(txt, done); });
+      } else { fallback(txt, done); }
+    });
+  });
+  function fallback(txt, cb){
+    var ta = document.createElement('textarea');
+    ta.value = txt; ta.setAttribute('readonly','');
+    ta.style.position='fixed'; ta.style.top='-1000px';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); cb(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+</script>
