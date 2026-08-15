@@ -1,0 +1,1726 @@
+<title>Garden Lighting RAC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#eef1f6; --bg2:#e6eaf1; --card:#ffffff; --card2:#f7f9fc;
+    --ink:#18202f; --ink2:#3d4759; --muted:#68728a; --faint:#8a93a6;
+    --line:#e3e8f0; --line2:#eef2f8;
+    --accent:#2159d6; --accent-ink:#1642a8; --accent-soft:#e7eefc;
+    --good:#137a3b;  --good-bg:#e3f5ea;  --good-line:#bfe6cd;
+    --warn:#9a5b06;  --warn-bg:#fdf1d8;  --warn-line:#f4dca6;
+    --bad:#b3251f;   --bad-bg:#fce7e5;   --bad-line:#f4c6c2;
+    --ask:#4a5570;   --ask-bg:#eceff5;   --ask-line:#d6dcea;
+    --shadow:0 1px 2px rgba(24,32,47,.04), 0 6px 20px rgba(24,32,47,.06);
+    --shadow-lg:0 2px 4px rgba(24,32,47,.05), 0 16px 44px rgba(24,32,47,.10);
+    --radius:14px; --radius-sm:9px;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+      --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+      --line:#2a3444; --line2:#232c3a;
+      --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+      --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+      --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+      --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+      --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+    --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+    --line:#2a3444; --line2:#232c3a;
+    --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+    --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+    --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+    --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+    --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+  }
+
+  /* ============ BASE ============ */
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-size:16.5px; line-height:1.62;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;}
+  .wrap{max-width:1060px; margin:0 auto; padding:0 20px 90px}
+  h1,h2,h3,h4{line-height:1.2; text-wrap:balance; margin:0}
+  p{margin:0 0 14px}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  strong{font-weight:650}
+  section{margin-top:30px}
+  .card{background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 28px;}
+  .card + .card{margin-top:18px}
+  .sec-eyebrow{font-size:12px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--accent-ink); font-weight:700; margin-bottom:8px;
+    display:flex; align-items:center; gap:9px;}
+  .sec-eyebrow .n{font-family:var(--mono); font-size:11px; color:var(--muted);
+    border:1px solid var(--line); border-radius:5px; padding:1px 6px; background:var(--card2);}
+  h2.sec-title{font-size:26px; letter-spacing:-.02em; margin-bottom:6px}
+  .sec-sub{color:var(--muted); font-size:15px; margin-bottom:18px}
+  h3.blk{font-size:18.5px; letter-spacing:-.01em; margin:22px 0 10px}
+  h4.mini{font-size:14px; letter-spacing:.02em; margin:16px 0 8px; color:var(--ink2)}
+
+  /* ============ CHIPS ============ */
+  .chip{display:inline-flex; align-items:center; gap:5px; font-size:11.5px;
+    font-weight:650; letter-spacing:.02em; padding:2px 9px; border-radius:100px;
+    border:1px solid var(--line); white-space:nowrap; vertical-align:middle; font-family:var(--sans);}
+  .chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.8}
+  .chip.good{color:var(--good); background:var(--good-bg); border-color:var(--good-line)}
+  .chip.warn{color:var(--warn); background:var(--warn-bg); border-color:var(--warn-line)}
+  .chip.bad{color:var(--bad); background:var(--bad-bg); border-color:var(--bad-line)}
+  .chip.ask{color:var(--ask); background:var(--ask-bg); border-color:var(--ask-line)}
+  .chip.plain{color:var(--ink2); background:var(--card2)}
+  .chip.plain::before{display:none}
+
+  /* ============ CITATIONS ============ */
+  .cite{font-size:12.5px; color:var(--muted); border-left:3px solid var(--line);
+    background:var(--card2); padding:8px 12px; border-radius:0 8px 8px 0; margin:10px 0 16px;}
+  .cite .src{color:var(--ink2); font-weight:600}
+  .cite .why{display:block; font-style:italic; color:var(--muted); margin-top:2px; font-size:12px}
+  .cite .date{color:var(--faint); font-variant-numeric:tabular-nums}
+
+  /* ============ BANNER ============ */
+  .banner{background:linear-gradient(180deg,var(--warn-bg),var(--card));
+    border:1px solid var(--warn-line); border-radius:var(--radius);
+    padding:16px 20px; margin-top:20px; box-shadow:var(--shadow);
+    font-size:13.5px; color:var(--ink2);}
+  .banner .row1{display:flex; align-items:center; gap:10px; font-weight:700; color:var(--warn);
+    font-size:13px; letter-spacing:.03em; text-transform:uppercase; margin-bottom:7px}
+
+  /* ============ HERO ============ */
+  .hero{margin-top:22px;
+    background:radial-gradient(120% 140% at 88% -10%, var(--accent-soft), transparent 55%), var(--card);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-lg);
+    overflow:hidden; position:relative;}
+  .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:0}
+  .hero-l{padding:36px 34px 32px}
+  .hero-r{position:relative; min-height:300px; border-left:1px solid var(--line2); background:#0d1522}
+  .hero .kicker{font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-ink); font-weight:700}
+  .hero h1{font-size:44px; letter-spacing:-.03em; margin:12px 0 8px; line-height:1.03}
+  .hero h1 .rac{color:var(--accent)}
+  .hero .lede{font-size:16px; color:var(--ink2); max-width:46ch}
+  .hero .expand{font-size:13px; color:var(--muted); margin-top:14px; display:flex; flex-wrap:wrap; gap:6px 16px}
+  .hero .expand b{color:var(--ink); font-weight:700}
+  .hero svg{display:block; width:100%; height:100%; position:absolute; inset:0}
+
+  /* ============ TOC ============ */
+  .toc{margin-top:18px}
+  .toc ol{list-style:none; margin:0; padding:0; columns:2; column-gap:26px}
+  .toc li{break-inside:avoid; margin-bottom:2px}
+  .toc a{display:flex; gap:10px; padding:7px 10px; border-radius:8px; color:var(--ink2); font-size:14px; align-items:baseline}
+  .toc a:hover{background:var(--card2); text-decoration:none; color:var(--ink)}
+  .toc .tn{font-family:var(--mono); font-size:12px; color:var(--accent); min-width:20px}
+
+  /* ============ VERDICT BOX ============ */
+  .verdict{background:linear-gradient(155deg,var(--good-bg),var(--card) 70%);
+    border:1.5px solid var(--good-line); border-radius:var(--radius); padding:24px 26px; box-shadow:var(--shadow);}
+  .verdict .vtag{display:inline-flex; gap:7px; align-items:center; font-size:12px; font-weight:800;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--good)}
+  .verdict h3{font-size:23px; margin:10px 0 4px; letter-spacing:-.02em}
+  .verdict h3 .pk{color:var(--good)}
+  .verdict .vrow{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px}
+  .vcell{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px}
+  .vcell .lab{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:4px}
+  .vcell .who{font-size:16px; font-weight:700; letter-spacing:-.01em}
+  .vcell .note{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; box-shadow:var(--shadow)}
+  .stat .big{font-size:29px; font-weight:750; letter-spacing:-.03em; color:var(--accent); line-height:1; font-variant-numeric:tabular-nums}
+  .stat .cap{font-size:12.5px; color:var(--ink2); margin-top:7px; line-height:1.4}
+  .stat .sub{font-size:11px; color:var(--faint); margin-top:5px}
+
+  .callout{border:1.5px solid var(--accent); border-radius:var(--radius);
+    background:linear-gradient(160deg,var(--accent-soft),var(--card) 65%);
+    padding:20px 24px; margin-top:16px; box-shadow:var(--shadow);}
+  .callout .ctitle{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-ink);
+    font-weight:800; margin-bottom:7px; display:flex; align-items:center; gap:8px}
+  .callout h3{font-size:20px; letter-spacing:-.02em; margin-bottom:8px}
+  .callout p{font-size:15px; color:var(--ink2); margin-bottom:8px}
+
+  /* ============ TABLES ============ */
+  .tscroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); background:var(--card)}
+  table{border-collapse:collapse; width:100%; font-size:14px; min-width:640px}
+  .matrix{min-width:900px}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line2); vertical-align:top}
+  thead th{position:sticky; top:0; background:var(--card2); z-index:2; font-size:12px; letter-spacing:.03em;
+    text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1.5px solid var(--line);}
+  tbody tr:last-child td{border-bottom:none}
+  td.crit, th.crit{font-weight:650; color:var(--ink); background:var(--card2); position:sticky; left:0; z-index:1; min-width:158px}
+  thead th.crit{z-index:3}
+  .cellwin{background:var(--good-bg); box-shadow:inset 3px 0 0 var(--good)}
+  .cellwin strong{color:var(--good)}
+  td.num{font-variant-numeric:tabular-nums}
+  .vrowfin td{background:var(--accent-soft); font-weight:650; border-top:1.5px solid var(--accent)}
+  .tnote{font-size:12px; color:var(--muted); margin-top:8px}
+
+  /* ============ PROFILES ============ */
+  .rankbadge{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px;
+    border-radius:8px; background:var(--accent); color:#fff; font-weight:750; font-size:15px}
+  .rankbadge.gr{background:var(--ask)}
+  .prof-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .prof-head h3{font-size:21px; letter-spacing:-.02em}
+  .factsheet{font-size:13.5px; color:var(--ink2); background:var(--card2); border:1px solid var(--line2);
+    border-radius:9px; padding:11px 14px; margin:12px 0}
+  .quote{border-left:3px solid var(--accent); padding:4px 0 4px 15px; margin:12px 0; color:var(--ink2); font-style:italic}
+  .quote .attr{display:block; font-style:normal; font-size:12.5px; color:var(--muted); margin-top:5px}
+  .against{background:var(--bad-bg); border:1px solid var(--bad-line); border-radius:10px; padding:13px 16px; margin-top:12px}
+  .against .h{font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:800; color:var(--bad); margin-bottom:6px}
+  .against p{font-size:13.5px; color:var(--ink2); margin:0}
+  .deadend{font-size:12.5px; color:var(--muted); border:1px dashed var(--line); border-radius:9px;
+    padding:10px 13px; margin-top:12px; background:var(--card2)}
+  .deadend b{color:var(--warn)}
+  .sitelink{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-family:var(--mono);
+    background:var(--accent-soft); border:1px solid var(--line); color:var(--accent-ink);
+    padding:4px 10px; border-radius:7px; font-weight:600}
+  .sitelink:hover{text-decoration:none; background:var(--card2)}
+
+  ul.tick{list-style:none; margin:6px 0 14px; padding:0}
+  ul.tick li{position:relative; padding-left:24px; margin-bottom:7px; font-size:14.5px; color:var(--ink2)}
+  ul.tick li::before{content:""; position:absolute; left:2px; top:8px; width:9px; height:9px; border-radius:2px; background:var(--accent)}
+  ul.tick.g li::before{background:var(--good)}
+  ul.tick.r li::before{background:var(--bad)}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .subcard{background:var(--card2); border:1px solid var(--line2); border-radius:10px; padding:16px 18px}
+  .subcard h4{font-size:15px; margin-bottom:8px; letter-spacing:-.01em}
+
+  .email{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:0; margin-top:14px; overflow:hidden}
+  .email-bar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 16px;
+    background:var(--card); border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .email-bar .to{font-size:13px; color:var(--ink2)} .email-bar .to b{color:var(--ink)}
+  .copybtn{font-family:var(--sans); font-size:12.5px; font-weight:650; color:#fff; background:var(--accent);
+    border:none; border-radius:7px; padding:7px 14px; cursor:pointer; transition:background .15s}
+  .copybtn:hover{background:var(--accent-ink)}
+  .copybtn.done{background:var(--good)}
+  .email pre{margin:0; padding:16px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.6;
+    color:var(--ink2); white-space:pre-wrap; word-wrap:break-word}
+
+  .srcgroup{margin-top:18px}
+  .srcgroup h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink);
+    margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+  ol.srclist{margin:0; padding-left:0; list-style:none}
+  ol.srclist li{position:relative; padding:8px 0 8px 34px; border-bottom:1px solid var(--line2); font-size:13px}
+  ol.srclist li .sn{position:absolute; left:0; top:8px; font-family:var(--mono); font-size:11px; color:var(--accent);
+    background:var(--accent-soft); border-radius:5px; width:24px; height:20px; display:flex;
+    align-items:center; justify-content:center; font-weight:700}
+  ol.srclist .why{display:block; font-style:italic; color:var(--muted); font-size:12px; margin-top:2px}
+  ol.srclist .u{color:var(--muted); word-break:break-all}
+
+  .final{background:linear-gradient(165deg,#0f2a5e,#123a86 55%,#0d244f);
+    color:#eaf1ff; border-radius:20px; padding:34px 34px 30px; margin-top:34px;
+    box-shadow:var(--shadow-lg); border:1px solid #1e4aa0;}
+  .final .fk{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:#9dc0ff; font-weight:800}
+  .final h2{font-size:28px; letter-spacing:-.02em; margin:10px 0 14px; color:#fff}
+  .final p{color:#d3e1fb; font-size:15.5px}
+  .final .pick1{font-size:19px; color:#fff; font-weight:650; border-left:4px solid #6f9bff; padding-left:16px; margin:0 0 20px}
+  .final h4{color:#fff; font-size:15px; margin:22px 0 8px; letter-spacing:.02em}
+  .final .elim{border-top:1px solid #24509f; padding:12px 0; display:grid; grid-template-columns:150px 1fr; gap:16px}
+  .final .elim .nm{font-weight:700; color:#fff; font-size:14px}
+  .final .elim .bd{color:#cfe0fb; font-size:13.5px}
+  .final .conf{margin-top:22px; background:rgba(255,255,255,.07); border:1px solid #2a5aad; border-radius:12px; padding:16px 18px}
+  .final .conf .lab{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#9dc0ff; font-weight:800; margin-bottom:6px}
+  .final a{color:#a9c4ff}
+  .final .backup{display:inline-block; font-size:11px; font-weight:700; color:#0d244f; background:#9dc0ff;
+    border-radius:5px; padding:1px 7px; margin-left:8px; letter-spacing:.03em}
+
+  .foot{margin-top:26px; text-align:center; color:var(--faint); font-size:12px; line-height:1.7}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-r{min-height:200px; border-left:none; border-top:1px solid var(--line2)}
+    .hero h1{font-size:36px}
+    .stats{grid-template-columns:1fr 1fr}
+    .verdict .vrow{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    .grid2{grid-template-columns:1fr}
+    .final .elim{grid-template-columns:1fr; gap:2px}
+  }
+  @media (max-width:480px){
+    body{font-size:16px}
+    .card{padding:20px 18px}
+    .stats{grid-template-columns:1fr}
+    .hero-l{padding:26px 22px}
+  }
+  @media print{
+    body{background:#fff}
+    .card,.hero,.verdict,.tscroll,.stat,.callout{box-shadow:none}
+    .copybtn{display:none}
+    .final{background:#0f2a5e !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    a{color:var(--ink)}
+    section{break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px}
+</style>
+
+<div class="wrap">
+
+  <!-- ===== CONFIDENTIALITY BANNER ===== -->
+  <div class="banner" role="note">
+    <div class="row1">🔒 Confidential — prepared for the homeowner · San Jose, CA 95138 · internal decision document</div>
+    <p style="margin:0">Every fact in this report was read on <b>15 August 2026</b> and is date-stamped at the point of use. Licence status, insurance filings, review counts and published price ranges all drift — <b>re-confirm anything load-bearing before you sign or pay</b>. This document names real businesses and commits to one recommendation; treat it as research, not legal advice, and not a contract.</p>
+    <p style="margin:8px 0 0"><b>Sourcing method — read this before you read anything else.</b> This environment's network policy blocked direct page loads to <i>every</i> vendor site, regulator and review platform I tried — including <code>cslb.ca.gov</code>, <code>yelp.com</code>, <code>bbb.org</code> and <code>leginfo.legislature.ca.gov</code>. Research was therefore gathered through <b>web search that surfaces those pages' own text</b>, not by rendering each primary page myself. Every figure below is attributed to the correct official URL and dated, but is tagged <span class="chip warn" style="margin:0 2px">Search-derived</span> where I could not open the page byte-for-byte. Nothing is tagged <span class="chip good" style="margin:0 2px">Verified</span> unless a primary record confirms it — and because CSLB was unreachable, <b>no licence in this report is Verified.</b> The single most valuable thing you can do with this report is spend ten minutes closing that gap yourself; §7 tells you exactly how.</p>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-l">
+        <div class="kicker">Low-voltage garden lighting · Silver Creek / Evergreen, San Jose 95138</div>
+        <h1>Garden Lighting <span class="rac">RAC</span></h1>
+        <p class="lede"><strong>R</strong>esearch · <strong>A</strong>ssessment · <strong>C</strong>omparison — who should design and install a low-voltage garden lighting system at your address, and what it should cost.</p>
+        <div class="expand">
+          <span>Reframe: <b>the 50-watt clause</b></span>
+          <span>Real gate: <b>who owns the 120 V side</b></span>
+          <span>Published range: <b>$2,000–$6,000</b></span>
+        </div>
+      </div>
+      <div class="hero-r" aria-hidden="true">
+        <svg viewBox="0 0 420 320" preserveAspectRatio="xMidYMid slice" role="img">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0a1120"/><stop offset="1" stop-color="#16233a"/>
+            </linearGradient>
+            <linearGradient id="beam" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#ffd489" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#ffd489" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="pool">
+              <stop offset="0" stop-color="#ffcf80" stop-opacity=".7"/>
+              <stop offset="1" stop-color="#ffcf80" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="420" height="320" fill="url(#sky)"/>
+          <!-- ground -->
+          <path d="M0 236 Q120 222 210 232 Q320 244 420 230 L420 320 L0 320 Z" fill="#101b2b"/>
+          <!-- uplit tree -->
+          <path d="M118 236 L118 168" stroke="#2a3a52" stroke-width="7" stroke-linecap="round"/>
+          <path d="M118 176 q-30 -18 -34 -46 q26 10 34 26 q6 -32 30 -46 q4 34 -12 50 q22 -8 34 4 q-24 20 -52 20 Z" fill="#1d3448"/>
+          <polygon points="118,236 74,150 162,150" fill="url(#beam)"/>
+          <circle cx="118" cy="236" r="4.5" fill="#ffd489"/>
+          <!-- path lights -->
+          <g>
+            <ellipse cx="238" cy="262" rx="42" ry="15" fill="url(#pool)"/>
+            <rect x="235" y="236" width="5" height="26" rx="2" fill="#2a3a52"/>
+            <path d="M226 236 q12 -12 24 0 Z" fill="#3c4f6b"/>
+            <circle cx="238" cy="238" r="3.5" fill="#ffd489"/>
+          </g>
+          <g>
+            <ellipse cx="316" cy="288" rx="52" ry="18" fill="url(#pool)"/>
+            <rect x="313" y="256" width="5" height="32" rx="2" fill="#2a3a52"/>
+            <path d="M303 256 q13 -13 26 0 Z" fill="#3c4f6b"/>
+            <circle cx="316" cy="258" r="3.5" fill="#ffd489"/>
+          </g>
+          <!-- house wall + transformer + GFCI: the 120V side -->
+          <rect x="336" y="120" width="84" height="118" fill="#141f31"/>
+          <rect x="336" y="120" width="84" height="4" fill="#22334c"/>
+          <!-- transformer box, highlighted as the crux -->
+          <rect x="352" y="156" width="42" height="50" rx="5" fill="#1c2b40" stroke="#6f9bff" stroke-width="1.6"/>
+          <rect x="360" y="166" width="26" height="4" rx="2" fill="#6f9bff" opacity=".8"/>
+          <rect x="360" y="176" width="18" height="3" rx="1.5" fill="#4d7fe0" opacity=".7"/>
+          <text x="360" y="196" font-family="monospace" font-size="9" fill="#9dc0ff">300W</text>
+          <!-- conduit down to ground -->
+          <path d="M373 206 L373 232 Q373 238 366 238 L150 238" stroke="#2a3a52" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- 120V outlet above -->
+          <rect x="362" y="132" width="22" height="16" rx="3" fill="#1c2b40" stroke="#3c4f6b" stroke-width="1.2"/>
+          <circle cx="369" cy="140" r="1.6" fill="#8a93a6"/><circle cx="377" cy="140" r="1.6" fill="#8a93a6"/>
+          <text x="336" y="116" font-family="monospace" font-size="8.5" fill="#68728a">120 V — permitted work</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOC ===== -->
+  <section class="card toc" aria-label="Table of contents">
+    <div class="sec-eyebrow"><span class="n">TOC</span> What's in this report</div>
+    <ol>
+      <li><a href="#call"><span class="tn">01</span> The call — verdict, stats &amp; the reframe</a></li>
+      <li><a href="#evidence"><span class="tn">02</span> What we're working with</a></li>
+      <li><a href="#matrix"><span class="tn">03</span> Comparison matrix</a></li>
+      <li><a href="#ratings"><span class="tn">04</span> Ratings — every platform</a></li>
+      <li><a href="#profiles"><span class="tn">05</span> Candidate profiles, ranked</a></li>
+      <li><a href="#cost"><span class="tn">06</span> What this should cost</a></li>
+      <li><a href="#policy"><span class="tn">07</span> The policy layer</a></li>
+      <li><a href="#audit"><span class="tn">08</span> Claim-by-claim audit — Wooding Electric</a></li>
+      <li><a href="#plain"><span class="tn">09</span> My assessment, in plain English</a></li>
+      <li><a href="#emails"><span class="tn">10</span> Copy-paste emails to the top vendors</a></li>
+      <li><a href="#sources"><span class="tn">11</span> Numbered sources</a></li>
+      <li><a href="#final"><span class="tn">12</span> Final verdict</a></li>
+    </ol>
+  </section>
+
+  <!-- ===== 01 THE CALL ===== -->
+  <section id="call">
+    <div class="sec-eyebrow"><span class="n">01</span> The call</div>
+    <h2 class="sec-title">The verdict, up front</h2>
+    <p class="sec-sub">One pick, one runner-up, one special-role vendor — and the four numbers that got them there.</p>
+
+    <div class="verdict">
+      <div class="vtag">✓ Recommendation</div>
+      <h3>Hire <span class="pk">Pearman Landscape Management, Inc.</span> — on the condition that they name their C-10 electrician in the contract.</h3>
+      <p style="margin:0; color:var(--ink2); font-size:15px">Pearman is described as one of the largest installers of FX Luminaire landscape lighting in the South Bay, is twelve miles from your address, and carries the highest review rating of any candidate on the platform that actually covers this category. What they do <b>not</b> hold is an electrical licence — their classification is C-27 Landscaping. That is fixable, not disqualifying, but it has to be fixed <b>in writing, before you pay a deposit.</b> <span class="chip warn">Search-derived</span></p>
+      <div class="vrow">
+        <div class="vcell">
+          <div class="lab">The pick</div>
+          <div class="who">Pearman Landscape</div>
+          <div class="note">Design and fixture craft. C-27 #767024 — needs a named C-10 sub for the 120 V tie-in.</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">The runner-up</div>
+          <div class="who">Wooding Electric</div>
+          <div class="note">C-10 #680882, trading since 1992, BBB A+ accredited. One licence covers the whole job.</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Special role</div>
+          <div class="who">Tested and True Electric</div>
+          <div class="note">Hire directly for the 120 V scope only, if you'd rather choose the electrician yourself.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="big">$2,000–$6,000</div>
+        <div class="cap">Published range for a professionally installed residential outdoor lighting system in San Jose.</div>
+        <div class="sub">Cost guides · read 15 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">50 W</div>
+        <div class="cap">The power ceiling in San Jose's permit exemption. Most garden transformers are 150–600 W — well over it.</div>
+        <div class="sub">SJMC 24.02.110 · read 15 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">$1,000</div>
+        <div class="cap">Hard legal cap on your deposit — or 10% of the contract, whichever is <i>less</i>. Not negotiable.</div>
+        <div class="sub">B&amp;P Code §7159 · read 15 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">5 of 8</div>
+        <div class="cap">Vendors I could find a CSLB licence number for. Three had none I could locate at all.</div>
+        <div class="sub">See §5 and the dead ends</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ctitle">◆ The finding that reframes everything</div>
+      <h3>"It's low voltage, so it doesn't need a permit or an electrician" is wrong for the system you'd actually buy.</h3>
+      <p>The exemption everyone in this trade leans on has <b>two</b> conditions, not one. San José exempts electrical work "operating at less than 25 volts <b>and</b> not capable of supplying more than 50 watts of energy." A 12-volt garden system clears the first condition easily. It fails the second one immediately: the transformer that runs even a modest scheme is typically 150 W to 600 W. Published transformer prices of $150–$800 describe exactly that class of hardware.</p>
+      <p>So the honest picture is a <b>split job</b>. The 12 V side — fixtures, cable runs, aiming, the part you can actually see — is landscaping craft. The 120 V side — the outdoor GFCI receptacle, the circuit feeding it, the transformer connection — is permitted electrical work that belongs to a C-10 licence holder. Most of the marketing in this category quietly collapses those two halves into one, and that is where homeowners get hurt: not by bad fixtures, but by an unpermitted, unlicensed 120 V connection buried behind a nice-looking garden.</p>
+      <p style="margin-bottom:0"><b>What this changes:</b> you are not shopping for "a garden light installer." You are commissioning a design-led 12 V install <i>and</i> a small, permitted 120 V electrical job — and your job is to make sure one contract covers both, with a named licence holder against each half.</p>
+      <div class="cite" style="margin-top:14px; background:var(--card)">
+        <span class="src">Source: City of San José — <a href="https://www.sanjoseca.gov/businesses/development-services-permit-center/start-your-project/when-is-a-building-permit-required">When Is a Building Permit Required?</a> (referencing San José Municipal Code §24.02.110) · sanjoseca.gov</span>
+        <span class="why">(The city's own Development Services Permit Center — the authority that issues and inspects permits at your address. This is the controlling exemption list for 95138. Read 15 Aug 2026. <span class="chip warn">Search-derived</span> — the page text was surfaced by search, not opened directly.)</span>
+      </div>
+      <div class="cite" style="margin:0; background:var(--card)">
+        <span class="src">Source: HomeGuide — <a href="https://homeguide.com/costs/outdoor-landscape-lighting-installation-cost">Landscape Lighting Cost (2026)</a> · homeguide.com</span>
+        <span class="why">(Established consumer cost guide built from contractor-submitted job data; widely used but <b>not</b> an independent audit — treat the $150–$800 transformer range as directional, not as a quote. Read 15 Aug 2026.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 EVIDENCE ===== -->
+  <section id="evidence">
+    <div class="sec-eyebrow"><span class="n">02</span> Evidence</div>
+    <h2 class="sec-title">What we're working with</h2>
+    <p class="sec-sub">Your brief, read closely — including what it doesn't say.</p>
+
+    <div class="card">
+      <h3 class="blk">What you actually gave me</h3>
+      <p>Three things, and I want to be straight about how thin that is before I build a recommendation on top of it:</p>
+      <ul class="tick">
+        <li><b>The category: "garden light installer."</b> Not "electrician," not "landscaper," not "holiday lights." The word <i>garden</i> is doing real work — it points at trees, beds, paths and planting being lit deliberately, which is a design discipline, not a fixture-fitting job.</li>
+        <li><b>The location: San Jose, CA 95138.</b> That's Silver Creek / Evergreen in south-east San Jose — largely detached single-family housing with mature planting, much of it inside HOA-governed communities. Two consequences: mature trees mean uplighting is likely in scope, and an HOA may have its own approval process I have no visibility into. <span class="chip ask">Ask</span></li>
+        <li><b>A request for vendor links.</b> Which tells me you intend to do your own verification pass. Good — this report is built for that, and §7 hands you the exact checks.</li>
+      </ul>
+
+      <h3 class="blk">What you didn't give me — and how I've handled it</h3>
+      <p>You didn't state a budget, a fixture count, a style, a timeline, or a priority. The report template asks me to explain "why my priority beats price," so I have to be honest: <b>you never stated a priority, so I derived one.</b> Here it is, stated plainly so you can reject it if it's wrong:</p>
+      <div class="factsheet">
+        <b>Derived priority:</b> a garden that is lit well <i>and</i> wired legally — a system that still works, and is still insurable, in ten years. Not the cheapest quote.
+      </div>
+      <p>I derived that from three observations. First, garden lighting is a discretionary aesthetic purchase; nobody commissions it to save money, so lowest-bid logic fits it badly. Second, the failure mode in this category is not "the lights look mediocre," it's "the transformer connection was never permitted and the wire was buried three inches deep" — an invisible defect you discover years later, often at resale. Third, the legal exposure in California for getting the licence question wrong is unusually asymmetric, and it lands on <b>you</b>, not the contractor — see §7.</p>
+      <p>If that's wrong — if this is a rental, a quick pre-sale tidy-up, or you have a hard $2,000 ceiling — say so, and the ranking changes materially. I'd tell you the honest answer in that case is a smaller scheme from a single licensed electrician, not the pick below.</p>
+
+      <h3 class="blk">What the market looks like once you actually search it</h3>
+      <p>Three distinct kinds of business answer to "garden light installer" in San Jose, and conflating them is the most common mistake here:</p>
+      <div class="grid2" style="margin-top:14px">
+        <div class="subcard">
+          <h4>Licensed electricians (C-10)</h4>
+          <p style="font-size:13.5px; margin:0">Wooding Electric, Tested and True, Emelco. They can legally do every part of the job including the 120 V side. Landscape lighting is one service page among twenty, and none of them published evidence of <i>design</i> capability I could find.</p>
+        </div>
+        <div class="subcard">
+          <h4>Landscape contractors (C-27)</h4>
+          <p style="font-size:13.5px; margin:0">Pearman, R &amp; J. The C-27 scope covers low-voltage landscape lighting. They own the aesthetics and the planting knowledge — but the 120 V connection sits outside their classification.</p>
+        </div>
+        <div class="subcard">
+          <h4>Outdoor-lighting brands &amp; franchises</h4>
+          <p style="font-size:13.5px; margin:0">Warriors for Light, Vibe Light Co, and similar. Heavy on marketing language, often national in reach. I could not find a CSLB licence number for any of them — which is <i>not</i> proof they lack one, but it is a gap you'd have to close before signing.</p>
+        </div>
+        <div class="subcard">
+          <h4>Not what you're looking for</h4>
+          <p style="font-size:13.5px; margin:0">Hevi Lite is a <b>manufacturer</b>, not an installer. SiteOne and Imperial Sprinkler Supply are <b>distributors</b>. Both surface in searches for this term; neither will light your garden.</p>
+        </div>
+      </div>
+      <div class="cite" style="margin-top:16px">
+        <span class="src">Source: CSLB — <a href="https://www.cslb.ca.gov/about_us/library/licensing_classifications/C-10_-_Electrical.aspx">C-10 Electrical</a> and <a href="https://www.cslb.ca.gov/about_us/library/licensing_classifications/c-27_-_landscaping.aspx">C-27 Landscaping</a> classification pages · cslb.ca.gov</span>
+        <span class="why">(The California Contractors State License Board — the state agency that writes, issues and disciplines these classifications. It is the only authoritative definition of what each licence may legally perform. Read 15 Aug 2026. <span class="chip warn">Search-derived</span> — cslb.ca.gov was unreachable from this environment.)</span>
+      </div>
+
+      <h3 class="blk">The single rule that eliminates candidates</h3>
+      <div class="callout" style="border-color:var(--good); background:linear-gradient(160deg,var(--good-bg),var(--card) 65%)">
+        <div class="ctitle" style="color:var(--good)">▲ The eliminating rule</div>
+        <p style="font-size:16px; color:var(--ink); margin-bottom:6px"><b>Whoever signs the contract must be able to show an active CSLB licence covering every part of the job they are signing for — including the 120 V side, either in-house or through a C-10 subcontractor named in the contract document — before any money moves.</b></p>
+        <p style="margin-bottom:0">Not "we're licensed and insured" on a website. Not a licence number in an email footer. An active record on the CSLB <i>Check A License</i> page, matched to the exact legal entity on your contract, with a named electrician against the 120 V scope. Everything in this report is ranked by how close each candidate gets to satisfying that rule on the day you call them.</p>
+      </div>
+      <p style="margin-top:14px">Two candidates fail it outright today — not because they're bad, but because I could find no licence record at all. That is a gap in <i>my</i> evidence, not a proven absence; §5 gives you their phone numbers so you can close it yourself in one call.</p>
+    </div>
+  </section>
+
+  <!-- ===== 03 MATRIX ===== -->
+  <section id="matrix">
+    <div class="sec-eyebrow"><span class="n">03</span> Comparison</div>
+    <h2 class="sec-title">The comparison matrix</h2>
+    <p class="sec-sub">Five candidates that cleared the "I found a licence number" bar. Winning cell in each row is shaded green. Scroll sideways on a narrow screen.</p>
+
+    <div class="tscroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="crit">Criterion</th>
+            <th>Pearman Landscape</th>
+            <th>Wooding Electric</th>
+            <th>Tested and True</th>
+            <th>Emelco Electric</th>
+            <th>R &amp; J Landscaping</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">CSLB licence &amp; class</td>
+            <td>C-27 #767024<br><span class="chip warn">Search-derived</span></td>
+            <td class="cellwin"><strong>C-10 #680882</strong><br><span class="chip warn">Search-derived</span></td>
+            <td>C-10 #964755<br><span class="chip warn">Search-derived</span></td>
+            <td>C-10 #1016173<br><span class="chip warn">Search-derived</span></td>
+            <td>#946599, class not confirmed<br><span class="chip warn">Search-derived</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Licence expiry on record</td>
+            <td>Not found <span class="chip ask">Ask</span></td>
+            <td>Not found <span class="chip ask">Ask</span></td>
+            <td class="cellwin"><strong>31 Aug 2027</strong> — comfortably current</td>
+            <td><b>31 Jul 2026</b> — i.e. <i>two weeks ago</i> <span class="chip bad">Check first</span></td>
+            <td>Not found <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Can do the 120 V side in-house</td>
+            <td>No — needs a named C-10 sub <span class="chip warn">Condition</span></td>
+            <td class="cellwin"><strong>Yes</strong> — C-10 is the whole business</td>
+            <td class="cellwin"><strong>Yes</strong></td>
+            <td class="cellwin"><strong>Yes</strong></td>
+            <td>No — needs a named C-10 sub <span class="chip warn">Condition</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Evidence of garden-lighting <i>design</i> craft</td>
+            <td class="cellwin"><strong>Strongest</strong> — described as one of the largest FX Luminaire installers in the South Bay</td>
+            <td>A dedicated landscape-lighting service page; no design portfolio found</td>
+            <td>A dedicated landscape-lighting service page; no design portfolio found</td>
+            <td>A dedicated landscape-lighting page; business skews to panels, EV chargers, rewires</td>
+            <td>Lighting listed inside a hardscape/irrigation offer</td>
+          </tr>
+          <tr>
+            <td class="crit">Professional fixture line named</td>
+            <td class="cellwin"><strong>FX Luminaire</strong> — brass-forward pro tier</td>
+            <td>None named <span class="chip ask">Ask</span></td>
+            <td>None named <span class="chip ask">Ask</span></td>
+            <td>None named <span class="chip ask">Ask</span></td>
+            <td>None named <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Trading since (claimed)</td>
+            <td>15+ yrs claimed; entity records go back further</td>
+            <td class="cellwin"><strong>1992</strong> — longest claim with a matching licence-era number</td>
+            <td>1989 claimed <span class="chip bad">Contradicted</span></td>
+            <td>2013 <span class="chip warn">Search-derived</span></td>
+            <td>1999</td>
+          </tr>
+          <tr>
+            <td class="crit">Approx. drive from 95138</td>
+            <td class="cellwin"><strong>~12 mi</strong> (Morgan Hill) — same valley, straight down 101</td>
+            <td>~18 mi (Santa Clara) — across the valley</td>
+            <td>~9 mi (San Jose 95125)</td>
+            <td>~8 mi (San Jose)</td>
+            <td>~10 mi (San Jose)</td>
+          </tr>
+          <tr>
+            <td class="crit">Best rating on a platform that covers this category</td>
+            <td class="cellwin"><strong>4.7 / 5</strong> Yelp (41)</td>
+            <td>4.6 / 5 Yelp (23)</td>
+            <td>4.5 / 5 Yelp (59)</td>
+            <td>4.7 / 5 Angi</td>
+            <td>4.1 / 5 Angi</td>
+          </tr>
+          <tr>
+            <td class="crit">Total reviews located, all platforms</td>
+            <td class="num">~43</td>
+            <td class="num">~83</td>
+            <td class="cellwin num"><strong>~534</strong></td>
+            <td class="num">~121</td>
+            <td class="num">~89</td>
+          </tr>
+          <tr>
+            <td class="crit">BBB status</td>
+            <td>Profile exists; <b>not</b> accredited</td>
+            <td class="cellwin"><strong>A+, accredited</strong></td>
+            <td>Profile exists (as JMC Electrical Services)</td>
+            <td>Profile exists</td>
+            <td>Not found <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Insurance / bonding evidence</td>
+            <td>"Fully licensed, insured and bonded" — vendor's own claim</td>
+            <td>"Licensed, bonded, insured" — vendor's own claim</td>
+            <td>"Fully licensed, bonded, insured" — vendor's own claim</td>
+            <td>Not stated in what I could reach</td>
+            <td>"Licensed and fully insured" — vendor's own claim</td>
+          </tr>
+          <tr>
+            <td class="crit">Published written warranty</td>
+            <td colspan="5" style="color:var(--muted)">None of the five publishes a workmanship warranty I could find. Every one of them is <span class="chip ask">Ask</span> — which is exactly why the emails in §10 demand it in writing.</td>
+          </tr>
+          <tr>
+            <td class="crit">Trade-body membership</td>
+            <td class="cellwin"><strong>CLCA</strong> (California Landscape Contractors Association)</td>
+            <td>None found</td>
+            <td>None found</td>
+            <td>None found</td>
+            <td>Mercury News "Best Landscaper" 5× <span class="chip warn">Readers' poll</span></td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Verdict</td>
+            <td><b>PICK</b> — best garden craft, closest to you; hire only with a named C-10 sub</td>
+            <td><b>RUNNER-UP</b> — one licence covers everything; least design evidence</td>
+            <td><b>SPECIAL ROLE</b> — hire for the 120 V scope alone</td>
+            <td><b>HOLD</b> — verify the licence renewed before anything else</td>
+            <td><b>PASS</b> — good landscapers, lighting is not the headline</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Distances are straight-line estimates from the 95138 centroid to each published business address, rounded — treat as "same side of the valley / other side of the valley," not as routing. Every licence number here came from secondary aggregators or vendor marketing because cslb.ca.gov was unreachable; none is <span class="chip good">Verified</span>.</p>
+
+    <div class="cite">
+      <span class="src">Source: BuildZoom contractor records — <a href="https://www.buildzoom.com/contractor/rn-pearman-landscape-management-inc">R.N. Pearman</a>, <a href="https://www.buildzoom.com/contractor/wooding-electric">Wooding Electric</a>, <a href="https://www.buildzoom.com/contractor/emelco">Emelco</a>, <a href="https://www.buildzoom.com/contractor/jmc-electrical-services">JMC Electrical Services</a>, <a href="https://www.buildzoom.com/contractor/r-j-landscaping-san-jose-ca">R &amp; J Landscaping</a> · buildzoom.com</span>
+      <span class="why">(A commercial construction-marketplace aggregator that republishes CSLB licence and permit data. It is a <b>mirror</b>, not the register — useful for finding a licence number, worthless as proof of current status. Every number it gave me is flagged for you to re-check at source. Read 15 Aug 2026.)</span>
+    </div>
+  </section>
+
+  <!-- ===== 04 RATINGS ===== -->
+  <section id="ratings">
+    <div class="sec-eyebrow"><span class="n">04</span> Ratings</div>
+    <h2 class="sec-title">Ratings — every platform I could reach</h2>
+    <p class="sec-sub">Including the platforms where a vendor simply isn't present. An empty cell on a platform that doesn't serve this category is meaningless, not a red flag.</p>
+
+    <div class="tscroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="crit">Platform</th>
+            <th>Pearman</th>
+            <th>Wooding</th>
+            <th>Tested and True</th>
+            <th>Emelco</th>
+            <th>R &amp; J</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Yelp</td>
+            <td class="cellwin num"><strong>4.7</strong> · 41</td>
+            <td class="num">4.6 · 23</td>
+            <td class="num">4.5 · 59</td>
+            <td class="num">— · 75 <span class="chip ask">Stars not readable</span></td>
+            <td class="num">— · 38 <span class="chip ask">Stars not readable</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Yelp "not recommended" queue</td>
+            <td colspan="5" style="color:var(--muted)">Not readable for any vendor — Yelp was blocked from this environment. This queue can hold both glowing and damning reviews and is <b>excluded from the star rating</b> by design. See the note below the table before you read anything into it.</td>
+          </tr>
+          <tr>
+            <td class="crit">Google</td>
+            <td>Not located <span class="chip ask">Ask</span></td>
+            <td class="num">4.9 · 60+</td>
+            <td class="cellwin num"><strong>4.9 · 212</strong></td>
+            <td class="num">4.9 · 46 <span class="chip warn">Platform unclear</span></td>
+            <td>Not located <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Angi</td>
+            <td>Profile exists, score not readable</td>
+            <td>Profile exists, score not readable</td>
+            <td>Not located</td>
+            <td class="cellwin num"><strong>4.7</strong></td>
+            <td class="num">4.1</td>
+          </tr>
+          <tr>
+            <td class="crit">HomeAdvisor</td>
+            <td>Not located</td>
+            <td>Profile exists, score not readable</td>
+            <td>Not located</td>
+            <td class="cellwin num"><strong>4.7</strong></td>
+            <td>Not located</td>
+          </tr>
+          <tr>
+            <td class="crit">BBB</td>
+            <td>Profile, not accredited</td>
+            <td class="cellwin"><strong>A+ · accredited</strong></td>
+            <td>Profile (JMC Electrical Services, Inc.)</td>
+            <td>Profile</td>
+            <td>Not located</td>
+          </tr>
+          <tr>
+            <td class="crit">Birdeye (aggregator)</td>
+            <td>Not located</td>
+            <td>Not located</td>
+            <td class="cellwin num"><strong>263</strong></td>
+            <td>Not located</td>
+            <td class="num">49</td>
+          </tr>
+          <tr>
+            <td class="crit">Bay Area Consumers' Checkbook</td>
+            <td class="num">2</td>
+            <td>Not located</td>
+            <td>Not located</td>
+            <td>Not located</td>
+            <td class="num">1–2</td>
+          </tr>
+          <tr>
+            <td class="crit">Houzz</td>
+            <td class="cellwin"><strong>Profile with project photos</strong></td>
+            <td>Not located</td>
+            <td>Not located</td>
+            <td>Not located</td>
+            <td>Not located</td>
+          </tr>
+          <tr>
+            <td class="crit">Thumbtack / Nextdoor</td>
+            <td colspan="5" style="color:var(--muted)">Not readable for any vendor. Thumbtack lists exterior-lighting pros for San Jose but individual profiles were unreachable; Nextdoor requires an address-verified login I don't have. <b>Nextdoor is genuinely worth your time</b> — it is the one platform where 95138 neighbours will name who lit the house down the street.</td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Total reviews located</td>
+            <td class="num">~43</td>
+            <td class="num">~83</td>
+            <td class="num"><b>~534</b></td>
+            <td class="num">~121</td>
+            <td class="num">~89</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote"><b>Read the totals carefully.</b> They are sums across platforms that overlap, so they double-count some customers — they measure <i>visibility</i>, not distinct clients. And volume is not quality: Tested and True has roughly twelve times Pearman's review footprint, but almost all of it is general electrical work, none of it demonstrably garden lighting.</p>
+
+    <div class="callout" style="border-color:var(--ask); background:linear-gradient(160deg,var(--ask-bg),var(--card) 65%)">
+      <div class="ctitle" style="color:var(--ask)">▣ On Yelp's hidden queue — and why it isn't a finding</div>
+      <p style="margin-bottom:0">Yelp routes a large share of submissions into a "not currently recommended" section that doesn't count toward the star rating. Its own explanation is that the filter targets solicited reviews, single-review accounts and low-signal rants — which means the queue is <b>full of both unfair praise and unfair complaints</b>. I could not read it for any vendor here. If you open it yourself, treat what you find as a prompt for a question, never as evidence: an anonymous or filtered review is not a finding, and I have not treated one as such anywhere in this report.</p>
+      <div class="cite" style="margin:12px 0 0; background:var(--card)">
+        <span class="src">Source: Widewail — <a href="https://www.widewail.com/blog/what-are-yelp-not-currently-recommended-reviews">Not Recommended Yelp Reviews</a> · widewail.com</span>
+        <span class="why">(A reputation-management vendor, so commercially interested in the topic — but its description of the filter's mechanics matches Yelp's own published policy. <b>Directional, not independent.</b> Read 15 Aug 2026.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 PROFILES ===== -->
+  <section id="profiles">
+    <div class="sec-eyebrow"><span class="n">05</span> Profiles</div>
+    <h2 class="sec-title">Candidate profiles, ranked</h2>
+    <p class="sec-sub">Ranked against the derived priority in §2: lit well <i>and</i> wired legally. Every vendor's own website is linked at the top of its profile.</p>
+
+    <div class="banner" style="margin-top:0; margin-bottom:18px">
+      <div class="row1">⚠ One dead end that applies to all six profiles</div>
+      <p style="margin:0"><b>I could not read a single owner response to a single review.</b> Review-response threads live inside Yelp, Google and BBB pages, all of which were blocked from this environment. So where the section below says "how the owner responds to reviews," what you'll find is an honest <span class="chip ask">Not verified</span> and instructions for checking it yourself in about ninety seconds. How an owner answers a two-star review is one of the most predictive signals in this whole category, and I'd rather hand you the gap than paper over it.</p>
+    </div>
+
+    <!-- ========== 1 PEARMAN ========== -->
+    <div class="card">
+      <div class="prof-head">
+        <span class="rankbadge">1</span>
+        <h3>Pearman Landscape Management, Inc.</h3>
+        <span class="chip good">The pick — conditional</span>
+      </div>
+      <p style="margin-top:12px"><a class="sitelink" href="https://www.pearmanlandscape.com/landscape-lighting.aspx">🔗 pearmanlandscape.com/landscape-lighting</a></p>
+      <div class="factsheet">
+        <b>Factsheet:</b> C-27 landscaping contractor at 9925 Lantz Dr, Morgan Hill · licence #767024 <span class="chip warn">Search-derived</span> · legal entity R.N. Pearman Landscape Management, Inc. · CLCA member · described as one of the largest FX Luminaire installers in the South Bay · Yelp 4.7 from 41 reviews · BBB profile exists, not accredited · ~12 miles from 95138.
+      </div>
+      <p><b>Why it ranks first.</b> Of every candidate, this is the only one where garden lighting reads as a discipline rather than a service page. Naming FX Luminaire matters: it's a brass-forward professional line, which is the difference between fixtures that survive twenty years in a Silver Creek irrigation zone and aluminium kit that corrodes through in two. They're also the closest candidate to you, and Morgan Hill-to-Evergreen is one straight run down 101 — which matters more than it sounds for a trade where you will want them back for re-aiming after the first season's growth.</p>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <div class="quote">"I will continue to use Pearman landscape for all my landscaping and garden maintenance."<span class="attr">— Yelp reviewer, surfaced 15 Aug 2026 <span class="chip warn">Search-surfaced; review page not opened</span></span></div>
+      <div class="quote">"Our team of Juan and his helpers take tremendous pride in everything they do; always on time every week without exception."<span class="attr">— Yelp reviewer, surfaced 15 Aug 2026. Note this describes <i>maintenance</i> crews, not a lighting install. <span class="chip warn">Search-surfaced</span></span></div>
+      <div class="quote">"Robert Pearman behaved more like a trusted confidant than a vendor."<span class="attr">— review surfaced 15 Aug 2026, platform not conclusively identified <span class="chip ask">Attribution unconfirmed</span></span></div>
+      <p style="font-size:13.5px; color:var(--muted)">I have deliberately not reproduced two further quotes that surfaced ("I can't say enough great things…", "Love, Love, Love this company…") as evidence — they carry no specific detail, and unsourced enthusiasm is not a finding.</p>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p><span class="chip ask">Not verified</span> — unreadable from here. Check it in ninety seconds: open <a href="https://www.yelp.com/biz/pearman-landscape-morgan-hill-4">the Yelp profile</a>, sort by lowest rating, and see whether Robert Pearman answers the critical ones by name and with specifics.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Pearman</div>
+        <p><b>They cannot legally do half your job.</b> A C-27 covers low-voltage landscape lighting; it does not cover the 120 V receptacle and circuit that feed the transformer. That means either a subcontractor you didn't choose, or a quiet decision to skip the permit — and you won't be able to tell which from the quote. Second, their review base is overwhelmingly <i>maintenance</i> customers: 41 reviews is a thin evidence base for lighting design specifically, and I found no lighting-specific verbatim at all. Third, they are not BBB accredited, which is a marketing choice rather than a defect, but it removes one independent check. Fourth, the "largest FX Luminaire installer in the South Bay" line is <b>their own marketing</b>, repeated by search — I found no independent corroboration of it anywhere. Treat it as a claim to test, not a credential.</p>
+      </div>
+      <div class="deadend"><b>Dead ends to close yourself:</b> CSLB licence #767024 — verify status, classification, bond and workers' comp at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov/Check A License</a> or by phone on <b>800-321-CSLB (2752)</b>. BBB profile at <a href="https://www.bbb.org/us/ca/morgan-hill/profile/landscape-contractors/pearman-landscape-management-inc-1216-382122">bbb.org</a> — unread. FX Luminaire dealer status: confirm directly with FX Luminaire's distributor network, <a href="https://www.fxl.com/distributors">fxl.com/distributors</a>.</div>
+      <div class="cite">
+        <span class="src">Source: Yelp — <a href="https://www.yelp.com/biz/pearman-landscape-morgan-hill-4">Pearman Landscape, Morgan Hill</a> · yelp.com</span>
+        <span class="why">(Yelp is the dominant consumer review platform for Bay Area home services and applies an algorithmic filter to submissions, which makes its visible rating more conservative than most. Authoritative for what customers said publicly; not an audit of workmanship. Read 15 Aug 2026 — <span class="chip warn">search-surfaced, page blocked</span>.)</span>
+      </div>
+    </div>
+
+    <!-- ========== 2 WOODING ========== -->
+    <div class="card">
+      <div class="prof-head">
+        <span class="rankbadge">2</span>
+        <h3>Wooding Electric</h3>
+        <span class="chip good">Runner-up</span>
+      </div>
+      <p style="margin-top:12px"><a class="sitelink" href="https://www.woodingelectric.com/san-jose/landscape-lighting-installation-in-san-jose/">🔗 woodingelectric.com — landscape lighting, San Jose</a></p>
+      <div class="factsheet">
+        <b>Factsheet:</b> C-10 electrical contractor at 3390 De La Cruz Blvd, Santa Clara 95054 · licence #680882 <span class="chip warn">Search-derived</span> · founded 1992 by master electrician Scott Wooding · BBB A+ and accredited · Google 4.9 from 60+ · Yelp 4.6 from 23 · phone 408-748-9663 · ~18 miles from 95138.
+      </div>
+      <p><b>Why it ranks second.</b> One licence, one contract, one throat to choke. Wooding is the only candidate that satisfies the eliminating rule in §2 without any conditions attached — the 120 V receptacle, the circuit, the transformer connection and the permit all sit inside their own classification. Add the longest continuous trading history of any candidate and the only BBB accreditation in the set, and this is the low-variance choice. If you want the job done correctly and you do not particularly care whether it's done <i>beautifully</i>, hire Wooding and stop reading.</p>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <div class="quote">"Scott Wooding (owner) came and personally replaced the entire electrical panel in my unit in about 6 hours. Showed up on time, finished on time, very professional work and paid close attention to detail."<span class="attr">— Yelp reviewer, surfaced 15 Aug 2026 <span class="chip warn">Search-surfaced; review page not opened</span></span></div>
+      <div class="quote">"I've been a Wooding customer for over two years, and they really go above and beyond. Their team is friendly, knowledgeable, efficient, and very professional."<span class="attr">— Yelp reviewer, surfaced 15 Aug 2026 <span class="chip warn">Search-surfaced</span></span></div>
+      <p style="font-size:13.5px; color:var(--muted)"><b>Note what's missing.</b> Both quotes describe panel and interior work. Despite Wooding publishing a dedicated landscape-lighting page, I found <b>no customer review describing a landscape lighting job</b> anywhere. That absence is the single biggest reason they are not the pick.</p>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p><span class="chip ask">Not verified</span> — unreadable from here. Check <a href="https://www.yelp.com/biz/wooding-electric-santa-clara-2">the Yelp profile</a>, then search <a href="https://www.bbb.org/search?find_country=USA&amp;find_loc=Santa+Clara%2C+CA&amp;find_text=Wooding+Electric">BBB for the Wooding Electric profile</a> and read the complaint history — I could not locate a direct BBB profile URL for them, only the reported A+ accreditation. For an owner-operated shop this size, an unanswered critical review is more meaningful than it would be at a 200-employee firm.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Wooding</div>
+        <p><b>Nothing here suggests they can design a garden.</b> Uplighting a mature oak, grazing a stone wall, hiding fixtures so you see light and not hardware — none of that is electrical work, and none of it appears in their evidence. There's a real risk you pay a competent electrician to produce a technically flawless, aesthetically flat result. Second, 23 Yelp reviews across 30+ years of trading is a thin public footprint. Third, the site is built as a network of city-targeted landing pages ("Landscape Lighting Installation in San Jose") run from a Santa Clara address — that's routine local-SEO practice and not dishonest, but it means the San Jose page is a marketing asset, not evidence of San Jose work. Fourth, their own copy contradicts itself on age — see §8.</p>
+      </div>
+      <div class="deadend"><b>Dead ends to close yourself:</b> CSLB #680882 — status, bond, workers' comp, and any disciplinary history, at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">Check A License</a>. Ask directly on <b>408-748-9663</b>: "how many low-voltage landscape lighting systems have you designed and installed in the last twelve months, and can I see two in Evergreen or Silver Creek?" That one question resolves the entire case against them.</div>
+      <div class="cite">
+        <span class="src">Source: Wooding Electric — <a href="https://www.woodingelectric.com/san-jose/landscape-lighting-installation-in-san-jose/">Landscape Lighting Installation in San Jose</a> · woodingelectric.com</span>
+        <span class="why">(The vendor's own published service page — authoritative for what they claim and offer, and for nothing else. Self-published marketing; every checkable claim on it is audited in §8. Read 15 Aug 2026 — <span class="chip warn">search-surfaced, domain blocked</span>.)</span>
+      </div>
+    </div>
+
+    <!-- ========== 3 TESTED AND TRUE ========== -->
+    <div class="card">
+      <div class="prof-head">
+        <span class="rankbadge">3</span>
+        <h3>Tested and True Electric <span style="font-weight:400; color:var(--muted); font-size:16px">(JMC Electrical Services, Inc.)</span></h3>
+        <span class="chip warn">Special role</span>
+      </div>
+      <p style="margin-top:12px"><a class="sitelink" href="https://www.testedandtrue.com/electrical-company/lighting/landscape-lighting">🔗 testedandtrue.com — landscape lighting</a></p>
+      <div class="factsheet">
+        <b>Factsheet:</b> C-10 electrical contractor at 1713 Little Orchard St, Ste D, San Jose 95125 · licence #964755, expiring 31 Aug 2027 <span class="chip warn">Search-derived</span> · trades under two names · Google 4.9 from 212 · Yelp 4.5 from 59 · Birdeye 263 · ~9 miles from 95138.
+      </div>
+      <p><b>Why it ranks third, and what it's genuinely best at.</b> This is the strongest <i>electrical</i> operation in the set by review volume — 212 Google reviews at 4.9 is a large, consistent public record, and the licence has the longest runway of anyone here. Their commercial work (generators, EV charging, parking-lot lighting, panel upgrades) suggests real capacity. That combination makes them the obvious answer to a narrow question: <b>if Pearman needs a C-10 and you'd rather choose that electrician yourself, this is who you call.</b></p>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <p><span class="chip ask">None reproduced</span> — I could not retrieve a single attributable verbatim review for this vendor. Search surfaced only paraphrased summaries ("customers praise their professionalism, responsiveness and quality of work"), which is not a quote and will not be presented as one. <b>Nothing here is invented to fill the gap.</b></p>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p><span class="chip ask">Not verified</span> — check <a href="https://www.yelp.com/biz/jmc-electrical-services-san-jose">the Yelp profile</a>, which still sits at the <code>jmc-electrical-services</code> URL.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Tested and True</div>
+        <p><b>The identity is foggy, and the founding claim doesn't hold up on the evidence I have.</b> The business markets as "Tested and True Electric" and says "since 1989," but the Yelp profile lives at a JMC Electrical Services URL, the BBB profile is filed under JMC Electrical Services, Inc., and the entity is associated with at least four CSLB licence numbers (#964755, #923741, #702346, #749226). None of that is inherently improper — firms rebrand, acquire and hold multiple licences all the time. But "since 1989" is a marketing claim I could not tie to any record, and a 1989 founding is hard to square with the licence numbers I found. <span class="chip bad">Contradiction</span> Second, the practice skews commercial; a residential garden scheme is not their centre of gravity. Third, as with Wooding: no landscape-lighting design evidence.</p>
+      </div>
+      <div class="deadend"><b>Dead ends to close yourself:</b> The CSLB License Detail page shows an explicit <b>"Issue Date"</b> — pull #964755 and #702346 and compare them to the "since 1989" claim. Ask them directly which legal entity will appear on your contract. BBB profile: <a href="https://www.bbb.org/us/ca/san-jose/profile/electrician/jmc-electrical-services-inc-1216-1000006167">JMC Electrical Services, Inc.</a> — unread.</div>
+      <div class="cite">
+        <span class="src">Source: Yelp — <a href="https://www.yelp.com/biz/jmc-electrical-services-san-jose">Tested and True Electric, San Jose</a>; BBB — <a href="https://www.bbb.org/us/ca/san-jose/profile/electrician/jmc-electrical-services-inc-1216-1000006167">JMC Electrical Services, Inc.</a></span>
+        <span class="why">(Two independent third-party records that both file this business under its former name — which is how the dual identity surfaced at all. The BBB is a private accreditation body, not a regulator; its value here is corroborating the legal entity name, not certifying quality. Read 15 Aug 2026.)</span>
+      </div>
+    </div>
+
+    <!-- ========== 4 EMELCO ========== -->
+    <div class="card">
+      <div class="prof-head">
+        <span class="rankbadge gr">4</span>
+        <h3>Emelco Electric</h3>
+        <span class="chip bad">Hold — verify licence first</span>
+      </div>
+      <p style="margin-top:12px"><a class="sitelink" href="https://emelco-electric.com/landscape-lighting-san-jose/">🔗 emelco-electric.com — landscape lighting San Jose</a></p>
+      <div class="factsheet">
+        <b>Factsheet:</b> C-10 electrical contractor, San Jose · licence #1016173 <b>with a recorded expiry of 31 July 2026</b> <span class="chip bad">Two weeks ago</span> · a second number, #981772, also appears · founded 2013 <span class="chip warn">Search-derived</span> · Yelp 75 reviews · Angi 4.7 · HomeAdvisor 4.7 · BuildZoom score 118, described as top 1% of California licensed contractors.
+      </div>
+      <p><b>Why it's held rather than ranked.</b> On reviews alone Emelco would rank higher — 4.7 on both Angi and HomeAdvisor with a 75-review Yelp footprint is a strong, consistent record, and they publish a dedicated San Jose landscape lighting page. But the licence expiry I found reads <b>31 July 2026</b>, which is two weeks before this report was written. Renewal is routine and it has very probably already happened — an aggregator's cached expiry date is not evidence of a lapse. It is, however, exactly the fact you must confirm before anything else, because an expired licence changes your legal position completely (§7).</p>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <p><span class="chip ask">None reproduced</span> — no attributable verbatim surfaced. Their homepage advertises "400+ 5 Star Reviews," which does not reconcile with the ~121 reviews I could actually locate across all platforms. That is not proof of anything — the count may aggregate closed platforms, texts, or years of internal feedback — but it is <b>an unverifiable marketing number</b>, and I'd ask them to break it down.</p>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p><span class="chip ask">Not verified</span> — <a href="https://www.yelp.com/biz/emelco-electric-san-jose-2">Yelp profile</a> and <a href="https://www.bbb.org/us/ca/san-jose/profile/electrician/emelco-electric-1216-1329894">BBB profile</a> both unread.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Emelco</div>
+        <p><b>An open licence question is a hard stop, not a caveat.</b> Until #1016173 shows Active on the state register, nothing else about this vendor matters. Beyond that: two licence numbers associated with one trading name is worth a plain question about which entity contracts with you; a 2013 founding makes them the youngest candidate; and the business reads as panels, rewires and EV chargers, with landscape lighting as an adjacent offer rather than a craft. <b>To be fair to them:</b> none of that makes Emelco a poor electrician. The BuildZoom placement and the twin 4.7s suggest the opposite. They are wrong for a design-led garden scheme, not bad.</p>
+      </div>
+      <div class="deadend"><b>Dead ends to close yourself:</b> Pull #1016173 <i>and</i> #981772 on <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">Check A License</a>. If either shows anything other than Active with workers' comp on file, stop. Ask them to reconcile "400+ 5 Star Reviews" against a platform-by-platform count.</div>
+      <div class="cite">
+        <span class="src">Source: BuildZoom — <a href="https://www.buildzoom.com/contractor/emelco">Emelco contractor record</a>; Angi — <a href="https://www.angi.com/companylist/us/ca/san-jose/emelco-electric-reviews-1.htm">Emelco Electric reviews</a>; HomeAdvisor — <a href="https://www.homeadvisor.com/rated.Emelco.35866375.html">Emelco rating</a></span>
+        <span class="why">(Angi and HomeAdvisor are the same corporate group, so their two 4.7s are <b>not</b> independent confirmations of each other — treat them as one data point. BuildZoom's licence expiry is a cached mirror of CSLB data and may simply be stale. Read 15 Aug 2026.)</span>
+      </div>
+    </div>
+
+    <!-- ========== 5 R&J ========== -->
+    <div class="card">
+      <div class="prof-head">
+        <span class="rankbadge gr">5</span>
+        <h3>R &amp; J Landscaping</h3>
+        <span class="chip plain">Pass — with respect</span>
+      </div>
+      <p style="margin-top:12px"><a class="sitelink" href="https://www.randjlandscaping.net/ca-landscape-design/outdoor-lighting">🔗 randjlandscaping.net — outdoor lighting</a></p>
+      <div class="factsheet">
+        <b>Factsheet:</b> Landscape contractor at 34 El Campo Dr, San Jose · CSLB #946599, reported Active <span class="chip warn">Search-derived</span> · trading since 1999 · Yelp 38 reviews · Angi 4.1 · Birdeye 49 · named San Jose Mercury News "Silicon Valley's Best Landscaper" five years running.
+      </div>
+      <p><b>Why they're here and why they're not the pick.</b> A 27-year-old San Jose landscape firm with a readers'-poll record that long is not a business to dismiss — for a full yard redesign they'd be on any sensible shortlist. But lighting sits inside a broader hardscape, irrigation and retaining-wall offer rather than standing on its own, they name no professional fixture line, and their 4.1 on Angi is the lowest score in this set. Same structural constraint as Pearman on the 120 V side, without Pearman's lighting-specific evidence.</p>
+
+      <h4 class="mini">Verbatim customer quotes</h4>
+      <p><span class="chip ask">None reproduced</span> — no attributable verbatim surfaced for this vendor.</p>
+
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p><span class="chip ask">Not verified</span> — <a href="https://www.yelp.com/biz/r-and-j-landscaping-san-jose">Yelp profile</a> unread.</p>
+
+      <div class="against">
+        <div class="h">The honest case against R &amp; J</div>
+        <p>The Mercury News accolade is a <b>readers' poll</b>, not an assessment — it measures name recognition and mobilised customers, not workmanship, and should carry very little weight in a decision like this. The 4.1 Angi score sits meaningfully below every other candidate. And "lighting" appearing in a services list is the weakest possible evidence of lighting capability. <b>In fairness:</b> a 4.1 across a large general-landscaping book of work is a perfectly respectable score for a trade with far more scope for disputes than lighting — this is a mismatch with your job, not a mark against the firm.</p>
+      </div>
+      <div class="deadend"><b>Dead ends to close yourself:</b> CSLB #946599 — confirm the classification, which I could not establish. If it turns out to carry C-10 as well as C-27, they move up this list immediately.</div>
+    </div>
+
+    <!-- ========== 6 UNVERIFIED TIER ========== -->
+    <div class="card">
+      <div class="prof-head">
+        <span class="rankbadge gr">6</span>
+        <h3>The unverified tier — Warriors for Light, Vibe Light Co, and similar</h3>
+        <span class="chip ask">Not verified</span>
+      </div>
+      <p style="margin-top:12px">
+        <a class="sitelink" href="https://www.warriorsforlight.com/outdoor-lighting/ca/san-jose/">🔗 warriorsforlight.com</a>
+        &nbsp;
+        <a class="sitelink" href="https://vibelightco.com/outdoor-landscape-lighting-installation-services-in-san-jose-ca/">🔗 vibelightco.com</a>
+      </p>
+      <p>These businesses market directly and specifically into 95138. Warriors for Light advertises an evening demonstration where a designer sets lights up in your yard before you commit — which is, genuinely, the single best way to buy garden lighting and something no candidate above offers. Their published phone number is <b>888-930-3450</b>.</p>
+      <p><b>The problem is purely evidentiary.</b> I could not find a CSLB licence number for either business. I want to be precise about what that does and does not mean:</p>
+      <ul class="tick r">
+        <li><b>It is not proof they are unlicensed.</b> A failed search is a gap in my evidence, nothing more. Plenty of properly licensed contractors don't put their number where a search engine will index it — though in California they are required to display it in advertising.</li>
+        <li><b>It does mean they cannot clear the §2 rule today.</b> The rule is about what can be shown before money moves, and right now nothing can be shown.</li>
+        <li><b>A toll-free 888 number is not a red flag by itself</b> — but combined with no locatable licence and no local address, it makes the "who exactly would be standing in my garden" question harder to answer than it should be.</li>
+      </ul>
+      <div class="deadend"><b>Close this one yourself in a single call.</b> Ring <b>888-930-3450</b> and ask for the CSLB licence number and the legal entity name, then check it at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">Check A License</a>. If it comes back Active with C-10 or C-27 and workers' comp on file, <b>Warriors for Light belongs on your shortlist</b> — that evening-demo offer is a real advantage and I'd want them quoting alongside Pearman. I simply cannot recommend what I cannot verify.</div>
+    </div>
+
+    <!-- ========== DEAD ENDS ========== -->
+    <div class="card">
+      <h3 class="blk">My dead ends, printed in full</h3>
+      <p>Everything I tried that didn't work, with the number or URL for you to close it:</p>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">What I tried</th><th>What happened</th><th>How you close it</th></tr></thead>
+          <tbody>
+            <tr><td class="crit">CSLB Check A License</td><td>Domain blocked from this environment. <b>No licence in this report is state-verified.</b></td><td><a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov</a> · <b>800-321-CSLB (2752)</b></td></tr>
+            <tr><td class="crit">Yelp — all profiles and the "not recommended" queue</td><td>Domain blocked. Star ratings and counts came via search summaries.</td><td>Open each profile link in §5</td></tr>
+            <tr><td class="crit">BBB — all profiles</td><td>Domain blocked. Accreditation and complaint history unread.</td><td><a href="https://www.bbb.org/">bbb.org</a> — profile links in §5</td></tr>
+            <tr><td class="crit">Every vendor website</td><td>All five vendor domains blocked. Claims came via search-surfaced page text.</td><td>Links at the top of each profile</td></tr>
+            <tr><td class="crit">leginfo.legislature.ca.gov (SB 216 / SB 1455 text)</td><td>Blocked. Statutory dates below are from secondary summaries and <b>they disagree with each other</b> — see §7.</td><td><a href="https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB216">SB 216 text</a></td></tr>
+            <tr><td class="crit">Chop Chop Landscaping</td><td>Surfaced as a 95138-serving lighting installer — but its Yelp listing shows <b>CLOSED</b> as of May 2026.</td><td>(408) 444-9594 if you want to confirm</td></tr>
+            <tr><td class="crit">AOLP certified members near San Jose</td><td>Could not identify one. The only California AOLP-certified company I found is in <b>Southern</b> California.</td><td><a href="https://aolponline.org/">aolponline.org</a> member directory</td></tr>
+            <tr><td class="crit">Hevi Lite</td><td>Ranks for "San Jose outdoor lighting" but is a <b>manufacturer</b>, not an installer.</td><td>—</td></tr>
+            <tr><td class="crit">Nextdoor 95138</td><td>Requires address-verified login. Not accessible to me — and the best untapped source you have.</td><td>Post in your own Nextdoor</td></tr>
+            <tr><td class="crit">Thumbtack individual profiles</td><td>Category page found, vendor profiles unreadable.</td><td><a href="https://www.thumbtack.com/ca/san-jose/exterior-lighting-companies">thumbtack.com</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 06 COST ===== -->
+  <section id="cost">
+    <div class="sec-eyebrow"><span class="n">06</span> Cost</div>
+    <h2 class="sec-title">What this should cost</h2>
+    <p class="sec-sub">Modelled on a representative 14-fixture garden scheme: 6 path lights, 5 tree uplights, 2 wall/facade washes, 1 step light, one multi-tap transformer.</p>
+
+    <div class="tscroll">
+      <table>
+        <thead><tr><th class="crit">Line item</th><th>Published range</th><th>Qty</th><th>Line total</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">Lighting design / night demonstration</td>
+            <td>No published range found</td>
+            <td>1</td>
+            <td>—</td>
+            <td><span class="chip ask">Ask</span> Often free or credited against the install</td>
+          </tr>
+          <tr>
+            <td class="crit">Fixture supplied &amp; installed<br><span style="font-weight:400; color:var(--muted); font-size:12.5px">brass/composite pro tier, incl. labour share</span></td>
+            <td class="num">$205 – $328 each</td>
+            <td class="num">14</td>
+            <td class="num"><b>$2,870 – $4,592</b></td>
+            <td><span class="chip warn">Search-derived</span> Homewyse, May 2026</td>
+          </tr>
+          <tr>
+            <td class="crit">Multi-tap transformer (300 W class)</td>
+            <td class="num">$150 – $800</td>
+            <td class="num">1</td>
+            <td class="num"><b>$150 – $800</b></td>
+            <td><span class="chip warn">Search-derived</span> Quality drives reliability</td>
+          </tr>
+          <tr>
+            <td class="crit">12-gauge direct-burial cable, connectors, trenching</td>
+            <td>Not separately published</td>
+            <td>~250 ft</td>
+            <td>—</td>
+            <td><span class="chip ask">Ask</span> Usually buried inside the per-fixture rate</td>
+          </tr>
+          <tr>
+            <td class="crit">120 V outdoor GFCI receptacle + circuit<br><span style="font-weight:400; color:var(--muted); font-size:12.5px">the permitted electrical scope</span></td>
+            <td>No reliable range found</td>
+            <td class="num">1</td>
+            <td>—</td>
+            <td><span class="chip bad">Not verified</span> Demand this as its own line</td>
+          </tr>
+          <tr>
+            <td class="crit">Astronomic timer / photocell control</td>
+            <td>No published range found</td>
+            <td class="num">1</td>
+            <td>—</td>
+            <td><span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">San José electrical permit + inspection</td>
+            <td>Fee schedule not reachable</td>
+            <td class="num">1</td>
+            <td>—</td>
+            <td><span class="chip ask">Ask</span> 408-535-3555</td>
+          </tr>
+          <tr>
+            <td class="crit">Bay Area labour uplift</td>
+            <td class="num">+20% – 40%</td>
+            <td>—</td>
+            <td>applies to labour</td>
+            <td><span class="chip warn">Search-derived</span></td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Modelled total, 14 fixtures in 95138</td>
+            <td colspan="2">bottom-up, before the unpriced lines</td>
+            <td class="num"><b>$3,600 – $6,500</b></td>
+            <td><span class="chip warn">Directional</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="blk">Two-sided sanity check on that total</h3>
+    <div class="grid2">
+      <div class="subcard">
+        <h4>↑ Bottom-up — build it from parts</h4>
+        <p style="font-size:13.5px">14 fixtures at $205–$328 installed = <b>$2,870–$4,592</b>. Add a transformer at $150–$800 → <b>$3,020–$5,392</b>. Apply the Bay Area uplift of 20–40% to the labour content → roughly <b>$3,600–$7,500</b>, still excluding the 120 V work, the permit and the control gear.</p>
+      </div>
+      <div class="subcard">
+        <h4>↓ Top-down — what the market publishes</h4>
+        <p style="font-size:13.5px">Cost guides put a professionally installed system at <b>$2,000–$4,500</b> nationally, averaging <b>$3,250</b>; a San Jose residential install is published at <b>$2,000–$6,000</b>. The top of the local published band sits just below the middle of my bottom-up band — consistent, given those guides describe smaller schemes than 14 fixtures.</p>
+      </div>
+    </div>
+    <p style="margin-top:16px"><b>Where the two methods agree — and what that tells you.</b> They overlap in the <b>$3,600–$6,000</b> band, which is where a 14-fixture professional-tier system in 95138 should land. Use that as your reading frame, not as a target:</p>
+    <ul class="tick">
+      <li><b>Under ~$2,500 for 14 fixtures</b> is not a bargain, it's a different product — almost certainly aluminium or plastic fixtures, thin cable, and no permitted 120 V work. Box-store aluminium kits are reported to fail within a season or two, against 20+ years for brass-forward professional lines.</li>
+      <li><b>$3,600–$6,500</b> is the honest zone. Any quote in it should still be itemized.</li>
+      <li><b>Over ~$9,000</b> isn't necessarily wrong — smart control systems, colour-adjustable heads, long cable runs and difficult trenching all legitimately add cost — but it demands a line-by-line breakdown before you sign.</li>
+      <li><b>A quote that isn't itemized at all</b> tells you nothing and can't be compared to anything. That's why every email in §10 demands itemization in identical terms.</li>
+    </ul>
+    <div class="cite">
+      <span class="src">Source: Homewyse — <a href="https://www.homewyse.com/services/cost_to_install_outdoor_landscape_lighting.html">Cost to Install Outdoor Landscape Lighting</a>, figures dated May 2026 · homewyse.com</span>
+      <span class="why">(A long-running unit-cost estimator built on published labour and material databases rather than lead-generation. More methodologically transparent than most cost guides, but still a <b>national model with a ZIP adjustment</b>, not a local quote. Read 15 Aug 2026.)</span>
+    </div>
+    <div class="cite">
+      <span class="src">Source: Angi — <a href="https://www.angi.com/articles/landscape-lighting-costs.htm">Landscape Lighting Installation Cost, 2026 data</a> · angi.com</span>
+      <span class="why">(Cost guide from a home-services marketplace. Its data comes from jobs booked through its own platform, which is a real sample but a <b>commercially interested</b> one — Angi profits when you hire. Directional. Read 15 Aug 2026.)</span>
+    </div>
+    <div class="cite">
+      <span class="src">Source: HomeGuide — <a href="https://homeguide.com/costs/outdoor-landscape-lighting-installation-cost">Landscape Lighting Cost (2026)</a> · homeguide.com</span>
+      <span class="why">(Contractor-submitted cost aggregator; same commercial-interest caveat as Angi. Used here for the $100–$500 per-fixture spread and the $150–$800 transformer range. Read 15 Aug 2026.)</span>
+    </div>
+  </section>
+
+  <!-- ===== 07 POLICY ===== -->
+  <section id="policy">
+    <div class="sec-eyebrow"><span class="n">07</span> Policy</div>
+    <h2 class="sec-title">The policy layer</h2>
+    <p class="sec-sub">The law that governs this job, what it costs you if it goes wrong, and the clauses that protect you.</p>
+
+    <div class="card">
+      <h3 class="blk" style="margin-top:0">The governing law — and a contradiction I could not resolve</h3>
+      <p><b>SB 216 (2022)</b> extended California's mandatory workers' compensation requirement to contractor classifications that were previously allowed a no-employee exemption, phasing in by classification and reaching <b>all licensees on 1 January 2026</b>. Then <b>SB 1455 (2024)</b> — the CSLB sunset-extension bill — pushed full implementation to <b>1 January 2028</b>, reinstated the exemption, and directed CSLB to build a process for verifying exemption eligibility <b>by 1 January 2027</b>.</p>
+      <div class="banner" style="margin-top:6px">
+        <div class="row1">⚠ Sources disagree — do not act on a date from this report</div>
+        <p style="margin:0">Several insurance-industry sources still publish the pre-SB 1455 timeline, including a hard "file proof of workers' comp with CSLB by <b>1 July 2026</b>" deadline. Others describe that deadline as superseded. I could not open the statutory text to settle it. <b>The practical consequence for you is the same either way:</b> ignore the date entirely and read the <i>Workers' Compensation</i> block on each contractor's CSLB License Detail page. That page shows what is actually on file today, which is the only fact that protects you.</p>
+      </div>
+      <div class="cite">
+        <span class="src">Source: California Legislature — <a href="https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB216">SB 216 (2021–22)</a>; <a href="https://legiscan.com/CA/text/SB1455/id/2999905">SB 1455 (2023–24)</a>; CSLB board packet — <a href="https://cslb.ca.gov/Resources/BoardPackets/2024/Item%20D%20Senate%20Bill%201455.pdf">Item D: Senate Bill 1455</a></span>
+        <span class="why">(The Legislature's own bill texts are the authoritative record of what the law says; the CSLB board packet is the regulator's own analysis of the bill it sponsored. Both were <b>unreachable from this environment</b>, so the dates above come from secondary summaries — which is precisely why they conflict. Read 15 Aug 2026.)</span>
+      </div>
+
+      <h3 class="blk">What you lose if the licence question goes wrong</h3>
+      <p>This is the part most homeowners don't know, and it is genuinely asymmetric — the downside lands on <b>you</b>, not the contractor:</p>
+      <ul class="tick r">
+        <li><b>You may become the employer.</b> Under Insurance Code §2750.5, someone performing work that requires a licence, without holding one, is <b>not</b> an independent contractor. Hire an unlicensed contractor and that person — and potentially their crew — can be treated as <b>your employee</b>. If one of them falls off a ladder in your garden, you can be liable for the medical costs, and your homeowner's policy may decline it.</li>
+        <li><b>Your recourse runs the other way too.</b> Business &amp; Professions Code §7031 lets you sue to recover <b>all compensation paid</b> to an unlicensed contractor — even if the work was done perfectly. That's a real remedy, but it's a lawsuit, not a warranty, and it is a poor substitute for hiring correctly the first time.</li>
+        <li><b>Unpermitted electrical work follows the house.</b> A 120 V connection made without a permit doesn't fail immediately — it surfaces at resale, at an insurance claim, or when the next owner's inspector opens the transformer enclosure.</li>
+      </ul>
+      <div class="cite">
+        <span class="src">Source: California Business &amp; Professions Code §7031, via <a href="https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-7031/">FindLaw</a>; Insurance Code §2750.5 analysis via <a href="https://echo-ca.org/dangers-hiring-unlicensed-contractors-0/">ECHO (Educational Community for Homeowners)</a></span>
+        <span class="why">(FindLaw republishes California's codified statutes verbatim — a reliable mirror of the primary text, though not the Legislature's own site. ECHO is a long-standing California non-profit that educates HOA boards and homeowners; it has no stake in which contractor you pick, which makes it a comparatively clean secondary source. Read 15 Aug 2026.)</span>
+      </div>
+
+      <h3 class="blk">Vendor policies, side by side</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Policy</th><th>Pearman</th><th>Wooding</th><th>Tested and True</th><th>Emelco</th></tr></thead>
+          <tbody>
+            <tr><td class="crit">Published workmanship warranty</td><td><span class="chip ask">None found</span></td><td><span class="chip ask">None found</span></td><td><span class="chip ask">None found</span></td><td><span class="chip ask">None found</span></td></tr>
+            <tr><td class="crit">Insurance claim on own site</td><td>"Licensed, insured and bonded"</td><td>"Licensed, bonded, insured"</td><td>"Fully licensed, bonded, insured"</td><td>Not stated</td></tr>
+            <tr><td class="crit">Independent verification of that claim</td><td colspan="4" style="color:var(--muted)"><b>None, for any of them.</b> A bond and workers' comp appear on the CSLB record; <i>general liability</i> does not. The only proof that matters is a certificate of insurance sent to you <b>directly by their broker</b> — which is why every email in §10 asks for exactly that.</td></tr>
+            <tr><td class="crit">Written pricing published</td><td><span class="chip bad">No</span></td><td><span class="chip bad">No</span></td><td><span class="chip bad">No</span></td><td><span class="chip bad">No</span></td></tr>
+            <tr><td class="crit">Trade-body accountability</td><td>CLCA member</td><td>BBB accredited</td><td><span class="chip ask">None found</span></td><td><span class="chip ask">None found</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">Not one of these four publishes a warranty, a price, or verifiable insurance. That is normal for this trade and is not a mark against any individual vendor — but it does mean <b>every protection you get, you will have to write into the contract yourself.</b></p>
+
+      <h3 class="blk">Third-party risk</h3>
+      <ul class="tick">
+        <li><b>The subcontractor you didn't choose.</b> If Pearman or R &amp; J brings in an electrician for the 120 V work, that person's licence, insurance and workers' comp are what actually protect you — not the name on your contract. Name them in the document.</li>
+        <li><b>The manufacturer is not your counterparty.</b> Fixture warranties run from the manufacturer to the purchaser. If the contractor bought the fixtures, <b>they</b> may be the purchaser of record, not you. Ask in writing who holds the warranty and get the paperwork transferred at handover.</li>
+        <li><b>Labour is never covered by the fixture warranty.</b> A lifetime brass warranty replaces the casting. It does not pay anyone to dig it up, swap it and re-aim it. That gap is the contractor's workmanship warranty, and it's the one nobody here publishes.</li>
+        <li><b>Your HOA.</b> 95138 contains HOA-governed communities. Exterior lighting can require architectural approval. <span class="chip ask">Ask</span> — check before you commission a design, not after.</li>
+      </ul>
+
+      <h3 class="blk">Warranty terms — what "lifetime" actually means</h3>
+      <p>The professional fixture tier does carry serious warranties, and this is a real reason to pay for it. <b>VOLT</b> publishes a lifetime warranty on brass and copper fixtures, LED bulbs and low-voltage transformers, with two-way shipping. <b>AMP Lighting</b> applies a lifetime warranty to brass, copper and stainless fixtures, LED bulbs and transformer cores and housings. <b>Alliance Outdoor Lighting</b> covers brass, copper and bronze castings and housings for life. FX Luminaire — the line Pearman names — sits in the same brass-forward professional tier.</p>
+      <p style="margin-bottom:0"><b>Read the boundary carefully:</b> these warranties cover the <i>casting</i>, the <i>housing</i>, the <i>bulb</i>. They are not a system warranty. Corroded connectors, nicked cable, a transformer sized wrong for the load, and fixtures aimed into your neighbour's bedroom are all workmanship — and all outside every one of these documents.</p>
+      <div class="cite">
+        <span class="src">Source: <a href="https://www.voltlighting.com/warranty">VOLT Lighting warranty</a>; <a href="https://www.amplighting.com/warranty">AMP Lighting warranty</a>; <a href="https://allianceoutdoorlighting.com/product-warranty/">Alliance Outdoor Lighting product warranty</a></span>
+        <span class="why">(Manufacturers' own published warranty documents — authoritative for their own terms, and legally binding on them, which is exactly what makes a self-published warranty page a strong source rather than a weak one. They are of course silent on how well anyone installs the product. Read 15 Aug 2026.)</span>
+      </div>
+
+      <h3 class="blk">Your contract protections — the seven clauses</h3>
+      <div class="grid2">
+        <div class="subcard">
+          <h4>1 · The deposit cap is law, not etiquette</h4>
+          <p style="font-size:13.5px; margin:0">A home-improvement down payment may not exceed <b>$1,000 or 10% of the contract price, whichever is less</b>, excluding finance charges. A contractor asking for "half up front" is asking you to help them break B&amp;P §7159. On a $5,000 job your legal maximum deposit is <b>$500</b>.</p>
+        </div>
+        <div class="subcard">
+          <h4>2 · Your right to cancel</h4>
+          <p style="font-size:13.5px; margin:0">Home-improvement contracts carry a written notice of the right to cancel — <b>three business days</b>, extended to <b>five</b> for buyers aged 65 or over on contracts signed since 1 January 2021. If the notice isn't in the document, the document isn't compliant.</p>
+        </div>
+        <div class="subcard">
+          <h4>3 · Name the C-10 against the 120 V scope</h4>
+          <p style="font-size:13.5px; margin:0">One sentence: <i>"All 120 V work will be performed by [name], CSLB licence #[number], under permit from the City of San José."</i> This is the clause that turns §2's rule into something enforceable.</p>
+        </div>
+        <div class="subcard">
+          <h4>4 · Permit responsibility, in writing</h4>
+          <p style="font-size:13.5px; margin:0">State who pulls the permit and that <b>final payment is contingent on a passed inspection</b>. Never accept "you don't need a permit for low voltage" as an answer — see §1 on the 50-watt clause.</p>
+        </div>
+        <div class="subcard">
+          <h4>5 · The insurance certificate comes from the broker</h4>
+          <p style="font-size:13.5px; margin:0">Not a PDF the contractor emails you. A certificate <b>sent directly by their insurance broker</b>, naming general liability and workers' compensation, with you listed as certificate holder so you're notified if it lapses.</p>
+        </div>
+        <div class="subcard">
+          <h4>6 · Workmanship warranty, separately stated</h4>
+          <p style="font-size:13.5px; margin:0">The fixture warranty is the manufacturer's. Get the <b>labour</b> warranty in writing — how long, what it covers, and specifically whether re-aiming after the first growing season is included. Two years is a reasonable ask.</p>
+        </div>
+        <div class="subcard">
+          <h4>7 · Hold a retention until dark</h4>
+          <p style="font-size:13.5px; margin:0">Withhold a meaningful final payment until you have walked the garden <b>at night</b> and signed off on aiming and glare. Lighting is the one trade where daytime acceptance is meaningless.</p>
+        </div>
+        <div class="subcard">
+          <h4>Bonus · Ask for the as-built</h4>
+          <p style="font-size:13.5px; margin:0">A simple plan showing cable runs, splice locations, transformer taps and wattage per zone. In five years, when you plant a tree, this document is worth more than the warranty.</p>
+        </div>
+      </div>
+      <div class="cite" style="margin-top:16px">
+        <span class="src">Source: CSLB — <a href="https://www.cslb.ca.gov/resources/GuidesAndPublications/HomeImprovementContractsConsumerGuide.pdf">Home Improvement Contracts: A Consumer Guide</a>; B&amp;P Code §7159 via <a href="https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-7159/">FindLaw</a>; Civil Code §1689.7 / AB 2471 (2020) on the five-day senior cancellation right</span>
+        <span class="why">(The CSLB consumer guide is the state licensing regulator's own plain-English statement of what a compliant California home-improvement contract must contain — the single most useful document a homeowner can read before signing anything in this state. Read 15 Aug 2026 — <span class="chip warn">search-surfaced, cslb.ca.gov blocked</span>.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 AUDIT ===== -->
+  <section id="audit">
+    <div class="sec-eyebrow"><span class="n">08</span> Audit</div>
+    <h2 class="sec-title">Claim-by-claim audit — Wooding Electric</h2>
+    <p class="sec-sub">Wooding's marketing is the most claim-dense in the set and they're my runner-up, so they get the audit. Auditing the vendor you're recommending is more useful than auditing one you already rejected.</p>
+
+    <div class="tscroll">
+      <table class="matrix">
+        <thead><tr><th class="crit">The claim, as published</th><th>Independent record checked</th><th>What I found</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">"Licensed … C-10 Electrical Contractor," licence #680882</td>
+            <td>CSLB Check A License</td>
+            <td>The number appears consistently across an aggregator and the vendor's own pages. <b>The state register itself was unreachable</b>, so status, classification and expiry are unconfirmed.</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Bonded"</td>
+            <td>CSLB bond record</td>
+            <td>Bond status appears on the CSLB License Detail page. Not readable from here. California requires a contractor bond as a condition of licensure, so this is very likely true — but "likely" is not "checked."</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Insured"</td>
+            <td>No public register exists</td>
+            <td><b>There is no independent record of general liability insurance anywhere.</b> This claim is structurally unverifiable from outside. Only a broker-issued certificate settles it.</td>
+            <td><span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Serving … since 1992"</td>
+            <td>Licence issue date</td>
+            <td>Consistent with a licence number in the #680882 range and with an owner-founder narrative. The CSLB License Detail page shows an explicit Issue Date that would settle it in one lookup.</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Nearly 30 years of expertise"</td>
+            <td>Their own "since 1992" claim</td>
+            <td><b>Their two claims contradict each other.</b> 1992 to 2026 is 34 years, not "nearly 30." The likeliest explanation is boilerplate written around 2020 and never updated — a stale-copy error, not a lie. But it tells you the site isn't maintained closely, which matters when you're relying on it for anything else.</td>
+            <td><span class="chip bad">Contradicted</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Founded by master electrician Scott Wooding"</td>
+            <td>Review text naming the owner</td>
+            <td>Multiple independent reviews describe Scott Wooding personally performing work on site — strong corroboration that he is a real, working owner-operator. The specific title <i>master electrician</i> is not a CSLB-issued designation and I could not check it.</td>
+            <td><span class="chip good">Corroborated</span> / title <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"A+ rating … BBB Accredited"</td>
+            <td>BBB business profile</td>
+            <td>Reported consistently, but bbb.org was blocked. Worth knowing regardless: <b>BBB accreditation is a paid membership</b>, and the letter grade partly reflects responsiveness to BBB's own complaint process — it is a customer-service signal, not an inspection.</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"4.9 stars, 60+ Google reviews"</td>
+            <td>Google Business Profile</td>
+            <td>Reported consistently but not independently counted. Plausible for a shop this size.</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Yelp 4.6 from 23 reviews</td>
+            <td>Yelp listing metadata</td>
+            <td>An independent Yelp listing snippet gives 23 reviews, updated July 2026 — the one figure here that came from somewhere <b>other</b> than the vendor and matched.</td>
+            <td><span class="chip good">Corroborated</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Landscape lighting replacements, repairs, and fresh installations in San Jose"</td>
+            <td>Customer reviews</td>
+            <td><b>No customer review describing a landscape lighting job was found anywhere.</b> The capability is claimed but not evidenced. This is the audit's most important finding and the reason Wooding is the runner-up rather than the pick.</td>
+            <td><span class="chip bad">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Page titled "The Best Licensed Electricians in San Jose, CA"</td>
+            <td>n/a — self-assessment</td>
+            <td>A superlative a business awards itself on its own website. Not dishonest, not evidence. Noted so it doesn't get mistaken for a third-party ranking.</td>
+            <td><span class="chip plain">Marketing</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Business address 3390 De La Cruz Blvd, Santa Clara 95054; 408-748-9663</td>
+            <td>Yelp listing address</td>
+            <td>Matches. Note the tension worth naming plainly: pages titled "…in San Jose" run from a <b>Santa Clara</b> address. Standard local-SEO practice, entirely legal, but the San Jose page is a marketing asset — not proof of San Jose jobs.</td>
+            <td><span class="chip good">Corroborated</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote"><b>Audit summary:</b> three claims corroborated, six unconfirmed, three not verified or contradicted. Nothing here suggests bad faith — the pattern is an owner-operated shop with a dated website, not a business misrepresenting itself. But two findings matter to your decision: the stale "nearly 30 years" copy, and the complete absence of landscape-lighting evidence behind a landscape-lighting service page.</p>
+  </section>
+
+  <!-- ===== 09 PLAIN ENGLISH ===== -->
+  <section id="plain">
+    <div class="sec-eyebrow"><span class="n">09</span> Assessment</div>
+    <h2 class="sec-title">My assessment, in plain English</h2>
+    <p class="sec-sub">No jargon. Short sentences.</p>
+
+    <div class="card">
+      <h3 class="blk" style="margin-top:0">The situation, simply</h3>
+      <p>You want your garden lit. That sounds like one job. It is actually two.</p>
+      <p>The first job is the pretty part. Where the lights go. Which tree gets lit from below. How bright. That is a design skill. Landscapers have it. Electricians usually don't.</p>
+      <p>The second job is a small piece of electrical work. The lights run on 12 volts, but the box that makes 12 volts has to be plugged into the house at 120 volts. That connection needs a licensed electrician and, in San Jose, almost certainly a permit.</p>
+      <p>Nearly everyone selling to you will tell you the second job doesn't exist. It does.</p>
+
+      <h3 class="blk">Why your priority beats price</h3>
+      <p>You didn't tell me a priority, so I picked one for you: get it right, not cheap. Here is why.</p>
+      <p>Cheap garden lighting fails in a specific, predictable way. The fixtures are aluminium. They corrode. Within a couple of seasons half of them are dark. Then you pay again.</p>
+      <p>Good fixtures are brass. They last decades and the makers warrant them for life. The difference in price is maybe two thousand dollars. The difference in outcome is doing this once instead of three times.</p>
+      <p>And the legal side is worse than the money side. If you hire someone unlicensed and their worker gets hurt in your garden, California can treat that worker as <b>your employee</b>. Your home insurance may not cover it. That risk is not worth saving a few hundred dollars on a quote.</p>
+
+      <h3 class="blk">The recommendation</h3>
+      <p><b>Hire Pearman Landscape Management.</b></p>
+      <p><b>The headline reason:</b> they are the only candidate who treats garden lighting as a craft rather than a service listing, and they name a professional fixture line.</p>
+      <p>Three more, in order:</p>
+      <ul class="tick g">
+        <li><b>They are closest to you.</b> Twelve miles, straight down the freeway. You will want them back to re-aim lights after the plants grow. Distance decides whether that happens.</li>
+        <li><b>Their rating is the highest on the platform that matters here</b> — 4.7 on Yelp, from real landscaping customers in your valley.</li>
+        <li><b>They belong to a trade association</b> and have been doing this for a long time. That is not proof of quality. It is a sign they intend to still be here in five years.</li>
+      </ul>
+      <p><b>The honest catch:</b> they cannot legally do the electrical half. You must make them write their electrician's name and licence number into the contract before you pay anything. If they won't, walk away.</p>
+
+      <h3 class="blk">The runner-up</h3>
+      <p><b>Wooding Electric.</b> One licence covers the whole job, so there is no gap to manage. Trading since 1992. The only one with BBB accreditation.</p>
+      <p>The problem is that I found no evidence they have ever designed a garden. You might get a perfectly safe installation that looks ordinary. Ask them how many they did last year and to show you two nearby. If the answer is good, they become the easier choice — because they remove the whole electrician problem.</p>
+
+      <h3 class="blk">Who I didn't pick, and why</h3>
+      <ul class="tick">
+        <li><b>Tested and True Electric</b> — the biggest and best-reviewed electrician here. But their story about themselves doesn't quite add up, and garden design isn't what they do. Still the right call if you want to hire the electrical part separately.</li>
+        <li><b>Emelco Electric</b> — good reviews, genuinely. But the licence record I found says it expired two weeks ago. It has probably been renewed. Until you confirm that, nothing else counts.</li>
+        <li><b>R &amp; J Landscaping</b> — a solid, long-established San Jose landscaper. Lighting just isn't their headline, and their score is the lowest here. Wrong fit, not a bad firm.</li>
+        <li><b>Warriors for Light</b> — they offer to set lights up in your garden at night before you buy, which is the single best idea in this whole report. I could not find a licence for them. One phone call would fix that, and if it comes back clean, get them quoting.</li>
+      </ul>
+
+      <h3 class="blk">The uncomfortable part you should know</h3>
+      <p>I could not open a single official record for this report. Not the state licence board. Not Yelp. Not the BBB. Not one vendor's website. The network blocked all of it.</p>
+      <p>Everything here came through search, which surfaces those pages' own words but doesn't let me confirm them line by line. So I have labelled every claim honestly, and <b>not one licence in this report is verified</b>.</p>
+      <p>That means the ten minutes you spend on the state licence board website is not optional. It is the most valuable part of this whole exercise, and I can't do it for you.</p>
+      <p>One more thing. Pearman being "one of the largest FX Luminaire installers in the South Bay" is <b>their own claim</b>. Nobody else says it. It's the main reason they're my pick. Test it: ask to see three lighting jobs they installed in the last year.</p>
+
+      <h3 class="blk">What I'd actually do, in order</h3>
+      <ul class="tick">
+        <li><b>1.</b> Look up all five licence numbers at cslb.ca.gov. Ten minutes. Check status, classification, and workers' comp.</li>
+        <li><b>2.</b> Call Warriors for Light on 888-930-3450 and ask for their licence number. Two minutes.</li>
+        <li><b>3.</b> Ask your Nextdoor neighbours in 95138 who lit their garden. Free, and better than any review site.</li>
+        <li><b>4.</b> Send the three emails in §10, unchanged, so the quotes actually compare.</li>
+        <li><b>5.</b> Call San Jose Permits on 408-535-3555. Give them your transformer wattage. Ask plainly whether you need a permit. Get the answer before a contractor tells you that you don't.</li>
+        <li><b>6.</b> Check your HOA rules on exterior lighting.</li>
+        <li><b>7.</b> Ask every quoting vendor for a night demonstration. Then choose in the dark, not on paper.</li>
+        <li><b>8.</b> Sign nothing without the electrician named, the permit assigned, the warranty written, and the deposit at or under $1,000.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 10 EMAILS ===== -->
+  <section id="emails">
+    <div class="sec-eyebrow"><span class="n">10</span> Outreach</div>
+    <h2 class="sec-title">Copy-paste-ready emails to the top vendors</h2>
+    <p class="sec-sub">The scope paragraph is <b>word-for-word identical</b> in all three. That is the entire point — vary the scope and the quotes stop comparing. Only the opening line and the licence question change.</p>
+
+    <div class="email">
+      <div class="email-bar">
+        <div class="to">To: <b>Pearman Landscape Management, Inc.</b> — the pick · <a href="https://www.pearmanlandscape.com/landscape-lighting.aspx">pearmanlandscape.com</a></div>
+        <button class="copybtn" type="button" data-copy>Copy email</button>
+      </div>
+      <pre>Subject: Request for itemized quote - low-voltage garden lighting, San Jose 95138
+
+Hello,
+
+I'm getting three comparable quotes for a low-voltage garden lighting system at my home in San Jose 95138 (Silver Creek / Evergreen). I found you through your landscape lighting page and your FX Luminaire work.
+
+SCOPE - please quote exactly this so I can compare like for like:
+- Approximately 14 fixtures: 6 path lights, 5 tree uplights, 2 wall/facade
+  washes, 1 step light. Adjust the count if you'd design it differently, but
+  please price my 14 first so the quotes compare.
+- Professional-grade brass or copper fixtures. Please name the manufacturer
+  and series.
+- One multi-tap transformer sized for the load, with an astronomic timer or
+  photocell.
+- 12-gauge direct-burial cable, all runs and connections.
+- The 120V side: an outdoor GFCI receptacle and its circuit, permitted with
+  the City of San Jose.
+
+PLEASE ITEMIZE separately:
+1. Design / lighting plan
+2. Fixtures - unit price x quantity, manufacturer and series named
+3. Transformer and controls
+4. Cable, connectors, trenching
+5. Labor for the 12V installation
+6. The 120V electrical work, permit and inspection, as its own line
+7. Tax
+
+THREE THINGS I NEED IN WRITING BEFORE I SIGN ANYTHING:
+
+a) Your CSLB licence number and the exact legal entity that will appear on
+   the contract. Because your classification is C-27, please also give me the
+   name and CSLB number of the C-10 electrician who will perform the 120V
+   work, so it can be written into the contract.
+
+b) A certificate of insurance sent to me DIRECTLY BY YOUR INSURANCE BROKER -
+   not forwarded by you - showing general liability and workers'
+   compensation, with me listed as certificate holder.
+
+c) Your workmanship guarantee in writing: how long it runs, what it covers,
+   and specifically whether re-aiming after the first growing season is
+   included. Please state this separately from the manufacturer's fixture
+   warranty.
+
+Two more questions:
+- Do you offer an evening demonstration before I commit?
+- Will you provide an as-built plan showing cable runs, splice locations and
+  transformer taps at handover?
+
+I understand California caps the deposit at $1,000 or 10% of the contract,
+whichever is less, and I'll be working to that.
+
+Thank you,
+[Your name] - [phone] - San Jose, CA 95138</pre>
+    </div>
+
+    <div class="email">
+      <div class="email-bar">
+        <div class="to">To: <b>Wooding Electric</b> — the runner-up · <a href="https://www.woodingelectric.com/san-jose/landscape-lighting-installation-in-san-jose/">woodingelectric.com</a> · 408-748-9663</div>
+        <button class="copybtn" type="button" data-copy>Copy email</button>
+      </div>
+      <pre>Subject: Request for itemized quote - low-voltage garden lighting, San Jose 95138
+
+Hello,
+
+I'm getting three comparable quotes for a low-voltage garden lighting system at my home in San Jose 95138 (Silver Creek / Evergreen). I found you through your San Jose landscape lighting page.
+
+SCOPE - please quote exactly this so I can compare like for like:
+- Approximately 14 fixtures: 6 path lights, 5 tree uplights, 2 wall/facade
+  washes, 1 step light. Adjust the count if you'd design it differently, but
+  please price my 14 first so the quotes compare.
+- Professional-grade brass or copper fixtures. Please name the manufacturer
+  and series.
+- One multi-tap transformer sized for the load, with an astronomic timer or
+  photocell.
+- 12-gauge direct-burial cable, all runs and connections.
+- The 120V side: an outdoor GFCI receptacle and its circuit, permitted with
+  the City of San Jose.
+
+PLEASE ITEMIZE separately:
+1. Design / lighting plan
+2. Fixtures - unit price x quantity, manufacturer and series named
+3. Transformer and controls
+4. Cable, connectors, trenching
+5. Labor for the 12V installation
+6. The 120V electrical work, permit and inspection, as its own line
+7. Tax
+
+THREE THINGS I NEED IN WRITING BEFORE I SIGN ANYTHING:
+
+a) Your CSLB licence number and the exact legal entity that will appear on
+   the contract. Please also confirm that your C-10 covers the full scope
+   above, including the permitted 120V work, with no subcontractor involved.
+
+b) A certificate of insurance sent to me DIRECTLY BY YOUR INSURANCE BROKER -
+   not forwarded by you - showing general liability and workers'
+   compensation, with me listed as certificate holder.
+
+c) Your workmanship guarantee in writing: how long it runs, what it covers,
+   and specifically whether re-aiming after the first growing season is
+   included. Please state this separately from the manufacturer's fixture
+   warranty.
+
+Two more questions:
+- How many low-voltage landscape lighting systems have you designed and
+  installed in the last twelve months, and could I see two of them locally?
+- Will you provide an as-built plan showing cable runs, splice locations and
+  transformer taps at handover?
+
+I understand California caps the deposit at $1,000 or 10% of the contract,
+whichever is less, and I'll be working to that.
+
+Thank you,
+[Your name] - [phone] - San Jose, CA 95138</pre>
+    </div>
+
+    <div class="email">
+      <div class="email-bar">
+        <div class="to">To: <b>Tested and True Electric</b> — special role · <a href="https://www.testedandtrue.com/electrical-company/lighting/landscape-lighting">testedandtrue.com</a></div>
+        <button class="copybtn" type="button" data-copy>Copy email</button>
+      </div>
+      <pre>Subject: Request for itemized quote - low-voltage garden lighting, San Jose 95138
+
+Hello,
+
+I'm getting three comparable quotes for a low-voltage garden lighting system at my home in San Jose 95138 (Silver Creek / Evergreen). I found you through your landscape lighting page.
+
+SCOPE - please quote exactly this so I can compare like for like:
+- Approximately 14 fixtures: 6 path lights, 5 tree uplights, 2 wall/facade
+  washes, 1 step light. Adjust the count if you'd design it differently, but
+  please price my 14 first so the quotes compare.
+- Professional-grade brass or copper fixtures. Please name the manufacturer
+  and series.
+- One multi-tap transformer sized for the load, with an astronomic timer or
+  photocell.
+- 12-gauge direct-burial cable, all runs and connections.
+- The 120V side: an outdoor GFCI receptacle and its circuit, permitted with
+  the City of San Jose.
+
+PLEASE ITEMIZE separately:
+1. Design / lighting plan
+2. Fixtures - unit price x quantity, manufacturer and series named
+3. Transformer and controls
+4. Cable, connectors, trenching
+5. Labor for the 12V installation
+6. The 120V electrical work, permit and inspection, as its own line
+7. Tax
+
+THREE THINGS I NEED IN WRITING BEFORE I SIGN ANYTHING:
+
+a) Your CSLB licence number and the exact legal entity that will appear on
+   the contract. I've seen this business referred to both as Tested and True
+   Electric and as JMC Electrical Services, Inc. - please confirm which one
+   contracts with me, and which licence number applies.
+
+b) A certificate of insurance sent to me DIRECTLY BY YOUR INSURANCE BROKER -
+   not forwarded by you - showing general liability and workers'
+   compensation, with me listed as certificate holder.
+
+c) Your workmanship guarantee in writing: how long it runs, what it covers,
+   and specifically whether re-aiming after the first growing season is
+   included. Please state this separately from the manufacturer's fixture
+   warranty.
+
+Two more questions:
+- Would you also quote the 120V portion alone - outdoor GFCI receptacle,
+  circuit, permit and transformer connection - in case I use a landscape
+  contractor for the 12V design and installation?
+- Will you provide an as-built plan showing cable runs, splice locations and
+  transformer taps at handover?
+
+I understand California caps the deposit at $1,000 or 10% of the contract,
+whichever is less, and I'll be working to that.
+
+Thank you,
+[Your name] - [phone] - San Jose, CA 95138</pre>
+    </div>
+  </section>
+
+  <!-- ===== 11 SOURCES ===== -->
+  <section id="sources">
+    <div class="sec-eyebrow"><span class="n">11</span> Sources</div>
+    <h2 class="sec-title">Numbered sources</h2>
+    <p class="sec-sub">All read 15 August 2026. Grouped by type, strongest tier first. Sources that <b>failed</b> are included, marked, and listed with the URL or phone number so you can close them yourself.</p>
+
+    <div class="card">
+      <div class="srcgroup">
+        <h4>Tier 1 — Government &amp; regulator records</h4>
+        <ol class="srclist">
+          <li><span class="sn">1</span><b>CSLB — Check A License</b> · <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx"><span class="u">cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx</span></a> <span class="chip bad">Blocked — dead end</span>
+            <span class="why">(The California Contractors State License Board is the state agency that issues, renews and disciplines every contractor licence in California. Its License Detail page is the single authoritative record for status, classification, bond, workers' compensation and disciplinary history. <b>Unreachable from this environment — this is the report's central gap.</b> Phone 800-321-CSLB (2752).)</span></li>
+          <li><span class="sn">2</span><b>CSLB — C-10 Electrical classification</b> · <a href="https://www.cslb.ca.gov/about_us/library/licensing_classifications/C-10_-_Electrical.aspx"><span class="u">cslb.ca.gov/…/C-10_-_Electrical.aspx</span></a>
+            <span class="why">(The regulator's own definition of what a C-10 licence may legally perform. Authoritative for scope. Search-surfaced.)</span></li>
+          <li><span class="sn">3</span><b>CSLB — C-27 Landscaping classification</b> · <a href="https://www.cslb.ca.gov/about_us/library/licensing_classifications/c-27_-_landscaping.aspx"><span class="u">cslb.ca.gov/…/c-27_-_landscaping.aspx</span></a>
+            <span class="why">(Same authority, for the landscaping scope — the document that establishes that C-27 covers low-voltage landscape lighting but not the line-voltage side. Search-surfaced.)</span></li>
+          <li><span class="sn">4</span><b>CSLB — Home Improvement Contracts: A Consumer Guide</b> · <a href="https://www.cslb.ca.gov/resources/GuidesAndPublications/HomeImprovementContractsConsumerGuide.pdf"><span class="u">cslb.ca.gov/…/HomeImprovementContractsConsumerGuide.pdf</span></a>
+            <span class="why">(The regulator's plain-English statement of what a compliant California home-improvement contract must contain, including the deposit cap. The most useful single document a California homeowner can read before signing. Search-surfaced.)</span></li>
+          <li><span class="sn">5</span><b>CSLB — Board packet, Item D: Senate Bill 1455</b> · <a href="https://cslb.ca.gov/Resources/BoardPackets/2024/Item%20D%20Senate%20Bill%201455.pdf"><span class="u">cslb.ca.gov/Resources/BoardPackets/2024/Item D Senate Bill 1455.pdf</span></a>
+            <span class="why">(The regulator's own analysis of the bill that changed the workers' compensation timeline — a primary account of what the agency understood the law to do. Search-surfaced.)</span></li>
+          <li><span class="sn">6</span><b>City of San José — When Is a Building Permit Required?</b> · <a href="https://www.sanjoseca.gov/businesses/development-services-permit-center/start-your-project/when-is-a-building-permit-required"><span class="u">sanjoseca.gov/…/when-is-a-building-permit-required</span></a>
+            <span class="why">(The permitting authority for your address, citing San José Municipal Code §24.02.110. This is the source of the 25-volt / 50-watt exemption that reframes the whole job. Permit Center: 408-535-3555. Search-surfaced.)</span></li>
+          <li><span class="sn">7</span><b>City of San José — Electrical Projects</b> · <a href="https://www.sanjoseca.gov/businesses/development-services-permit-center/start-your-project/electrical-projects"><span class="u">sanjoseca.gov/…/electrical-projects</span></a>
+            <span class="why">(The city's own guidance on which electrical work requires a permit and how to apply. Search-surfaced.)</span></li>
+          <li><span class="sn">8</span><b>California Legislature — SB 216 (2021–22)</b> · <a href="https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB216"><span class="u">leginfo.legislature.ca.gov/…/SB216</span></a> <span class="chip bad">Blocked — dead end</span>
+            <span class="why">(The Legislature's official bill text — the authoritative record of the statute. <b>Unreachable</b>, which is why the workers' compensation dates in §7 come from conflicting secondary summaries rather than from the law itself.)</span></li>
+          <li><span class="sn">9</span><b>California Legislature — SB 1455 (2023–24), text via LegiScan</b> · <a href="https://legiscan.com/CA/text/SB1455/id/2999905"><span class="u">legiscan.com/CA/text/SB1455/id/2999905</span></a>
+            <span class="why">(LegiScan republishes official legislative text verbatim; a reliable mirror, though not the Legislature's own server. The bill that moved full workers' comp implementation to 1 Jan 2028. Search-surfaced.)</span></li>
+          <li><span class="sn">10</span><b>California Business &amp; Professions Code §7031, via FindLaw</b> · <a href="https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-7031/"><span class="u">codes.findlaw.com/ca/business-and-professions-code/bpc-sect-7031/</span></a>
+            <span class="why">(FindLaw is a long-established legal-publishing service (Thomson Reuters) that republishes codified state statutes verbatim. A dependable mirror of primary law. Search-surfaced.)</span></li>
+          <li><span class="sn">11</span><b>California Business &amp; Professions Code §7159, via FindLaw</b> · <a href="https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-7159/"><span class="u">codes.findlaw.com/ca/business-and-professions-code/bpc-sect-7159/</span></a>
+            <span class="why">(Same publisher; the statute containing the home-improvement contract requirements and the down-payment cap. Search-surfaced.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 2 — Vendors' own published material</h4>
+        <ol class="srclist">
+          <li><span class="sn">12</span><b>Pearman Landscape — Landscape Lighting</b> · <a href="https://www.pearmanlandscape.com/landscape-lighting.aspx"><span class="u">pearmanlandscape.com/landscape-lighting.aspx</span></a> <span class="chip warn">Domain blocked</span>
+            <span class="why">(The vendor's own page — authoritative for what they claim to offer and nothing more. Source of the FX Luminaire and "largest installer in the South Bay" claims, neither independently corroborated. Search-surfaced.)</span></li>
+          <li><span class="sn">13</span><b>Wooding Electric — Landscape Lighting Installation in San Jose</b> · <a href="https://www.woodingelectric.com/san-jose/landscape-lighting-installation-in-san-jose/"><span class="u">woodingelectric.com/san-jose/landscape-lighting-installation-in-san-jose/</span></a> <span class="chip warn">Domain blocked</span>
+            <span class="why">(Self-published marketing; every checkable claim on it is audited line by line in §8. Search-surfaced.)</span></li>
+          <li><span class="sn">14</span><b>Tested and True Electric — Landscape Lighting</b> · <a href="https://www.testedandtrue.com/electrical-company/lighting/landscape-lighting"><span class="u">testedandtrue.com/electrical-company/lighting/landscape-lighting</span></a> <span class="chip warn">Domain blocked</span>
+            <span class="why">(Vendor's own page; source of the unverified "since 1989" claim. Search-surfaced.)</span></li>
+          <li><span class="sn">15</span><b>Emelco Electric — Landscape Lighting San Jose</b> · <a href="https://emelco-electric.com/landscape-lighting-san-jose/"><span class="u">emelco-electric.com/landscape-lighting-san-jose/</span></a> <span class="chip warn">Domain blocked</span>
+            <span class="why">(Vendor's own page; source of the "400+ 5 Star Reviews" figure that doesn't reconcile with locatable review counts. Search-surfaced.)</span></li>
+          <li><span class="sn">16</span><b>R &amp; J Landscaping — Outdoor Lighting</b> · <a href="https://www.randjlandscaping.net/ca-landscape-design/outdoor-lighting"><span class="u">randjlandscaping.net/ca-landscape-design/outdoor-lighting</span></a> <span class="chip warn">Domain blocked</span>
+            <span class="why">(Vendor's own page. Search-surfaced.)</span></li>
+          <li><span class="sn">17</span><b>Warriors for Light — Landscape Lighting Installation, San Jose</b> · <a href="https://www.warriorsforlight.com/outdoor-lighting/ca/san-jose/"><span class="u">warriorsforlight.com/outdoor-lighting/ca/san-jose/</span></a>
+            <span class="why">(Vendor's own page; source of the evening-demonstration offer and the 888-930-3450 number. <b>No CSLB licence number located anywhere</b> — the reason they sit in the unverified tier. Search-surfaced.)</span></li>
+          <li><span class="sn">18</span><b>Vibe Light Co — Outdoor Landscape Lighting, San Jose</b> · <a href="https://vibelightco.com/outdoor-landscape-lighting-installation-services-in-san-jose-ca/"><span class="u">vibelightco.com/…/san-jose-ca/</span></a>
+            <span class="why">(Vendor's own page. No licence number located. Search-surfaced.)</span></li>
+          <li><span class="sn">19</span><b>VOLT Lighting — Warranty</b> · <a href="https://www.voltlighting.com/warranty"><span class="u">voltlighting.com/warranty</span></a>
+            <span class="why">(A manufacturer's published warranty is legally binding on the manufacturer, which makes self-publication a strength here rather than a weakness. Source of the lifetime brass/copper/transformer terms. Search-surfaced.)</span></li>
+          <li><span class="sn">20</span><b>AMP Lighting — Warranty</b> · <a href="https://www.amplighting.com/warranty"><span class="u">amplighting.com/warranty</span></a>
+            <span class="why">(As above — binding published terms from a professional-tier manufacturer. Search-surfaced.)</span></li>
+          <li><span class="sn">21</span><b>Alliance Outdoor Lighting — Product Warranty</b> · <a href="https://allianceoutdoorlighting.com/product-warranty/"><span class="u">allianceoutdoorlighting.com/product-warranty/</span></a>
+            <span class="why">(As above. Search-surfaced.)</span></li>
+          <li><span class="sn">22</span><b>FX Luminaire — Distributors</b> · <a href="https://www.fxl.com/distributors"><span class="u">fxl.com/distributors</span></a>
+            <span class="why">(The manufacturer's own distributor directory — the place to confirm whether a contractor genuinely has access to the line they claim to install. Also identifies SiteOne (1145 N 13th St, San Jose) and Imperial Sprinkler Supply as local distributors. Search-surfaced.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 3 — Review platforms &amp; accreditation bodies</h4>
+        <ol class="srclist">
+          <li><span class="sn">23</span><b>Yelp — Pearman Landscape, Morgan Hill</b> · <a href="https://www.yelp.com/biz/pearman-landscape-morgan-hill-4"><span class="u">yelp.com/biz/pearman-landscape-morgan-hill-4</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(Yelp is the dominant consumer review platform for Bay Area home services and filters submissions algorithmically, making visible ratings more conservative than most. 4.7 from 41 reviews. Search-surfaced only — the page and its hidden queue were unreadable.)</span></li>
+          <li><span class="sn">24</span><b>Yelp — Wooding Electric, Santa Clara</b> · <a href="https://www.yelp.com/biz/wooding-electric-santa-clara-2"><span class="u">yelp.com/biz/wooding-electric-santa-clara-2</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(4.6 from 23 reviews, updated July 2026. The one Wooding figure corroborated by a source other than Wooding.)</span></li>
+          <li><span class="sn">25</span><b>Yelp — Tested and True Electric, San Jose</b> · <a href="https://www.yelp.com/biz/jmc-electrical-services-san-jose"><span class="u">yelp.com/biz/jmc-electrical-services-san-jose</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(4.5 from 59 reviews. Note the URL still carries the former trading name — how the dual identity surfaced.)</span></li>
+          <li><span class="sn">26</span><b>Yelp — Emelco Electric, San Jose</b> · <a href="https://www.yelp.com/biz/emelco-electric-san-jose-2"><span class="u">yelp.com/biz/emelco-electric-san-jose-2</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(75 reviews; star rating not readable.)</span></li>
+          <li><span class="sn">27</span><b>Yelp — R &amp; J Landscaping, San Jose</b> · <a href="https://www.yelp.com/biz/r-and-j-landscaping-san-jose"><span class="u">yelp.com/biz/r-and-j-landscaping-san-jose</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(38 reviews; star rating not readable.)</span></li>
+          <li><span class="sn">28</span><b>Yelp — Chop Chop Landscaping, San Jose</b> · <a href="https://www.yelp.com/biz/chop-chop-landscaping-san-jose"><span class="u">yelp.com/biz/chop-chop-landscaping-san-jose</span></a> <span class="chip bad">Listing shows CLOSED</span>
+            <span class="why">(Surfaced by search as a 95138-serving lighting installer, but the listing is marked closed as of May 2026 — a live example of why a search recommendation is not a verified vendor. Phone (408) 444-9594 if you want to confirm.)</span></li>
+          <li><span class="sn">29</span><b>BBB — Pearman Landscape Management, Inc.</b> · <a href="https://www.bbb.org/us/ca/morgan-hill/profile/landscape-contractors/pearman-landscape-management-inc-1216-382122"><span class="u">bbb.org/…/pearman-landscape-management-inc</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(The Better Business Bureau is a private, membership-funded accreditation body — <b>not</b> a regulator. Its letter grades partly reflect responsiveness to its own complaint process, so treat accreditation as a customer-service signal, not an inspection. Profile exists; not accredited.)</span></li>
+          <li><span class="sn">30</span><b>BBB — JMC Electrical Services, Inc.</b> · <a href="https://www.bbb.org/us/ca/san-jose/profile/electrician/jmc-electrical-services-inc-1216-1000006167"><span class="u">bbb.org/…/jmc-electrical-services-inc</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(Same caveats. Useful here for corroborating the legal entity name behind "Tested and True Electric.")</span></li>
+          <li><span class="sn">31</span><b>BBB — Emelco Electric</b> · <a href="https://www.bbb.org/us/ca/san-jose/profile/electrician/emelco-electric-1216-1329894"><span class="u">bbb.org/…/emelco-electric</span></a> <span class="chip bad">Blocked</span>
+            <span class="why">(Same caveats.)</span></li>
+          <li><span class="sn">32</span><b>Angi — Emelco Electric reviews</b> · <a href="https://www.angi.com/companylist/us/ca/san-jose/emelco-electric-reviews-1.htm"><span class="u">angi.com/…/emelco-electric-reviews-1.htm</span></a>
+            <span class="why">(A home-services marketplace that earns revenue when you hire through it — commercially interested, and Angi and HomeAdvisor are the <b>same corporate group</b>, so their two 4.7 scores are one data point, not two. 4.7/5. Search-surfaced.)</span></li>
+          <li><span class="sn">33</span><b>HomeAdvisor — Emelco Electric</b> · <a href="https://www.homeadvisor.com/rated.Emelco.35866375.html"><span class="u">homeadvisor.com/rated.Emelco.35866375.html</span></a>
+            <span class="why">(See above — same group as Angi. 4.7/5. Search-surfaced.)</span></li>
+          <li><span class="sn">34</span><b>Angi — R &amp; J Landscaping reviews</b> · <a href="https://www.angi.com/companylist/us/ca/san-jose/r-and-j-landscaping-reviews-3726868.htm"><span class="u">angi.com/…/r-and-j-landscaping-reviews-3726868.htm</span></a>
+            <span class="why">(4.1/5 — the lowest score in this set. Same commercial-interest caveat. Search-surfaced.)</span></li>
+          <li><span class="sn">35</span><b>Houzz — Pearman Landscape Inc, project photos &amp; reviews</b> · <a href="https://www.houzz.com/professionals/landscape-contractors/pearman-landscape-inc-pfvwus-pf~1041705620"><span class="u">houzz.com/professionals/…/pearman-landscape-inc</span></a>
+            <span class="why">(A design-and-renovation platform whose value here is the <b>project photography</b> rather than the ratings — the closest thing to a portfolio I could locate for any candidate. Search-surfaced.)</span></li>
+          <li><span class="sn">36</span><b>BuildZoom — contractor records for all five candidates</b> · <a href="https://www.buildzoom.com/contractor/rn-pearman-landscape-management-inc"><span class="u">buildzoom.com/contractor/…</span></a>
+            <span class="why">(A commercial marketplace that republishes CSLB licence and permit data. A <b>mirror, not the register</b> — the source of every licence number in this report, and the reason none of them is marked Verified. Its cached expiry dates may be stale, which is exactly the Emelco question. Search-surfaced.)</span></li>
+          <li><span class="sn">37</span><b>Thumbtack — exterior lighting pros near San Jose</b> · <a href="https://www.thumbtack.com/ca/san-jose/exterior-lighting-companies"><span class="u">thumbtack.com/ca/san-jose/exterior-lighting-companies</span></a> <span class="chip warn">Category page only</span>
+            <span class="why">(Marketplace directory; individual vendor profiles were unreadable. Listed so you can work it yourself.)</span></li>
+          <li><span class="sn">38</span><b>Nextdoor — 95138</b> · <span class="u">nextdoor.com</span> <span class="chip bad">Login required — dead end</span>
+            <span class="why">(Address-verified neighbourhood network. Inaccessible to me and <b>the single best untapped source you have</b> — it is the only place where verified 95138 neighbours will name who lit the house down the street.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 4 — Cost guides, trade bodies &amp; industry references</h4>
+        <ol class="srclist">
+          <li><span class="sn">39</span><b>Homewyse — Cost to Install Outdoor Landscape Lighting</b> · <a href="https://www.homewyse.com/services/cost_to_install_outdoor_landscape_lighting.html"><span class="u">homewyse.com/services/cost_to_install_outdoor_landscape_lighting.html</span></a>
+            <span class="why">(A unit-cost estimator built on published labour and material databases rather than lead generation — more methodologically transparent than most cost guides, but still a national model with a ZIP adjustment, not a local quote. Source of the $205–$328 per-fixture figure, dated May 2026.)</span></li>
+          <li><span class="sn">40</span><b>Angi — Landscape Lighting Installation Cost, 2026 data</b> · <a href="https://www.angi.com/articles/landscape-lighting-costs.htm"><span class="u">angi.com/articles/landscape-lighting-costs.htm</span></a>
+            <span class="why">(Cost guide drawn from jobs booked on Angi's own platform — a real sample, but a commercially interested one. Directional.)</span></li>
+          <li><span class="sn">41</span><b>HomeGuide — Landscape Lighting Cost (2026)</b> · <a href="https://homeguide.com/costs/outdoor-landscape-lighting-installation-cost"><span class="u">homeguide.com/costs/outdoor-landscape-lighting-installation-cost</span></a>
+            <span class="why">(Contractor-submitted cost aggregator; same commercial-interest caveat. Source of the $100–$500 per-fixture spread and the $150–$800 transformer range.)</span></li>
+          <li><span class="sn">42</span><b>AOLP — Association of Outdoor Lighting Professionals</b> · <a href="https://aolponline.org/"><span class="u">aolponline.org</span></a> <span class="chip warn">No local member found</span>
+            <span class="why">(The recognised North American trade body for this specific discipline, running the CLVLT and COLD certifications — the only meaningful third-party credential in garden lighting. <b>I could not identify a certified member near San Jose</b>; the only California company I found is in Southern California. Worth searching their directory yourself before you commit.)</span></li>
+          <li><span class="sn">43</span><b>CLCA — California Landscape Contractors Association</b> · <span class="u">clca.org</span>
+            <span class="why">(State trade association for landscape contractors; Pearman's claimed membership. A membership body, not an accreditor — it signals professional engagement, not verified workmanship. Referenced via Pearman's own site; not independently confirmed.)</span></li>
+          <li><span class="sn">44</span><b>Widewail — Not Recommended Yelp Reviews</b> · <a href="https://www.widewail.com/blog/what-are-yelp-not-currently-recommended-reviews"><span class="u">widewail.com/blog/what-are-yelp-not-currently-recommended-reviews</span></a>
+            <span class="why">(A reputation-management vendor and therefore commercially interested in the topic, but its account of the filter's mechanics matches Yelp's published policy. <b>Trade source, not an independent test — treat as directional.</b>)</span></li>
+          <li><span class="sn">45</span><b>ECHO — The Dangers of Hiring Unlicensed Contractors</b> · <a href="https://echo-ca.org/dangers-hiring-unlicensed-contractors-0/"><span class="u">echo-ca.org/dangers-hiring-unlicensed-contractors-0/</span></a>
+            <span class="why">(Educational Community for Homeowners — a long-standing California non-profit educating HOA boards and homeowners. It has no stake in which contractor you hire, which makes it an unusually clean secondary source on Insurance Code §2750.5 exposure.)</span></li>
+          <li><span class="sn">46</span><b>WCIRB — Bulletin 2025-16, California Legislation Summary</b> · <a href="https://www.wcirb.com/sites/default/files/2025-10/2025-16_2025_ca_legislative_summary.pdf"><span class="u">wcirb.com/…/2025-16_2025_ca_legislative_summary.pdf</span></a>
+            <span class="why">(The Workers' Compensation Insurance Rating Bureau of California — the statutorily designated rating organisation for California workers' comp. Close to primary on this subject, and the most authoritative of the secondary sources on the SB 216 / SB 1455 timeline.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 5 — Supporting colour only, never load-bearing</h4>
+        <ol class="srclist">
+          <li><span class="sn">47</span><b>Portfolio Lighting — Low-Voltage Landscape Lighting Brand Comparison</b> · <a href="https://www.portfoliolighting.net/low-voltage-landscape-lighting-brand-comparison.html"><span class="u">portfoliolighting.net/low-voltage-landscape-lighting-brand-comparison.html</span></a>
+            <span class="why">(<b>A trade blog with an obvious commercial interest in brand rankings — labelled Tier 5 and used for nothing load-bearing.</b> Referenced only for the general claim that brass-forward professional lines outlast box-store aluminium kits, which is corroborated by the manufacturers' own lifetime warranty terms in sources 19–21.)</span></li>
+          <li><span class="sn">48</span><b>Mike Holt and ECN electrical forums — low-voltage landscape lighting permit threads</b> · <a href="https://forums.mikeholt.com/threads/landscape-lighting.34987/"><span class="u">forums.mikeholt.com/threads/landscape-lighting.34987/</span></a>
+            <span class="why">(<b>Practitioner forums — anonymous, unverifiable, and explicitly not relied upon for any claim in this report.</b> Listed for transparency: they surfaced during the permit research and confirmed only that the 25 V / 50 W question is contested among electricians nationally, which is itself the reason §1 leans entirely on San José's own municipal code instead.)</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 12 FINAL VERDICT ===== -->
+  <section id="final">
+    <div class="final">
+      <div class="fk">◆ Final verdict</div>
+      <h2>Pearman Landscape Management, Inc.</h2>
+
+      <p class="pick1">Call Pearman Landscape Management on Monday, send them the email in §10, and tell them the quote will not be considered unless it names the C-10 electrician who will do the 120 V work.</p>
+
+      <h4>Why I chose them</h4>
+      <p>Because you asked for a <b>garden</b> light installer, and Pearman is the only candidate in this field where lighting reads as a craft someone has practised, rather than a page someone commissioned. That distinction is the whole call.</p>
+      <p>The evidence that moved me, weighted honestly. <b>Heaviest: the fixture line.</b> Pearman is the only vendor of eight who names a professional brass-forward manufacturer. That single fact tells me more about what will be standing in your garden in 2036 than every review in this report combined, because the failure mode in this category is corrosion, not craftsmanship. <b>Second: proximity.</b> Twelve miles down 101 versus eighteen across the valley sounds trivial and isn't — garden lighting needs re-aiming after the first growing season, and the contractor who comes back is the one for whom coming back is cheap. <b>Third, and lighter than it looks: the 4.7 from 41 reviews.</b> It's the best rating in the set on the platform that actually covers this trade, but almost all of it is maintenance work, so I've treated it as evidence they treat customers well, not as evidence they light gardens well.</p>
+      <p>What I deliberately gave <i>little</i> weight to: review volume. Tested and True has roughly twelve times Pearman's footprint. It is almost entirely panel upgrades and EV chargers. A large public record of a different job is not evidence about your job, and I'd rather say that plainly than let a big number do the deciding.</p>
+
+      <h4>Why I eliminated each of the others</h4>
+      <div class="elim">
+        <div class="nm">Wooding Electric <span class="backup">BACK-UP</span></div>
+        <div class="bd">Genuinely good at the thing that trips this trade up: they hold the C-10, so the permitted 120 V work sits inside one contract with no seams. Longest trading history and the only BBB accreditation here. <b>What knocked them out:</b> a dedicated landscape-lighting service page with not one customer review anywhere describing a landscape lighting job — and their own site can't agree on how old the company is. Capability claimed, never evidenced. <b>Stays as the back-up, and a strong one.</b></div>
+      </div>
+      <div class="elim">
+        <div class="nm">Tested and True Electric <span class="backup">SPECIAL ROLE</span></div>
+        <div class="bd">The most substantial electrical operation in the set — 212 Google reviews at 4.9, a licence running to August 2027, real commercial capacity. <b>What knocked them out:</b> the business tells a story about itself I could not tie to any record. "Since 1989," two trading names, four licence numbers, and a Yelp profile still filed under the old company. Probably all innocent; not something I'll build a recommendation on. <b>Keep them for the 120 V scope alone</b> — that job plays entirely to their strengths.</div>
+      </div>
+      <div class="elim">
+        <div class="nm">Emelco Electric</div>
+        <div class="bd">Strong, consistent reviews across three platforms and a dedicated San Jose lighting page — on customer satisfaction alone they'd outrank Wooding. <b>What knocked them out:</b> the only licence record I could find shows an expiry of 31 July 2026, two weeks before this was written. It has almost certainly been renewed. But "almost certainly" is not a basis for signing a contract, and I won't rank a vendor above one whose paperwork isn't in question. <b>Not a back-up today; becomes one the moment you see Active on the CSLB page.</b></div>
+      </div>
+      <div class="elim">
+        <div class="nm">R &amp; J Landscaping</div>
+        <div class="bd">A 27-year-old San Jose landscape firm with a genuine local reputation and five Mercury News reader awards. For a whole-yard redesign they'd be a serious contender. <b>What knocked them out:</b> lighting is a line item inside a hardscape offer, no fixture line is named, and their 4.1 is the lowest score here. This is a mismatch with your job, not a criticism of their work. <b>Not a back-up for lighting.</b></div>
+      </div>
+      <div class="elim">
+        <div class="nm">Warriors for Light</div>
+        <div class="bd">They offer the best idea in this entire report — an evening demonstration in your own garden before you commit, which is how this purchase <i>should</i> be made. <b>What knocked them out:</b> I could not find a CSLB licence number for them anywhere, and my eliminating rule is about what can be shown before money moves. That is a gap in my evidence, not a proven fault. <b>One call to 888-930-3450 could put them straight back on the shortlist</b> — and if it comes back Active, I'd want them quoting alongside Pearman.</div>
+      </div>
+      <div class="elim">
+        <div class="nm">Vibe Light Co, Chop Chop, Hevi Lite</div>
+        <div class="bd">Vibe Light Co: no licence located, same evidentiary problem as above. Chop Chop Landscaping: its Yelp listing shows <b>closed</b> as of May 2026, so it's out on availability, not merit. Hevi Lite: a manufacturer, not an installer — it ranks for your search term but was never a candidate.</div>
+      </div>
+
+      <h4>What would change my mind</h4>
+      <p><b>One fact: whether Pearman will name their C-10 electrician in the contract.</b> Ask for it in writing. If they name a licensed electrician and the number checks out Active, the recommendation stands as written. <b>If they hedge, refuse, or tell you the 120 V side "doesn't need a permit because it's low voltage" — my recommendation flips immediately to Wooding Electric.</b> That answer isn't a paperwork preference; it tells you whether they intend to do the electrical half properly or quietly skip it, and there is no version of this job where skipping it is acceptable.</p>
+      <p>A second, smaller trigger: if the CSLB record for #767024 shows anything other than Active with workers' compensation on file, stop and go to Wooding the same day.</p>
+
+      <div class="conf">
+        <div class="lab">Confidence, and what sits unconfirmed underneath it</div>
+        <p style="margin-bottom:10px"><b>Moderate.</b> High that the <i>framework</i> is right — the job splits into 12 V craft and 120 V permitted electrical work, and that split should drive the decision. Lower on the specific pick, and I want to be exact about why.</p>
+        <p style="margin-bottom:10px">Unconfirmed underneath this call: <b>every licence number in this report</b>, because the state register was unreachable — including Pearman's own #767024, its classification and its workers' comp status. <b>Pearman's FX Luminaire standing</b>, which is their claim, uncorroborated, and the largest single reason they're the pick. <b>Every insurance claim</b> made by every vendor, which no public register can settle. <b>Every workmanship warranty</b>, because not one of them publishes one. And <b>the exact statutory position on workers' comp</b>, where my sources contradict each other on dates.</p>
+        <p style="margin-bottom:0">Two of those you can close in about twelve minutes at <a href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx">cslb.ca.gov</a> and one phone call to <a href="https://www.fxl.com/distributors">FX Luminaire's distributor network</a>. If both come back clean, treat my confidence in this pick as high. If either doesn't, Wooding Electric is waiting, and nothing else in this report needs to change.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">
+    Garden Lighting RAC · Research · Assessment · Comparison<br>
+    Prepared 15 August 2026 for a homeowner in San Jose, CA 95138 · All facts date-stamped at point of use<br>
+    No licence in this report is state-verified — see the sourcing note at the top and §11 before acting on any of it.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll("[data-copy]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var pre = btn.closest(".email").querySelector("pre");
+      var text = pre.innerText;
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = "Copied";
+        btn.classList.add("done");
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove("done"); }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+      } else {
+        fallback(text, done);
+      }
+    });
+  });
+  function fallback(text, done){
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly","");
+    ta.style.position = "absolute";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+})();
+</script>
