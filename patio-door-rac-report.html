@@ -1,0 +1,1227 @@
+<title>Patio Door Installers RAC</title>
+<style>
+  :root{
+    --ground:#eceff4; --card:#fff; --card-2:#f7f9fc; --ink:#141922; --ink-2:#38414f;
+    --muted:#5c6675; --line:#dde3ec; --line-2:#c9d3e0;
+    --accent:#1d4ed8; --accent-soft:#e8eeff; --accent-ink:#1a3fae;
+    --green:#0f7a4d; --green-soft:#e3f5ec; --green-line:#9bd7bb;
+    --amber:#b45309; --amber-soft:#fdf1e0; --amber-line:#f0cd9a;
+    --red:#b42318; --red-soft:#fdeceb; --red-line:#f3b9b4;
+    --shadow:0 1px 2px rgba(20,25,34,.05), 0 6px 18px -6px rgba(20,25,34,.10);
+    --shadow-lg:0 2px 4px rgba(20,25,34,.06), 0 18px 44px -14px rgba(20,25,34,.18);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0e1218; --card:#161c25; --card-2:#1c232e; --ink:#e9edf3; --ink-2:#c3cbd6;
+      --muted:#93a0b1; --line:#28313d; --line-2:#3a4552;
+      --accent:#7ea2ff; --accent-soft:#1a2338; --accent-ink:#a8c0ff;
+      --green:#5ed3a0; --green-soft:#12261d; --green-line:#2c5f47;
+      --amber:#f0b26b; --amber-soft:#291d0f; --amber-line:#6b4a22;
+      --red:#f38b82; --red-soft:#2a1614; --red-line:#6e3630;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -6px rgba(0,0,0,.5);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 18px 44px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0e1218; --card:#161c25; --card-2:#1c232e; --ink:#e9edf3; --ink-2:#c3cbd6;
+    --muted:#93a0b1; --line:#28313d; --line-2:#3a4552;
+    --accent:#7ea2ff; --accent-soft:#1a2338; --accent-ink:#a8c0ff;
+    --green:#5ed3a0; --green-soft:#12261d; --green-line:#2c5f47;
+    --amber:#f0b26b; --amber-soft:#291d0f; --amber-line:#6b4a22;
+    --red:#f38b82; --red-soft:#2a1614; --red-line:#6e3630;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -6px rgba(0,0,0,.5);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 18px 44px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--sans); font-size:16.5px; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:26px 20px 90px; display:flex; flex-direction:column; gap:26px}
+
+  h1,h2,h3,h4{text-wrap:balance; margin:0; line-height:1.22; letter-spacing:-.019em}
+  h1{font-size:clamp(2rem,5.2vw,3.05rem); font-weight:800}
+  h2{font-size:clamp(1.4rem,3vw,1.85rem); font-weight:750}
+  h3{font-size:1.14rem; font-weight:700}
+  h4{font-size:1rem; font-weight:700}
+  p{margin:0}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px}
+  a:focus-visible,button:focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:5px}
+  strong{font-weight:680; color:var(--ink)}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:clamp(20px,3.2vw,32px); display:flex; flex-direction:column; gap:16px}
+  .eyebrow{font-size:.71rem; font-weight:750; letter-spacing:.13em; text-transform:uppercase; color:var(--muted)}
+  .sec-no{font-family:var(--mono); font-size:.78rem; color:var(--accent); font-weight:700}
+  .lede{font-size:1.06rem; color:var(--ink-2)}
+  .muted{color:var(--muted)}
+  .small{font-size:.87rem}
+  .tiny{font-size:.8rem}
+  hr{border:0; border-top:1px solid var(--line); margin:2px 0}
+
+  /* chips */
+  .chip{display:inline-flex; align-items:center; gap:5px; font-family:var(--sans); font-size:.7rem; font-weight:750;
+        letter-spacing:.045em; text-transform:uppercase; padding:3px 8px; border-radius:999px; border:1px solid; white-space:nowrap; vertical-align:middle}
+  .chip.v{background:var(--green-soft); color:var(--green); border-color:var(--green-line)}
+  .chip.u{background:var(--amber-soft); color:var(--amber); border-color:var(--amber-line)}
+  .chip.n{background:var(--red-soft); color:var(--red); border-color:var(--red-line)}
+  .chip.a{background:var(--accent-soft); color:var(--accent-ink); border-color:var(--line-2)}
+  .chip.neutral{background:var(--card-2); color:var(--muted); border-color:var(--line)}
+
+  /* banner */
+  .banner{background:var(--amber-soft); border:1px solid var(--amber-line); border-radius:var(--radius); padding:16px 20px; display:flex; flex-direction:column; gap:7px}
+  .banner .t{font-weight:780; color:var(--amber); font-size:.82rem; letter-spacing:.09em; text-transform:uppercase}
+
+  /* hero */
+  .hero{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-lg); overflow:hidden}
+  .hero-art{display:block; width:100%; height:auto; background:var(--card-2); border-bottom:1px solid var(--line)}
+  .hero-body{padding:clamp(22px,3.4vw,34px); display:flex; flex-direction:column; gap:13px}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+
+  /* toc */
+  .toc{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:2px}
+  .toc a{display:flex; gap:11px; padding:8px 10px; border-radius:8px; text-decoration:none; color:var(--ink-2); font-size:.93rem; align-items:baseline}
+  .toc a:hover{background:var(--accent-soft); color:var(--accent-ink)}
+  .toc .n{font-family:var(--mono); font-size:.78rem; color:var(--accent); font-weight:700; min-width:1.5em}
+
+  /* verdict box */
+  .verdict{background:var(--green-soft); border:1.5px solid var(--green-line); border-radius:var(--radius); padding:clamp(18px,3vw,28px); display:flex; flex-direction:column; gap:15px}
+  .verdict .role{font-size:.71rem; font-weight:780; letter-spacing:.12em; text-transform:uppercase; color:var(--green)}
+  .vrow{display:flex; flex-direction:column; gap:3px}
+  .vrow .nm{font-size:1.16rem; font-weight:770; color:var(--ink)}
+
+  /* stats */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(212px,1fr)); gap:14px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:17px 18px; display:flex; flex-direction:column; gap:5px}
+  .stat .fig{font-size:1.92rem; font-weight:800; letter-spacing:-.035em; font-variant-numeric:tabular-nums; line-height:1.05}
+  .stat .lab{font-size:.79rem; font-weight:730; letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+  .stat .sub{font-size:.85rem; color:var(--muted); line-height:1.45}
+
+  /* callouts */
+  .call{border-radius:var(--radius); padding:19px 22px; display:flex; flex-direction:column; gap:9px; border:1px solid}
+  .call h4{font-size:.79rem; font-weight:780; letter-spacing:.11em; text-transform:uppercase}
+  .call.blue{background:var(--accent-soft); border-color:var(--line-2)} .call.blue h4{color:var(--accent-ink)}
+  .call.green{background:var(--green-soft); border-color:var(--green-line)} .call.green h4{color:var(--green)}
+  .call.amber{background:var(--amber-soft); border-color:var(--amber-line)} .call.amber h4{color:var(--amber)}
+  .call.red{background:var(--red-soft); border-color:var(--red-line)} .call.red h4{color:var(--red)}
+
+  .rule{background:var(--ink); color:var(--ground); border-radius:var(--radius); padding:20px 24px; display:flex; flex-direction:column; gap:7px}
+  .rule .t{font-size:.74rem; font-weight:780; letter-spacing:.12em; text-transform:uppercase; opacity:.68}
+  .rule .b{font-size:1.11rem; font-weight:680; line-height:1.5}
+
+  /* tables */
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--card)}
+  table{border-collapse:collapse; width:100%; min-width:660px; font-size:.9rem}
+  th,td{text-align:left; padding:10px 13px; border-bottom:1px solid var(--line); vertical-align:top}
+  thead th{background:var(--card-2); font-size:.73rem; font-weight:760; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); position:sticky; top:0}
+  tbody tr:last-child td{border-bottom:0}
+  td.crit{font-weight:680; color:var(--ink); background:var(--card-2); white-space:nowrap}
+  td.win{background:var(--green-soft); box-shadow:inset 3px 0 0 var(--green)}
+  tr.verdict-row td{background:var(--ink); color:var(--ground); font-weight:700; border-bottom:0}
+  tr.verdict-row td.crit{background:var(--ink); color:var(--ground)}
+  .num{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:.87rem}
+
+  /* profiles */
+  .prof{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--card)}
+  .prof-hd{display:flex; gap:14px; align-items:flex-start; padding:17px 20px; background:var(--card-2); border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .rank{font-family:var(--mono); font-size:1.5rem; font-weight:800; color:var(--accent); line-height:1; padding-top:2px}
+  .prof-bd{padding:18px 20px; display:flex; flex-direction:column; gap:15px}
+  .fact{font-family:var(--mono); font-size:.83rem; color:var(--ink-2); background:var(--card-2); border:1px solid var(--line); border-radius:9px; padding:11px 13px; line-height:1.7}
+  .block{border-left:3px solid var(--line-2); padding:2px 0 2px 15px; display:flex; flex-direction:column; gap:6px}
+  .block.against{border-left-color:var(--red)}
+  .block.resp{border-left-color:var(--accent)}
+  .block .h{font-size:.75rem; font-weight:770; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+
+  ul,ol{margin:0; padding-left:1.25em; display:flex; flex-direction:column; gap:7px}
+  li::marker{color:var(--muted)}
+  ol.ranked{counter-reset:r; list-style:none; padding-left:0}
+  ol.ranked li{counter-increment:r; padding-left:2.1em; position:relative}
+  ol.ranked li::before{content:counter(r); position:absolute; left:0; top:.05em; font-family:var(--mono); font-weight:750; color:var(--accent); font-size:.86rem;
+    border:1px solid var(--line-2); border-radius:6px; width:1.55em; height:1.55em; display:grid; place-items:center; line-height:1}
+
+  /* email */
+  .mail{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .mail-hd{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 15px; background:var(--card-2); border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .mail-hd .to{font-size:.85rem; font-weight:700}
+  .mail pre{margin:0; padding:17px 19px; font-family:var(--mono); font-size:.83rem; line-height:1.68; white-space:pre-wrap; word-wrap:break-word; color:var(--ink-2); background:var(--card)}
+  button.copy{font-family:var(--sans); font-size:.76rem; font-weight:730; letter-spacing:.04em; text-transform:uppercase; padding:6px 13px; border-radius:7px;
+    border:1px solid var(--line-2); background:var(--card); color:var(--accent-ink); cursor:pointer; transition:background .15s,color .15s}
+  button.copy:hover{background:var(--accent-soft)}
+  button.copy.ok{background:var(--green-soft); color:var(--green); border-color:var(--green-line)}
+
+  /* sources */
+  .src{display:flex; gap:13px; padding:12px 0; border-bottom:1px solid var(--line)}
+  .src:last-child{border-bottom:0}
+  .src .n{font-family:var(--mono); font-size:.83rem; font-weight:700; color:var(--accent); min-width:2.1em}
+  .src .b{display:flex; flex-direction:column; gap:3px; min-width:0}
+  .src .b .ttl{font-weight:650; font-size:.94rem; word-break:break-word}
+  .src .b .why{font-style:italic; font-size:.85rem; color:var(--muted); line-height:1.5}
+
+  .final{background:var(--ink); color:var(--ground); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:clamp(24px,4vw,40px); display:flex; flex-direction:column; gap:20px}
+  .final h2{color:#fff}
+  .final .eyebrow{color:rgba(255,255,255,.6)}
+  .final a{color:#9dbaff}
+  .final strong{color:#fff}
+  .final hr{border-top-color:rgba(255,255,255,.15)}
+  .final .pick{font-size:1.24rem; font-weight:730; line-height:1.5; color:#fff}
+  .kill{display:flex; flex-direction:column; gap:4px; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.13)}
+  .kill:last-child{border-bottom:0}
+  .kill .nm{font-weight:740; color:#fff}
+
+  @media (max-width:640px){
+    body{font-size:15.8px}
+    .wrap{padding:16px 13px 60px; gap:20px}
+    .prof-hd{padding:14px 15px} .prof-bd{padding:15px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+  @media print{
+    body{background:#fff}
+    .wrap{max-width:100%; padding:0; gap:16px}
+    .card,.hero,.prof,.stat,.mail{box-shadow:none; break-inside:avoid}
+    .final{background:#fff; color:#000; border:2px solid #000}
+    .final h2,.final .pick,.final strong,.kill .nm{color:#000}
+    .final .eyebrow{color:#444} .final a{color:#000}
+    .rule{background:#fff; color:#000; border:2px solid #000}
+    tr.verdict-row td{background:#eee; color:#000}
+    button.copy{display:none}
+    .scroll{overflow:visible}
+    a[href^="http"]::after{content:" (" attr(href) ")"; font-size:.7rem; color:#555; word-break:break-all}
+  }
+</style>
+
+<div class="wrap">
+
+  <!-- 1. CONFIDENTIALITY -->
+  <div class="banner">
+    <div class="t">Confidential — prepared for a single reader</div>
+    <p class="small">Prepared for the homeowner at <strong>San Jose, CA 95138</strong>. All facts in this report were read on <strong>17 August 2026</strong> unless a different date is stamped on the individual claim. Contains assessments of named, real local businesses. Not for redistribution — several judgements here are unflattering, provisional, and explicitly marked unverified.</p>
+    <p class="small"><strong>Read the status chips before you act on anything.</strong> <span class="chip v">Verified</span> means I opened a primary record. <span class="chip u">Unconfirmed</span> means one source says so and I could not corroborate. <span class="chip n">Not verified</span> means I could not open the record at all. <span class="chip a">Ask</span> means put the question to the vendor in writing.</p>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <svg class="hero-art" viewBox="0 0 1060 300" role="img" aria-label="Illustration of a two-panel sliding patio door with an integrated retractable screen">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#cfe0f5"/><stop offset="100%" stop-color="#eaf1fa"/>
+        </linearGradient>
+        <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity=".55"/>
+          <stop offset="45%" stop-color="#ffffff" stop-opacity=".08"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity=".34"/>
+        </linearGradient>
+      </defs>
+      <rect width="1060" height="300" fill="url(#sky)"/>
+      <circle cx="880" cy="72" r="120" fill="#fff" opacity=".33"/>
+      <path d="M0 240 Q170 196 330 236 T680 228 T1060 244 L1060 300 L0 300Z" fill="#7fa87f" opacity=".42"/>
+      <path d="M0 262 Q220 232 460 262 T1060 258 L1060 300 L0 300Z" fill="#5d8a62" opacity=".38"/>
+      <!-- door frame -->
+      <rect x="196" y="34" width="668" height="248" rx="5" fill="#2f3a49"/>
+      <rect x="206" y="44" width="648" height="228" rx="3" fill="#8a949f" opacity=".25"/>
+      <!-- left fixed panel -->
+      <rect x="216" y="54" width="304" height="208" rx="2" fill="#4a5563"/>
+      <rect x="228" y="66" width="280" height="184" fill="#b9d2e8" opacity=".62"/>
+      <rect x="228" y="66" width="280" height="184" fill="url(#glass)"/>
+      <!-- right sliding panel, offset open -->
+      <rect x="540" y="54" width="304" height="208" rx="2" fill="#3d4756"/>
+      <rect x="552" y="66" width="280" height="184" fill="#b9d2e8" opacity=".5"/>
+      <rect x="552" y="66" width="280" height="184" fill="url(#glass)"/>
+      <!-- integrated retractable screen, partially drawn -->
+      <g opacity=".5">
+        <rect x="552" y="66" width="112" height="184" fill="#2f3a49" opacity=".3"/>
+        <g stroke="#1f2733" stroke-width=".7" opacity=".55">
+          <path d="M556 66v184M562 66v184M568 66v184M574 66v184M580 66v184M586 66v184M592 66v184M598 66v184M604 66v184M610 66v184M616 66v184M622 66v184M628 66v184M634 66v184M640 66v184M646 66v184M652 66v184M658 66v184"/>
+          <path d="M552 70h112M552 76h112M552 82h112M552 88h112M552 94h112M552 100h112M552 106h112M552 112h112M552 118h112M552 124h112M552 130h112M552 136h112M552 142h112M552 148h112M552 154h112M552 160h112M552 166h112M552 172h112M552 178h112M552 184h112M552 190h112M552 196h112M552 202h112M552 208h112M552 214h112M552 220h112M552 226h112M552 232h112M552 238h112M552 244h112"/>
+        </g>
+        <rect x="662" y="66" width="6" height="184" rx="2" fill="#2f3a49"/>
+      </g>
+      <!-- hardware -->
+      <rect x="528" y="140" width="9" height="48" rx="4" fill="#c9ced6"/>
+      <rect x="846" y="146" width="7" height="36" rx="3" fill="#c9ced6"/>
+      <!-- sill -->
+      <rect x="196" y="276" width="668" height="12" rx="3" fill="#242c38"/>
+    </svg>
+    <div class="hero-body">
+      <div class="eyebrow">Research · Assessment · Comparison</div>
+      <h1>Patio Door Installers RAC</h1>
+      <p class="lede">Replacing a sliding patio door in San Jose 95138, benchmarked against the product in the Pella marketing video that started this — the <strong>Lifestyle Series slider with integrated Rolscreen</strong>. Five vendors assessed. One pick, one runner-up, one specialist.</p>
+      <div class="hero-meta">
+        <span class="chip neutral">Facts read 17 Aug 2026</span>
+        <span class="chip u">Confidence: low–moderate</span>
+        <span class="chip n">0 of 5 licences opened at source</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="card">
+    <div class="eyebrow">Contents</div>
+    <nav class="toc">
+      <a href="#call"><span class="n">01</span><span>The call</span></a>
+      <a href="#working"><span class="n">02</span><span>What we're working with</span></a>
+      <a href="#matrix"><span class="n">03</span><span>Comparison matrix</span></a>
+      <a href="#ratings"><span class="n">04</span><span>Ratings, every platform</span></a>
+      <a href="#profiles"><span class="n">05</span><span>Candidate profiles, ranked</span></a>
+      <a href="#cost"><span class="n">06</span><span>What this should cost</span></a>
+      <a href="#policy"><span class="n">07</span><span>The policy layer</span></a>
+      <a href="#audit"><span class="n">08</span><span>Claim-by-claim audit: Pella</span></a>
+      <a href="#plain"><span class="n">09</span><span>My assessment, in plain English</span></a>
+      <a href="#emails"><span class="n">10</span><span>Copy-paste emails</span></a>
+      <a href="#sources"><span class="n">11</span><span>Sources, including dead ends</span></a>
+      <a href="#final"><span class="n">12</span><span>Final verdict</span></a>
+    </nav>
+  </div>
+
+  <!-- 2. THE CALL -->
+  <section class="card" id="call">
+    <div><span class="sec-no">01</span> <span class="eyebrow">The call</span></div>
+    <h2>The call</h2>
+
+    <div class="verdict">
+      <div class="vrow">
+        <div class="role">The pick</div>
+        <div class="nm">Almaden Window &amp; Door <span class="chip u">pending 2 licence checks</span></div>
+        <p class="small">5807 Winfield Blvd, San Jose — roughly 10 minutes from 95138. Local, family-run, multi-brand, and the only candidate whose office you can physically stand in without leaving the South Bay. Get them out to measure and quote first.</p>
+      </div>
+      <hr>
+      <div class="vrow">
+        <div class="role">The runner-up</div>
+        <div class="nm">Brothers Home Improvement <span class="chip v">licence vintage corroborates its age claim</span></div>
+        <p class="small">The longest genuinely checkable track record in the set, and the only candidate with an independent nonprofit price rating. Takes the top slot if Almaden's licence history comes back thin.</p>
+      </div>
+      <hr>
+      <div class="vrow">
+        <div class="role">Special role — not a general contractor</div>
+        <div class="nm">Blossom Hill Glass &amp; Mirror</div>
+        <p class="small">Retro-fit and glass-only specialist. Worth a call <em>only</em> if the existing frame is sound and you decide mid-process that you want glass and panels swapped rather than a full door replacement. Different job, much lower number.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="lab">Candidates assessed</div>
+        <div class="fig">5</div>
+        <div class="sub">Plus two rejected before profiling — big-box install programs and one out-of-area dealer.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Licences opened at source</div>
+        <div class="fig" style="color:var(--red)">0 / 5</div>
+        <div class="sub">cslb.ca.gov is blocked from this machine. Every licence claim below is second-hand. This is the report's central weakness.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Max legal deposit</div>
+        <div class="fig">$1,000</div>
+        <div class="sub">Or 10% of contract price — whichever is <em>less</em>. California law, no exceptions for special-order doors.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Directional installed range</div>
+        <div class="fig">$3.8–7k</div>
+        <div class="sub">Pella Lifestyle slider, installed. Cost-aggregator figure only — see §06 for why I distrust it.</div>
+      </div>
+    </div>
+
+    <div class="call amber">
+      <h4>The finding that reframes everything</h4>
+      <p>You are not choosing an installer. You are choosing <strong>who owns the parts supply for the next twenty years</strong>.</p>
+      <p class="small">A sliding patio door is not a window. It has rollers, a multi-point latch, a handle set and — in the Lifestyle Series specifically — an integrated retractable screen with its own spring mechanism. All of those are wear parts, and on a proprietary branded system they are single-sourced through the dealer network. The most instructive evidence I found in this whole exercise was not a review score; it was a complaint pattern against a <em>competing</em> premium brand in this same market, describing a patio door whose locking mechanism failed after roughly four years and left the owner waiting about two and a half months for a proprietary part <span class="chip u">Unconfirmed — relayed by search, BBB profile not opened</span>. The same body of complaints describes a defective patio slider replaced repeatedly with panels that were themselves defective, and a warranty threatened with voiding after the owner hired someone else to fix a leak.</p>
+      <p class="small">That reframes the decision. The premium-brand question is not "is the door good" — it almost certainly is. It's "when a $40 roller fails in 2034, am I dependent on one regional dealer with a documented habit of not answering complaints?" That question ranks the field differently than any star rating does.</p>
+    </div>
+  </section>
+
+  <!-- 3. WHAT WE'RE WORKING WITH -->
+  <section class="card" id="working">
+    <div><span class="sec-no">02</span> <span class="eyebrow">Evidence</span></div>
+    <h2>What we're working with</h2>
+
+    <h3>Your evidence, read closely</h3>
+    <p>You sent one thing: a YouTube link. It resolves to <strong>"Pella Lifestyle Series Sliding Patio Door with Rolscreen,"</strong> published 3 October 2019 — a manufacturer marketing video, not a review or a test.</p>
+    <blockquote class="fact">Source: YouTube — video ID xhFeiPwxFMM, "Pella Lifestyle Series Sliding Patio Door with Rolscreen," pub. 3 Oct 2019 · youtube.com/watch?v=xhFeiPwxFMM <span class="chip n">Not verified</span><br><em>(Video title and publication date resolved through web search only — youtube.com is blocked from this machine, so I never watched it. Manufacturer-published promotional content in any case: it is evidence of what Pella claims, not of how the door performs. Read 17 Aug 2026.)</em></blockquote>
+
+    <p>Three things follow from that link, and they matter more than they look:</p>
+    <ol class="ranked">
+      <li><strong>You led with a product, not a problem.</strong> You didn't say "my door sticks" or "my door leaks." You sent a door you liked the look of. That tells me this is an upgrade, not a failure repair — which changes the whole shape of the job and means you are not under time pressure. Use that. <span class="chip a">Ask</span> — if the current door is actually failing, tell me, because it inverts several recommendations below.</li>
+      <li><strong>The Rolscreen is the tell.</strong> Of everything in that video, the retractable screen is the genuinely differentiated feature — it retracts into the frame instead of sitting in a separate sliding track. Most sliders in this market ship with a conventional screen door on an outboard track. If the retracting screen is what caught your eye, that narrows the field far more than "I want a nice patio door" does, and it pushes toward the branded systems.</li>
+      <li><strong>Lifestyle Series is clad wood.</strong> Wood interior, aluminium-clad exterior. That is a different product class — and a different maintenance commitment — from the vinyl and aluminium retrofit sliders that most San Jose window companies sell by volume.</li>
+    </ol>
+
+    <div class="call blue">
+      <h4>The priority I have inferred — confirm or correct this</h4>
+      <p class="small">Because you sent a product video rather than a budget or a complaint, I am treating your priority as <strong>product fidelity and long-term serviceability over lowest price</strong>. Every ranking below flows from that assumption. <span class="chip a">Ask</span></p>
+      <p class="small">If your actual priority is lowest defensible cost for a competent sliding door, the ranking changes materially — Brothers moves to first and the Pella route drops out entirely. Tell me and I will re-cut it. One line from you decides this.</p>
+    </div>
+
+    <h3>The single rule that eliminates candidates</h3>
+    <div class="rule">
+      <div class="t">The elimination rule</div>
+      <div class="b">If a vendor will not put their CSLB licence number, a named parts-availability commitment, and a certificate of insurance sent directly by their broker in writing <em>before</em> you pay a deposit — they are out. No exceptions, no matter how good the quote or how well the visit went.</div>
+    </div>
+    <p class="small muted">This rule does the work that I could not do from here. Because cslb.ca.gov is unreachable from this machine, I cannot pre-clear anyone — so the rule pushes the verification burden onto the vendor, in writing, at the one moment you have maximum leverage: before money changes hands. Every vendor in this report should survive it. Any who doesn't has told you something no review platform would have.</p>
+  </section>
+
+  <!-- 4. MATRIX -->
+  <section class="card" id="matrix">
+    <div><span class="sec-no">03</span> <span class="eyebrow">Comparison</span></div>
+    <h2>Comparison matrix</h2>
+    <p class="small muted">Winning cell in each row shaded green. Where no candidate wins a row outright, no cell is shaded. Chips carry the verification status of that specific cell, not of the vendor overall.</p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Criterion</th>
+            <th>Almaden Window &amp; Door</th>
+            <th>Brothers Home Improvement</th>
+            <th>Pella dealer (Pella Window &amp; Door Co. of CA)</th>
+            <th>Renewal by Andersen of SF</th>
+            <th>Blossom Hill Glass</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Distance to 95138</td>
+            <td class="win">5807 Winfield Blvd, San Jose — same city, ~10 min <span class="chip u">Unconfirmed</span></td>
+            <td>125 Component Dr, San Jose — same city <span class="chip u">Unconfirmed</span></td>
+            <td>Nearest showrooms Hayward &amp; Belmont — no San Jose showroom <span class="chip u">Unconfirmed</span></td>
+            <td>Hayward-based, serves Bay Area <span class="chip u">Unconfirmed</span></td>
+            <td>San Jose <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">CSLB licence</td>
+            <td>#1133114, General Building, active at last third-party check <span class="chip n">Not verified</span></td>
+            <td class="win">#699009 — number vintage is consistent with the claimed 1994 founding <span class="chip n">Not verified</span></td>
+            <td>Multiple entity numbers surfaced; one third-party record shows an <em>inactive</em> licence <span class="chip n">Not verified</span></td>
+            <td>Not surfaced <span class="chip n">Not verified</span></td>
+            <td>Not surfaced <span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Claimed years in trade</td>
+            <td>Since 1995 — but see the licence-age conflict in §05 <span class="chip a">Ask</span></td>
+            <td class="win">Since 1994; BBB-accredited since 1 Nov 1996 <span class="chip u">Unconfirmed</span></td>
+            <td>26 years in business per BBB profile <span class="chip u">Unconfirmed</span></td>
+            <td>BBB-accredited since 9 Jun 2010 <span class="chip u">Unconfirmed</span></td>
+            <td>"Over 30 years" per own site <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Can supply the video's door</td>
+            <td>Multi-brand dealer — likely, unconfirmed <span class="chip a">Ask</span></td>
+            <td>No — vinyl/retrofit specialist, different product class <span class="chip u">Unconfirmed</span></td>
+            <td class="win">Yes — sole authorised route to Pella Lifestyle <span class="chip v">Verified by definition</span></td>
+            <td>No — sells its own Andersen-derived system only <span class="chip v">Verified by definition</span></td>
+            <td>No — retro-fit glass, not branded door systems <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Parts independence (20-yr risk)</td>
+            <td class="win">Multi-brand — not locked to one factory <span class="chip u">Unconfirmed</span></td>
+            <td>Multi-brand, plus lifetime glass-breakage claim <span class="chip u">Unconfirmed</span></td>
+            <td>Proprietary; single dealer channel <span class="chip u">Unconfirmed</span></td>
+            <td>Proprietary; documented multi-month part waits <span class="chip u">Unconfirmed</span></td>
+            <td>Generic glass — highest independence, narrowest scope <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Independent nonprofit rating</td>
+            <td>Checkbook: 21 reviews, score not opened <span class="chip n">Not verified</span></td>
+            <td class="win">Checkbook: 76 reviews, 86% "superior", prices ~1% below average <span class="chip n">Not verified</span></td>
+            <td>None surfaced <span class="chip n">Not verified</span></td>
+            <td>None surfaced <span class="chip n">Not verified</span></td>
+            <td>None surfaced <span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Complaint-handling posture</td>
+            <td>Nothing adverse surfaced <span class="chip n">Not verified</span></td>
+            <td class="win">Nothing adverse surfaced; long accreditation <span class="chip n">Not verified</span></td>
+            <td>BBB grade B−, cited for failure to respond to 2 complaints <span class="chip u">Unconfirmed</span></td>
+            <td>Accredited, but substantive complaint pattern on patio doors <span class="chip u">Unconfirmed</span></td>
+            <td>Nothing surfaced — thin footprint, not a red flag <span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Subcontracting</td>
+            <td>Not stated <span class="chip a">Ask</span></td>
+            <td class="win">Claims employee crews, "no subcontractors" <span class="chip u">Unconfirmed</span></td>
+            <td>Not stated <span class="chip a">Ask</span></td>
+            <td>Not stated <span class="chip a">Ask</span></td>
+            <td>Not stated <span class="chip a">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Survives the elimination rule?</td>
+            <td>Unknown until you ask <span class="chip a">Ask</span></td>
+            <td>Unknown until you ask <span class="chip a">Ask</span></td>
+            <td>Unknown until you ask <span class="chip a">Ask</span></td>
+            <td>Unknown until you ask <span class="chip a">Ask</span></td>
+            <td>Unknown until you ask <span class="chip a">Ask</span></td>
+          </tr>
+          <tr class="verdict-row">
+            <td class="crit">Verdict</td>
+            <td><strong>PICK</strong> — local, independent, brand-flexible</td>
+            <td><strong>RUNNER-UP</strong> — best evidence, wrong product class</td>
+            <td>Only if Lifestyle is non-negotiable</td>
+            <td>Eliminated — parts risk</td>
+            <td>Specialist — different job</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tiny muted">Sources for this matrix are enumerated in §11. Every "Not verified" chip in the CSLB row traces to a single cause: source [1] could not be opened from this machine.</p>
+  </section>
+
+  <!-- 5. RATINGS -->
+  <section class="card" id="ratings">
+    <div><span class="sec-no">04</span> <span class="eyebrow">Platform data</span></div>
+    <h2>Ratings, every platform</h2>
+    <div class="call red">
+      <h4>Read this before you read the table</h4>
+      <p class="small">I could not open Yelp, BBB, Angi, Houzz, Checkbook or Nextdoor from this machine — all are blocked by this environment's egress policy. Every figure below was <strong>relayed to me by a search engine's summary of those pages</strong>. Review <em>counts</em> relayed this way are usually reliable; <strong>star ratings and percentages are not</strong>, and where I did not receive one I have left the cell empty rather than estimate it. Empty means unknown, not zero.</p>
+      <p class="small">Consistent with your own rules: I have quoted <strong>no</strong> customer reviews anywhere in this report, because I could not open a single one to read it in context or confirm it was not filtered. Yelp's "not recommended" queue — which is where the most useful signal usually sits — I could not reach at all.</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Vendor</th><th>Yelp</th><th>BBB</th><th>Checkbook</th><th>Angi</th><th>Other</th><th>Total reviews seen</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Brothers Home Improvement</td>
+            <td><span class="num">300</span> reviews <span class="chip u">Unconfirmed</span></td>
+            <td>Accredited 1 Nov 1996; grade not relayed</td>
+            <td><span class="num">76</span> reviews · 86% superior · price ~1% below avg</td>
+            <td>Listed; rating not relayed</td>
+            <td>Birdeye <span class="num">75</span>; aggregator <span class="num">4.4</span>/5 from <span class="num">61</span></td>
+            <td class="num">≈512</td>
+          </tr>
+          <tr>
+            <td class="crit">Renewal by Andersen of SF</td>
+            <td><span class="num">477</span> reviews (as of Apr 2026) <span class="chip u">Unconfirmed</span></td>
+            <td>Accredited 9 Jun 2010; complaint pages exist</td>
+            <td>None surfaced</td>
+            <td><span class="num">4.4</span>/5 <span class="chip u">Unconfirmed</span></td>
+            <td>—</td>
+            <td class="num">≈477</td>
+          </tr>
+          <tr>
+            <td class="crit">Almaden Window &amp; Door</td>
+            <td><span class="num">57</span> reviews (as of Apr 2026) <span class="chip u">Unconfirmed</span></td>
+            <td>Profile exists; grade not relayed</td>
+            <td><span class="num">21</span> reviews; score not relayed</td>
+            <td>Listed; rating not relayed</td>
+            <td>Nextdoor, Porch, Houzz pages exist</td>
+            <td class="num">≈78</td>
+          </tr>
+          <tr>
+            <td class="crit">Pella dealer — Hayward showroom</td>
+            <td><span class="num">41</span> reviews <span class="chip u">Unconfirmed</span></td>
+            <td rowspan="2">Grade <strong>B−</strong>; failure to respond to 2 complaints. A separate Sacramento entity is <em>not</em> accredited.</td>
+            <td>None surfaced</td>
+            <td>Not relayed</td>
+            <td>Houzz profile exists</td>
+            <td class="num">≈41</td>
+          </tr>
+          <tr>
+            <td class="crit">Pella dealer — SF location</td>
+            <td><span class="num">23</span> reviews <span class="chip u">Unconfirmed</span></td>
+            <td>None surfaced</td>
+            <td>Not relayed</td>
+            <td>—</td>
+            <td class="num">≈23</td>
+          </tr>
+          <tr>
+            <td class="crit">Blossom Hill Glass &amp; Mirror</td>
+            <td>Not relayed</td>
+            <td>Not relayed</td>
+            <td>None surfaced</td>
+            <td>Not relayed</td>
+            <td>Own site only</td>
+            <td class="num">unknown</td>
+          </tr>
+          <tr class="verdict-row">
+            <td class="crit">Total reviews across set</td>
+            <td class="num">≈898</td><td>—</td><td class="num">≈97</td><td>—</td><td class="num">≈136</td><td class="num">≈1,131</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <blockquote class="fact">Source: Bay Area Consumers' Checkbook — window and door installer ratings, San Jose · checkbook.org <span class="chip n">Not verified</span><br><em>(Nonprofit consumer organisation, subscriber-funded and famously advertising-free — it takes no money from the companies it rates, which makes it the single most credible rating source in this report and the only one that publishes comparative <strong>price</strong> data. Its own guidance notes that the highest quote in this category can exceed the lowest by more than double, and that it receives many complaints about sloppy window installation work. Relayed via search 17 Aug 2026 — page not opened.)</em></blockquote>
+    <p class="small"><strong>How to read the spread.</strong> Renewal by Andersen has roughly six times Almaden's review volume — that is a marketing-budget artefact, not a quality signal. A regional franchise running paid lead generation accumulates reviews at a rate a family firm never will. Volume tells you how much a company spends on acquisition; the nonprofit percentages tell you what customers actually got. Weight Checkbook's 76 over Yelp's 477.</p>
+  </section>
+
+  <!-- 6. PROFILES -->
+  <section class="card" id="profiles">
+    <div><span class="sec-no">05</span> <span class="eyebrow">Candidates</span></div>
+    <h2>Candidate profiles, ranked</h2>
+    <p class="small muted">Ranked against the inferred priority in §02: product fidelity and long-term serviceability over lowest price. Every profile carries its honest case against — including the pick's.</p>
+
+    <div class="prof">
+      <div class="prof-hd">
+        <div class="rank">1</div>
+        <div style="flex:1; min-width:230px">
+          <h3>Almaden Window &amp; Door</h3>
+          <p class="small muted">The pick — on locality and independence, not on evidence depth</p>
+        </div>
+        <span class="chip u">2 open questions</span>
+      </div>
+      <div class="prof-bd">
+        <div class="fact">5807 Winfield Blvd, San Jose CA · CSLB #1133114, General Building, active at last third-party check <span class="chip n">Not verified</span> · claims family-owned since 1995 <span class="chip a">Ask</span> · multi-brand window and patio door replacement · Yelp ≈57 reviews, Checkbook 21 reviews</div>
+        <blockquote class="fact">Source: BuildZoom — contractor record for Almaden Window &amp; Door Construction Inc · buildzoom.com <span class="chip n">Not verified</span><br><em>(Commercial construction-marketplace site that republishes CSLB licence data and scraped building-permit records. It is a <strong>mirror, not the registry</strong> — useful as a pointer, never as proof, and it has a commercial interest in listing contractors. Relayed via search 17 Aug 2026; site blocked from this machine.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; owner responses</div>
+          <p class="small"><strong>None reproduced — deliberately.</strong> I could not open Yelp, Nextdoor, Houzz or Checkbook, so I have no verbatim quote I could attribute to a named reviewer and no way to see whether the owner replies to criticism. Fabricating either would be worse than omitting it. Close it yourself in five minutes: <span class="num">yelp.com/biz/almaden-window-and-door-san-jose</span> — read the "not recommended" queue at the page foot, and check whether the owner answers the <em>one-star</em> reviews rather than thanking the five-star ones. That single behaviour predicts warranty service better than the average score does.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>The founding date and the licence number don't agree.</strong> The business claims 1995. But CSLB licence numbers are issued sequentially, and #1133114 sits in a range issued in roughly the early 2020s — not the mid-1990s. Brothers' #699009, by contrast, sits exactly where a 1994 licence should. So Almaden's number is doing something else: a re-incorporation, a new entity after a generational handover, a licence moved between entities — all completely ordinary and benign. But it matters, because <strong>the bond, the complaint history and the disciplinary record attach to the entity, not to the family</strong>. If the entity is three years old, "thirty years of trust" is not what you are contracting with. <span class="chip a">Ask</span> — "Is there a prior CSLB licence number for this business? What is it?"</p>
+          <p class="small"><strong>Thin evidence base, full stop.</strong> 78 total reviews against Brothers' 512. That is not evidence of being worse; it is less evidence, which is a real cost when I cannot open the registry either. And I have not confirmed they can even source a Pella Lifestyle.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prof">
+      <div class="prof-hd">
+        <div class="rank">2</div>
+        <div style="flex:1; min-width:230px">
+          <h3>Brothers Home Improvement, Inc.</h3>
+          <p class="small muted">The runner-up — best evidence in the set, probably the wrong product</p>
+        </div>
+        <span class="chip v">age claim corroborates</span>
+      </div>
+      <div class="prof-bd">
+        <div class="fact">125 Component Dr, San Jose CA · CA LIC #699009 · NV LIC #0068117 · claims family-operated since 1994, 50,000+ customers · BBB-accredited since 1 Nov 1996 · claims employee crews, no subcontractors · lifetime warranty and lifetime glass-breakage cover claimed</div>
+        <blockquote class="fact">Source: Brothers Home Improvement — San Jose windows and doors page · brotherswindows.com/san-jose-windows-doors/ <span class="chip n">Not verified</span><br><em>(The vendor's own marketing site — authoritative for what the company <strong>claims</strong> and legally accountable for it, but not independent evidence of any of it. Relayed via search 17 Aug 2026; site blocked from this machine.)</em></blockquote>
+        <p class="small"><strong>The one thing here that actually checks out.</strong> Licence #699009 falls in the range CSLB was issuing around 1994–95, which independently corroborates "family operated since 1994" — and BBB accreditation dated 1 Nov 1996 corroborates it a second time from a third source. That is the only marketing claim in this entire report that I can cross-check against an independent record without opening a website, because the licence number itself encodes its own approximate date. <span class="chip v">Verified by internal consistency</span></p>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; owner responses</div>
+          <p class="small">None reproduced, same reason as above. Their Yelp page is <span class="num">yelp.com/biz/brothers-home-improvement-san-jose-2</span> (≈300 reviews) and the BBB profile is under San Jose → Windows. The Checkbook figure — 76 reviews, 86% rating them "superior", prices about 1% below area average — is the most valuable number about any vendor in this report, because Checkbook takes no advertising and surveys customers directly. Open it and read the actual comments.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>They are excellent at a job you may not be buying.</strong> Their published line is energy-efficient double-pane <em>vinyl</em> windows and doors — picture, hung, slider, bay, bow, garden, patio sliders and French doors. That is a volume retrofit business, and it is a genuinely good one. But the door in your video is clad wood with an integrated retracting screen, which is a different product class. If you hand them that video, the honest answer is likely "we can do you an excellent vinyl slider" — and if that is fine with you, they are arguably the strongest vendor here. It just isn't the door you sent me.</p>
+          <p class="small"><strong>"Prices 1% below average" cuts both ways.</strong> It confirms they are not gouging. It also confirms they are not cheap — you will not out-negotiate a company that already prices at market.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prof">
+      <div class="prof-hd">
+        <div class="rank">3</div>
+        <div style="flex:1; min-width:230px">
+          <h3>Pella Window &amp; Door Company of California / Pella of Northern California</h3>
+          <p class="small muted">The only route to the actual door in your video</p>
+        </div>
+        <span class="chip u">BBB B−</span>
+      </div>
+      <div class="prof-bd">
+        <div class="fact">Showrooms: Hayward (2251 Claremont Ct), Belmont, San Francisco (850 S Van Ness), San Rafael — <strong>no San Jose showroom</strong> · regional line (510) 243-6964 · BBB grade B−, 26 years in business, cited for failure to respond to 2 complaints · a separate Sacramento-registered Pella entity is not BBB-accredited</div>
+        <p class="small"><strong>There are two Pellas and you need to know which one is on your contract.</strong> "Pella" the manufacturer (Pella Corporation, Iowa) makes the door. "Pella of Northern California" is an independent regional distributor that sells and installs it. Your warranty, your installation quality and your future parts orders run through the <em>distributor</em>, not the manufacturer — and it is the distributor that carries the B− and the two unanswered complaints. <span class="chip a">Ask</span> — "Which legal entity is the contracting party, and what is its CSLB number?"</p>
+        <blockquote class="fact">Source: Better Business Bureau — business profiles for Pella Window &amp; Door Company of California, Inc. (Hayward) and Pella Windows and Doors of Northern California (Sacramento) · bbb.org <span class="chip n">Not verified</span><br><em>(BBB is a private nonprofit business-accreditation body, not a regulator; its letter grades weight complaint <strong>responsiveness</strong> heavily, and accreditation is a paid relationship — so treat the grade as a measure of how a company handles complaints, not of workmanship. Relayed via search 17 Aug 2026; bbb.org blocked from this machine.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; owner responses</div>
+          <p class="small">None reproduced. The relevant behaviour is already on the record without needing quotes: a BBB grade held down by <strong>failure to respond to two complaints</strong> is itself a statement about how this vendor answers unhappy customers — which is precisely the risk in §01. Yelp pages: Hayward showroom ≈41 reviews, SF ≈23.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>No South Bay showroom, and that is a service-radius question, not a convenience one.</strong> Everything — measurement, installation, and every warranty callback for the next two decades — dispatches from Hayward or Belmont, 25–35 miles away. Fine on installation day. Less fine on the third callback for a screen that won't retract.</p>
+          <p class="small"><strong>The parts monopoly is total.</strong> Nobody else can supply a Lifestyle Series roller, latch or Rolscreen assembly. You are marrying the dealer network, and this particular dealer's documented weakness is responsiveness.</p>
+          <p class="small"><strong>In fairness:</strong> B− is a mediocre grade, not a bad company — it reflects two unanswered complaints across 26 years of trading, which is a thin evidentiary base for a strong conclusion. And they are the only vendor here who can actually give you the thing you asked for. If the Rolscreen is non-negotiable, this is your vendor and the mitigation is contractual, not alternative — see §07.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prof">
+      <div class="prof-hd">
+        <div class="rank">4</div>
+        <div style="flex:1; min-width:230px">
+          <h3>Renewal by Andersen of San Francisco</h3>
+          <p class="small muted">Eliminated — on a documented pattern, not on reputation</p>
+        </div>
+        <span class="chip n">Eliminated</span>
+      </div>
+      <div class="prof-bd">
+        <div class="fact">Hayward-based, serves the Bay Area including San Jose · BBB-accredited since 9 Jun 2010 · Yelp ≈477 reviews (Apr 2026) · Angi 4.4/5 · full-service replacement franchise selling its own proprietary Fibrex system</div>
+        <p class="small">This is the best-marketed vendor in the set and, by review volume, the most visible. It is eliminated anyway, because the complaint pattern lands precisely on <em>patio doors</em> — the exact product you are buying.</p>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <ul class="small">
+            <li>A patio slider described as defective, with repeated replacement panels themselves arriving defective <span class="chip u">Unconfirmed</span></li>
+            <li>A patio door lock failing roughly four years after installation, with about a two-and-a-half-month wait for a proprietary part <span class="chip u">Unconfirmed</span></li>
+            <li>Improper flashing around doors, and a warranty threatened with voiding when the owner brought in another contractor to stop the leak <span class="chip u">Unconfirmed</span></li>
+            <li>A project reported as completing about 3.5 months past the promised date over hardware availability <span class="chip u">Unconfirmed</span></li>
+          </ul>
+          <p class="small"><strong>In fairness to them:</strong> these are complaints, which are a self-selecting sample — nobody files with the BBB to say the door works. 477 Yelp reviews and continuous accreditation since 2010 are not the profile of a bad company, and their installers draw genuine individual praise. This is a competent national operation. It is simply the wrong shape for a buyer whose main long-run risk is proprietary parts, and every one of the four items above is a parts-or-warranty failure rather than a workmanship one. That is what disqualifies it here — a different buyer with different priorities could hire them happily.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prof">
+      <div class="prof-hd">
+        <div class="rank">5</div>
+        <div style="flex:1; min-width:230px">
+          <h3>Blossom Hill Glass &amp; Mirror</h3>
+          <p class="small muted">Special role — keep the number, different job</p>
+        </div>
+        <span class="chip a">Specialist</span>
+      </div>
+      <div class="prof-bd">
+        <div class="fact">San Jose · claims over 30 years in retro-fit patio door sales and installation · also emergency board-up and glass replacement · CSLB number not surfaced <span class="chip n">Not verified</span></div>
+        <p class="small">Not a competitor to the others and shouldn't be scored against them. Their business is retro-fitting patio doors and replacing glass — which becomes the right answer only in one scenario: the existing frame and sill are sound, and once you see the quotes for a full replacement you decide a panel-and-glass upgrade gets you 70% of the benefit for a fraction of the cost.</p>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small">They cannot give you the door in the video, and I found no independent rating footprint at all. <strong>That absence is not a red flag</strong> — a glass specialist doing trade and emergency work has little reason to accumulate consumer-platform reviews, and grading them on an empty Yelp presence would be meaningless. It just means I have nothing to assess. Call them only if the scenario above materialises.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="call blue">
+      <h4>Considered and set aside before profiling</h4>
+      <p class="small"><strong>Home Depot / Lowe's installation programmes.</strong> Both sell patio doors with installation in this market. Set aside because the retailer subcontracts the work to independent crews, so the thing you are actually assessing — the installer — is unknown at the point of sale and can change between quote and install day. That is the opposite of your elimination rule. Not a judgement on the crews, several of whom are the same local contractors profiled above.</p>
+      <p class="small"><strong>Anderson Window &amp; Door Installation</strong> (unrelated to Andersen the manufacturer). Carries a Checkbook record — 44 reviews, 68% "superior" — but with a relayed note that customers recommend them only if you are willing to pay a very high price. Lower rating than Brothers at higher cost, so it does not displace anyone. Worth a quote only if both leaders are booked out.</p>
+    </div>
+  </section>
+
+  <!-- 7. COST -->
+  <section class="card" id="cost">
+    <div><span class="sec-no">06</span> <span class="eyebrow">Money</span></div>
+    <h2>What this should cost</h2>
+
+    <div class="call red">
+      <h4>I do not trust these numbers and neither should you</h4>
+      <p class="small">Your brief bans content farms and affiliate roundups. When I searched for Pella patio door pricing, <strong>the entire first page of results was exactly that</strong> — sites of the "2026 Cost Guide" genre with no named authors, no methodology and affiliate incentives. The $3,800–$7,000 installed figure quoted everywhere below traces to that layer. Pella's own published price page and any reputable cost guide were both unreachable from this machine.</p>
+      <p class="small">So treat this table as <strong>a structure for reading your quotes, not a prediction of them</strong>. Its real job is to make sure nothing is missing from the bids you receive.</p>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Line item</th><th>Directional range</th><th>Status</th><th>What to watch</th></tr></thead>
+        <tbody>
+          <tr><td class="crit">Door unit — clad-wood 2-panel slider, ~6ft</td><td class="num">$2,200–4,200</td><td><span class="chip n">Not verified</span></td><td>Ask for the unit price <em>separately</em> from labour. Any vendor refusing to split them is managing your comparison for you.</td></tr>
+          <tr><td class="crit">Integrated retractable screen (Rolscreen or equiv.)</td><td class="num">$250–600</td><td><span class="chip n">Not verified</span></td><td>The feature from your video. Confirm it is integrated, not an outboard track screen.</td></tr>
+          <tr><td class="crit">Removal &amp; disposal of existing slider</td><td class="num">$150–400</td><td><span class="chip n">Not verified</span></td><td>Frequently bundled invisibly. Confirm disposal is included, not extra.</td></tr>
+          <tr><td class="crit">Installation labour</td><td class="num">$700–1,600</td><td><span class="chip n">Not verified</span></td><td>Employee crew or subcontractor? Changes who carries the liability.</td></tr>
+          <tr><td class="crit">Flashing &amp; waterproofing</td><td class="num">$150–450</td><td><span class="chip n">Not verified</span></td><td><strong>The line that causes lawsuits.</strong> Improper door flashing is a named complaint against one vendor here. Insist it is itemised and described.</td></tr>
+          <tr><td class="crit">Interior/exterior trim, stucco or siding patch</td><td class="num">$200–900</td><td><span class="chip n">Not verified</span></td><td>Widest variance in the whole job — depends entirely on your existing wall. Get it in the written scope.</td></tr>
+          <tr><td class="crit">Paint / stain / finish</td><td class="num">$150–500</td><td><span class="chip n">Not verified</span></td><td>Clad wood means an interior wood surface someone must finish. Often excluded silently.</td></tr>
+          <tr><td class="crit">City of San José building permit</td><td class="num">Ask city</td><td><span class="chip a">Ask</span></td><td>Confirm the contractor pulls it in <em>their</em> name. See §07.</td></tr>
+          <tr><td class="crit">Sales tax on materials</td><td class="num">per invoice</td><td><span class="chip a">Ask</span></td><td>Santa Clara County rate applies to the goods portion.</td></tr>
+          <tr class="verdict-row"><td class="crit">Indicative total, installed</td><td class="num">$3,800–8,650</td><td>Directional only</td><td>Expect real quotes to land inside this band. Anything far outside it needs explaining.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Two-sided sanity check on the total</h3>
+    <div class="stats">
+      <div class="stat">
+        <div class="lab">Bottom-up</div>
+        <div class="fig num">$3,800–8,650</div>
+        <div class="sub">Summing the line items above. Widest at the top because trim, stucco patching and finish carry the most variance — all wall-condition dependent, none knowable before someone stands in front of your door.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Top-down</div>
+        <div class="fig num">$3,800–7,000</div>
+        <div class="sub">The market figure for a Lifestyle Series slider installed, from cost-aggregator sources only. Lands inside the bottom-up band — which is mild corroboration, not confirmation, since both may draw on the same weak layer.</div>
+      </div>
+    </div>
+    <p class="small"><strong>What the check actually tells you.</strong> The two methods agree at the bottom and diverge at the top, and the divergence is the honest part: the top-down number describes a <em>door</em>, while the bottom-up number describes <em>your wall</em>. If your opening needs resizing, the stucco is fragile, or there is dry rot under the existing sill — none of which anyone can know from here — you exit the published range immediately and legitimately.</p>
+    <p class="small">The genuinely useful benchmark isn't either range. It's Checkbook's finding that in this category <strong>the highest quote can be more than double the lowest for the same work</strong>. That is the number to act on: it means the spread between your three bids will tell you more than any published range can, which is exactly why the emails in §10 hold scope identical across all three.</p>
+    <blockquote class="fact">Source: cost-aggregator pages returned for "Pella Lifestyle sliding patio door cost 2026" — sthwindows.com, latestcost.com, urbanexteriorsgb.com and similar <span class="chip n">Not verified</span><br><em>(SEO cost-guide sites with no named authors, no stated methodology and probable affiliate relationships — precisely the source class your brief excludes. Cited here <strong>only</strong> to be transparent about where the widely-repeated $3,800–$7,000 figure originates, and explicitly not relied upon. Relayed via search 17 Aug 2026.)</em></blockquote>
+  </section>
+
+  <!-- 8. POLICY -->
+  <section class="card" id="policy">
+    <div><span class="sec-no">07</span> <span class="eyebrow">Law, warranty, risk</span></div>
+    <h2>The policy layer</h2>
+
+    <h3>The governing law, and what you lose if it goes wrong</h3>
+    <p>California's Home Improvement Contract rules sit in the Business &amp; Professions Code and are enforced by the CSLB. Three provisions do almost all the protective work on a job this size:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Rule</th><th>What it says</th><th>What you lose if it goes wrong</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">Written contract required</td>
+            <td>Every home improvement job over <span class="num">$500</span> needs a written, legible, understandable contract; changes must also be written.</td>
+            <td>Without it you are arguing about an oral scope. Verbal change orders are where "we didn't quote the stucco patch" lives.</td>
+          </tr>
+          <tr>
+            <td class="crit">Down payment cap</td>
+            <td>The deposit may not exceed <span class="num">$1,000</span> <strong>or</strong> 10% of the contract price — <strong>whichever is less</strong>. No exception for special-order materials.</td>
+            <td>This is your single biggest financial protection, and it is the one most often quietly broken on custom-order doors. On a $6,000 job your maximum lawful deposit is <strong>$600</strong>, not $1,000. A vendor asking for 50% up front on a special-order door is asking you to waive a statutory right.</td>
+          </tr>
+          <tr>
+            <td class="crit">Three-day right to cancel</td>
+            <td>Unless the contract was negotiated at the contractor's own place of business, you get three days to cancel in writing under the Home Solicitation Sales Act, and the contractor must hand you the notice with the contract.</td>
+            <td>Nearly every in-home sales visit triggers this. If you sign at your kitchen table and no cancellation notice is attached, the contract is defective from the start.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <blockquote class="fact">Source: CSLB — "Learn About Home Improvement Contracts" and the Home Improvement Contracts Consumer Guide (PDF) · cslb.ca.gov/Consumers/Hire_A_Contractor/Home_Improvement_Contracts/ <span class="chip n">Not verified — could not open</span><br><em>(California Contractors State License Board, part of the Department of Consumer Affairs — the state agency that licenses, bonds and disciplines contractors, and the authoritative source for home improvement contract law. This would be a Tier 1 source; the substance above was <strong>relayed by search summary only</strong> because cslb.ca.gov is blocked from this machine. Confirm the figures yourself before relying on them: 800-321-CSLB (2752). Relayed 17 Aug 2026.)</em></blockquote>
+    <p class="small"><strong>Effective date, honestly stated.</strong> The $1,000/10% cap and the three-day rescission right are long-standing California law, not new for 2026. I could not open the code section to give you a precise operative date or confirm 2026 amendments — search surfaced commentary referring to new contractor laws taking effect in 2026 that I could not read. <span class="chip a">Ask</span> — confirm current text with CSLB before signing.</p>
+
+    <h3>Vendor policies, side by side</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Policy</th><th>Almaden</th><th>Brothers</th><th>Pella dealer</th><th>Renewal by Andersen</th></tr></thead>
+        <tbody>
+          <tr><td class="crit">Published warranty</td><td>Not surfaced <span class="chip a">Ask</span></td><td class="win">Lifetime warranty claimed; lifetime cover for accidental glass breakage <span class="chip u">Unconfirmed</span></td><td>Manufacturer limited warranty + dealer labour terms <span class="chip a">Ask</span></td><td>Proprietary limited warranty <span class="chip a">Ask</span></td></tr>
+          <tr><td class="crit">Who performs the work</td><td>Not stated <span class="chip a">Ask</span></td><td class="win">Employee crews, "no subcontractors" claimed <span class="chip u">Unconfirmed</span></td><td>Not stated <span class="chip a">Ask</span></td><td>Franchise crews <span class="chip a">Ask</span></td></tr>
+          <tr><td class="crit">Parts source after year 5</td><td>Open market <span class="chip u">Unconfirmed</span></td><td>Open market <span class="chip u">Unconfirmed</span></td><td>Dealer only <span class="chip u">Unconfirmed</span></td><td>Franchise only — documented delays <span class="chip u">Unconfirmed</span></td></tr>
+          <tr><td class="crit">Warranty-void exposure</td><td>Unknown <span class="chip a">Ask</span></td><td>Unknown <span class="chip a">Ask</span></td><td>Unknown <span class="chip a">Ask</span></td><td>Voiding reportedly threatened after third-party leak repair <span class="chip u">Unconfirmed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Third-party risk</h3>
+    <ul>
+      <li><strong>Subcontracted labour.</strong> If crews are subcontracted, the sub's workers' comp — not the contractor's — may be what actually covers an injury on your property. Ask who employs the people in your house, and get the answer in writing.</li>
+      <li><strong>Mechanics' liens.</strong> In California a supplier or subcontractor who isn't paid by <em>your contractor</em> can lien <em>your house</em>, even though you paid in full. Ask for unconditional lien releases from the contractor and any material supplier at each payment.</li>
+      <li><strong>Manufacturer vs. installer split.</strong> The door is warranted by the factory; the installation by the contractor. Water intrusion sits exactly on that seam, and it is where both sides point at each other. Get one named party accountable for leaks in writing.</li>
+      <li><strong>Permit in whose name.</strong> If you pull the permit yourself as owner-builder, you absorb liability the contractor would otherwise carry. Let the contractor pull it. San José Development Services: <strong>408-535-3555</strong>.</li>
+    </ul>
+
+    <h3>Your contract protections — the checklist</h3>
+    <ol class="ranked">
+      <li>Deposit capped at the lesser of $1,000 or 10%. Write the number in yourself before signing.</li>
+      <li>Three-day cancellation notice physically attached if you sign anywhere but their office.</li>
+      <li>CSLB licence number, entity legal name and expiry printed on the contract — then check it at cslb.ca.gov yourself.</li>
+      <li>Certificate of insurance sent <strong>directly by their broker</strong> to your email — never a PDF forwarded by the salesperson. General liability and workers' comp, with you listed as certificate holder.</li>
+      <li>Payments tied to completed milestones, never to calendar dates. Final payment after your inspection, not after theirs.</li>
+      <li>Flashing and waterproofing method described in the written scope, not assumed.</li>
+      <li>Parts-availability commitment in writing — see §10 for the exact wording.</li>
+      <li>Unconditional lien release at each payment.</li>
+    </ol>
+    <blockquote class="fact">Source: City of San José, Development Services Permit Center · sanjoseca.gov · 408-535-3555 <span class="chip n">Not verified — could not open</span><br><em>(The municipal authority that issues building permits and inspects work in San José — authoritative for whether your specific job needs a permit and what it costs. Search relayed that glazing in sliding door panels is treated as a hazardous location requiring safety glazing, and that residential jobs may use a walk-in "Simple Projects" counter; sanjoseca.gov is blocked from this machine, so <strong>call the number and confirm both</strong>. Relayed 17 Aug 2026.)</em></blockquote>
+  </section>
+
+  <!-- 9. AUDIT -->
+  <section class="card" id="audit">
+    <div><span class="sec-no">08</span> <span class="eyebrow">Marketing audit</span></div>
+    <h2>Claim-by-claim audit: the Pella video that started this</h2>
+    <p class="small muted">The marketing that prompted this exercise is Pella's own. Auditing it fairly means separating what is definitionally true, what is plausible but untested, and what is unfalsifiable — and being explicit that I could not watch the video or open Pella's specification pages.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Claim</th><th>Where it comes from</th><th>Audit</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">"Lifestyle Series sliding patio door with Rolscreen"</td>
+            <td>Video title</td>
+            <td>The product exists and Rolscreen is Pella's proprietary retractable screen. Definitionally true — it names a real product line.</td>
+            <td><span class="chip v">Verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Rolscreen retracts out of sight when not in use</td>
+            <td>Product positioning</td>
+            <td>This is the line's central differentiator and the most likely reason you sent the link. I could not open Pella's specification PDF to confirm the mechanism or its rated cycle life.</td>
+            <td><span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Footbolt provides additional ventilation and security</td>
+            <td>Video description, relayed</td>
+            <td>A footbolt lets the door lock in a partly-open position. Mechanically ordinary and offered by several manufacturers — real, but not distinctive.</td>
+            <td><span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Exceptional sound control and energy efficiency"</td>
+            <td>Marketing copy relayed by cost aggregators, not by Pella</td>
+            <td><strong>Unfalsifiable as phrased.</strong> No STC rating, no U-factor, no SHGC, no comparator. Meaningless until converted into numbers — which is exactly what §10's email asks for.</td>
+            <td><span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">"Beauty of wood at a more approachable price point"</td>
+            <td>Cost-aggregator paraphrase</td>
+            <td>Approachable relative to Pella's own Architect Series, not to the market. This is internal-range positioning being read as market positioning. Clad wood remains a premium class against vinyl.</td>
+            <td><span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Available with integrated blinds/shades between the glass</td>
+            <td>Cost-aggregator paraphrase</td>
+            <td>Plausible and consistent with the product line, but sourced from the layer your brief excludes. Confirm from Pella's own literature.</td>
+            <td><span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Implied: buying "Pella" means dealing with Pella</td>
+            <td>Structural implication of brand marketing</td>
+            <td><strong>The audit's real finding.</strong> The video is manufacturer-published, but nothing in this market is sold or installed by that manufacturer. Your counterparty is an independent regional distributor carrying a BBB grade of B− and two unanswered complaints. The brand's reputation and your contract's counterparty are different things.</td>
+            <td><span class="chip u">Contradiction surfaced</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="call amber">
+      <h4>Contradictions surfaced across the whole report</h4>
+      <ul class="small">
+        <li><strong>Almaden:</strong> "family-owned since 1995" vs. CSLB #1133114, a number in an early-2020s issuance range. Probably a re-incorporation — but the entity's age, not the family's, is what carries the bond and the complaint history. <span class="chip a">Ask</span></li>
+        <li><strong>Pella:</strong> a single consumer-facing brand resolving to at least two distinct legal entities with different BBB standings — one B−, one not accredited — plus a third-party record showing an inactive licence against one Pella-named entity. <span class="chip a">Ask</span></li>
+        <li><strong>Brothers:</strong> no contradiction found. Licence vintage, claimed founding year and BBB accreditation date all corroborate each other. Worth stating plainly, since it is the only clean result in the set.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10. PLAIN ENGLISH -->
+  <section class="card" id="plain">
+    <div><span class="sec-no">09</span> <span class="eyebrow">In plain English</span></div>
+    <h2>My assessment, in plain English</h2>
+
+    <h3>The situation, simply</h3>
+    <p>You saw a nice patio door in a video. It's a Pella. You want one, or something like it, in your house in San Jose. There are about five outfits who could do this job, and they fall into two camps: local family firms who will fit whatever door you buy, and brand operations who will only fit their own door.</p>
+    <p>I was asked to check them properly. I mostly couldn't. The state licence website — the one that says whether a contractor is real, insured and in trouble — is blocked from this computer. So is Yelp. So is the Better Business Bureau. So is Pella's own site. I've been straight about that everywhere below, and I've given you the phone numbers to finish the job in about twenty minutes.</p>
+
+    <h3>Why your priority beats price</h3>
+    <p>You didn't send me a budget. You sent me a door. So I've assumed you care more about getting the right door, fitted properly, than about saving four hundred dollars.</p>
+    <p>Here's why that's the right way round anyway. A patio door is the largest moving object in your house. It has wheels, a lock and a screen, and all of those wear out. The cheapest quote saves you money once. The wrong choice of <em>who supplies your parts</em> costs you every time something breaks for the next twenty years. I found a case in this market where a lock failed and the owner waited about two and a half months for the part, because only one company could sell it to them. That's the risk that actually matters, and it isn't on any price list.</p>
+
+    <h3>The recommendation</h3>
+    <p><strong>Start with Almaden Window &amp; Door.</strong></p>
+    <p class="small"><strong>The headline reason:</strong> they're in San Jose, they're independent, and they aren't tied to one factory — so when something breaks in ten years, you have options and they're ten minutes away.</p>
+    <p class="small">Then, in order:</p>
+    <ol class="ranked">
+      <li><strong>They can fit a Pella if you want one, or something better-value if you don't.</strong> The brand operations can only sell you their own door. Almaden can sell you the right one.</li>
+      <li><strong>A local firm has to live with its reputation.</strong> They're a few miles from you and their customers are your neighbours. A regional franchise dispatching from Hayward doesn't carry that pressure.</li>
+      <li><strong>Nothing bad turned up.</strong> No complaint pattern, no adverse record, no unanswered grievances. That's a weaker statement than it sounds — I couldn't open the registry — but it's better than what I found on two of the others.</li>
+    </ol>
+    <p class="small"><strong>The honest catch:</strong> there's much less evidence about them than about Brothers — 78 reviews against 512 — and their licence number looks about three years old while they claim to have been trading since 1995. That's probably a company re-registration and completely innocent. But you should ask, because the guarantee behind your contract belongs to the company, not the family.</p>
+
+    <h3>The runner-up</h3>
+    <p><strong>Brothers Home Improvement.</strong> They have the best evidence of anyone here by a distance — an independent consumer group surveyed 76 of their customers and 86% rated them superior, at prices about 1% below average, and their licence number genuinely does date from 1994 like they say. If Almaden's answer about the licence is unconvincing, go here without hesitating. The only catch is that they mainly do vinyl doors, which isn't the wood-and-glass door in your video. If you're relaxed about that, they might honestly be the better buy.</p>
+
+    <h3>Who you didn't pick, and why</h3>
+    <ul>
+      <li><strong>Renewal by Andersen</strong> — a large, competent, well-run operation, and their installers get real praise. But the complaints I found were about <em>patio doors specifically</em>: defective panels, a long wait for a lock part, a leak dispute. Wrong shape of risk for you. A different buyer could use them happily.</li>
+      <li><strong>Pella direct</strong> — the only people who can sell you the exact door from the video. Held back because the local Pella company scores B− with the BBB for not replying to two complaints, and there's no San Jose showroom. If the retracting screen is a must-have, go here anyway and use the contract protections in §07.</li>
+      <li><strong>Blossom Hill Glass</strong> — not really a competitor. Keep their number in case you decide to upgrade the glass instead of replacing the whole door.</li>
+      <li><strong>Home Depot and Lowe's</strong> — they subcontract the actual work, so you can't check who's turning up. That's the one thing I'd tell you never to accept on this job.</li>
+    </ul>
+
+    <div class="call red">
+      <h4>The uncomfortable part you should know</h4>
+      <p class="small">This report is thinner than it looks. It has the shape of a verified assessment, but I could not open a single primary record — not one licence, not one review, not one warranty document. Every fact here reached me second-hand through a search engine's summary of pages I never saw.</p>
+      <p class="small">I've marked all of that honestly, and the ranking is built on structural reasoning that doesn't depend on the missing data — locality, brand independence, parts risk — which is why I'll still stand behind it. But if you take one thing from this: <strong>spend twenty minutes at cslb.ca.gov and on the phone before you sign anything.</strong> That check is worth more than everything above it.</p>
+      <p class="small">And a fairness note on the other direction: I found nothing bad about Almaden or Blossom Hill, but a failed or impossible search is not evidence of a clean record. It is just an absence of evidence. I have not cleared anyone.</p>
+    </div>
+
+    <h3>What I'd actually do, in order</h3>
+    <ol class="ranked">
+      <li>Open <strong>cslb.ca.gov</strong> and look up #1133114 (Almaden) and #699009 (Brothers). Check status, expiry, bond and workers' comp. Five minutes each.</li>
+      <li>Call <strong>408-535-3555</strong> and ask whether your door swap needs a permit and roughly what it costs.</li>
+      <li>Send the three emails in §10 — identical scope, so the quotes actually compare.</li>
+      <li>While waiting, read the one-star reviews on each Yelp page, plus the "not recommended" section at the bottom. Watch how owners reply to criticism.</li>
+      <li>Take all three quotes. Expect the top one to be near double the bottom — that's normal here, and it's the spread, not the average, that tells you who's serious.</li>
+      <li>Before signing: deposit capped at the lesser of $1,000 or 10%, insurance certificate emailed by their broker directly to you, parts commitment in writing.</li>
+      <li>Only then sign — and let the contractor pull the permit in their name.</li>
+    </ol>
+  </section>
+
+  <!-- 11. EMAILS -->
+  <section class="card" id="emails">
+    <div><span class="sec-no">10</span> <span class="eyebrow">Outreach</span></div>
+    <h2>Copy-paste emails</h2>
+    <p class="small muted">Identical scope across all three so the quotes are genuinely comparable. Each asks for itemised pricing, an insurance certificate sent directly by the broker, and the guarantee in writing. Replace the bracketed details before sending.</p>
+
+    <div class="mail">
+      <div class="mail-hd"><span class="to">To: Almaden Window &amp; Door — the pick</span><button class="copy" data-t="m1">Copy</button></div>
+      <pre id="m1">Subject: Request for itemized quote — sliding patio door replacement, 95138
+
+Hello,
+
+I'm looking to replace one sliding patio door at my home in San Jose 95138 and would like to arrange a measurement visit and a written quote.
+
+Scope, so we're working from the same brief:
+- Remove and dispose of one existing sliding patio door
+- Supply and install one 2-panel sliding patio door, approx. 6 ft wide
+  (please confirm exact size on site)
+- Clad-wood construction preferred; I'm interested in a Pella Lifestyle
+  Series equivalent, and specifically want an INTEGRATED RETRACTABLE
+  SCREEN rather than an outboard track screen
+- All flashing and waterproofing to manufacturer specification
+- Interior and exterior trim, plus any stucco or siding patching
+- Interior wood finishing
+- Building permit pulled in your company's name
+
+Please could your quote itemize the following as separate lines:
+1. Door unit (make, series, model)
+2. Retractable screen
+3. Removal and disposal
+4. Installation labor
+5. Flashing and waterproofing
+6. Trim and patching
+7. Finishing
+8. Permit fee
+9. Sales tax
+
+Four things I'd like in writing with the quote:
+- Your CSLB license number and the exact legal entity name that would
+  be the contracting party
+- A certificate of insurance (general liability and workers' comp) sent
+  DIRECTLY TO ME BY YOUR INSURANCE BROKER, with me as certificate holder
+- Your written guarantee: what is covered, for how long, and whether
+  labor and parts are covered separately
+- A parts-availability statement: if a roller, latch or screen mechanism
+  fails in year 10, who supplies the part, and what is the typical lead
+  time?
+
+Two product questions: what are the U-factor and SHGC for the glazing you
+propose, and is there an STC or OITC sound rating available?
+
+One last question — I noticed your license number appears to have been
+issued relatively recently, while the business describes itself as
+serving the area since 1995. Is there a prior license number for the
+business? Purely for my records.
+
+Whoever performs the work: are they your employees or subcontractors?
+
+Thank you — happy to arrange a visit at your convenience.
+
+[Your name]
+[Address, San Jose, CA 95138]
+[Phone]</pre>
+    </div>
+
+    <div class="mail">
+      <div class="mail-hd"><span class="to">To: Brothers Home Improvement — the runner-up</span><button class="copy" data-t="m2">Copy</button></div>
+      <pre id="m2">Subject: Request for itemized quote — sliding patio door replacement, 95138
+
+Hello,
+
+I'm looking to replace one sliding patio door at my home in San Jose 95138 and would like to arrange a measurement visit and a written quote.
+
+Scope, so we're working from the same brief:
+- Remove and dispose of one existing sliding patio door
+- Supply and install one 2-panel sliding patio door, approx. 6 ft wide
+  (please confirm exact size on site)
+- I'd like to see TWO options priced separately:
+  (a) your standard vinyl sliding patio door, and
+  (b) a clad-wood door if you can supply one
+- In both cases I want an INTEGRATED RETRACTABLE SCREEN rather than an
+  outboard track screen, if available — please tell me if it isn't
+- All flashing and waterproofing to manufacturer specification
+- Interior and exterior trim, plus any stucco or siding patching
+- Interior finishing as required
+- Building permit pulled in your company's name
+
+Please could your quote itemize the following as separate lines:
+1. Door unit (make, series, model)
+2. Retractable screen
+3. Removal and disposal
+4. Installation labor
+5. Flashing and waterproofing
+6. Trim and patching
+7. Finishing
+8. Permit fee
+9. Sales tax
+
+Four things I'd like in writing with the quote:
+- Your CSLB license number and the exact legal entity name that would
+  be the contracting party
+- A certificate of insurance (general liability and workers' comp) sent
+  DIRECTLY TO ME BY YOUR INSURANCE BROKER, with me as certificate holder
+- Your written guarantee. Your website refers to a lifetime warranty and
+  lifetime coverage for accidental glass breakage — please confirm the
+  exact terms, what voids it, and whether it transfers if I sell
+- A parts-availability statement: if a roller, latch or screen mechanism
+  fails in year 10, who supplies the part, and what is the typical lead
+  time?
+
+Two product questions: what are the U-factor and SHGC for the glazing you
+propose, and is there an STC or OITC sound rating available?
+
+I understand you use your own employees rather than subcontractors —
+please confirm that applies to this job.
+
+Thank you — happy to arrange a visit at your convenience.
+
+[Your name]
+[Address, San Jose, CA 95138]
+[Phone]</pre>
+    </div>
+
+    <div class="mail">
+      <div class="mail-hd"><span class="to">To: Pella of Northern California — only if the Rolscreen is non-negotiable</span><button class="copy" data-t="m3">Copy</button></div>
+      <pre id="m3">Subject: Request for itemized quote — Lifestyle Series sliding patio door, San Jose 95138
+
+Hello,
+
+I'd like a written quote for a Pella Lifestyle Series sliding patio door
+at my home in San Jose 95138, and to arrange a measurement visit.
+
+Scope, so we're working from the same brief:
+- Remove and dispose of one existing sliding patio door
+- Supply and install one Lifestyle Series 2-panel sliding patio door,
+  approx. 6 ft wide (please confirm exact size on site), WITH ROLSCREEN
+- All flashing and waterproofing to manufacturer specification
+- Interior and exterior trim, plus any stucco or siding patching
+- Interior wood finishing
+- Building permit pulled in your company's name
+
+Please could your quote itemize the following as separate lines:
+1. Door unit (series and configuration)
+2. Rolscreen
+3. Removal and disposal
+4. Installation labor
+5. Flashing and waterproofing
+6. Trim and patching
+7. Finishing
+8. Permit fee
+9. Sales tax
+
+Five things I'd like in writing with the quote:
+- The exact legal entity that would be the contracting party, and its
+  CSLB license number. I've seen more than one Pella-named California
+  entity and I want to be clear which one I'd be contracting with
+- A certificate of insurance (general liability and workers' comp) sent
+  DIRECTLY TO ME BY YOUR INSURANCE BROKER, with me as certificate holder
+- The manufacturer's limited warranty document, AND your separate
+  installation-labor warranty — I'd like both, in full, before I decide
+- A parts-availability statement. This matters to me more than price: if
+  the Rolscreen mechanism, a roller or the multi-point latch fails in
+  year 10, who supplies the part, what is the typical lead time, and what
+  happens if the series has been discontinued by then?
+- Confirmation of who performs the installation — your employees or
+  subcontractors
+
+Two product questions: what are the U-factor and SHGC for the glazing you
+propose, and what is the STC or OITC sound rating? I've seen "exceptional
+sound control" in your marketing and would like the actual figures.
+
+Service question: since the nearest showroom is Hayward or Belmont, what
+is your response time for a warranty callback to San Jose 95138?
+
+Thank you — happy to arrange a visit at your convenience.
+
+[Your name]
+[Address, San Jose, CA 95138]
+[Phone]</pre>
+    </div>
+  </section>
+
+  <!-- 12. SOURCES -->
+  <section class="card" id="sources">
+    <div><span class="sec-no">11</span> <span class="eyebrow">Provenance</span></div>
+    <h2>Sources, including the ones that failed</h2>
+    <div class="call red">
+      <h4>Read this first — it governs every source below</h4>
+      <p class="small"><strong>I could not open any of these pages.</strong> This machine's egress policy returned a hard 403 for every research domain I attempted. Everything below was located and summarised for me by a search engine; I read snippets and summaries, never the pages themselves. Under your own rule — never cite anything you cannot open and read yourself — <em>none</em> of these fully qualifies. They are listed so you can close them yourself, not to imply they were verified.</p>
+    </div>
+
+    <h3>Tier 1 — Government &amp; regulator records</h3>
+    <div class="src"><span class="n">1.</span><span class="b"><span class="ttl">CSLB — Contractor licence lookup &amp; Home Improvement Contracts guidance · <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/">cslb.ca.gov/OnlineServices/CheckLicenseII/</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(California Contractors State License Board, Department of Consumer Affairs — the state agency that issues, renews and disciplines contractor licences and the authoritative record for licence status, bond and workers' comp. This is the single most important source in the report and I could not reach it. <strong>Close it yourself: look up #1133114 and #699009, or call 800-321-CSLB (2752).</strong> Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">2.</span><span class="b"><span class="ttl">City of San José — Development Services Permit Center · <a href="https://www.sanjoseca.gov/your-government/departments-offices/planning-building-code-enforcement/building-division/online-permits">sanjoseca.gov — building permits</a> · <strong>408-535-3555</strong> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(The municipal authority issuing building permits and inspecting work in San José — authoritative for permit requirements and fees on your specific address. Relayed content only. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">3.</span><span class="b"><span class="ttl">San José Building Code 2022, Chapter 24 "Glass and Glazing" · <a href="https://up.codes/viewer/san-jose/ca-building-code-2022/chapter/24/glass-and-glazing">up.codes — San José Building Code</a> <span class="chip n">Not opened</span></span><span class="why">(Third-party republisher of adopted municipal building codes — accurate as a mirror but not the city's own publication; the operative text is the code as adopted by San José. Cited for the safety-glazing point on sliding door panels. Relayed 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">4.</span><span class="b"><span class="ttl">ENERGY STAR — windows, doors &amp; skylights criteria · <a href="https://www.energystar.gov/products/windows_doors_skylights">energystar.gov</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(US EPA programme setting the U-factor and SHGC thresholds that define an efficient door in California's climate zone — the neutral benchmark against which any vendor's efficiency claim should be read. I could not retrieve the thresholds, which is why §10's emails ask vendors for the raw figures instead. Attempted 17 Aug 2026.)</span></span></div>
+
+    <h3>Tier 2 — Vendors' own published material</h3>
+    <div class="src"><span class="n">5.</span><span class="b"><span class="ttl">Pella — Northern California regional site and Lifestyle Series pages · <a href="https://www.pella.com/locations/northern-california/">pella.com/locations/northern-california/</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(The manufacturer's and regional distributor's own site — authoritative for product specification, warranty text and showroom locations, though promotional by nature. Regional line relayed as (510) 243-6964. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">6.</span><span class="b"><span class="ttl">Pella — Lifestyle Series sliding door specification PDF · <a href="https://media.pella.com/professional/adm/Clad-Wood-LS/Pella-LifestyleSeries-SlidingDoor.pdf">media.pella.com — Lifestyle Series slider spec</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(Manufacturer's technical specification sheet for architects and trade — would have given the U-factor, SHGC and sound ratings that §08 marks unverifiable. The most useful single document I failed to open. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">7.</span><span class="b"><span class="ttl">Brothers Home Improvement — San Jose windows &amp; doors · <a href="https://www.brotherswindows.com/san-jose-windows-doors/">brotherswindows.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Vendor's own marketing site — authoritative for what the company claims and legally accountable for it; not independent evidence. Source of the #699009 licence claim, the 1994 founding date, the no-subcontractors claim and the lifetime glass warranty. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">8.</span><span class="b"><span class="ttl">Almaden Window &amp; Door · <a href="https://almaden-windows.com/">almaden-windows.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Vendor's own site — source of the "family-owned since 1995" claim that §08 flags against the licence-number vintage. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">9.</span><span class="b"><span class="ttl">Blossom Hill Glass &amp; Mirror — retro-fit patio doors · <a href="https://www.blossomhillglass.com/residential/retro-fit-patio-doors/">blossomhillglass.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Vendor's own site — source of the "over 30 years" claim and the retro-fit scope that defines their special role. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">10.</span><span class="b"><span class="ttl">YouTube — "Pella Lifestyle Series Sliding Patio Door with Rolscreen" · <a href="https://www.youtube.com/watch?v=xhFeiPwxFMM">youtube.com/watch?v=xhFeiPwxFMM</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(The video you sent — manufacturer-published promotional content, evidence of Pella's claims rather than of performance. Title and 3 Oct 2019 publication date resolved via search; I never watched it. Attempted 17 Aug 2026.)</span></span></div>
+
+    <h3>Tier 3 — Review platforms &amp; accreditation bodies</h3>
+    <div class="src"><span class="n">11.</span><span class="b"><span class="ttl">Bay Area Consumers' Checkbook — window and door installer ratings, San Jose · <a href="https://www.checkbook.org/ca/san-jose/window-installers/ratings/">checkbook.org — San Jose window installers</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(Subscriber-funded nonprofit that accepts <strong>no advertising</strong> from the firms it rates and surveys customers directly — the most credible rating source in this report and the only one publishing comparative price data. Source of Brothers' 86%-superior/76-review figure, Almaden's 21 reviews, and the finding that the highest quote in this category can exceed the lowest by more than double. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">12.</span><span class="b"><span class="ttl">Better Business Bureau — profiles for Brothers Home Improvement, Almaden Window &amp; Door Construction, Pella Window &amp; Door Co. of California, Pella of Northern California, Renewal by Andersen of San Francisco · <a href="https://www.bbb.org/us/ca/san-jose/profile/windows/brothers-home-improvement-inc-1216-203386">bbb.org</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Private nonprofit accreditation body, not a regulator; grades weight complaint <em>responsiveness</em> heavily and accreditation is a paid relationship — read the grade as complaint-handling behaviour, not workmanship. Source of the B− grade, the two unanswered complaints, and all accreditation dates. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">13.</span><span class="b"><span class="ttl">Yelp — business pages for Brothers (≈300 reviews), Almaden (≈57), Pella Hayward (≈41), Pella SF (≈23), Renewal by Andersen (≈477) · <a href="https://www.yelp.com/biz/almaden-window-and-door-san-jose">yelp.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Large consumer review platform with an algorithmic filter; its "not recommended" queue often holds the most informative reviews and I could reach none of it. Review counts relayed via search; <strong>no star ratings and no customer quotes are reproduced anywhere in this report</strong> because I could not read a single review in context. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">14.</span><span class="b"><span class="ttl">Angi and HomeAdvisor — listings for Brothers, Almaden and Renewal by Andersen · <a href="https://www.angi.com/companylist/us/ca/san-jose/almaden-window-and-door-reviews-156071.htm">angi.com</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(Lead-generation marketplaces that charge contractors for placement — a commercial interest that makes their ratings weaker evidence than Checkbook's or a regulator's. Source of the relayed 4.4/5 for Renewal by Andersen. Treat as directional. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">15.</span><span class="b"><span class="ttl">BuildZoom — contractor records for Almaden Window &amp; Door Construction Inc and Pella Doors &amp; Windows of Northern California · <a href="https://www.buildzoom.com/contractor/almaden-window-door-construction-inc">buildzoom.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Commercial marketplace republishing CSLB licence data and scraped permit records — a <strong>mirror of source [1], never a substitute</strong>, with a commercial interest in listing contractors. Source of licence #1133114, the "inactive" note against a Pella entity, and the 473-permit figure. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">16.</span><span class="b"><span class="ttl">Houzz, Nextdoor, Porch, Birdeye — secondary listing pages for several candidates <span class="chip n">Not opened</span></span><span class="why">(Directory and reputation-aggregation platforms of varying independence; Birdeye and similar are vendor-controlled review widgets and are the weakest class cited here. Noted only to show where the residual review counts in §04 come from. Relayed 17 Aug 2026.)</span></span></div>
+
+    <h3>Tier 5 — Excluded, and why</h3>
+    <div class="src"><span class="n">17.</span><span class="b"><span class="ttl">Cost-aggregator pages: sthwindows.com, latestcost.com, risingsunartscentre.org, urbanexteriorsgb.com <span class="chip n">EXCLUDED as load-bearing</span></span><span class="why">(SEO "2026 cost guide" pages with no named authors, no methodology and probable affiliate relationships — the source class your brief excludes. They dominated every pricing search I ran. Cited in §06 <strong>only</strong> to disclose the origin of the widely-repeated $3,800–$7,000 figure, and explicitly not relied upon for any conclusion. Relayed 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">18.</span><span class="b"><span class="ttl">Contractor-licensing schools, surety brokers and insurance agency blogs (contractorslicensingschools.com, contractor-prep.com, suretyfirst.com and similar) <span class="chip n">Directional only</span></span><span class="why">(Commercial trade-service providers selling licensing courses and bonds — knowledgeable but with an interest in the subject, and not the regulator. Source of the $25,000 contractor bond and workers'-comp framing in §07; the operative authority is source [1]. Relayed 17 Aug 2026.)</span></span></div>
+
+    <div class="call amber">
+      <h4>My dead ends — close these yourself</h4>
+      <ul class="small">
+        <li><strong>CSLB licence verification</strong> — the biggest gap in this report. <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/">cslb.ca.gov/OnlineServices/CheckLicenseII/</a> or <strong>800-321-2752</strong>. Look up <span class="num">#1133114</span> and <span class="num">#699009</span>; ask Pella and Renewal by Andersen for theirs.</li>
+        <li><strong>Permit requirement and fee for your address</strong> — San José Development Services, <strong>408-535-3555</strong>.</li>
+        <li><strong>Pella regional distributor</strong> — <strong>(510) 243-6964</strong>. Ask which legal entity contracts, and its licence number.</li>
+        <li><strong>Blossom Hill Glass licence number</strong> — never surfaced at all. Ask them directly, then check it at [1].</li>
+        <li><strong>Star ratings on every platform</strong> — I have review counts but almost no scores. Twenty minutes on Yelp, BBB and Checkbook closes this.</li>
+        <li><strong>Yelp's "not recommended" queue</strong> for all five vendors — unreachable, and usually the most informative part of the page.</li>
+        <li><strong>Pella Lifestyle U-factor, SHGC and STC</strong> — source [6] would have them; §10's emails ask the vendors instead.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 13. FINAL VERDICT -->
+  <section class="final" id="final">
+    <div class="eyebrow">The closing argument</div>
+    <h2>Final verdict</h2>
+
+    <p class="pick">Hire <strong>Almaden Window &amp; Door</strong> — call them this week, book the measurement, and run them through the elimination rule before you pay a cent.</p>
+
+    <hr>
+
+    <h3 style="color:#fff">Why I chose it</h3>
+    <p>Because your priority, as I read it from a product video rather than a budget, is a door that still works properly in fifteen years — and the thing that decides that isn't the brand on the glass, it's who can get you a roller when one fails.</p>
+    <p>The evidence that moved me most was not about Almaden at all. It was the complaint pattern against Renewal by Andersen: a lock failing at year four, roughly ten weeks waiting on a proprietary part, a warranty threatened when the owner brought in outside help. I gave that heavy weight — not as a mark against that company specifically, but as a demonstration of how the failure mode works in this product category. Then I looked at who is structurally exposed to it. Both brand operations are; the independents aren't. That single structural fact does more work in this decision than any star rating, and it survives the fact that I couldn't open the registries.</p>
+    <p>Almaden wins among the independents on locality and flexibility: same city as you, multi-brand, and able to quote the video's door or a better-value equivalent rather than being obliged to sell one factory's product. I gave moderate weight to the absence of anything adverse in their record, and I want to be honest that it is <em>moderate</em> — I couldn't open the registry, so an empty result is thin. I gave near-zero weight to review volume in either direction, because volume in this category tracks marketing spend, not workmanship.</p>
+
+    <hr>
+
+    <h3 style="color:#fff">Why I eliminated each of the others</h3>
+    <div class="kill">
+      <div class="nm">Brothers Home Improvement — stays as the back-up, and it's a strong one</div>
+      <p class="small">Genuinely the best-evidenced vendor here: 86% of 76 surveyed customers rating them superior at slightly below-average prices, from an advertising-free nonprofit, plus a licence number whose vintage independently corroborates their 1994 founding claim. That last point is the only marketing claim in this entire report that checks out against a second record. What knocked them out was product class, not quality — they are a vinyl retrofit specialist, and the door you sent me is clad wood with an integrated retracting screen. <strong>Back-up: yes, first reserve.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Pella of Northern California — stays as the back-up if the Rolscreen is non-negotiable</div>
+      <p class="small">Uniquely good at the one thing nobody else can do: they are the only route to the actual door in your video. Knocked out by the combination of a BBB grade of B− driven by <strong>failure to respond to two complaints</strong> and the total absence of a South Bay showroom — the same vendor owning both your parts monopoly and a documented responsiveness problem, at 30 miles' distance. <strong>Back-up: yes, but only if you decide the retracting screen is worth that exposure — and then use §07's contract protections hard.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Renewal by Andersen of San Francisco — not a back-up</div>
+      <p class="small">A large, competent, well-marketed operation whose installers earn real individual praise, accredited continuously since 2010. Knocked out because the specific complaint pattern I found lands on <em>patio doors</em> — defective panels replaced with more defective panels, the multi-month lock part, the flashing dispute. Those are precisely the failure modes that matter for this purchase, on precisely this product. A buyer optimising for a turnkey national warranty could reasonably still choose them; you aren't that buyer. <strong>Back-up: no.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Blossom Hill Glass &amp; Mirror — different job, keep the number</div>
+      <p class="small">Thirty-odd years of retro-fit and glass specialism, and the highest parts independence in the set. Knocked out only because they can't do the job you asked about. If the quotes come back high and you decide a glass-and-panel upgrade gets you most of the way, they become the right call immediately. <strong>Back-up: for a different scope.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Home Depot / Lowe's install programmes — not a back-up</div>
+      <p class="small">Real convenience, real buying power, and often the same local crews. Knocked out on a single structural point: you cannot assess an installer whose identity isn't fixed until after you've signed. That is the direct inverse of your elimination rule. <strong>Back-up: no.</strong></p>
+    </div>
+
+    <hr>
+
+    <h3 style="color:#fff">What would change my mind</h3>
+    <p><strong>Almaden's licence history.</strong> If CSLB shows #1133114 issued recently <em>and</em> there is no predecessor licence tying the entity to the claimed 1995 founding — meaning the company carrying your bond and your warranty is a few years old with a correspondingly short disciplinary record — <strong>I flip to Brothers Home Improvement</strong> immediately, and accept a vinyl door as the trade-off. One lookup at cslb.ca.gov decides it.</p>
+    <p>A second, narrower trigger: if Almaden cannot source a clad-wood slider with an integrated retracting screen at all, and that screen turns out to be non-negotiable for you, the pick moves to <strong>Pella of Northern California</strong> — with every protection in §07 written into the contract.</p>
+
+    <hr>
+
+    <h3 style="color:#fff">Confidence, and what sits unconfirmed underneath it</h3>
+    <p><span class="chip u">Low–moderate confidence</span> — and the split matters. I hold the <em>structural</em> reasoning with reasonable confidence: independent beats proprietary on twenty-year parts risk, local beats regional on warranty callbacks, and identical-scope quotes beat published price ranges. None of that depends on the data I couldn't reach.</p>
+    <p>I hold the <em>vendor-specific</em> ranking loosely, because underneath it: not one contractor licence was confirmed at source; no bond amount, workers' comp status or disciplinary history was seen for anyone; no star rating was independently confirmed; no warranty document was read; no customer review was read in full, which is why none is quoted; and the cost table rests on a source class your brief rightly excludes. Every adverse finding against Pella and Renewal by Andersen is search-relayed and unconfirmed — I would not want either company judged on it without you seeing the pages yourself.</p>
+    <p>Act on the pick today by booking the visit. Don't sign until the licence lookup is done.</p>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll("button.copy").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var el = document.getElementById(btn.dataset.t);
+      if(!el) return;
+      var done = function(){
+        var prev = btn.textContent;
+        btn.textContent = "Copied";
+        btn.classList.add("ok");
+        setTimeout(function(){ btn.textContent = prev; btn.classList.remove("ok"); }, 1800);
+      };
+      var text = el.innerText;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+      } else {
+        fallback(text, done);
+      }
+    });
+  });
+  function fallback(text, done){
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+</script>
