@@ -1,0 +1,1480 @@
+<title>Carpet Cleaning RAC — South San Jose</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#eef1f6; --bg2:#e6eaf1;
+    --card:#ffffff; --card2:#f7f9fc;
+    --ink:#18202f; --ink2:#3d4759; --muted:#68728a; --faint:#8a93a6;
+    --line:#e3e8f0; --line2:#eef2f8;
+    --accent:#2159d6; --accent-ink:#1642a8; --accent-soft:#e7eefc;
+    --good:#137a3b;  --good-bg:#e3f5ea;  --good-line:#bfe6cd;
+    --warn:#9a5b06;  --warn-bg:#fdf1d8;  --warn-line:#f4dca6;
+    --bad:#b3251f;   --bad-bg:#fce7e5;   --bad-line:#f4c6c2;
+    --ask:#4a5570;   --ask-bg:#eceff5;   --ask-line:#d6dcea;
+    --shadow:0 1px 2px rgba(24,32,47,.04), 0 6px 20px rgba(24,32,47,.06);
+    --shadow-lg:0 2px 4px rgba(24,32,47,.05), 0 16px 44px rgba(24,32,47,.10);
+    --radius:14px; --radius-sm:9px;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+      --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+      --line:#2a3444; --line2:#232c3a;
+      --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+      --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+      --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+      --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+      --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+    --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+    --line:#2a3444; --line2:#232c3a;
+    --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+    --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+    --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+    --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+    --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+  }
+
+  /* ============ BASE ============ */
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-size:16.5px; line-height:1.62;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:0 20px 90px}
+  h1,h2,h3,h4{line-height:1.2; text-wrap:balance; margin:0}
+  p{margin:0 0 14px}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  strong{font-weight:650}
+  section{margin-top:30px}
+  .card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 28px;
+  }
+  .card + .card{margin-top:18px}
+  .sec-eyebrow{
+    font-size:12px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--accent-ink); font-weight:700; margin-bottom:8px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .sec-eyebrow .n{
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+    border:1px solid var(--line); border-radius:5px; padding:1px 6px; background:var(--card2);
+  }
+  h2.sec-title{font-size:26px; letter-spacing:-.02em; margin-bottom:6px}
+  .sec-sub{color:var(--muted); font-size:15px; margin-bottom:18px}
+  h3.blk{font-size:18.5px; letter-spacing:-.01em; margin:22px 0 10px}
+  h4.mini{font-size:14px; letter-spacing:.02em; margin:16px 0 8px; color:var(--ink2)}
+
+  /* ============ CHIPS ============ */
+  .chip{
+    display:inline-flex; align-items:center; gap:5px; font-size:11.5px;
+    font-weight:650; letter-spacing:.02em; padding:2px 9px; border-radius:100px;
+    border:1px solid var(--line); white-space:nowrap; vertical-align:middle; font-family:var(--sans);
+  }
+  .chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.8}
+  .chip.good{color:var(--good); background:var(--good-bg); border-color:var(--good-line)}
+  .chip.warn{color:var(--warn); background:var(--warn-bg); border-color:var(--warn-line)}
+  .chip.bad{color:var(--bad); background:var(--bad-bg); border-color:var(--bad-line)}
+  .chip.ask{color:var(--ask); background:var(--ask-bg); border-color:var(--ask-line)}
+  .chip.plain{color:var(--ink2); background:var(--card2)}
+  .chip.plain::before{display:none}
+
+  /* ============ CITATIONS ============ */
+  .cite{
+    font-size:12.5px; color:var(--muted); border-left:3px solid var(--line);
+    background:var(--card2); padding:8px 12px; border-radius:0 8px 8px 0; margin:10px 0 16px;
+  }
+  .cite .src{color:var(--ink2); font-weight:600}
+  .cite .why{display:block; font-style:italic; color:var(--muted); margin-top:2px; font-size:12px}
+
+  /* ============ BANNER ============ */
+  .banner{
+    background:linear-gradient(180deg,var(--warn-bg),var(--card));
+    border:1px solid var(--warn-line); border-radius:var(--radius);
+    padding:16px 20px; margin-top:20px; box-shadow:var(--shadow);
+    font-size:13.5px; color:var(--ink2);
+  }
+  .banner .row1{display:flex; align-items:center; gap:10px; font-weight:700; color:var(--warn); font-size:13px; letter-spacing:.03em; text-transform:uppercase; margin-bottom:7px}
+
+  /* ============ HERO ============ */
+  .hero{
+    margin-top:22px;
+    background:radial-gradient(120% 140% at 88% -10%, var(--accent-soft), transparent 55%), var(--card);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-lg);
+    overflow:hidden; position:relative;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:0}
+  .hero-l{padding:36px 34px 32px}
+  .hero-r{position:relative; min-height:300px; border-left:1px solid var(--line2); background:var(--card2)}
+  .hero .kicker{font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-ink); font-weight:700}
+  .hero h1{font-size:44px; letter-spacing:-.03em; margin:12px 0 8px; line-height:1.03}
+  .hero h1 .rac{color:var(--accent)}
+  .hero .lede{font-size:16px; color:var(--ink2); max-width:46ch}
+  .hero .expand{font-size:13px; color:var(--muted); margin-top:14px; display:flex; flex-wrap:wrap; gap:6px 16px}
+  .hero .expand b{color:var(--ink); font-weight:700}
+  .hero svg{display:block; width:100%; height:100%; position:absolute; inset:0}
+
+  /* ============ TOC ============ */
+  .toc{margin-top:18px}
+  .toc ol{list-style:none; margin:0; padding:0; columns:2; column-gap:26px}
+  .toc li{break-inside:avoid; margin-bottom:2px}
+  .toc a{display:flex; gap:10px; padding:7px 10px; border-radius:8px; color:var(--ink2); font-size:14px; align-items:baseline}
+  .toc a:hover{background:var(--card2); text-decoration:none; color:var(--ink)}
+  .toc .tn{font-family:var(--mono); font-size:12px; color:var(--accent); min-width:20px}
+
+  /* ============ VERDICT BOX ============ */
+  .verdict{
+    background:linear-gradient(155deg,var(--good-bg),var(--card) 70%);
+    border:1.5px solid var(--good-line); border-radius:var(--radius);
+    padding:24px 26px; box-shadow:var(--shadow);
+  }
+  .verdict .vtag{display:inline-flex; gap:7px; align-items:center; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--good)}
+  .verdict h3{font-size:23px; margin:10px 0 4px; letter-spacing:-.02em}
+  .verdict h3 .pk{color:var(--good)}
+  .verdict .vrow{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px}
+  .vcell{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px}
+  .vcell .lab{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:4px}
+  .vcell .who{font-size:16px; font-weight:700; letter-spacing:-.01em}
+  .vcell .note{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; box-shadow:var(--shadow)}
+  .stat .big{font-size:29px; font-weight:750; letter-spacing:-.03em; color:var(--accent); line-height:1; font-variant-numeric:tabular-nums}
+  .stat .cap{font-size:12.5px; color:var(--ink2); margin-top:7px; line-height:1.4}
+  .stat .sub{font-size:11px; color:var(--faint); margin-top:5px}
+
+  .callout{
+    border:1.5px solid var(--accent); border-radius:var(--radius);
+    background:linear-gradient(160deg,var(--accent-soft),var(--card) 65%);
+    padding:20px 24px; margin-top:16px; box-shadow:var(--shadow);
+  }
+  .callout .ctitle{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-ink); font-weight:800; margin-bottom:7px; display:flex; align-items:center; gap:8px}
+  .callout h3{font-size:20px; letter-spacing:-.02em; margin-bottom:8px}
+  .callout p{font-size:15px; color:var(--ink2); margin-bottom:8px}
+
+  /* ============ TABLES ============ */
+  .tscroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); background:var(--card)}
+  table{border-collapse:collapse; width:100%; font-size:14px; min-width:640px}
+  .matrix{min-width:900px}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line2); vertical-align:top}
+  thead th{
+    position:sticky; top:0; background:var(--card2); z-index:2;
+    font-size:12px; letter-spacing:.03em; text-transform:uppercase; color:var(--muted);
+    font-weight:700; border-bottom:1.5px solid var(--line);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.crit, th.crit{font-weight:650; color:var(--ink); background:var(--card2); position:sticky; left:0; z-index:1; min-width:158px}
+  thead th.crit{z-index:3}
+  .cellwin{background:var(--good-bg); box-shadow:inset 3px 0 0 var(--good)}
+  .cellwin strong{color:var(--good)}
+  td.num{font-variant-numeric:tabular-nums}
+  .vrowfin td{background:var(--accent-soft); font-weight:650; border-top:1.5px solid var(--accent)}
+  .tnote{font-size:12px; color:var(--muted); margin-top:8px}
+
+  /* ============ PROFILES ============ */
+  .rankbadge{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:var(--accent); color:#fff; font-weight:750; font-size:15px}
+  .prof-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .prof-head h3{font-size:21px; letter-spacing:-.02em}
+  .factsheet{font-size:13.5px; color:var(--ink2); background:var(--card2); border:1px solid var(--line2); border-radius:9px; padding:11px 14px; margin:12px 0}
+  .quote{border-left:3px solid var(--accent); padding:4px 0 4px 15px; margin:12px 0; color:var(--ink2); font-style:italic}
+  .quote .attr{display:block; font-style:normal; font-size:12.5px; color:var(--muted); margin-top:5px}
+  .against{background:var(--bad-bg); border:1px solid var(--bad-line); border-radius:10px; padding:13px 16px; margin-top:12px}
+  .against .h{font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:800; color:var(--bad); margin-bottom:6px}
+  .against p{font-size:13.5px; color:var(--ink2); margin:0}
+  .deadend{font-size:12.5px; color:var(--muted); border:1px dashed var(--line); border-radius:9px; padding:10px 13px; margin-top:12px; background:var(--card2)}
+  .deadend b{color:var(--warn)}
+  .deadend a{font-family:var(--mono); font-size:11.5px; word-break:break-all}
+
+  ul.tick{list-style:none; margin:6px 0 14px; padding:0}
+  ul.tick li{position:relative; padding-left:24px; margin-bottom:7px; font-size:14.5px; color:var(--ink2)}
+  ul.tick li::before{content:""; position:absolute; left:2px; top:8px; width:9px; height:9px; border-radius:2px; background:var(--accent)}
+  ul.tick.g li::before{background:var(--good)}
+  ul.tick.r li::before{background:var(--bad)}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .subcard{background:var(--card2); border:1px solid var(--line2); border-radius:10px; padding:16px 18px}
+  .subcard h4{font-size:15px; margin-bottom:8px; letter-spacing:-.01em}
+
+  /* email */
+  .email{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:0; margin-top:14px; overflow:hidden}
+  .email-bar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 16px; background:var(--card); border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .email-bar .to{font-size:13px; color:var(--ink2)} .email-bar .to b{color:var(--ink)}
+  .copybtn{font-family:var(--sans); font-size:12.5px; font-weight:650; color:#fff; background:var(--accent); border:none; border-radius:7px; padding:7px 14px; cursor:pointer; transition:background .15s}
+  .copybtn:hover{background:var(--accent-ink)}
+  .copybtn.done{background:var(--good)}
+  .email pre{margin:0; padding:16px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.6; color:var(--ink2); white-space:pre-wrap; word-wrap:break-word}
+
+  /* sources */
+  .srcgroup{margin-top:18px}
+  .srcgroup h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+  ol.srclist{margin:0; padding-left:0; list-style:none}
+  ol.srclist li{position:relative; padding:8px 0 8px 38px; border-bottom:1px solid var(--line2); font-size:13px}
+  ol.srclist li .sn{position:absolute; left:0; top:9px; font-family:var(--mono); font-size:11px; color:var(--accent); background:var(--accent-soft); border-radius:5px; min-width:28px; height:20px; display:flex; align-items:center; justify-content:center; font-weight:700}
+  ol.srclist .why{display:block; font-style:italic; color:var(--muted); font-size:12px; margin-top:2px}
+  ol.srclist .u{color:var(--muted); word-break:break-all; font-family:var(--mono); font-size:11.5px}
+
+  /* final verdict */
+  .final{
+    background:linear-gradient(165deg,#0f2a5e,#123a86 55%,#0d244f);
+    color:#eaf1ff; border-radius:20px; padding:34px 34px 30px; margin-top:34px;
+    box-shadow:var(--shadow-lg); border:1px solid #1e4aa0;
+  }
+  .final .fk{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:#9dc0ff; font-weight:800}
+  .final h2{font-size:28px; letter-spacing:-.02em; margin:10px 0 14px; color:#fff}
+  .final p{color:#d3e1fb; font-size:15.5px}
+  .final .pick1{font-size:19px; color:#fff; font-weight:650; border-left:4px solid #6f9bff; padding-left:16px; margin:0 0 20px}
+  .final h4{color:#fff; font-size:15px; margin:22px 0 8px; letter-spacing:.02em}
+  .final .elim{border-top:1px solid #24509f; padding:12px 0; display:grid; grid-template-columns:150px 1fr; gap:16px}
+  .final .elim .nm{font-weight:700; color:#fff; font-size:14px}
+  .final .elim .bd{color:#cfe0fb; font-size:13.5px}
+  .final .conf{margin-top:22px; background:rgba(255,255,255,.07); border:1px solid #2a5aad; border-radius:12px; padding:16px 18px}
+  .final .conf .lab{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#9dc0ff; font-weight:800; margin-bottom:6px}
+  .final a{color:#a9c4ff}
+  .final .backup{display:inline-block; font-size:11px; font-weight:700; color:#0d244f; background:#9dc0ff; border-radius:5px; padding:1px 7px; margin-left:8px; letter-spacing:.03em}
+
+  .foot{margin-top:26px; text-align:center; color:var(--faint); font-size:12px; line-height:1.7}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-r{min-height:200px; border-left:none; border-top:1px solid var(--line2)}
+    .hero h1{font-size:36px}
+    .stats{grid-template-columns:1fr 1fr}
+    .verdict .vrow{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    .grid2{grid-template-columns:1fr}
+    .final .elim{grid-template-columns:1fr; gap:2px}
+  }
+  @media (max-width:480px){
+    body{font-size:16px}
+    .card{padding:20px 18px}
+    .stats{grid-template-columns:1fr}
+    .hero-l{padding:26px 22px}
+  }
+  @media print{
+    body{background:#fff}
+    .card,.hero,.verdict,.tscroll,.stat,.callout{box-shadow:none}
+    .copybtn{display:none}
+    .final{background:#0f2a5e !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    a{color:var(--ink)}
+    section{break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px}
+</style>
+
+<div class="wrap">
+
+  <!-- ===== CONFIDENTIALITY BANNER ===== -->
+  <div class="banner" role="note">
+    <div class="row1">🔒 Confidential — prepared for a homeowner in San Jose, CA 95138 · Internal decision document</div>
+    <p style="margin:0">All facts in this report were read on <b>17 August 2026</b> and are date-stamped at the point of use. Prices are published ranges as of that date and <b>will drift</b> — re-confirm before you book. This document names real local businesses and commits to a single recommendation; treat it as advice, not a contract, and not as a statement about anyone's character.</p>
+    <p style="margin:8px 0 0"><b>Sourcing method — read this first.</b> This environment's network policy blocked direct page loads to <em>every</em> vendor site, regulator site and review platform (sapphiresteamer.com, yelp.com, cslb.ca.gov, bbb.org, iicrc.org — all returned <span style="font-family:var(--mono);font-size:11.5px">EGRESS_BLOCKED</span>). Research was therefore gathered through <b>web search that surfaces those pages' own text</b>, not by rendering each primary page myself. Every figure is attributed to the correct official URL, but is labelled <span class="chip warn" style="margin:0 2px">Search-derived</span> unless independently corroborated. Where a number could not be pinned to a source it is tagged <span class="chip bad" style="margin:0 2px">Not verified</span>. <b>No customer quote has been invented</b> — see the dead-end note in each profile and §11 for the URLs and phone numbers to close every open item yourself.</p>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-l">
+        <div class="kicker">Residential carpet, upholstery &amp; tile care · South San Jose</div>
+        <h1>Carpet Cleaning <span class="rac">RAC</span></h1>
+        <p class="lede"><strong>R</strong>esearch · <strong>A</strong>ssessment · <strong>C</strong>omparison — five Santa Clara County cleaners assessed against the service mix published by Sapphire Steamer, for a home in <strong>95138</strong>.</p>
+        <div class="expand">
+          <span>Reframe: <b>there is no state licence for this trade</b></span>
+          <span>Real lever: <b>the insurance endorsement</b></span>
+          <span>Expected spend: <b>$325–$475</b></span>
+        </div>
+      </div>
+      <div class="hero-r" aria-hidden="true">
+        <svg viewBox="0 0 420 320" preserveAspectRatio="xMidYMid slice" role="img">
+          <defs>
+            <linearGradient id="wand" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#2159d6"/><stop offset="1" stop-color="#123a86"/>
+            </linearGradient>
+            <linearGradient id="cleanpile" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#dfe9fb"/><stop offset="1" stop-color="#b9cdf2"/>
+            </linearGradient>
+          </defs>
+          <!-- carpet backing -->
+          <rect x="0" y="236" width="420" height="84" fill="#cfd7e6"/>
+          <!-- dirty pile (right) -->
+          <rect x="196" y="196" width="224" height="42" fill="#b7b19d"/>
+          <g stroke="#a49d86" stroke-width="3" stroke-linecap="round">
+            <path d="M206 236 v-34"/><path d="M220 236 v-38"/><path d="M234 236 v-32"/><path d="M248 236 v-37"/>
+            <path d="M262 236 v-33"/><path d="M276 236 v-39"/><path d="M290 236 v-31"/><path d="M304 236 v-36"/>
+            <path d="M318 236 v-34"/><path d="M332 236 v-38"/><path d="M346 236 v-32"/><path d="M360 236 v-37"/>
+            <path d="M374 236 v-34"/><path d="M388 236 v-38"/><path d="M402 236 v-33"/>
+          </g>
+          <!-- clean pile (left) -->
+          <rect x="0" y="192" width="196" height="46" fill="url(#cleanpile)"/>
+          <g stroke="#8fb0e8" stroke-width="3" stroke-linecap="round">
+            <path d="M10 236 v-42"/><path d="M24 236 v-42"/><path d="M38 236 v-42"/><path d="M52 236 v-42"/>
+            <path d="M66 236 v-42"/><path d="M80 236 v-42"/><path d="M94 236 v-42"/><path d="M108 236 v-42"/>
+            <path d="M122 236 v-42"/><path d="M136 236 v-42"/><path d="M150 236 v-42"/><path d="M164 236 v-42"/>
+            <path d="M178 236 v-42"/><path d="M192 236 v-42"/>
+          </g>
+          <!-- extraction wand -->
+          <g>
+            <rect x="176" y="150" width="44" height="52" rx="7" fill="url(#wand)"/>
+            <rect x="186" y="162" width="24" height="6" rx="3" fill="#ffffff" opacity=".55"/>
+            <rect x="191" y="52" width="14" height="104" rx="7" fill="url(#wand)"/>
+            <rect x="182" y="40" width="32" height="18" rx="8" fill="#123a86"/>
+            <!-- steam -->
+            <g fill="none" stroke="#6f9bff" stroke-width="2.4" stroke-linecap="round" opacity=".65">
+              <path d="M160 150 q-10 -16 0 -30 q10 -14 0 -28"/>
+              <path d="M240 158 q10 -16 0 -30 q-10 -14 0 -26"/>
+            </g>
+          </g>
+          <!-- COI shield document, foreground -->
+          <g transform="rotate(-6 328 92)">
+            <rect x="272" y="30" width="112" height="128" rx="8" fill="#ffffff" stroke="#d7deea" stroke-width="1.5"/>
+            <rect x="286" y="46" width="58" height="7" rx="3.5" fill="#c3ccdb"/>
+            <rect x="286" y="62" width="82" height="4.5" rx="2.2" fill="#e3e8f0"/>
+            <rect x="286" y="73" width="74" height="4.5" rx="2.2" fill="#e3e8f0"/>
+            <path d="M328 92 l26 10 v20 c0 16 -12 26 -26 32 c-14 -6 -26 -16 -26 -32 v-20 z" fill="#e3f5ea" stroke="#137a3b" stroke-width="1.8"/>
+            <path d="M317 124 l8 8 l16 -17" fill="none" stroke="#137a3b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOC ===== -->
+  <section class="card toc" aria-label="Table of contents">
+    <div class="sec-eyebrow"><span class="n">TOC</span> What's in this report</div>
+    <ol>
+      <li><a href="#call"><span class="tn">01</span> The call — verdict, stats &amp; the reframe</a></li>
+      <li><a href="#evidence"><span class="tn">02</span> What we're working with</a></li>
+      <li><a href="#matrix"><span class="tn">03</span> Comparison matrix</a></li>
+      <li><a href="#ratings"><span class="tn">04</span> Ratings — every platform</a></li>
+      <li><a href="#profiles"><span class="tn">05</span> Candidate profiles, ranked</a></li>
+      <li><a href="#cost"><span class="tn">06</span> What this should cost</a></li>
+      <li><a href="#policy"><span class="tn">07</span> The policy layer</a></li>
+      <li><a href="#audit"><span class="tn">08</span> Claim-by-claim audit — Sapphire Steamer</a></li>
+      <li><a href="#plain"><span class="tn">09</span> My assessment, in plain English</a></li>
+      <li><a href="#emails"><span class="tn">10</span> Copy-paste emails to the top vendors</a></li>
+      <li><a href="#sources"><span class="tn">11</span> Numbered sources &amp; dead ends</a></li>
+      <li><a href="#final"><span class="tn">12</span> Final verdict</a></li>
+    </ol>
+  </section>
+
+  <!-- ===== 01 THE CALL ===== -->
+  <section id="call">
+    <div class="sec-eyebrow"><span class="n">01</span> The call</div>
+    <h2 class="sec-title">The verdict, up front</h2>
+    <p class="sec-sub">One pick, one runner-up, one special-role option — and the finding that decides all of them.</p>
+
+    <div class="verdict">
+      <div class="vtag">✓ Recommendation</div>
+      <h3>Book <span class="pk">Sapphire Steamer</span> — conditional on one document arriving before they park in your driveway.</h3>
+      <p style="margin:0; color:var(--ink2); font-size:15px">It is the only candidate whose reviews describe <em>the person who will actually be in your house</em>. Sapphire Steamer is owner-operated by Bret Furtado, and it carries a <strong>5.0</strong> on both Yelp (75 reviews) and Google (107 reviews) — roughly 182 ratings without a visible dissent. It publishes exactly the four services in your scope: carpet, upholstery, leather and tile &amp; grout. <strong>The condition:</strong> a broker-issued certificate of insurance showing care, custody &amp; control cover. Without it, move to the runner-up. <span class="chip warn">Search-derived ratings</span></p>
+      <div class="vrow">
+        <div class="vcell">
+          <div class="lab">The pick</div>
+          <div class="who">Sapphire Steamer</div>
+          <div class="note">Owner-operated, 5.0 across two platforms, full service mix. ~9 mi from 95138.</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Runner-up</div>
+          <div class="who">Dalux Carpet &amp; Upholstery</div>
+          <div class="note">4.9 across 299 Yelp reviews — the deepest verified review base at a near-perfect rating. Same-day available.</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Special role</div>
+          <div class="who">A Diamond Certified firm</div>
+          <div class="note">If you want audited third-party verification and a mediation backstop rather than platform stars — pay the premium for it.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="big">0</div>
+        <div class="cap">California state licences that exist for carpet <em>cleaning</em></div>
+        <div class="sub">CSLB classifies flooring <em>installation</em> (C-15), not cleaning</div>
+      </div>
+      <div class="stat">
+        <div class="big">$183</div>
+        <div class="cap">National average carpet-cleaning job, 2026</div>
+        <div class="sub">Typical range $123–$242 · Angi, 2026 data</div>
+      </div>
+      <div class="stat">
+        <div class="big">182</div>
+        <div class="cap">Sapphire Steamer ratings at 5.0, across Yelp + Google</div>
+        <div class="sub">75 Yelp · 107 Google · read 17 Aug 2026</div>
+      </div>
+      <div class="stat">
+        <div class="big">$299</div>
+        <div class="cap">Steamer Pros' published minimum for Santa Clara County</div>
+        <div class="sub">Above the national <em>average whole job</em></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ctitle">◆ The finding that reframes everything</div>
+      <h3>"Licensed and insured" — the phrase every one of these companies uses — is close to meaningless in this trade, and the insurance half is the dangerous half.</h3>
+      <p><strong>The licence half.</strong> There is no California state licence for carpet cleaning. The Contractors State License Board licenses <em>construction</em>; its flooring class, C-15, covers preparing surfaces and <em>installing</em> carpet, not cleaning it. Cleaning that doesn't alter the structure falls outside the licensing scheme entirely. So "licensed" here means a <em>City of San José business tax certificate</em> — a registration anyone can obtain by paying a tax. There is no exam, no bond, no disciplinary file, and no complaint history for you to search. The consumer-protection apparatus you instinctively assume sits behind the word "licensed" does not exist for this purchase.</p>
+      <div class="cite">
+        <span class="src">Source: CSLB — Licensing Classifications, C-15 Flooring &amp; Floor Covering · cslb.ca.gov/about_us/library/licensing_classifications/</span>
+        <span class="why">(California Contractors State License Board — the state agency that issues, renews and disciplines contractor licences and defines every trade classification; the authoritative record for what is and isn't a licensed trade. Read 17 Aug 2026 via search; direct page load blocked.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: City of San José — Business Tax &amp; Registration, SJMC §4.76 · sanjoseca.gov/your-government/departments-offices/finance/business-tax-registration</span>
+        <span class="why">(The city Finance Department page setting the registration duty; San José Municipal Code requires every business operating in the city — including home-based and mobile ones — to register within 90 days. This is the only "licence" a carpet cleaner here actually needs. Read 17 Aug 2026.)</span>
+      </div>
+      <p style="margin-top:14px"><strong>The insurance half — this is the part that can cost you money.</strong> A standard commercial general liability policy contains a <em>care, custody and control</em> exclusion: it does not pay for damage to the customer's property that was in the contractor's care while they worked on it. Read that again against this job. The thing in their care is your carpet, your sofa, your wool rug, your hardwood at the room transitions. A cleaner can hold a perfectly valid GL policy, say "fully insured" with a straight face, and still have <em>no coverage for the only loss this job realistically produces</em>. Cover for that has to be bought separately, as a care/custody/control endorsement or an equivalent bailee form.</p>
+      <div class="cite">
+        <span class="src">Source: Moody Insurance — "Understanding Care, Custody &amp; Control Coverage for Cleaning Businesses" · moodycleaninsurance.com</span>
+        <span class="why">(A specialist insurance brokerage writing for cleaning contractors — an industry practitioner source, not an independent test, so treat as directional on market practice; the underlying CCC exclusion in the standard ISO general liability form is not in dispute. Corroborated by Insureon's cleaning-business GL guidance. Read 17 Aug 2026.)</span>
+      </div>
+      <p style="margin-bottom:0"><strong>So the whole evaluation inverts.</strong> You cannot verify a carpet cleaner the way you verify a contractor, because the state record you'd check doesn't exist. Private substitutes have to carry the load instead: a broker-issued certificate of insurance with the right endorsement, IICRC Certified Firm status, an audited accreditation such as Diamond Certified, and a written guarantee with a real deadline on it. Stars are the <em>weakest</em> of these, and stars are the only thing all five candidates have.</p>
+    </div>
+  </section>
+
+  <!-- ===== 02 EVIDENCE ===== -->
+  <section id="evidence">
+    <div class="sec-eyebrow"><span class="n">02</span> Evidence</div>
+    <h2 class="sec-title">What we're working with</h2>
+    <p class="sec-sub">Your brief, read closely — including the parts you didn't say out loud.</p>
+
+    <div class="card">
+      <h3 class="blk" style="margin-top:0">What you actually asked for</h3>
+      <p>Two facts, and both do more work than they look like they do.</p>
+      <ul class="tick">
+        <li><strong>"Similar to sapphiresteamer.com/services."</strong> You didn't say "cheapest carpet cleaner." You anchored on a specific company's <em>service page</em>. That page bundles four things — carpet cleaning, upholstery cleaning, leather care, and tile &amp; grout cleaning. That is a meaningfully wider scope than "shampoo the carpets," and it eliminates the discount operators who only do carpet by the room. Leather care in particular is a specialist skill; plenty of good carpet cleaners won't touch it.</li>
+        <li><strong>"We're located at San Jose, CA 95138."</strong> That's the Silver Creek / south Evergreen side of San Jose. It matters for two reasons: it sets the travel-fee boundary that several of these companies price against, and it tells me the housing stock. 95138 is predominantly newer single-family construction — which in practice means wall-to-wall carpet upstairs, tile or LVP downstairs, and stairs. Stairs are the line item people forget and get surprised by, because they're priced per step, not per room.</li>
+      </ul>
+      <div class="cite">
+        <span class="src">Source: Sapphire Steamer — Services · sapphiresteamer.com/services</span>
+        <span class="why">(The vendor's own published service list — a primary source for what the company says it sells, though not for whether it delivers. <b>Direct page load was blocked in this environment</b>; the four-service list is reconstructed from search results that surface the site's own text plus its Yelp and Nextdoor category listings. Read 17 Aug 2026. Confirm at the URL yourself.)</span>
+      </div>
+
+      <h3 class="blk">The priority I'm inferring, stated plainly so you can overrule it</h3>
+      <p>You gave me a quality anchor, not a budget. Sapphire Steamer is an owner-operated shop carrying a perfect rating on a modest review count — that is the profile of a craftsman business, not a volume discounter. Nothing in your brief mentions coupons, specials, or a price ceiling. So I am optimising for <strong>work quality and accountability, with price as a constraint rather than the objective</strong>. <span class="chip ask">Assumption — tell me if wrong</span></p>
+      <p>If that's wrong — if this is a pre-listing clean on a rental and you want the cheapest competent pass — say so and the recommendation changes to Hi Tech Steamer, which is built for exactly that and prices for it.</p>
+
+      <h3 class="blk">What the evidence base can and can't support</h3>
+      <p>I need to be straight with you about the shape of the evidence, because it determines how much weight the ranking can bear.</p>
+      <div class="grid2">
+        <div class="subcard">
+          <h4 style="color:var(--good)">What is solid</h4>
+          <ul class="tick g" style="margin-bottom:0">
+            <li>The legal framework — licensing, wastewater, workers' comp thresholds — is statute and municipal code, and it doesn't move.</li>
+            <li>Cost ranges are published by multiple independent cost guides that broadly agree with each other.</li>
+            <li>Review counts and star ratings are consistent across several independent aggregators, which is decent corroboration that the headline numbers are real.</li>
+          </ul>
+        </div>
+        <div class="subcard">
+          <h4 style="color:var(--bad)">What is thin</h4>
+          <ul class="tick r" style="margin-bottom:0">
+            <li><strong>No individual review was read in context.</strong> Platform pages were blocked. I will not quote what I could not open.</li>
+            <li><strong>Yelp's "not currently recommended" queue is unread for every candidate.</strong> That queue is where complaints often sit.</li>
+            <li><strong>No insurance certificate was seen for any candidate.</strong> Not one. This is the decisive criterion and it is unverified across the board.</li>
+            <li><strong>No IICRC Certified Firm status was confirmed for any of the five.</strong> The verification tool was blocked.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout" style="border-color:var(--warn); background:linear-gradient(160deg,var(--warn-bg),var(--card) 65%)">
+        <div class="ctitle" style="color:var(--warn)">▲ The single rule that eliminates candidates</div>
+        <p style="margin-bottom:0; font-size:15.5px"><strong>Produce a certificate of insurance, sent to me directly by your insurance broker, showing general liability <em>with</em> care, custody &amp; control cover — or a written guarantee that explicitly makes you liable for damage to the items you clean. No certificate, no booking.</strong> Not a photo of a policy card. Not "yes, we're insured" on the phone. A broker-issued COI. Everything else in this report — stars, tenure, price, proximity — only gets to matter <em>after</em> a candidate clears this bar, because it is the only bar that has money behind it. Applied honestly today, <strong>this rule eliminates all five candidates</strong>, and that is precisely the point: it is a rule you enforce during the quoting call, not one I can settle from a desk.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 MATRIX ===== -->
+  <section id="matrix">
+    <div class="sec-eyebrow"><span class="n">03</span> Comparison</div>
+    <h2 class="sec-title">Comparison matrix</h2>
+    <p class="sec-sub">Criteria down the left, candidates across. Winning cell in each row shaded green. Scroll sideways on narrow screens.</p>
+
+    <div class="tscroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="crit">Criterion</th>
+            <th>Sapphire Steamer</th>
+            <th>Dalux Carpet &amp; Uph.</th>
+            <th>Steamer Pros</th>
+            <th>Hi Tech Steamer</th>
+            <th>Santana Carpet Clg.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Distance from 95138</td>
+            <td>949 Franquette Ave, 95125 — ~9 mi <span class="chip warn">OK</span></td>
+            <td>San Jose, address not published <span class="chip ask">Unconfirmed</span></td>
+            <td>4082 Casa Grande Way, 95118 — ~10 mi <span class="chip warn">OK</span></td>
+            <td>San Jose, address not published <span class="chip ask">Unconfirmed</span></td>
+            <td class="cellwin">3315 San Felipe Rd, 95135 — <strong>~3 mi</strong> <span class="chip good">Closest</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Full service mix in scope<br><span style="font-weight:400;color:var(--muted);font-size:12px">carpet · upholstery · leather · tile&amp;grout</span></td>
+            <td class="cellwin"><strong>All four published</strong> <span class="chip good">Verified</span></td>
+            <td>Carpet, upholstery, stain/odour. Leather not published <span class="chip warn">Partial</span></td>
+            <td>Carpet, rugs, upholstery, tile, stone <span class="chip warn">Leather unconfirmed</span></td>
+            <td>Carpet, upholstery, tile&amp;grout, water extraction <span class="chip warn">Leather unconfirmed</span></td>
+            <td>Not published in detail <span class="chip ask">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Verified review base<br><span style="font-weight:400;color:var(--muted);font-size:12px">Yelp recommended reviews</span></td>
+            <td>75 <span class="chip warn">Modest</span></td>
+            <td class="cellwin"><strong>299</strong> <span class="chip good">Deepest</span></td>
+            <td>227 <span class="chip good">Deep</span></td>
+            <td>295 <span class="chip good">Deep</span></td>
+            <td>12 <span class="chip bad">Thin</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Rating consistency<br><span style="font-weight:400;color:var(--muted);font-size:12px">across platforms</span></td>
+            <td class="cellwin"><strong>5.0 Yelp / 5.0 Google</strong> <span class="chip good">Perfect, two platforms</span></td>
+            <td>4.9 Yelp / 5.0 HomeAdvisor <span class="chip good">Strong</span></td>
+            <td>High; exact star value not confirmed <span class="chip ask">Unconfirmed</span></td>
+            <td>High; exact star value not confirmed <span class="chip ask">Unconfirmed</span></td>
+            <td>Not confirmed <span class="chip ask">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Who actually shows up</td>
+            <td class="cellwin"><strong>The owner, Bret Furtado</strong> — reviews describe him by name <span class="chip good">No crew lottery</span></td>
+            <td>Crew; "Rodney" named in listings <span class="chip warn">Varies</span></td>
+            <td>Multi-technician crew <span class="chip warn">Varies</span></td>
+            <td>Multi-technician crew, high volume <span class="chip warn">Varies</span></td>
+            <td>Unknown <span class="chip ask">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">State licence</td>
+            <td colspan="5" style="background:var(--ask-bg)"><strong>Not applicable to any of them.</strong> California does not license carpet cleaning; CSLB's C-15 covers flooring <em>installation</em>. Any "licensed" claim on any of these sites refers to a city business tax certificate. <span class="chip ask">Structural — not a differentiator</span></td>
+          </tr>
+          <tr>
+            <td class="crit">COI with care/custody/control <span class="chip bad" style="margin-left:4px">Decisive</span></td>
+            <td>Not seen <span class="chip bad">Ask</span></td>
+            <td>Not seen <span class="chip bad">Ask</span></td>
+            <td>Not seen <span class="chip bad">Ask</span></td>
+            <td>Not seen <span class="chip bad">Ask</span></td>
+            <td>Not seen <span class="chip bad">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Written guarantee with a named window</td>
+            <td>"Guaranteed" results claimed; no period published <span class="chip warn">Unbounded</span></td>
+            <td>No published terms found <span class="chip ask">Not verified</span></td>
+            <td>"100% Quality Guaranteed"; no period published <span class="chip warn">Unbounded</span></td>
+            <td>"Exclusive satisfaction guarantee"; no period published <span class="chip warn">Unbounded</span></td>
+            <td>No published terms found <span class="chip ask">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Entry price / minimum</td>
+            <td>Not published; reviews describe "reasonable" <span class="chip ask">Ask</span></td>
+            <td class="cellwin">Not published, but <strong>no stated minimum</strong> — best for a small job <span class="chip good">Flexible</span></td>
+            <td>$299 minimum, Santa Clara County <span class="chip bad">Highest floor</span></td>
+            <td>Up-front pricing, online booking; one reported $250 / 2 bedrooms <span class="chip warn">Mid</span></td>
+            <td>Not published <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Audited third-party accreditation</td>
+            <td colspan="5" style="background:var(--ask-bg)"><strong>None of the five is confirmed Diamond Certified or IICRC Certified Firm.</strong> Verification tools were blocked in this environment — this is an unread field, <em>not</em> a finding that they lack it. <span class="chip ask">Unread</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Tenure</td>
+            <td>"Thousands of jobs"; founding year not published <span class="chip ask">Unconfirmed</span></td>
+            <td>Not published <span class="chip ask">Not verified</span></td>
+            <td>18+ years claimed <span class="chip warn">Vendor claim</span></td>
+            <td class="cellwin">Since <strong>2005</strong> — ~21 yrs, most specific claim <span class="chip warn">Vendor claim</span></td>
+            <td>21 years per listing <span class="chip warn">Listing claim</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Wastewater handling stated</td>
+            <td class="cellwin"><strong>Yes — "disposes of waste water safely"</strong> <span class="chip good">Only one to raise it</span></td>
+            <td>Not stated <span class="chip ask">Ask</span></td>
+            <td>Not stated <span class="chip ask">Ask</span></td>
+            <td>Not stated <span class="chip ask">Ask</span></td>
+            <td>Not stated <span class="chip ask">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Focus</td>
+            <td class="cellwin"><strong>Soft-surface care only</strong> <span class="chip good">Specialist</span></td>
+            <td>Also runs junk removal <span class="chip warn">Diversified</span></td>
+            <td>Cleaning only <span class="chip good">Specialist</span></td>
+            <td>Cleaning + emergency water extraction <span class="chip good">Adjacent</span></td>
+            <td>Cleaning only <span class="chip good">Specialist</span></td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Verdict</td>
+            <td><strong>PICK</strong> — conditional on COI</td>
+            <td><strong>RUNNER-UP</strong> — take it if the COI fails</td>
+            <td>Right for a whole-house job, wrong for a small one</td>
+            <td>Right if price becomes the objective</td>
+            <td>Too little evidence to rank — worth a call for proximity</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">All cells read 17 August 2026 and labelled by confidence. Blank-looking fields are unread, not negative findings — see §11 for how to close each one. Distances are straight-line estimates from ZIP centroids and are <span class="chip bad" style="margin:0 2px">Not verified</span> as drive times.</p>
+  </section>
+
+  <!-- ===== 04 RATINGS ===== -->
+  <section id="ratings">
+    <div class="sec-eyebrow"><span class="n">04</span> Ratings</div>
+    <h2 class="sec-title">Every platform, side by side</h2>
+    <p class="sec-sub">Including the platforms where a candidate simply isn't listed — which is not a red flag.</p>
+
+    <div class="tscroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="crit">Platform</th>
+            <th>Sapphire Steamer</th>
+            <th>Dalux</th>
+            <th>Steamer Pros</th>
+            <th>Hi Tech Steamer</th>
+            <th>Santana</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Yelp <span style="font-weight:400;color:var(--muted);font-size:12px">(recommended)</span></td>
+            <td class="num cellwin"><strong>5.0 · 75</strong></td>
+            <td class="num">4.9 · 299</td>
+            <td class="num">— · 227</td>
+            <td class="num">— · 295</td>
+            <td class="num">— · 12</td>
+          </tr>
+          <tr>
+            <td class="crit">Yelp <span style="font-weight:400;color:var(--muted);font-size:12px">(not recommended queue)</span></td>
+            <td colspan="5" style="background:var(--ask-bg)"><strong>Unread for all five.</strong> Yelp's recommendation software hides reviews it judges unreliable; they don't count toward the star average or the review count. This queue is often where complaints sit, and it was inaccessible here. <span class="chip ask">Unread — close this yourself</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Google</td>
+            <td class="num cellwin"><strong>5.0 · 107</strong></td>
+            <td class="num">Not confirmed <span class="chip ask">Unread</span></td>
+            <td class="num">Not confirmed <span class="chip ask">Unread</span></td>
+            <td class="num">Not confirmed <span class="chip ask">Unread</span></td>
+            <td class="num">Not confirmed <span class="chip ask">Unread</span></td>
+          </tr>
+          <tr>
+            <td class="crit">BBB</td>
+            <td>No profile located <span class="chip ask">Not a finding</span></td>
+            <td><strong>Not accredited</strong>; BBB states insufficient information to issue a rating <span class="chip warn">Neutral, not negative</span></td>
+            <td>No profile located <span class="chip ask">Not a finding</span></td>
+            <td>Profile exists; rating not confirmed <span class="chip ask">Unread</span></td>
+            <td>No profile located <span class="chip ask">Not a finding</span></td>
+          </tr>
+          <tr>
+            <td class="crit">HomeAdvisor / Angi</td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+            <td class="num cellwin"><strong>5.0 overall</strong></td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Nextdoor</td>
+            <td class="cellwin"><strong>Page + neighbour recommendations</strong>; count not confirmed</td>
+            <td>Page exists (junk removal + carpet)</td>
+            <td>Page + recommendations; count not confirmed</td>
+            <td>14 recommendations</td>
+            <td>Not located <span class="chip ask">Not a finding</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Thumbtack</td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+            <td class="cellwin"><strong>Listed</strong> (via junk-removal category)</td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+            <td>Not listed <span class="chip plain">n/a</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Facebook</td>
+            <td>Page active (@sapphiresteamer408)</td>
+            <td>Not confirmed</td>
+            <td>Page active (@thesteamerpros)</td>
+            <td>Not confirmed</td>
+            <td>Not confirmed</td>
+          </tr>
+          <tr>
+            <td class="crit">Diamond Certified</td>
+            <td colspan="5" style="background:var(--ask-bg)">None of the five appears in the Diamond Certified San Jose carpet &amp; upholstery listing as far as could be determined — but the directory itself was <b>not readable</b> here, so treat this row as unread. For scale: Diamond Certified reports <strong>72 rated companies</strong> in Bay Area carpet &amp; upholstery cleaning averaging <strong>4.8 / 5 across 1,696 surveys</strong>. <span class="chip ask">Unread</span></td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Total reviews located</td>
+            <td class="num"><strong>~182</strong> <span style="font-weight:400;font-size:12px;color:var(--muted)">(75 + 107)</span></td>
+            <td class="num"><strong>~299+</strong></td>
+            <td class="num"><strong>~227+</strong></td>
+            <td class="num"><strong>~309+</strong> <span style="font-weight:400;font-size:12px;color:var(--muted)">(295 + 14)</span></td>
+            <td class="num"><strong>~12</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cite">
+      <span class="src">Sources: Yelp business pages for each candidate · yelp.com · Diamond Certified — Bay Area Carpet &amp; Upholstery Cleaning · diamondcertified.org · BBB business profiles · bbb.org</span>
+      <span class="why">(Yelp is the dominant review platform for Bay Area home services and publishes both a recommended count and a filtered queue; Diamond Certified is a regional accreditation body that rates firms via live telephone interviews with randomly sampled real customers rather than open submissions, which makes it materially harder to game than open review sites; BBB is a private, membership-funded accreditation body — accreditation is paid, so its <em>absence</em> carries little signal. All read 17 Aug 2026 via search; direct page loads blocked.)</span>
+    </div>
+    <p class="tnote"><strong>How to read the blanks.</strong> "Not listed" on Thumbtack or HomeAdvisor is meaningless for an owner-operated local business that fills its calendar on Yelp and word of mouth — those platforms charge for leads, and declining to buy leads is a business model, not a warning sign. Likewise, a missing BBB profile is not a finding: BBB accreditation is a paid membership. A dash in a rating cell means the numeric star value could not be confirmed, not that it is low.</p>
+  </section>
+
+  <!-- ===== 05 PROFILES ===== -->
+  <section id="profiles">
+    <div class="sec-eyebrow"><span class="n">05</span> Profiles</div>
+    <h2 class="sec-title">Candidate profiles, ranked</h2>
+    <p class="sec-sub">Each with the honest case against it. A vendor that conflicts with your priority is wrong for you, not bad at their job.</p>
+
+    <!-- 1 -->
+    <div class="card">
+      <div class="prof-head"><span class="rankbadge">1</span><h3>Sapphire Steamer</h3><span class="chip good">The pick — conditional</span></div>
+      <div class="factsheet">
+        <strong>Factsheet.</strong> Owner-operated carpet, upholstery, leather and tile &amp; grout cleaning, San Jose · Owner: Bret Furtado · 949 Franquette Ave, San Jose, CA 95125 · (408) 705-3315 · Truck-mounted hot-water extraction · Serves Santa Clara County &amp; the Bay Area · Yelp 5.0 (75) · Google 5.0 (107) · Read 17 Aug 2026
+      </div>
+      <p>This is the company you anchored on, and the research supports the instinct. Two things separate it from the field. First, it publishes <strong>all four services in your scope</strong>, including leather care — which several higher-volume competitors don't advertise at all. Second, and more importantly, it is <strong>owner-operated</strong>. Every review describes Bret Furtado personally. That collapses the single biggest source of variance in this trade: at a multi-truck company, a 4.9 average tells you about the company's hiring, not about the technician who rings your bell on Thursday. Here the average and the person are the same thing.</p>
+      <p>The equipment claim is also the right one. Truck-mounted hot-water extraction — heat and vacuum generated by the van, not a portable unit — is the method that actually removes soil rather than redistributing it, and it's what you want on wall-to-wall carpet. Their published note about disposing of wastewater safely is the only environmental-compliance statement any of the five candidates makes, and as §7 explains, that is not a throwaway line.</p>
+      <div class="cite">
+        <span class="src">Source: Sapphire Steamer — Home, About &amp; Services · sapphiresteamer.com</span>
+        <span class="why">(The vendor's own site — primary evidence of what it claims to sell and how, and the correct place to check its guarantee wording. Not evidence of performance. Direct load blocked; content reconstructed from search. Read 17 Aug 2026.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: Yelp — Sapphire Steamer, San Jose · yelp.com/biz/sapphire-steamer-san-jose</span>
+        <span class="why">(Yelp is the highest-traffic independent review platform for Bay Area home services and separates recommended from filtered reviews; the recommended count and star average are the figures cited here. Read 17 Aug 2026 via search — the page itself, and its filtered queue, could not be opened.)</span>
+      </div>
+      <h4 class="mini">Customer voice</h4>
+      <p style="font-size:14.5px">Search surfaced recurring themes from the Yelp and Nextdoor pages — fast response and estimates, punctuality, thorough work on cream-coloured carpet, upholstered dining chairs, sofas and area rugs, and pricing repeatedly described as reasonable. I am reporting these as <strong>themes, not quotations</strong>.</p>
+      <div class="deadend">
+        <b>Dead end — verbatim quotes.</b> The rules for this report say a quote must be read in context, with its author and date, or it isn't evidence. Every review platform was blocked by this environment's network policy, so <strong>no verbatim customer quote appears in this profile and none has been fabricated.</strong> Close it in about four minutes: open <a href="https://www.yelp.com/biz/sapphire-steamer-san-jose">yelp.com/biz/sapphire-steamer-san-jose</a>, read the three most recent 5★ and <em>any</em> review below 4★, then scroll to the bottom and click "other reviews that are not currently recommended". Cross-check at <a href="https://nextdoor.com/pages/sapphire-steamer-san-jose-ca/">nextdoor.com/pages/sapphire-steamer-san-jose-ca</a>, which is neighbour-verified and harder to seed.
+      </div>
+      <h4 class="mini">How the owner responds to reviews</h4>
+      <p style="font-size:14.5px"><span class="chip ask">Unread</span> Owner-response behaviour could not be observed, because responses render inside the review threads that were blocked. This is worth thirty seconds of your own scrolling: how an owner answers the <em>worst</em> review on their page is the single most informative thing on a review platform, and it is the one thing stars can't tell you.</p>
+      <div class="against">
+        <div class="h">The honest case against</div>
+        <p><strong>One person is a single point of failure, and 75 reviews is a modest base.</strong> A one-van operation can't absorb a schedule slip: if Bret is ill, on another job that overran, or on holiday, there is no second truck and your booking moves. A 299-review company has slack that this one structurally cannot have. Second, <strong>a perfect 5.0 is a weaker signal than it looks</strong> — it usually means a small, self-selecting customer base rather than flawlessness, and with the filtered queue unread I genuinely cannot tell you whether there are unhappy customers sitting behind it. Third, <strong>no founding year is published</strong>, so "vast experience" and "thousands of jobs" are unfalsifiable as written. Fourth, the base is in 95125 — roughly nine miles from you — so ask whether a travel fee applies to 95138 before you book.</p>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="card">
+      <div class="prof-head"><span class="rankbadge">2</span><h3>Dalux Carpet and Upholstery Cleaning Service</h3><span class="chip good">Runner-up</span></div>
+      <div class="factsheet">
+        <strong>Factsheet.</strong> Carpet &amp; upholstery cleaning, stain and odour removal, steam cleaning, protective treatments; same-day available · San Jose · (408) 466-0288 · Yelp 4.9 (299 reviews, 661 photos) · HomeAdvisor 5.0 · BBB: not accredited, no rating issued · Also operates a junk-removal line · Read 17 Aug 2026
+      </div>
+      <p>On raw evidence weight, Dalux is the strongest company on this page. <strong>299 recommended Yelp reviews at 4.9</strong> is a large, sustained sample — roughly four times Sapphire Steamer's Yelp base — and it is corroborated by a 5.0 on HomeAdvisor, which is a separate platform with its own verification. Sustaining 4.9 across 299 reviews is materially harder than holding 5.0 across 75, and I want to give that its due: this is a company that has satisfied a lot of people, repeatedly, over a long period.</p>
+      <p>It also has the two most practical operational advantages in the comparison: <strong>same-day availability</strong>, and no published minimum charge — which makes it the better call if your actual job is two rooms and a sofa rather than a whole house.</p>
+      <div class="cite">
+        <span class="src">Source: Yelp — Dalux Carpet and Upholstery Cleaning Service, San Jose · yelp.com/biz/dalux-carpet-and-upholstery-cleaning-service-san-jose-17</span>
+        <span class="why">(Independent review platform; the 4.9 / 299 figure is the recommended-review average, updated Aug 2026 per the listing. Read 17 Aug 2026 via search.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: Better Business Bureau — Dalux business profile · bbb.org/us/ca/san-jose/profile/carpet-and-rug-cleaners/dalux-carpet-and-upholstery-cleaning-service-1216-888569</span>
+        <span class="why">(BBB is a private, membership-funded body; a profile records complaints filed with BBB and accreditation status. BBB states it lacks sufficient information to rate this business. Because accreditation is <em>paid</em>, its absence is close to meaningless — the useful field here is the complaint log, which is what to read. Read 17 Aug 2026 via search.)</span>
+      </div>
+      <div class="deadend">
+        <b>Dead end — verbatim quotes and complaint log.</b> No review read in context; no quotes fabricated. Close both at <a href="https://www.yelp.com/biz/dalux-carpet-and-upholstery-cleaning-service-san-jose-17">the Yelp page</a> and <a href="https://www.bbb.org/us/ca/san-jose/profile/carpet-and-rug-cleaners/dalux-carpet-and-upholstery-cleaning-service-1216-888569">the BBB profile</a>. On BBB, ignore the missing rating and read only the "Complaints" tab — that's the part with substance. Or ask them directly on (408) 466-0288.
+      </div>
+      <div class="against">
+        <div class="h">The honest case against</div>
+        <p><strong>Focus, and the crew lottery.</strong> Dalux also runs a junk-removal business — it appears on Thumbtack under junk removal, and its Nextdoor page covers both lines. That's a legitimate and common way to smooth seasonal demand, and it says nothing bad about the carpet work. But your brief anchored on a specialist soft-surface shop, and a company splitting attention between hauling and fibre care is a different proposition. Separately, this is a <strong>crew business</strong>: 4.9 across 299 reviews tells you the average technician is very good, not which one you'll get. Finally, <strong>leather care is not published</strong> — the one service in your scope that most needs a specialist — so if the leather matters, confirm it before comparing quotes.</p>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="card">
+      <div class="prof-head"><span class="rankbadge">3</span><h3>Steamer Pros LLC</h3><span class="chip warn">Right for a bigger job</span></div>
+      <div class="factsheet">
+        <strong>Factsheet.</strong> Residential &amp; commercial carpet, area rugs, fine fabric and synthetic upholstery, tile &amp; grout, natural stone · 4082 Casa Grande Way, San Jose, CA 95118 · (408) 471-8945 · 18+ years claimed · Yelp 227 reviews · "600+ 5-star reviews" claimed across platforms · <strong>$299 minimum in Santa Clara County</strong> · Read 17 Aug 2026
+      </div>
+      <p>The most professionalised operation of the five. It publishes the widest surface range — including natural stone, which is a genuinely different skill set from carpet — explicitly serves Silver Creek and Evergreen (your side of town), and is the only candidate that <strong>publishes its minimum charge up front</strong>. I want to credit that properly: a published floor price is a transparency practice, not a penalty. It tells you before you call whether you're their customer.</p>
+      <p>For a whole-house job — upstairs carpet, stairs, two sofas, tile downstairs — the $299 floor is irrelevant because you'd clear it anyway, and you'd be buying an experienced multi-technician company with a deep review base.</p>
+      <div class="cite">
+        <span class="src">Source: Steamer Pros — steamerpros.com and Yelp business page · yelp.com/biz/steamer-pros-san-jose</span>
+        <span class="why">(Vendor site for the service list, minimum charge and tenure claim; Yelp for the independent review count. The "600+ 5-star" figure is the vendor's own aggregate across platforms and is <b>not</b> independently verifiable — Yelp's own recommended count is 227. Read 17 Aug 2026.)</span>
+      </div>
+      <div class="deadend">
+        <b>Dead end — star rating and guarantee terms.</b> The numeric Yelp star average and the terms behind "100% Quality Guaranteed" could not be read. Close at <a href="https://www.yelp.com/biz/steamer-pros-san-jose">yelp.com/biz/steamer-pros-san-jose</a> and <a href="https://steamerpros.com/">steamerpros.com</a>, or ask on (408) 471-8945: "what's the guarantee window in days, and what's the remedy — re-clean, or refund?"
+      </div>
+      <div class="against">
+        <div class="h">The honest case against</div>
+        <p><strong>The $299 floor is above the national average for an entire job.</strong> Angi puts the 2026 national average at $183, with most homeowners spending $123–$242. Steamer Pros' <em>minimum</em> starts above the top of that band. Bay Area labour justifies a premium and this is not price-gouging — but it does mean that if your job is one bedroom and a sofa, you will pay $299 for perhaps $150 of work, and that is a poor fit for your brief unless the scope is large. Second, the <strong>"600+ 5-star reviews" claim doesn't reconcile</strong> with the 227 recommended reviews on Yelp; it's presumably an all-platform aggregate, but as published it invites a comparison the underlying number doesn't support. Third, leather care is not published.</p>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card">
+      <div class="prof-head"><span class="rankbadge">4</span><h3>Hi Tech Steamer Carpet Cleaning</h3><span class="chip warn">If price becomes the objective</span></div>
+      <div class="factsheet">
+        <strong>Factsheet.</strong> Carpet, upholstery, tile &amp; grout steam cleaning, pet stain &amp; odour, emergency water extraction · San Jose, serving the wider South Bay · Owner: Allen Noroozi · (408) 386-2923 · "Since 2005", "120,000 homes", "420+ 5-star reviews" claimed · Yelp 295 reviews · Nextdoor 14 recommendations · Online booking with up-front pricing · Read 17 Aug 2026
+      </div>
+      <p>The volume player, and the one to call if the brief changes to "cheapest competent pass." Two real advantages: <strong>online booking with up-front pricing</strong>, which removes the negotiation and the doorstep-upsell risk entirely, and <strong>emergency water extraction</strong> — worth knowing exists before you need it at 11pm with a burst supply line. Its own cost guide puts San Jose carpet cleaning at $25–$75 per room or $0.20–$0.50 per sq ft, which is honest and matches the independent national guides rather than undercutting them for effect.</p>
+      <div class="cite">
+        <span class="src">Source: Hi Tech Steamer — "How Much Does Carpet Cleaning Cost In San Jose, CA?" · hitechsteamer.com/how-much-does-carpet-cleaning-cost-in-san-jose-ca/</span>
+        <span class="why">(Vendor-published cost guide — self-interested, so directional only; cited here because it <em>agrees</em> with the independent guides rather than contradicting them, which is mild evidence of straight pricing. Read 17 Aug 2026.)</span>
+      </div>
+      <div class="against">
+        <div class="h">The honest case against</div>
+        <p><strong>Three unverifiable marketing claims and one internal contradiction.</strong> "120,000 homes" has no auditable basis. "420+ 5-star reviews" sits oddly against 295 recommended Yelp reviews and 14 Nextdoor recommendations. And the founding year is <strong>inconsistent across sources</strong> — the company's own site says <em>since 2005</em>, while a third-party business listing says <em>since 2004</em>. That single-year gap is trivial in itself, and I flag it only because tenure is one of the few checkable claims here and it should be checkable cleanly. <span class="chip warn">Contradiction — surfaced, unresolved</span> The bigger objection is fit: this is a high-throughput operation optimised for turnaround, which is precisely the opposite of the craftsman profile your brief pointed at.</p>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="card">
+      <div class="prof-head"><span class="rankbadge">5</span><h3>Santana Carpet Cleaning</h3><span class="chip ask">Too little evidence to rank</span></div>
+      <div class="factsheet">
+        <strong>Factsheet.</strong> Carpet cleaning · 3315 San Felipe Rd, San Jose, CA 95135 · (408) 209-3993 · Mon–Fri 8am–8pm, Sat–Sun 8am–6pm · 21 years per listing · Yelp 12 reviews (listing last updated Apr 2025) · Read 17 Aug 2026
+      </div>
+      <p>Included because it is <strong>by far the closest</strong> — San Felipe Road is roughly three miles from you, against nine or ten for the others — and because two decades of trading in one neighbourhood is real evidence of something, even when the internet has barely recorded it. Local operators with tiny review counts and long tenure are usually running on referrals, and they are frequently excellent value.</p>
+      <p>I am not ranking it above the others, but I am explicitly <strong>not treating its thin review count as a mark against it</strong>. Twelve reviews is an absence of evidence, not evidence of poor work. The Yelp listing also appears to have gone quiet since April 2025, which may simply mean the owner stopped soliciting reviews.</p>
+      <div class="deadend">
+        <b>Dead end — almost everything.</b> Services, pricing, rating, insurance and current trading status are all unverified. This one is a phone call, not a research problem: <strong>(408) 209-3993</strong>. Ask whether they still trade, whether they do upholstery and leather, and put the same insurance question to them as to everyone else.
+      </div>
+      <div class="against">
+        <div class="h">The honest case against</div>
+        <p><strong>You would be buying on faith.</strong> With twelve data points and no published service list, guarantee or pricing, there is no way to compare them like-for-like against the others before the visit. That is a legitimate reason to pass on a company for a job of this size, and it says nothing about their competence — only about what I can responsibly recommend on the evidence available.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="prof-head"><h3 style="font-size:19px">Special role — a Diamond Certified firm</h3><span class="chip good">If you want audited verification</span></div>
+      <p style="margin-bottom:8px">Not a candidate I researched individually, but a <em>category</em> worth naming, because it directly answers the reframe in §1. Diamond Certified doesn't collect open review submissions — it rates firms by conducting live telephone interviews with a large random sample of the company's actual past customers, publishes verbatim survey results, runs credential checks, and backs the purchase with mediation and a performance guarantee. That is the closest thing this trade has to the state licence board it lacks. Across the Bay Area it lists <strong>72 rated carpet &amp; upholstery companies averaging 4.8 / 5 over 1,696 surveys</strong>; Heavenly Touch, certified since 2003, is one San Jose example.</p>
+      <p style="margin-bottom:0">The trade-off is honest: certified firms typically price above the market, and the pool is small, so you may not find one that covers all four of your services. If the insurance certificate question in §10 makes you nervous about all five candidates, this is the branch to take instead.</p>
+      <div class="cite">
+        <span class="src">Source: Diamond Certified — Bay Area Carpet &amp; Upholstery Cleaning, and "Why Trust Diamond Certified…" · diamondcertified.org/bay-area-carpet-upholstery-cleaning/</span>
+        <span class="why">(A regional accreditation body operating in the SF Bay Area; its ratings come from randomly sampled live telephone surveys of verified past customers rather than open submissions, which makes it structurally resistant to review seeding. It is a commercial certifier and firms pay to participate — so read it as a rigorous screen, not as neutral journalism. Read 17 Aug 2026 via search.)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 06 COST ===== -->
+  <section id="cost">
+    <div class="sec-eyebrow"><span class="n">06</span> Cost</div>
+    <h2 class="sec-title">What this should cost</h2>
+    <p class="sec-sub">Line by line, against published ranges — then two independent checks on the total.</p>
+
+    <div class="card">
+      <p style="margin-bottom:16px"><strong>Scope modelled:</strong> a typical 95138 single-family home — three carpeted bedrooms plus hallway (~1,100 sq ft of carpet), one flight of stairs (14 steps), one three-seat fabric sofa, one 8×10 wool area rug, and pet-odour treatment in one bedroom. Adjust the rows you don't need.</p>
+      <div class="tscroll">
+        <table>
+          <thead>
+            <tr><th class="crit">Line item</th><th>Published range</th><th>Basis</th><th>Modelled</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="crit">Carpet — 3 bedrooms + hall</td><td class="num">$25–$75 / room</td><td>4 rooms; national per-room range</td><td class="num">$140–$260</td></tr>
+            <tr><td class="crit">Stairs (14 steps)</td><td class="num">~$2–$5 / step</td><td>Priced per step, not per room <span class="chip warn">Directional</span></td><td class="num">$28–$70</td></tr>
+            <tr><td class="crit">Sofa — 3-seat fabric</td><td class="num">$60–$150</td><td>Upholstery, per piece <span class="chip warn">Directional</span></td><td class="num">$60–$150</td></tr>
+            <tr><td class="crit">Wool area rug, 8×10</td><td class="num">$1.50–$4 / sq ft</td><td>80 sq ft; wool priced above synthetic <span class="chip warn">Directional</span></td><td class="num">$120–$320</td></tr>
+            <tr><td class="crit">Pet odour treatment, 1 room</td><td class="num">$40–$150</td><td>Enzyme / sub-surface treatment <span class="chip warn">Directional</span></td><td class="num">$40–$150</td></tr>
+            <tr><td class="crit">Protector (optional)</td><td class="num">$0.08–$0.20 / sq ft</td><td>Often the doorstep upsell — decline it on the first visit</td><td class="num">$0–$220</td></tr>
+            <tr><td class="crit">Travel / trip charge</td><td class="num">$0–$50</td><td>95125 → 95138 is ~9 mi; ask <span class="chip ask">Ask</span></td><td class="num">$0–$50</td></tr>
+            <tr class="vrowfin"><td class="crit">Realistic total, carpet + stairs + sofa</td><td class="num">—</td><td>Excludes rug, pet treatment, protector</td><td class="num"><strong>$228–$480</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">Ranges are national published figures; the Bay Area sits at the upper end of every one of them. Rows marked <span class="chip warn" style="margin:0 2px">Directional</span> come from cost guides rather than any candidate's published price list — no candidate except Steamer Pros publishes numbers at all.</p>
+      <div class="cite">
+        <span class="src">Source: Angi — "How Much Does Carpet Cleaning Cost? [2026 Data]" · angi.com/articles/how-much-does-carpet-cleaning-cost.htm</span>
+        <span class="why">(Angi is a large national home-services marketplace that publishes cost guides built from jobs booked through its own platform — a real transaction dataset, but one skewed toward marketplace pros and national averages rather than Bay Area rates. National average $183; typical $123–$242. Read 17 Aug 2026.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: HomeGuide — "How Much Does Carpet Cleaning Cost? (2026 Prices)" · homeguide.com/costs/carpet-cleaning-prices</span>
+        <span class="why">(An independent cost-guide publisher aggregating quotes from its listed professionals; used here as a second, methodologically separate estimate that broadly agrees with Angi — $25–$75 per room, $0.20–$0.50 per sq ft typical, $100–$150+ minimum job fee. Read 17 Aug 2026.)</span>
+      </div>
+
+      <h3 class="blk">Two-sided sanity check on the total</h3>
+      <div class="grid2">
+        <div class="subcard">
+          <h4>Bottom-up — by room</h4>
+          <p style="font-size:14px;margin-bottom:6px">4 rooms at the <em>upper</em> national per-room rate ($75) = <strong>$300</strong>, plus 14 stairs at $3.50 = <strong>$49</strong>, plus one sofa at $100 = <strong>$100</strong>.</p>
+          <p style="font-size:14px;margin-bottom:0"><strong>Total: ~$449.</strong></p>
+        </div>
+        <div class="subcard">
+          <h4>Top-down — by area</h4>
+          <p style="font-size:14px;margin-bottom:6px">1,100 sq ft at $0.35 / sq ft (mid of the typical band) = <strong>$385</strong>, plus stairs and sofa at the same rates = <strong>$149</strong>.</p>
+          <p style="font-size:14px;margin-bottom:0"><strong>Total: ~$534.</strong></p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:16px">
+        <div class="ctitle">◆ Where the two methods land</div>
+        <p style="margin-bottom:0">The two approaches bracket the answer at roughly <strong>$450–$535</strong> at national rates for the full modelled scope, and <strong>$325–$475</strong> for the more common carpet-plus-stairs-plus-sofa job. Bay Area labour pushes both toward the top. So: <strong>a quote between $325 and $550 for this scope is normal and you should not haggle it.</strong> Below $200 for a whole house, ask what's being skipped — that is bait pricing, and the money comes back as doorstep upsells. Above $700, demand the itemisation before you agree; it may be entirely justified by wool or by pet contamination, but you should see which.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 07 POLICY ===== -->
+  <section id="policy">
+    <div class="sec-eyebrow"><span class="n">07</span> Policy</div>
+    <h2 class="sec-title">The policy layer</h2>
+    <p class="sec-sub">The law that governs this, what it costs you if it goes wrong, and the contract terms that close the gap.</p>
+
+    <div class="card">
+      <h3 class="blk" style="margin-top:0">The governing law, and what you lose if it goes wrong</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Rule</th><th>In force</th><th>What it means here</th><th>What you lose if it goes wrong</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="crit">CSLB licensing — Contractors State License Law</td>
+              <td>Ongoing; minor-work exemption at <strong>$500</strong> in labour + materials</td>
+              <td>Carpet <em>cleaning</em> is not a classified trade. C-15 covers flooring installation. No exam, no bond, no disciplinary record exists for a cleaner.</td>
+              <td>The entire state complaint-and-discipline route. There is no board to complain to. Your remedies are the contract, small claims court, and your card issuer.</td>
+            </tr>
+            <tr>
+              <td class="crit">San José Municipal Code §4.76 — business tax certificate</td>
+              <td>Ongoing; register within <strong>90 days</strong> of commencing business</td>
+              <td>The only registration a San Jose carpet cleaner must hold. Applies to home-based and mobile businesses alike.</td>
+              <td>Little directly — but an unregistered business is one that has chosen to be invisible to the city, which is a character signal worth having.</td>
+            </tr>
+            <tr>
+              <td class="crit">San José Municipal Code Title 15 — storm drain discharge</td>
+              <td>Ongoing</td>
+              <td>Wastewater from mobile cleaning must go to the <strong>sanitary sewer</strong>, never a storm drain. The city names mobile cleaners specifically and inspects them. Storm drains run untreated to local creeks and the Bay.</td>
+              <td><strong>This one has your address on it.</strong> A discharge from your driveway or kerb is traceable to your property, and the city can fine for it. You are relying on a stranger's disposal habits.</td>
+            </tr>
+            <tr>
+              <td class="crit">Labor Code §§3351 / 3352 — household worker workers' comp</td>
+              <td>Ongoing</td>
+              <td>A worker in your home is excluded from workers' comp if, in the 90 days before injury, they worked under <strong>52 hours</strong> or earned <strong>$100 or less</strong>. A one-off carpet clean sits well under both.</td>
+              <td>If they're excluded and get hurt, they can come at you directly under ordinary negligence and premises liability. Your homeowner's policy becomes the backstop — check whether yours carries a residence-employee endorsement.</td>
+            </tr>
+            <tr>
+              <td class="crit">SB 258 — Cleaning Product Right to Know Act of 2017</td>
+              <td>Online disclosure from <strong>1 Jan 2020</strong>; on-label from <strong>1 Jan 2021</strong></td>
+              <td>Manufacturers of designated cleaning products sold in California — including products for janitorial and institutional use — must disclose intentionally added ingredients online and on the label.</td>
+              <td>Nothing, if you use it. It means you are <em>entitled</em> to know what is going on your floor. Ask for product names and look them up — especially with pets, small children, or anyone asthmatic in the house.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cite">
+        <span class="src">Source: City of San José Environmental Services — Environmental Regulations &amp; Inspection Programs (businesses), and "Why should we be concerned with wash water disposal?" · sanjoseca.gov/.../stormwater-wastewater/businesses</span>
+        <span class="why">(The municipal department that operates the sewer system and enforces stormwater rules under SJMC Title 15 — the authoritative local source on what a mobile cleaner may discharge and where. It names mobile cleaning businesses explicitly and runs a Storm Drain Dumping Hotline. Read 17 Aug 2026.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: California Labor Code §3352 · leginfo.legislature.ca.gov / law.justia.com/codes/california/code-lab/…/section-3352</span>
+        <span class="why">(The statute itself, as published in the official California Legislative Information system and mirrored by Justia — primary law, and the controlling text on the 52-hour / $100 exclusion for household workers. Read 17 Aug 2026.)</span>
+      </div>
+      <div class="cite">
+        <span class="src">Source: SB-258 Cleaning Product Right to Know Act of 2017 · leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201720180SB258</span>
+        <span class="why">(The enacted bill text on California's official legislative information portal — primary law. Signed 15 Oct 2017; phased effective dates of 1 Jan 2020 online and 1 Jan 2021 on-label. Read 17 Aug 2026.)</span>
+      </div>
+
+      <h3 class="blk">Vendor policies, side by side</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th class="crit">Policy</th><th>Sapphire Steamer</th><th>Dalux</th><th>Steamer Pros</th><th>Hi Tech Steamer</th></tr></thead>
+          <tbody>
+            <tr><td class="crit">Guarantee wording</td><td>Results "guaranteed"</td><td>None published</td><td>"100% Quality Guaranteed"</td><td>"Exclusive satisfaction guarantee"</td></tr>
+            <tr><td class="crit">Guarantee window</td><td colspan="4" style="background:var(--warn-bg)"><strong>Not published by any of them.</strong> A guarantee with no stated period and no stated remedy is a marketing sentence, not a warranty. This is the single most fixable gap on this page — §10's emails ask for it in writing. <span class="chip warn">Unbounded</span></td></tr>
+            <tr><td class="crit">Remedy stated (re-clean vs refund)</td><td>Not published</td><td>Not published</td><td>Not published</td><td>Not published</td></tr>
+            <tr><td class="crit">Published pricing</td><td>No</td><td>No</td><td class="cellwin"><strong>Yes — $299 SCC minimum</strong></td><td class="cellwin"><strong>Yes — up-front pricing, online booking</strong></td></tr>
+            <tr><td class="crit">Wastewater disposal addressed</td><td class="cellwin"><strong>Yes</strong></td><td>No</td><td>No</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blk">Third-party risk</h3>
+      <ul class="tick">
+        <li><strong>Subcontracting.</strong> Nothing published tells you whether any of these firms subcontracts overflow work at peak. If they do, the COI you were shown may not cover the person who actually arrives. Ask: <em>"will the technician be your W-2 employee or the owner, and does your policy cover subcontractors?"</em></li>
+        <li><strong>Online booking platforms.</strong> Steamer Pros books through Markate, a third-party field-service platform. That means your address, phone and payment details sit with a processor you never chose. Not a reason to avoid them — it's the norm — but it is a data-sharing fact worth knowing.</li>
+        <li><strong>Lead-generation marketplaces.</strong> If you book via HomeAdvisor/Angi or Thumbtack rather than directly, your contract is with the pro but your details are sold as a lead. Expect follow-up calls from competitors. Booking direct avoids this entirely.</li>
+      </ul>
+
+      <h3 class="blk">Your contract protections — the terms to insist on</h3>
+      <p>None of this needs a lawyer. Get it in an email before the visit and you have a written contract.</p>
+      <ul class="tick g">
+        <li><strong>Itemised written quote</strong> naming rooms, stair count, each upholstery piece, and every treatment — with the total. This alone kills the doorstep upsell.</li>
+        <li><strong>Certificate of insurance sent directly by their broker</strong>, showing general liability limits and care/custody/control cover. Broker-issued, not vendor-forwarded — a forwarded PDF proves nothing.</li>
+        <li><strong>Guarantee with a number in it</strong>: "if spots reappear or you are not satisfied within <em>30 days</em>, we re-clean at no charge." A window and a remedy, in writing.</li>
+        <li><strong>Wastewater clause</strong>: "all wastewater will be discharged to the sanitary sewer, not the storm drain, in accordance with San José Municipal Code Title 15." One sentence moves that liability off your address.</li>
+        <li><strong>No price change on arrival</strong> without your written agreement — and no work starts until you've agreed any variation.</li>
+        <li><strong>Pay by credit card.</strong> Not Zelle, not cash, not Venmo. A card gives you chargeback rights, which — given there is no licensing board — is realistically your strongest single remedy.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 08 AUDIT ===== -->
+  <section id="audit">
+    <div class="sec-eyebrow"><span class="n">08</span> Audit</div>
+    <h2 class="sec-title">Claim-by-claim audit — Sapphire Steamer</h2>
+    <p class="sec-sub">The vendor whose marketing started this. Every published claim, checked one at a time.</p>
+
+    <div class="tscroll">
+      <table class="matrix">
+        <thead><tr><th class="crit">Claim as published</th><th>Status</th><th>What the check found</th><th>How to close it</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">"Carpet, upholstery, leather care, tile and grout cleaning"</td>
+            <td><span class="chip good">Verified</span></td>
+            <td>The four-service mix appears consistently on the vendor's own pages and in independent category listings on Yelp and Nextdoor. Consistent across sources.</td>
+            <td>Settled. Confirm leather is available for your specific item — hide type matters.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Owner-operated" · owner Bret Furtado</td>
+            <td><span class="chip good">Verified</span></td>
+            <td>Named as owner across the vendor's own About page and multiple independent directory listings; reviews describe him personally rather than a crew. Strongly corroborated.</td>
+            <td>Settled.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Family owned"</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+            <td>Appears in aggregator descriptions. Consistent with an owner-operated single-van business, but no registry record was retrievable to corroborate the ownership structure.</td>
+            <td>Low stakes — this claim doesn't affect the work. Ask casually if you care.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Vast experience in the flooring industry… thousands of carpet cleaning tasks"</td>
+            <td><span class="chip warn">Not verifiable as written</span></td>
+            <td>No founding year is published, so there is no denominator. "Thousands" over an unstated period cannot be checked against anything. Note this is unfalsifiable rather than contradicted — nothing suggests it's untrue.</td>
+            <td>Ask directly: <em>"what year did you start Sapphire Steamer, and were you in flooring before that?"</em> A straight answer settles it.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Top of the line truck mount cleaning equipment"</td>
+            <td><span class="chip warn">Unconfirmed</span></td>
+            <td>Truck-mounted extraction is genuinely the superior method over portables, so the claim is directionally meaningful. But "top of the line" names no make or model and is pure marketing language.</td>
+            <td>Ask which machine. An owner who's proud of the kit will name it without hesitating.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Disposes of waste water safely"</td>
+            <td><span class="chip good">Credible &amp; material</span></td>
+            <td>The only environmental claim made by any of the five, and it maps onto a real, enforced obligation — SJMC Title 15 prohibits discharge to storm drains, and San José explicitly inspects mobile cleaners. Making this claim publicly is a modest but genuine accountability signal.</td>
+            <td>Ask where the tank is emptied. "Sanitary sewer clean-out" or "back at the shop" are the right answers; a shrug is not.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Hot-water extraction… high quality results, guaranteed"</td>
+            <td><span class="chip warn">Unbounded guarantee</span></td>
+            <td>The method claim is standard and credible. The guarantee has <strong>no published window and no stated remedy</strong> — same gap as every other candidate, so this is a trade-wide norm rather than a mark against them specifically.</td>
+            <td>The email in §10 asks for a window and a remedy in writing. Get that and the gap closes.</td>
+          </tr>
+          <tr>
+            <td class="crit">"Ensuring on-time appointments and reliable service"</td>
+            <td><span class="chip good">Supported</span></td>
+            <td>Punctuality and responsiveness are the most consistently recurring themes across independent review platforms — the strongest theme in the whole review base. That's meaningful corroboration for exactly this claim.</td>
+            <td>Settled as far as review evidence can settle anything.</td>
+          </tr>
+          <tr>
+            <td class="crit">Implied "licensed and insured"</td>
+            <td><span class="chip bad">Not verified — decisive</span></td>
+            <td>No certificate of insurance was seen. No business tax certificate was confirmed. As §1 sets out, there is no state licence to check even in principle. <strong>This is the one open item that should gate your booking.</strong></td>
+            <td>The §10 email requests a broker-issued COI with care/custody/control. Nothing less closes it.</td>
+          </tr>
+          <tr>
+            <td class="crit">Yelp 5.0 / 75 · Google 5.0 / 107</td>
+            <td><span class="chip good">Verified</span> <span class="chip warn">Partially</span></td>
+            <td>Both figures appear consistently across multiple independent aggregators, which is decent corroboration. But <strong>the Yelp filtered queue is unread</strong>, so I cannot tell you what sits behind the 5.0.</td>
+            <td>Two minutes on the Yelp page — scroll to "not currently recommended".</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote"><strong>Audit summary:</strong> nine claims examined, no contradictions found. Three are solidly verified, four are unfalsifiable-as-written marketing language of a kind universal in this trade, and one — insurance — is the decisive open item. That is a <em>cleaner</em> result than the field: Hi Tech Steamer's founding year is inconsistent across sources and Steamer Pros' "600+ 5-star" figure doesn't reconcile with its 227 Yelp reviews. Sapphire Steamer's marketing is restrained by comparison, and restraint in marketing is itself weak evidence about how someone runs a business.</p>
+  </section>
+
+  <!-- ===== 09 PLAIN ENGLISH ===== -->
+  <section id="plain">
+    <div class="sec-eyebrow"><span class="n">09</span> Assessment</div>
+    <h2 class="sec-title">My assessment, in plain English</h2>
+    <p class="sec-sub">No jargon. Short sentences.</p>
+
+    <div class="card">
+      <h3 class="blk" style="margin-top:0">The situation, simply</h3>
+      <p>You want your carpets, sofa and tile cleaned. You found a company you liked the look of. You want to know if they're any good, and who else you should be talking to.</p>
+      <p>Here is the thing nobody tells you. Anyone can clean carpets for money in California. There is no state licence for it. No test. No board that can discipline them. When a carpet cleaner says "licensed", they mean they paid the city a business tax. That's all it means.</p>
+      <p>And "insured" is worse. Most standard business insurance does not cover damage to the thing you were hired to work on. So a cleaner can be genuinely insured, and still not be covered if they ruin your carpet. That cover is a separate add-on. Most people never ask for it.</p>
+
+      <h3 class="blk">Why your priority beats price</h3>
+      <p>You didn't ask me for the cheapest. You pointed at a specific company's service page. So I read you as wanting the job done properly.</p>
+      <p>That's the right instinct here, and the numbers back it. The whole spread between the cheapest and the dearest option is maybe two hundred dollars. Replacing carpet in three bedrooms is several thousand. Getting this wrong costs ten times what choosing well costs. Saving eighty dollars is not worth that risk.</p>
+      <p>There's a second reason. A bad clean is not neutral — it's worse than no clean. Over-wetting leaves carpet damp under the backing for days. That's how you get mildew and a smell that never quite leaves. Cheap operators work fast, and working fast is exactly how over-wetting happens.</p>
+
+      <h3 class="blk">The recommendation</h3>
+      <p style="font-size:17px"><strong>Book Sapphire Steamer.</strong> Ask for proof of insurance first.</p>
+      <p><strong>The headline reason:</strong> the owner does the work himself. So the reviews are about him, not about a company's hiring policy. You know exactly who is coming.</p>
+      <h4 class="mini">Then, in order:</h4>
+      <ul class="tick g">
+        <li><strong>He does all four things you need</strong> — carpet, upholstery, leather, tile. Leather is the fussy one and most competitors don't list it at all.</li>
+        <li><strong>Two separate platforms, both perfect.</strong> 5.0 on Yelp across 75 reviews, 5.0 on Google across 107. Not one place — two, independently.</li>
+        <li><strong>He's the only one who mentions wastewater disposal.</strong> Small thing. But dumping it down a storm drain is illegal in San José, and it's your driveway. Someone who thought about that has thought about other things too.</li>
+      </ul>
+      <p><strong>The honest catch:</strong> he's one man with one van. If he's sick, you wait. A bigger company would just send someone else. And 75 reviews is a smallish sample — a perfect score there is less impressive than a 4.9 across 299.</p>
+
+      <h3 class="blk">The runner-up</h3>
+      <p><strong>Dalux.</strong> 4.9 stars across 299 reviews, plus a 5.0 on HomeAdvisor. That's the biggest pile of evidence on this page, and holding 4.9 that long is genuinely hard. They also do same-day. If Sapphire can't produce an insurance certificate, or can't fit you in, call Dalux and don't feel you're settling.</p>
+
+      <h3 class="blk">Who I didn't pick, and why</h3>
+      <ul class="tick">
+        <li><strong>Steamer Pros</strong> — good company, wrong size job. Their minimum is $299 in Santa Clara County. If you're doing the whole house, that's fine and they're excellent. If you're doing two rooms, you're overpaying by half.</li>
+        <li><strong>Hi Tech Steamer</strong> — built for volume and speed. Nothing wrong with that, and their online booking with fixed prices is genuinely the most convenient option here. But you asked for the craftsman, not the machine.</li>
+        <li><strong>Santana</strong> — three miles from you and twenty-one years in business, which I like. But twelve reviews and no published prices means I can't compare them fairly. Worth a phone call. Not worth a recommendation on this evidence.</li>
+      </ul>
+
+      <h3 class="blk">The uncomfortable part you should know</h3>
+      <p>I could not open a single review page, vendor site, or licence database. This environment blocked all of them. Everything here comes from search results that quote those pages, not from me reading them.</p>
+      <p>So: the ratings and review counts are consistent across several independent sources, and I'm reasonably confident in them. But <strong>I have not read one actual customer review</strong>. I haven't seen the hidden Yelp complaints for any of these five. And I have not seen an insurance certificate for anyone.</p>
+      <p>That last one matters most, and I want to be blunt about it: <strong>the criterion I'm telling you is decisive is the one criterion I could not check for any candidate.</strong> That's not a flaw I can research away — a certificate only exists when a broker issues one to you, on request. It's a phone call you make, not a fact I can look up. But you should know the ranking rests on the things I could see, and the decisive thing isn't among them.</p>
+
+      <h3 class="blk">What I'd actually do, in order</h3>
+      <ul class="tick">
+        <li><strong>1.</strong> Spend five minutes on the Yelp pages for Sapphire Steamer and Dalux. Read the lowest-star reviews and click "not currently recommended" at the bottom. This is the highest-value five minutes available to you.</li>
+        <li><strong>2.</strong> Send the §10 email to both, plus Steamer Pros if your job is large. Same scope to each, so the quotes actually compare.</li>
+        <li><strong>3.</strong> Bin anyone who won't have their broker send a certificate. Not "won't reply fast" — won't do it at all.</li>
+        <li><strong>4.</strong> Compare the itemised quotes. Expect $325–$550. Below $200 means something's being skipped.</li>
+        <li><strong>5.</strong> Get the guarantee in writing with a number of days on it. Thirty is standard and reasonable to ask for.</li>
+        <li><strong>6.</strong> Book. Pay by credit card. Move the furniture yourself the night before — it's usually a per-item charge, and it's the easiest money you'll save all week.</li>
+        <li><strong>7.</strong> Walk the rooms with them before they pack up, while the carpet is still damp and problems are still fixable. Once the van leaves, your leverage leaves with it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 10 EMAILS ===== -->
+  <section id="emails">
+    <div class="sec-eyebrow"><span class="n">10</span> Outreach</div>
+    <h2 class="sec-title">Copy-paste-ready emails</h2>
+    <p class="sec-sub">Identical scope in each, so the quotes actually compare. Edit the square brackets, send, and let them price against each other.</p>
+
+    <div class="card">
+      <div class="email">
+        <div class="email-bar">
+          <div class="to">To: <b>Sapphire Steamer</b> — (408) 705-3315 · via sapphiresteamer.com/contact <span class="chip good">The pick</span></div>
+          <button class="copybtn" data-target="e1" type="button">Copy</button>
+        </div>
+        <pre id="e1">Subject: Quote request — carpet, upholstery &amp; tile, San Jose 95138
+
+Hi Bret,
+
+I'd like a written quote for the following, at my home in San Jose 95138.
+I'm requesting the same scope from two other companies so I can compare
+like for like, so an itemised breakdown would be very helpful.
+
+SCOPE
+  1. Carpet — 3 bedrooms plus upstairs hallway, approx. 1,100 sq ft
+  2. Stairs — one flight, 14 steps
+  3. Upholstery — one 3-seat fabric sofa
+  4. Area rug — one 8 x 10 wool rug
+  5. Pet odour treatment — one bedroom, localised
+  6. Tile &amp; grout — approx. [XXX] sq ft, kitchen and entry [delete if N/A]
+
+PLEASE INCLUDE
+  - A line-item price for each of the six items above, plus the total.
+  - Any travel or trip charge to 95138, stated separately.
+  - Any furniture-moving charge, and what I can move myself to avoid it.
+  - Whether carpet protector is extra, and its price per sq ft. I'd like
+    to decide on that now rather than on the day.
+
+THREE THINGS I ASK EVERY COMPANY
+  1. Insurance. Please have your insurance broker email me a certificate
+     of insurance directly, showing your general liability limits and
+     confirming whether you carry care, custody &amp; control cover for
+     damage to items being cleaned. I understand standard general
+     liability often excludes this, which is why I'm asking specifically.
+     A certificate sent by the broker rather than forwarded on is what
+     I need.
+  2. Guarantee in writing. What is the guarantee period in days, and
+     what is the remedy — a free re-clean, or a refund? A sentence in
+     your reply is fine; I just need it in writing before booking.
+  3. Wastewater. I saw your note about disposing of wastewater safely
+     and I appreciate it being mentioned. Can you confirm it goes to
+     the sanitary sewer rather than a storm drain? San Jose Municipal
+     Code Title 15 makes storm drain discharge an issue that can come
+     back to my address, so I'd like it confirmed.
+
+Two quick questions: what year did you start Sapphire Steamer, and will
+you personally be doing the work?
+
+Thanks very much,
+[Your name] · [Phone] · San Jose 95138
+</pre>
+      </div>
+
+      <div class="email">
+        <div class="email-bar">
+          <div class="to">To: <b>Dalux Carpet and Upholstery Cleaning</b> — (408) 466-0288 <span class="chip good">Runner-up</span></div>
+          <button class="copybtn" data-target="e2" type="button">Copy</button>
+        </div>
+        <pre id="e2">Subject: Quote request — carpet, upholstery &amp; tile, San Jose 95138
+
+Hello,
+
+I'd like a written quote for the following at my home in San Jose 95138.
+I'm requesting identical scope from two other companies to compare like
+for like, so please itemise.
+
+SCOPE
+  1. Carpet — 3 bedrooms plus upstairs hallway, approx. 1,100 sq ft
+  2. Stairs — one flight, 14 steps
+  3. Upholstery — one 3-seat fabric sofa
+  4. Area rug — one 8 x 10 wool rug
+  5. Pet odour treatment — one bedroom, localised
+  6. Tile &amp; grout — approx. [XXX] sq ft, kitchen and entry [delete if N/A]
+
+PLEASE INCLUDE
+  - A line-item price for each item above, plus the total.
+  - Any travel or trip charge to 95138, stated separately.
+  - Any furniture-moving charge, and what I can move myself to avoid it.
+  - Whether carpet protector is extra, and its price per sq ft.
+
+THREE THINGS I ASK EVERY COMPANY
+  1. Insurance. Please have your insurance broker email me a certificate
+     of insurance directly, showing your general liability limits and
+     confirming whether you carry care, custody &amp; control cover for
+     damage to items being cleaned. Broker-issued, please — not a
+     forwarded copy.
+  2. Guarantee in writing. What is the guarantee period in days, and is
+     the remedy a free re-clean or a refund?
+  3. Wastewater. Can you confirm wastewater goes to the sanitary sewer
+     and not to a storm drain? San Jose Municipal Code Title 15 makes
+     this something that can come back to my address.
+
+Also, two specifics: do you clean leather upholstery? And will the
+technician be your employee, or is any work subcontracted?
+
+Thanks,
+[Your name] · [Phone] · San Jose 95138
+</pre>
+      </div>
+
+      <div class="email">
+        <div class="email-bar">
+          <div class="to">To: <b>Steamer Pros LLC</b> — (408) 471-8945 <span class="chip warn">Send only if the job is large</span></div>
+          <button class="copybtn" data-target="e3" type="button">Copy</button>
+        </div>
+        <pre id="e3">Subject: Quote request — carpet, upholstery &amp; tile, San Jose 95138
+
+Hello,
+
+I'd like a written quote for the scope below at my home in San Jose
+95138. I'm collecting identical-scope quotes from two other companies,
+so an itemised breakdown would help me compare fairly.
+
+I've seen your $299 minimum for Santa Clara County — I expect this job
+to clear it comfortably, but please flag it if not.
+
+SCOPE
+  1. Carpet — 3 bedrooms plus upstairs hallway, approx. 1,100 sq ft
+  2. Stairs — one flight, 14 steps
+  3. Upholstery — one 3-seat fabric sofa
+  4. Area rug — one 8 x 10 wool rug
+  5. Pet odour treatment — one bedroom, localised
+  6. Tile &amp; grout — approx. [XXX] sq ft, kitchen and entry [delete if N/A]
+
+PLEASE INCLUDE
+  - A line-item price for each item above, plus the total.
+  - Any travel or trip charge to 95138, stated separately.
+  - Any furniture-moving charge, and what I can move myself to avoid it.
+  - Whether carpet protector is extra, and its price per sq ft.
+
+THREE THINGS I ASK EVERY COMPANY
+  1. Insurance. Please have your insurance broker email me a certificate
+     of insurance directly, showing general liability limits and
+     confirming whether you carry care, custody &amp; control cover for
+     damage to items being cleaned. Broker-issued, not forwarded.
+  2. Guarantee in writing. Your site says "100% Quality Guaranteed" —
+     could you tell me the period in days and whether the remedy is a
+     free re-clean or a refund?
+  3. Wastewater. Can you confirm wastewater goes to the sanitary sewer
+     and not a storm drain, per San Jose Municipal Code Title 15?
+
+One more: do you clean leather upholstery? It isn't listed on your
+services page and I may have a piece that needs it.
+
+Thanks,
+[Your name] · [Phone] · San Jose 95138
+</pre>
+      </div>
+      <p class="tnote" style="margin-top:14px"><strong>Why these three requests and not others.</strong> The insurance certificate is the only one that can cost you real money if you skip it. The written guarantee converts a marketing phrase into something enforceable. The wastewater question moves a liability that currently attaches to your property. Everything else — price, timing, method — you can negotiate on the day. These three you cannot.</p>
+    </div>
+  </section>
+
+  <!-- ===== 11 SOURCES ===== -->
+  <section id="sources">
+    <div class="sec-eyebrow"><span class="n">11</span> Sources</div>
+    <h2 class="sec-title">Numbered sources &amp; dead ends</h2>
+    <p class="sec-sub">Grouped by type. Every entry carries its retrieval date and a one-line note on what it is and why it's credible here — including the ones that failed.</p>
+
+    <div class="card">
+      <div class="srcgroup">
+        <h4>Tier 1 — Government, regulator &amp; primary law</h4>
+        <ol class="srclist">
+          <li><span class="sn">1</span><strong>CSLB — Licensing Classifications (C-15 Flooring &amp; Floor Covering)</strong> · <span class="u">cslb.ca.gov/about_us/library/licensing_classifications/</span> · read 17 Aug 2026
+            <span class="why">(California Contractors State License Board — the state agency that issues, renews and disciplines contractor licences and defines every trade classification. The authoritative record for what is and is not a licensed trade in California, and therefore the basis for this report's central finding that carpet cleaning is not one.)</span></li>
+          <li><span class="sn">2</span><strong>City of San José — Business Tax &amp; Registration (SJMC §4.76)</strong> · <span class="u">sanjoseca.gov/your-government/departments-offices/finance/business-tax-registration</span> · read 17 Aug 2026
+            <span class="why">(The city Finance Department's own page setting out the registration duty — every business operating in San José, including home-based and mobile ones, must register within 90 days. Primary local authority on the only "licence" a carpet cleaner here actually holds.)</span></li>
+          <li><span class="sn">3</span><strong>City of San José Environmental Services — Environmental Regulations &amp; Inspection Programs (businesses)</strong> · <span class="u">sanjoseca.gov/your-government/departments-offices/environmental-services/water-utilities/stormwater-wastewater/businesses</span> · read 17 Aug 2026
+            <span class="why">(The municipal department that runs the sewer system and enforces stormwater rules under SJMC Title 15. It names mobile cleaning businesses explicitly as a regulated category — the authoritative source on lawful wastewater disposal for this trade.)</span></li>
+          <li><span class="sn">4</span><strong>City of San José — "Why should we be concerned with wash water disposal?"</strong> · <span class="u">sanjoseca.gov/home/showpublisheddocument/2060/636625280512170000</span> · read 17 Aug 2026
+            <span class="why">(A City of San José published guidance document for mobile cleaning businesses, stating that discharging wash water to the storm drain violates the stormwater ordinance and may be fined. Primary municipal guidance.)</span></li>
+          <li><span class="sn">5</span><strong>California Labor Code §3352 (household worker exclusions)</strong> · <span class="u">law.justia.com/codes/california/code-lab/division-4/part-1/chapter-2/article-2/section-3352/</span> · read 17 Aug 2026
+            <span class="why">(The statute itself, mirrored from California's official legislative record. Primary law, and the controlling text on the 52-hour / $100 workers' compensation exclusion that determines your exposure if a cleaner is injured in your home.)</span></li>
+          <li><span class="sn">6</span><strong>SB-258 — Cleaning Product Right to Know Act of 2017</strong> · <span class="u">leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201720180SB258</span> · read 17 Aug 2026
+            <span class="why">(The enacted bill text on California's official legislative information portal — primary law. Signed 15 Oct 2017; online ingredient disclosure from 1 Jan 2020, on-label from 1 Jan 2021.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 2 — Vendors' own published material</h4>
+        <ol class="srclist">
+          <li><span class="sn">7</span><strong>Sapphire Steamer — Home, About, Services, Contact</strong> · <span class="u">sapphiresteamer.com</span> · read 17 Aug 2026 <span class="chip bad" style="margin-left:6px">Direct load blocked</span>
+            <span class="why">(The vendor's own site — primary evidence of what the company claims to sell, its method, its owner and its guarantee wording. Primary for claims, not for performance. Reconstructed from search results surfacing the site's own text; see dead end D1.)</span></li>
+          <li><span class="sn">8</span><strong>Steamer Pros — steamerpros.com (incl. upholstery and area-rug pages)</strong> · <span class="u">steamerpros.com</span> · read 17 Aug 2026
+            <span class="why">(Vendor site — source for the published $299 Santa Clara County minimum, the 18-years tenure claim, the service list and the "100% Quality Guaranteed" wording. Self-interested by nature; used only for the vendor's own claims.)</span></li>
+          <li><span class="sn">9</span><strong>Hi Tech Steamer — hitechsteamer.com, incl. "How Much Does Carpet Cleaning Cost In San Jose, CA?"</strong> · <span class="u">hitechsteamer.com</span> · read 17 Aug 2026
+            <span class="why">(Vendor site and vendor-published cost guide — source for the "since 2005", "120,000 homes" and "420+ 5-star" claims, and for local per-room pricing. Self-interested; noted in-text because its price figures agree with independent guides rather than undercutting them.)</span></li>
+          <li><span class="sn">10</span><strong>Dalux Carpet Cleaning — daluxcarpetcleaners.com</strong> · <span class="u">daluxcarpetcleaners.com</span> · read 17 Aug 2026
+            <span class="why">(Vendor site — source for the service list, same-day availability and contact number. Primary for claims only.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 3 — Review platforms &amp; accreditation bodies</h4>
+        <ol class="srclist">
+          <li><span class="sn">11</span><strong>Yelp — Sapphire Steamer, San Jose</strong> · <span class="u">yelp.com/biz/sapphire-steamer-san-jose</span> · read 17 Aug 2026
+            <span class="why">(Yelp is the highest-traffic independent review platform for Bay Area home services and separates recommended reviews from a filtered queue. Source for 5.0 / 75 recommended reviews and the 949 Franquette Ave address. The filtered queue was not readable — see dead end D2.)</span></li>
+          <li><span class="sn">12</span><strong>Yelp — Dalux Carpet and Upholstery Cleaning Service</strong> · <span class="u">yelp.com/biz/dalux-carpet-and-upholstery-cleaning-service-san-jose-17</span> · read 17 Aug 2026
+            <span class="why">(Independent review platform; source for 4.9 across 299 recommended reviews, listing updated August 2026.)</span></li>
+          <li><span class="sn">13</span><strong>Yelp — Steamer Pros</strong> · <span class="u">yelp.com/biz/steamer-pros-san-jose</span> · read 17 Aug 2026
+            <span class="why">(Independent review platform; source for 227 recommended reviews and the 4082 Casa Grande Way, 95118 address. Numeric star average not confirmed.)</span></li>
+          <li><span class="sn">14</span><strong>Yelp — Hi Tech Steamer Carpet Cleaning</strong> · <span class="u">yelp.com/biz/hi-tech-steamer-carpet-cleaning-san-jose</span> · read 17 Aug 2026
+            <span class="why">(Independent review platform; source for 295 recommended reviews. Used to test the vendor's "420+ 5-star" claim.)</span></li>
+          <li><span class="sn">15</span><strong>Yelp — Santana Carpet Cleaning</strong> · <span class="u">yelp.com/biz/santana-carpet-cleaning-san-jose-5</span> · read 17 Aug 2026
+            <span class="why">(Independent review platform; source for the 3315 San Felipe Rd, 95135 address, hours, 21-year tenure and 12-review count. Listing last updated April 2025.)</span></li>
+          <li><span class="sn">16</span><strong>Better Business Bureau — Dalux business profile</strong> · <span class="u">bbb.org/us/ca/san-jose/profile/carpet-and-rug-cleaners/dalux-carpet-and-upholstery-cleaning-service-1216-888569</span> · read 17 Aug 2026
+            <span class="why">(BBB is a private, membership-funded accreditation body. Source for "not accredited / insufficient information to rate". Because accreditation is paid, its absence carries little signal — the meaningful field is the complaint log, which was not readable here.)</span></li>
+          <li><span class="sn">17</span><strong>Better Business Bureau — Hi Tech Steamer business profile</strong> · <span class="u">bbb.org/us/ca/san-jose/profile/not-elsewhere-classified/hi-tech-steamer-1216-1000065028</span> · read 17 Aug 2026
+            <span class="why">(As above. Confirms a profile exists; rating and complaint history not confirmed.)</span></li>
+          <li><span class="sn">18</span><strong>Diamond Certified — Bay Area Carpet &amp; Upholstery Cleaning; San Jose category; "Why Trust Diamond Certified…"</strong> · <span class="u">diamondcertified.org/bay-area-carpet-upholstery-cleaning/</span> · read 17 Aug 2026
+            <span class="why">(A regional SF Bay Area accreditation body that rates firms via live telephone interviews with randomly sampled verified past customers rather than open submissions — structurally harder to game than open review sites, and the closest local substitute for the licensing board this trade lacks. Commercial: firms pay to participate, so read as a rigorous screen, not neutral journalism. Source for 72 rated companies / 4.8 avg / 1,696 surveys.)</span></li>
+          <li><span class="sn">19</span><strong>HomeAdvisor — Dalux Carpet Cleaning &amp; Upholstery reviews</strong> · <span class="u">homeadvisor.com/rated.DaluxCarpetCleaning.69072403.html</span> · read 17 Aug 2026
+            <span class="why">(A national home-services marketplace that verifies reviews against jobs booked on its platform — a methodologically separate check on Yelp. Source for Dalux's 5.0 overall rating.)</span></li>
+          <li><span class="sn">20</span><strong>Nextdoor — Sapphire Steamer, Steamer Pros, Hi Tech Steamer pages</strong> · <span class="u">nextdoor.com/pages/sapphire-steamer-san-jose-ca/</span> · read 17 Aug 2026
+            <span class="why">(A neighbourhood platform where recommendations come from address-verified neighbours, which makes seeding harder than on open platforms — useful corroboration, though counts are small and it is not an audited source.)</span></li>
+          <li><span class="sn">21</span><strong>IICRC — Certified Firm Verification &amp; Global Locator</strong> · <span class="u">iicrc.org/certifiedfirmverification/</span> · read 17 Aug 2026 <span class="chip bad" style="margin-left:6px">Direct load blocked</span>
+            <span class="why">(The Institute of Inspection, Cleaning and Restoration Certification — the non-profit standards body for this industry and the authoritative register of Certified Firms and technicians. The single best private substitute for a state licence check. Not readable here — see dead end D5.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Tier 4 — Cost guides, trade &amp; industry sources</h4>
+        <ol class="srclist">
+          <li><span class="sn">22</span><strong>Angi — "How Much Does Carpet Cleaning Cost? [2026 Data]"</strong> · <span class="u">angi.com/articles/how-much-does-carpet-cleaning-cost.htm</span> · read 17 Aug 2026
+            <span class="why">(A large national home-services marketplace publishing cost guides built from jobs actually booked through its platform — a real transaction dataset, though skewed toward marketplace pros and national rather than Bay Area rates. Source for the $183 average and $123–$242 typical range.)</span></li>
+          <li><span class="sn">23</span><strong>HomeGuide — "How Much Does Carpet Cleaning Cost? (2026 Prices)"</strong> · <span class="u">homeguide.com/costs/carpet-cleaning-prices</span> · read 17 Aug 2026
+            <span class="why">(An independent cost-guide publisher aggregating quotes from listed professionals. Used as a second, methodologically separate estimate: $25–$75 per room, $0.20–$0.50 per sq ft typical, $100–$150+ minimum job fee. Its broad agreement with Angi is what makes the range trustworthy.)</span></li>
+          <li><span class="sn">24</span><strong>Insureon — General Liability &amp; Carpet/Upholstery Cleaner insurance guidance</strong> · <span class="u">insureon.com/cleaning-business-insurance/carpet-upholstery-cleaners</span> · read 17 Aug 2026
+                <span class="why">(A national commercial insurance brokerage writing for this exact trade — an industry practitioner source, not an independent test, so directional on market practice. Cited for what a certificate of insurance is and what cleaning-business general liability typically covers.)</span></li>
+          <li><span class="sn">25</span><strong>Moody Insurance — "Understanding Care, Custody &amp; Control Coverage for Cleaning Businesses"</strong> · <span class="u">moodycleaninsurance.com/understanding-care-custody-control-coverage-for-cleaning-businesses</span> · read 17 Aug 2026
+            <span class="why">(A specialist insurance brokerage for cleaning contractors. Trade source, not independent — treat as directional. Cited for the care/custody/control exclusion in standard general liability and the endorsements that buy it back; the exclusion itself is standard ISO policy language and is not in dispute.)</span></li>
+          <li><span class="sn">26</span><strong>Widewail / LockedOnSEO — explanations of Yelp's "not currently recommended" filter</strong> · <span class="u">widewail.com/blog/what-are-yelp-not-currently-recommended-reviews</span> · read 17 Aug 2026
+            <span class="why">(Marketing-industry commentary, <b>not</b> an independent audit of Yelp — treat as directional. Cited only for the mechanics of where the filtered queue sits on the page and that filtered reviews don't count toward the star average, which matches Yelp's own published description.)</span></li>
+        </ol>
+      </div>
+
+      <div class="srcgroup">
+        <h4>Dead ends — the ones that failed, and how you close them</h4>
+        <ol class="srclist">
+          <li><span class="sn">D1</span><strong>Sapphire Steamer's own site — could not be opened.</strong> <span class="u">https://www.sapphiresteamer.com/services</span> returned <span style="font-family:var(--mono);font-size:11.5px">EGRESS_BLOCKED</span> from this environment's network proxy, as did every other page on the domain.
+            <span class="why">(Close it: open the URL in your own browser, or call <b>(408) 705-3315</b>. What to look for — the exact guarantee wording, any founding year, and whether leather care covers your specific item.)</span></li>
+          <li><span class="sn">D2</span><strong>Yelp — every page, including all five "not currently recommended" queues.</strong> <span class="u">https://www.yelp.com/biz/sapphire-steamer-san-jose</span> and all others blocked.
+            <span class="why">(Close it: open each business page, scroll past the last review, and click the grey "other reviews that are not currently recommended" link. This is where complaints tend to sit, and it is the single highest-value unread item in this report.)</span></li>
+          <li><span class="sn">D3</span><strong>CSLB licence lookup — could not be run.</strong> <span class="u">https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx</span> blocked.
+            <span class="why">(Close it: run each company name through the free lookup. Expect to find nothing — carpet cleaning isn't a licensed trade, so an empty result is the correct answer, not evidence of wrongdoing. Note carefully: <b>a failed registry search is not proof a business is unregistered.</b> CSLB also runs a public information line if you want the classification question answered by the board directly.)</span></li>
+          <li><span class="sn">D4</span><strong>BBB — all profiles.</strong> <span class="u">https://www.bbb.org/us/ca/san-jose/category/carpet-and-rug-cleaners</span> blocked.
+            <span class="why">(Close it: open the two profiles at sources 16–17 and read the Complaints tab only. Ignore the accreditation badge — it is a paid membership and tells you nothing about work quality.)</span></li>
+          <li><span class="sn">D5</span><strong>IICRC Certified Firm verification — could not be run for any candidate.</strong> <span class="u">https://iicrc.org/certifiedfirmverification/</span> blocked.
+            <span class="why">(Close it: run all five names through the verification tool and the Global Locator. This is the most useful single check available to you after the insurance certificate — IICRC Certified Firm status is the industry's real credential, and none of the five is confirmed to hold it. <b>Absence of confirmation here is an unread field, not a finding.</b>)</span></li>
+          <li><span class="sn">D6</span><strong>San José business tax certificate — no public lookup located.</strong> <span class="u">https://www.sanjoseca.gov/your-government/departments-offices/finance/business-tax-registration</span> blocked; no public search interface was identified.
+            <span class="why">(Close it: the City of San José Finance Department administers the register — ask them directly whether a given business holds a current certificate. This is a low-value check compared with D5 and the insurance certificate, but it is the only "licence" that exists.)</span></li>
+          <li><span class="sn">D7</span><strong>Diamond Certified San Jose directory — not readable.</strong> <span class="u">https://www.diamondcertified.org/category/carpet-upholstery-cleaning/ca/san-jose/</span> blocked.
+            <span class="why">(Close it: open the directory to see whether any of the five appears, and to price the certified alternatives. The report treats this row as unread, not negative.)</span></li>
+          <li><span class="sn">D8</span><strong>Google Business Profiles — not readable for four of five candidates.</strong>
+            <span class="why">(Close it: search each business name in Google Maps and read the rating, count and — most usefully — the owner's replies to negative reviews. Only Sapphire Steamer's Google figure of 5.0 / 107 was corroborated, via third-party aggregators.)</span></li>
+          <li><span class="sn">D9</span><strong>Santana Carpet Cleaning — almost entirely unverified.</strong>
+            <span class="why">(Close it with a phone call: <b>(408) 209-3993</b>. Confirm they still trade, what they clean, and put the same insurance question to them. Their Yelp listing has not updated since April 2025, which may mean nothing at all.)</span></li>
+        </ol>
+      </div>
+
+      <p class="tnote" style="margin-top:18px"><strong>Sources deliberately not used.</strong> Several high-ranking results for these searches were content farms, SEO listicles, AI-generated "best of" roundups and affiliate directories — trustanalytica, wheree, bestprosintown, southbaylocalguide, reputablecleaners, skilledcleaners and similar. None is cited here, in the matrix, or in any figure, including where they were the <em>only</em> source for a number. Where that left a cell empty, the cell says so. Forum and social sources (Reddit, contractor boards, Facebook) were read for orientation only and carry no weight in the ranking.</p>
+    </div>
+  </section>
+
+  <!-- ===== 12 FINAL VERDICT ===== -->
+  <section id="final">
+    <div class="final">
+      <div class="fk">§12 · Final verdict</div>
+      <h2>Sapphire Steamer — book it, on one condition.</h2>
+
+      <p class="pick1">Call Bret Furtado on (408) 705-3315 today, send the §10 email, and hold the booking until his broker emails you a certificate of insurance showing care, custody &amp; control cover. If that certificate arrives, book him. If he won't ask his broker for it, call Dalux instead and don't look back.</p>
+
+      <h4>Why I chose it</h4>
+      <p>Your brief pointed at a craftsman, so I weighted the evidence the way a craftsman purchase deserves — and one piece of evidence did most of the work. <strong>Sapphire Steamer is owner-operated, and I gave that more weight than everything else combined.</strong> In a trade with no licensing board, no exam and no disciplinary file, reviews are the primary evidence — and reviews of a multi-truck company tell you about a hiring process, not about the person who will kneel on your bedroom floor on Thursday morning. Here the reviews and the technician are the same man. That collapses the largest uncontrolled variable in the purchase, and no competitor on this page can offer it.</p>
+      <p>Second in weight, and some way behind: <strong>5.0 on two independent platforms</strong> — Yelp across 75, Google across 107. I discounted this more than it looks like I should have, because a perfect score on a modest base usually means a small self-selecting customer set rather than perfection, and because the filtered queue is unread. It corroborates; it doesn't carry.</p>
+      <p>Third, and lighter still, two fit factors: it is <strong>the only candidate publishing all four services in your scope</strong> including leather, and <strong>the only one of the five that mentions wastewater disposal at all</strong> — which, given that SJMC Title 15 attaches that liability to your driveway, is a small window into whether someone thinks past the invoice.</p>
+      <p>What I gave almost no weight to: marketing volume. "120,000 homes", "600+ 5-star", "#1 in San Jose" — none of it is auditable, and the two candidates leaning hardest on it are the two whose numbers didn't reconcile.</p>
+
+      <h4>Why I eliminated each of the others</h4>
+      <div class="elim">
+        <div class="nm">Dalux <span class="backup">Back-up</span></div>
+        <div class="bd">Genuinely the strongest evidence base here — 4.9 across 299 Yelp reviews plus an independent 5.0 on HomeAdvisor, which is harder to sustain than a perfect score on 75. Same-day availability and no minimum charge make it the more practical choice for a small job. <strong>Knocked out by the crew lottery and the split focus:</strong> a 4.9 average across a multi-technician team doesn't tell you which technician you get, and a company also running a junk-removal line isn't the specialist your brief pointed at. Leather isn't published either. <strong>Stays as the back-up</strong> — take it without hesitation if the certificate doesn't materialise.</div>
+      </div>
+      <div class="elim">
+        <div class="nm">Steamer Pros <span class="backup">Back-up, large jobs</span></div>
+        <div class="bd">The most professionalised operation on the page, the widest surface range including natural stone, explicit coverage of Silver Creek and Evergreen, and the only company honest enough to publish its floor price. <strong>Knocked out by that floor price against your likely scope:</strong> $299 minimum in Santa Clara County starts above the top of the national typical band for an entire job. That's a mismatch, not a criticism — and it inverts the moment the job gets big. <strong>Stays as the back-up if the scope is the whole house</strong>, tile and stone included.</div>
+      </div>
+      <div class="elim">
+        <div class="nm">Hi Tech Steamer</div>
+        <div class="bd">The most convenient option here by some distance — online booking with up-front fixed pricing removes the negotiation and the doorstep upsell entirely, and its published local price guide agrees with the independent guides rather than undercutting them to bait a call. Emergency water extraction is a genuine bonus. <strong>Knocked out on two counts:</strong> it is optimised for throughput, which is the opposite of the craftsman profile you anchored on; and it is the only candidate with an unreconciled internal contradiction — its own site says trading since 2005 while a third-party listing says 2004, alongside a "420+ 5-star" claim sitting above its 295 Yelp reviews. Small things, but tenure is one of the few checkable claims in this trade. <strong>Not a back-up for this brief</strong> — but the right first call if your priority changes to speed and price.</div>
+      </div>
+      <div class="elim">
+        <div class="nm">Santana</div>
+        <div class="bd">Three miles away against nine or ten for everyone else, and twenty-one years trading in one neighbourhood — which usually means a referral business that never needed the internet. I have real time for that profile. <strong>Knocked out purely on evidence volume:</strong> twelve reviews, no published services, no pricing, and a listing that hasn't moved since April 2025. That is an absence of information, not a bad sign, and I want to be clear I am not calling them a weak operator — I simply cannot compare them fairly against companies with two hundred data points. <strong>Not a back-up, but worth one phone call</strong> before you commit, on proximity alone.</div>
+      </div>
+      <div class="elim">
+        <div class="nm">Diamond Certified route</div>
+        <div class="bd">The most rigorous verification available in this market — randomly sampled telephone surveys of real customers, published verbatim, with mediation and a performance guarantee behind the purchase. It is the closest thing this trade has to the licensing board it lacks. <strong>Knocked out on fit and cost:</strong> certified firms price above the market, the pool is small, and none is confirmed to cover all four of your services. <strong>Stays as the fallback branch</strong> if the insurance question makes you distrust the whole field.</div>
+      </div>
+
+      <h4>What would change my mind</h4>
+      <p><strong>One fact: whether the broker-issued certificate names care, custody &amp; control cover.</strong> If Sapphire Steamer's broker sends it, book him and stop reading. If he declines, stalls, or forwards a policy photo instead of having the broker issue one, that single fact flips my recommendation to <strong>Dalux</strong> immediately — and I would apply exactly the same test to Dalux before booking them. This isn't a tiebreaker; it's the whole decision, because it is the only criterion on this page with money behind it.</p>
+      <p>A distant second: if the Yelp filtered queue turns out to hold a pattern of damage complaints against Sapphire Steamer, that also flips it to Dalux. One angry outlier wouldn't — every business has one. A pattern would.</p>
+
+      <div class="conf">
+        <div class="lab">Confidence level</div>
+        <p style="margin:0 0 10px"><strong>Moderate on the ranking. Low-to-moderate on the underlying facts. High on the decision rule.</strong></p>
+        <p style="margin:0 0 10px">I am confident about the reasoning — the licensing gap and the care/custody/control exclusion are structural facts about this market, and they hold regardless of which company you pick. I am reasonably confident in the review counts and ratings, which corroborate across several independent aggregators. I am least confident about anything requiring me to have read a page myself, because <strong>this environment blocked every vendor site, every review platform and every regulator database</strong>. Everything here came through search results quoting those pages.</p>
+        <p style="margin:0"><strong>Still unconfirmed underneath this call:</strong> no insurance certificate for any of the five — including the pick. No IICRC Certified Firm status for any of them. No Yelp filtered queue read, anywhere. No individual customer review read in context, which is why no verbatim quote appears in this report. Sapphire Steamer's founding year, and therefore its "thousands of jobs" claim, remains unfalsifiable. And Santana is close to entirely unresearched. None of these gaps changes the recommendation — but the one that could is the first one, and it is a phone call away from being closed.</p>
+      </div>
+    </div>
+
+    <p class="foot">Carpet Cleaning RAC · Prepared 17 August 2026 for a homeowner in San Jose, CA 95138<br>All facts date-stamped at point of use · Confidential — internal decision document<br>Direct page retrieval was blocked in this environment; see §11 dead ends to close every open item yourself.</p>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = document.getElementById(btn.dataset.target);
+      if(!el) return;
+      var text = el.innerText;
+      var done = function(){
+        var prev = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = prev; btn.classList.remove('done'); }, 1800);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+      } else { fallback(text, done); }
+    });
+  });
+  function fallback(text, done){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+</script>
