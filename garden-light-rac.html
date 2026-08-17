@@ -1,0 +1,1664 @@
+<title>Garden Light RAC</title>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ground:#eceff4;
+  --card:#ffffff;
+  --card-2:#f6f8fb;
+  --ink:#13181f;
+  --ink-2:#3d4756;
+  --ink-3:#68737f;
+  --line:#dde3ec;
+  --line-2:#eaeff5;
+
+  --blue:#1a56c4;
+  --blue-deep:#0f367f;
+  --blue-wash:#e8effb;
+
+  --green:#0f6b41;
+  --green-wash:#e0f2e8;
+  --green-line:#a8d8bf;
+
+  --amber:#8a5a00;
+  --amber-wash:#fbeed3;
+  --amber-line:#e6c98a;
+
+  --red:#a52a22;
+  --red-wash:#fbe6e3;
+  --red-line:#eab5ae;
+
+  --brass:#a5854a;
+  --brass-lite:#d6bb84;
+
+  --shadow:0 1px 2px rgba(19,24,31,.05), 0 4px 14px rgba(19,24,31,.06);
+  --shadow-lg:0 2px 4px rgba(19,24,31,.05), 0 12px 34px rgba(19,24,31,.10);
+  --radius:14px;
+  --radius-sm:9px;
+
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e1319;
+    --card:#171d26;
+    --card-2:#1e2531;
+    --ink:#e8edf4;
+    --ink-2:#b6c0cd;
+    --ink-3:#8b96a5;
+    --line:#2b3441;
+    --line-2:#232b36;
+
+    --blue:#79a6ff;
+    --blue-deep:#a8c6ff;
+    --blue-wash:#1a2438;
+
+    --green:#5fd39b;
+    --green-wash:#132c22;
+    --green-line:#2c5c45;
+
+    --amber:#e8b45c;
+    --amber-wash:#2e2413;
+    --amber-line:#5e4a22;
+
+    --red:#f08a80;
+    --red-wash:#2f1a18;
+    --red-line:#5e2e29;
+
+    --brass:#d6bb84;
+    --brass-lite:#e8d5a8;
+
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 12px 34px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e1319;
+  --card:#171d26;
+  --card-2:#1e2531;
+  --ink:#e8edf4;
+  --ink-2:#b6c0cd;
+  --ink-3:#8b96a5;
+  --line:#2b3441;
+  --line-2:#232b36;
+
+  --blue:#79a6ff;
+  --blue-deep:#a8c6ff;
+  --blue-wash:#1a2438;
+
+  --green:#5fd39b;
+  --green-wash:#132c22;
+  --green-line:#2c5c45;
+
+  --amber:#e8b45c;
+  --amber-wash:#2e2413;
+  --amber-line:#5e4a22;
+
+  --red:#f08a80;
+  --red-wash:#2f1a18;
+  --red-line:#5e2e29;
+
+  --brass:#d6bb84;
+  --brass-lite:#e8d5a8;
+
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+  --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 12px 34px rgba(0,0,0,.45);
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16.5px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 90px}
+p{margin:0 0 1em}
+p:last-child{margin-bottom:0}
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--blue) 35%,transparent)}
+a:hover{border-bottom-color:var(--blue)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+strong{font-weight:650}
+small{font-size:.83em}
+
+/* ============ CARD / SECTION ============ */
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:30px 32px;
+  margin:0 0 22px;
+}
+@media (max-width:640px){ .card{padding:22px 18px} .wrap{padding:0 13px 60px} }
+
+.sec-eyebrow{
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-3);margin:0 0 7px;
+}
+h2.sec-title{
+  font-size:26px;line-height:1.24;font-weight:700;letter-spacing:-.019em;
+  margin:0 0 18px;
+}
+h3{font-size:18px;font-weight:670;letter-spacing:-.011em;margin:26px 0 9px}
+h4{font-size:15px;font-weight:670;margin:18px 0 6px}
+.lede{font-size:17.5px;color:var(--ink-2);line-height:1.58}
+hr.rule{border:0;border-top:1px solid var(--line-2);margin:26px 0}
+
+/* ============ CHIPS ============ */
+.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:700;letter-spacing:.045em;text-transform:uppercase;
+  padding:3px 9px;border-radius:100px;border:1px solid;white-space:nowrap;
+  vertical-align:middle;line-height:1.5;
+}
+.c-green{background:var(--green-wash);color:var(--green);border-color:var(--green-line)}
+.c-amber{background:var(--amber-wash);color:var(--amber);border-color:var(--amber-line)}
+.c-red{background:var(--red-wash);color:var(--red);border-color:var(--red-line)}
+.c-blue{background:var(--blue-wash);color:var(--blue-deep);border-color:color-mix(in srgb,var(--blue) 30%,transparent)}
+.c-grey{background:var(--card-2);color:var(--ink-3);border-color:var(--line)}
+
+/* ============ BANNER ============ */
+.banner{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-left:4px solid var(--amber);
+  border-radius:var(--radius-sm);
+  padding:16px 20px;margin:22px 0 20px;
+  font-size:13.5px;color:var(--ink-2);line-height:1.55;
+}
+.banner b{color:var(--ink)}
+
+/* ============ HERO ============ */
+.hero{
+  border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--line);
+  margin-bottom:22px;
+  background:#0b1622;
+}
+.hero-art{display:block;width:100%;height:auto}
+.hero-cap{
+  padding:20px 26px 22px;background:var(--card);border-top:1px solid var(--line);
+}
+h1{
+  font-size:clamp(30px,5.4vw,44px);line-height:1.06;font-weight:730;
+  letter-spacing:-.033em;margin:0 0 8px;
+}
+.hero-sub{color:var(--ink-2);font-size:15.5px;margin:0}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;
+}
+
+/* ============ TOC ============ */
+.toc ol{margin:0;padding:0;list-style:none;counter-reset:t;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:2px 24px}
+.toc li{counter-increment:t;border-bottom:1px solid var(--line-2)}
+.toc li a{
+  display:flex;gap:11px;align-items:baseline;padding:8px 2px;
+  border:0;color:var(--ink);font-size:14.5px;
+}
+.toc li a:hover{color:var(--blue)}
+.toc li a::before{
+  content:counter(t,decimal-leading-zero);
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;min-width:20px;
+}
+
+/* ============ VERDICT BOX ============ */
+.verdict{
+  background:var(--green-wash);
+  border:1px solid var(--green-line);
+  border-radius:var(--radius);
+  padding:26px 28px;margin:0 0 22px;
+}
+.verdict-label{
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
+  color:var(--green);margin:0 0 9px;
+}
+.verdict h3{margin:0 0 10px;font-size:23px;line-height:1.24;letter-spacing:-.02em;color:var(--ink)}
+.verdict p{color:var(--ink-2);font-size:15.5px}
+.verdict-row{
+  display:grid;gap:14px;margin-top:18px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+.vr{background:var(--card);border:1px solid var(--green-line);border-radius:var(--radius-sm);padding:14px 16px}
+.vr .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--ink-3);margin-bottom:4px}
+.vr .v{font-size:15px;font-weight:650;line-height:1.35}
+.vr .n{font-size:13px;color:var(--ink-3);margin-top:3px;line-height:1.45}
+
+/* ============ STAT CARDS ============ */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:14px;margin:0 0 22px}
+.stat{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:20px 20px 18px;
+}
+.stat .lbl{font-size:11px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--ink-3)}
+.stat .big{
+  font-size:32px;font-weight:700;letter-spacing:-.035em;line-height:1.1;margin:8px 0 2px;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.stat .sub{font-size:13px;color:var(--ink-3);line-height:1.45}
+.stat .src{font-size:11.5px;color:var(--ink-3);margin-top:9px;font-style:italic;line-height:1.4}
+
+/* ============ CALLOUT ============ */
+.callout{
+  border-radius:var(--radius);padding:24px 26px;margin:22px 0;
+  border:1px solid var(--amber-line);background:var(--amber-wash);
+}
+.callout.blue{border-color:color-mix(in srgb,var(--blue) 30%,transparent);background:var(--blue-wash)}
+.callout.red{border-color:var(--red-line);background:var(--red-wash)}
+.callout.green{border-color:var(--green-line);background:var(--green-wash)}
+.callout h3{margin:0 0 10px;font-size:19px;letter-spacing:-.015em}
+.callout p{color:var(--ink-2)}
+.callout .kicker{
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
+  color:var(--amber);margin-bottom:7px;
+}
+.callout.blue .kicker{color:var(--blue-deep)}
+.callout.red .kicker{color:var(--red)}
+.callout.green .kicker{color:var(--green)}
+
+/* ============ SOURCE LINE ============ */
+.src{
+  font-size:13px;line-height:1.5;color:var(--ink-2);
+  border-left:2px solid var(--line);padding:2px 0 2px 13px;margin:11px 0 16px;
+}
+.src .s1{display:block;font-weight:600;color:var(--ink)}
+.src .s2{display:block;font-style:italic;color:var(--ink-3);font-size:12.5px;margin-top:2px}
+.src a{border-bottom-color:transparent}
+.src a:hover{border-bottom-color:var(--blue)}
+
+/* ============ TABLES ============ */
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px 0 10px;
+  border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:620px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line-2);vertical-align:top}
+thead th{
+  background:var(--card-2);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-3);white-space:nowrap;position:sticky;top:0;
+  border-bottom:1px solid var(--line);
+}
+tbody tr:last-child td{border-bottom:0}
+td.crit{font-weight:640;color:var(--ink);background:var(--card-2);white-space:nowrap}
+td.win{background:var(--green-wash);box-shadow:inset 3px 0 0 var(--green)}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.verdict-row-t td{border-top:2px solid var(--line);font-weight:640;background:var(--card-2)}
+.tnote{font-size:12.5px;color:var(--ink-3);font-style:italic;margin:0 0 14px}
+
+/* ============ FIXTURE GALLERY ============ */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:16px;margin:8px 0 4px}
+.fx{
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  background:linear-gradient(180deg,var(--card-2) 0%,var(--card) 62%);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.fx svg{display:block;width:100%;height:auto;background:transparent}
+.fx-body{padding:13px 15px 15px;border-top:1px solid var(--line-2);background:var(--card)}
+.fx-name{font-weight:670;font-size:14.5px;line-height:1.3;margin-bottom:3px}
+.fx-spec{font-size:12.5px;color:var(--ink-3);line-height:1.5;font-variant-numeric:tabular-nums}
+.fx-link{font-size:12.5px;margin-top:7px;display:block}
+
+/* ============ PROFILES ============ */
+.rank{
+  display:flex;align-items:center;gap:12px;margin:0 0 4px;
+}
+.rank .num{
+  font-family:var(--mono);font-size:12px;font-weight:700;color:var(--card);
+  background:var(--ink);border-radius:6px;padding:3px 8px;letter-spacing:.02em;
+}
+.rank .num.gold{background:var(--green)}
+.factsheet{
+  background:var(--card-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:13px 16px;font-size:14px;margin:12px 0 6px;line-height:1.6;
+}
+blockquote{
+  margin:12px 0;padding:12px 0 12px 16px;border-left:3px solid var(--line);
+  font-size:14.5px;color:var(--ink-2);
+}
+blockquote p{margin:0 0 6px}
+blockquote cite{font-style:normal;font-size:12.5px;color:var(--ink-3);display:block}
+ul,ol{margin:0 0 1em;padding-left:1.35em}
+li{margin-bottom:.42em}
+li:last-child{margin-bottom:0}
+ul.tight li{margin-bottom:.24em}
+
+/* ============ EMAIL ============ */
+.email{
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--card-2);margin:16px 0;overflow:hidden;
+}
+.email-hd{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:11px 15px;background:var(--card);border-bottom:1px solid var(--line);
+}
+.email-hd .to{font-size:13.5px;font-weight:650}
+.email-hd .to span{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
+.copy{
+  border:1px solid var(--line);background:var(--card-2);color:var(--ink-2);
+  font:inherit;font-size:12.5px;font-weight:640;padding:6px 13px;border-radius:7px;cursor:pointer;
+  white-space:nowrap;transition:background .15s,color .15s,border-color .15s;
+}
+.copy:hover{background:var(--blue-wash);color:var(--blue-deep);border-color:color-mix(in srgb,var(--blue) 35%,transparent)}
+.copy.done{background:var(--green-wash);color:var(--green);border-color:var(--green-line)}
+.email pre{
+  margin:0;padding:16px 17px;font-family:var(--mono);font-size:12.6px;line-height:1.62;
+  white-space:pre-wrap;word-wrap:break-word;color:var(--ink-2);
+}
+
+/* ============ SOURCES ============ */
+ol.sources{list-style:none;counter-reset:s;padding:0;margin:0}
+ol.sources li{
+  counter-increment:s;position:relative;padding:0 0 14px 40px;margin:0 0 14px;
+  border-bottom:1px solid var(--line-2);font-size:14px;line-height:1.55;
+}
+ol.sources li:last-child{border-bottom:0;margin-bottom:0}
+ol.sources li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink-3);
+  background:var(--card-2);border:1px solid var(--line);border-radius:6px;
+  width:28px;text-align:center;padding:2px 0;
+}
+ol.sources .note{display:block;font-style:italic;color:var(--ink-3);font-size:12.7px;margin-top:3px;line-height:1.5}
+.src-group{
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
+  color:var(--ink-3);margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);
+}
+.src-group:first-of-type{margin-top:6px}
+
+/* ============ FINAL VERDICT ============ */
+.final{
+  background:var(--card);border:2px solid var(--green);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:34px 34px 32px;margin-top:34px;
+}
+.final .fv-eyebrow{
+  font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:700;
+  color:var(--green);margin-bottom:9px;
+}
+.final h2{font-size:29px;letter-spacing:-.024em;margin:0 0 16px;line-height:1.16}
+.final .pick{
+  font-size:19px;line-height:1.44;font-weight:600;color:var(--ink);
+  background:var(--green-wash);border:1px solid var(--green-line);
+  border-radius:var(--radius-sm);padding:18px 20px;margin:0 0 22px;
+}
+.elim{border-top:1px solid var(--line-2);padding-top:13px;margin-top:13px}
+.elim:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.elim .en{font-weight:670;font-size:15px;margin-bottom:2px}
+@media (max-width:640px){ .final{padding:24px 18px} }
+
+/* ============ MISC ============ */
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px;margin:12px 0}
+.kv dt{font-weight:650;color:var(--ink-3);font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.kv dd{margin:0}
+.foot{
+  text-align:center;font-size:12.5px;color:var(--ink-3);
+  padding:34px 0 0;line-height:1.6;
+}
+
+@media print{
+  body{background:#fff;font-size:11pt}
+  .card,.hero,.final,.stat{box-shadow:none;break-inside:avoid}
+  .toc,.copy{display:none}
+  a{color:#000;border-bottom:0}
+  .tscroll{overflow:visible}
+  table{min-width:0;font-size:9pt}
+  h2.sec-title{break-after:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<!-- ═══════════ 1 · CONFIDENTIALITY BANNER ═══════════ -->
+<div class="banner">
+  <b>Confidential — prepared for a single buyer at San Jose, CA 95138.</b> Not for redistribution. Every fact below was read on <b>17 August 2026</b> and is date-stamped at the point of the claim. Prices, stock and promotions on consumer retail change daily — re-check the linked page before you pay.
+  <br><br>
+  <b>Verification ceiling, stated up front.</b> The machine that built this report has outbound web page access blocked by its network egress proxy. Every vendor page, government page and review page listed below was reached through a <b>search index extract</b> of that page, not by opening the page directly. That is a real limit on this report and it is why almost nothing here is tagged <span class="chip c-green">Verified</span> against two independent reads. Treat every number as a <b>lead to confirm on the live link in one click</b>, not as a settled figure. The dead ends are printed in §12 with the URLs and phone numbers so you can close them yourself in about fifteen minutes.
+</div>
+
+<!-- ═══════════ 2 · HERO ═══════════ -->
+<div class="hero">
+  <svg class="hero-art" viewBox="0 0 1060 340" role="img" aria-label="Illustration of a garden path at night lit by three low-voltage brass path lights casting overlapping warm pools of light.">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0a1220"/>
+        <stop offset="55%" stop-color="#111e2e"/>
+        <stop offset="100%" stop-color="#16242f"/>
+      </linearGradient>
+      <radialGradient id="pool" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffd08a" stop-opacity=".62"/>
+        <stop offset="45%" stop-color="#e8a94f" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="#e8a94f" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lamp" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff2d4" stop-opacity=".95"/>
+        <stop offset="100%" stop-color="#ffca7a" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="br" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#6d5730"/>
+        <stop offset="42%" stop-color="#c8ab72"/>
+        <stop offset="100%" stop-color="#7d6537"/>
+      </linearGradient>
+      <linearGradient id="path" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a4750"/>
+        <stop offset="100%" stop-color="#242f38"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1060" height="340" fill="url(#sky)"/>
+
+    <!-- stars -->
+    <g fill="#dce8f5">
+      <circle cx="112" cy="38" r="1.1" opacity=".75"/><circle cx="228" cy="66" r="0.8" opacity=".5"/>
+      <circle cx="332" cy="26" r="1.3" opacity=".8"/><circle cx="468" cy="52" r="0.9" opacity=".55"/>
+      <circle cx="596" cy="30" r="1.1" opacity=".7"/><circle cx="712" cy="70" r="0.8" opacity=".45"/>
+      <circle cx="838" cy="34" r="1.2" opacity=".78"/><circle cx="946" cy="60" r="0.9" opacity=".5"/>
+      <circle cx="1012" cy="24" r="1" opacity=".62"/><circle cx="60" cy="88" r="0.8" opacity=".4"/>
+      <circle cx="404" cy="92" r="0.7" opacity=".38"/><circle cx="770" cy="16" r="0.8" opacity=".5"/>
+      <circle cx="176" cy="14" r="0.9" opacity=".55"/><circle cx="654" cy="88" r="0.7" opacity=".35"/>
+    </g>
+
+    <!-- distant ridge: Mt Hamilton -->
+    <path d="M0 152 L118 122 L206 138 L318 104 L432 132 L534 112 L648 140 L742 118 L868 142 L968 124 L1060 146 L1060 200 L0 200 Z" fill="#0d1822" opacity=".92"/>
+
+    <!-- lawn -->
+    <path d="M0 196 Q265 182 530 194 Q795 206 1060 190 L1060 340 L0 340 Z" fill="#17262a"/>
+
+    <!-- path -->
+    <path d="M300 340 Q430 262 512 214 Q560 186 640 180 L760 176 L790 200 L666 208 Q596 212 556 236 Q470 288 400 340 Z" fill="url(#path)"/>
+
+    <!-- light pools -->
+    <ellipse cx="392" cy="286" rx="150" ry="52" fill="url(#pool)"/>
+    <ellipse cx="540" cy="234" rx="118" ry="40" fill="url(#pool)"/>
+    <ellipse cx="672" cy="200" rx="94" ry="31" fill="url(#pool)"/>
+
+    <!-- shrubs -->
+    <g fill="#101d21">
+      <ellipse cx="196" cy="242" rx="86" ry="46"/><ellipse cx="132" cy="266" rx="64" ry="36"/>
+      <ellipse cx="880" cy="228" rx="78" ry="40"/><ellipse cx="962" cy="248" rx="70" ry="36"/>
+      <ellipse cx="742" cy="176" rx="50" ry="24"/>
+    </g>
+    <g fill="#1b2f2c" opacity=".85">
+      <ellipse cx="238" cy="256" rx="44" ry="24"/><ellipse cx="838" cy="240" rx="40" ry="21"/>
+    </g>
+
+    <!-- fixture 1 (near / large) -->
+    <g transform="translate(392,286)">
+      <ellipse cx="0" cy="0" rx="46" ry="15" fill="#e8a94f" opacity=".16"/>
+      <rect x="-2.6" y="-70" width="5.2" height="70" fill="url(#br)"/>
+      <path d="M-30 -70 Q0 -88 30 -70 Q0 -63 -30 -70 Z" fill="url(#br)"/>
+      <ellipse cx="0" cy="-70" rx="30" ry="5" fill="#5b4a29"/>
+      <ellipse cx="0" cy="-66" rx="17" ry="5" fill="url(#lamp)"/>
+      <circle cx="0" cy="-67" r="3.4" fill="#fff6e2"/>
+    </g>
+    <!-- fixture 2 (mid) -->
+    <g transform="translate(540,234)">
+      <ellipse cx="0" cy="0" rx="34" ry="11" fill="#e8a94f" opacity=".16"/>
+      <rect x="-2" y="-53" width="4" height="53" fill="url(#br)"/>
+      <path d="M-23 -53 Q0 -67 23 -53 Q0 -48 -23 -53 Z" fill="url(#br)"/>
+      <ellipse cx="0" cy="-53" rx="23" ry="4" fill="#5b4a29"/>
+      <ellipse cx="0" cy="-50" rx="13" ry="4" fill="url(#lamp)"/>
+      <circle cx="0" cy="-50.5" r="2.6" fill="#fff6e2"/>
+    </g>
+    <!-- fixture 3 (far) -->
+    <g transform="translate(672,200)">
+      <ellipse cx="0" cy="0" rx="25" ry="8" fill="#e8a94f" opacity=".16"/>
+      <rect x="-1.5" y="-40" width="3" height="40" fill="url(#br)"/>
+      <path d="M-17 -40 Q0 -51 17 -40 Q0 -36 -17 -40 Z" fill="url(#br)"/>
+      <ellipse cx="0" cy="-40" rx="17" ry="3" fill="#5b4a29"/>
+      <ellipse cx="0" cy="-38" rx="10" ry="3" fill="url(#lamp)"/>
+      <circle cx="0" cy="-38.5" r="2" fill="#fff6e2"/>
+    </g>
+
+    <!-- house edge right -->
+    <path d="M1010 340 L1010 160 L1060 138 L1060 340 Z" fill="#0c161d"/>
+    <rect x="1024" y="188" width="20" height="26" fill="#e8c48a" opacity=".22"/>
+  </svg>
+
+  <div class="hero-cap">
+    <h1>Garden Light RAC</h1>
+    <p class="hero-sub">Research · Assessment · Comparison — low-voltage LED garden path lighting for a residential property in San Jose, CA&nbsp;95138. Six candidates researched, four compared, one recommended with a live purchase link and a landed price.</p>
+    <div class="hero-meta">
+      <span class="chip c-blue">Physical product</span>
+      <span class="chip c-grey">Read 17 Aug 2026</span>
+      <span class="chip c-grey">Santa Clara County · 10.000% tax</span>
+      <span class="chip c-amber">Sources read via search extract only</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TOC ═══════════ -->
+<div class="card toc">
+  <p class="sec-eyebrow">Contents</p>
+  <ol>
+    <li><a href="#call">The call</a></li>
+    <li><a href="#brief">What we're working with</a></li>
+    <li><a href="#fixtures">See the fixtures</a></li>
+    <li><a href="#matrix">Comparison matrix</a></li>
+    <li><a href="#ratings">Ratings</a></li>
+    <li><a href="#profiles">Candidate profiles, ranked</a></li>
+    <li><a href="#cost">What this should cost</a></li>
+    <li><a href="#policy">The policy layer</a></li>
+    <li><a href="#audit">Claim-by-claim audit</a></li>
+    <li><a href="#plain">My assessment, in plain English</a></li>
+    <li><a href="#emails">Copy-paste emails</a></li>
+    <li><a href="#sources">Sources &amp; dead ends</a></li>
+    <li><a href="#final">Final verdict</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════ 3 · THE CALL ═══════════ -->
+<h2 class="sec-title" id="call" style="margin:34px 0 16px">The call</h2>
+
+<div class="verdict">
+  <p class="verdict-label">Recommended purchase</p>
+  <h3>VOLT Low Voltage LED Outdoor Path Light 6-pack Kit with 100W Transformer — bought through Costco, item&nbsp;#100505043, $349.99 + tax.</h3>
+  <p>Solid brass VOLT fixtures with VOLT's lifetime warranty on fixtures, bulbs and transformer, sold through the one retail channel in America whose return policy has no expiry date. It is the same manufacturer as the premium pick and roughly <b>half the price of the same brand at Home Depot</b>. Buy it online; it ships free.</p>
+  <div class="verdict-row">
+    <div class="vr">
+      <div class="k">The pick</div>
+      <div class="v">VOLT 6-pack path kit via Costco</div>
+      <div class="n">$349.99 · 4.8★ from 437 ratings · online only, limit 5</div>
+    </div>
+    <div class="vr">
+      <div class="k">The runner-up</div>
+      <div class="v">VOLT direct — voltlighting.com</div>
+      <div class="n">Wider fixture choice, deeper support bench, no Costco membership needed. Costs more.</div>
+    </div>
+    <div class="vr">
+      <div class="k">Special role</div>
+      <div class="v">Philips Hue Calla — the smart-light exception</div>
+      <div class="n">Only pick this if app control and colour actually matter to you. It is not a lifetime fixture.</div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="lbl">Landed price, the pick</div>
+    <div class="big">$384.99</div>
+    <div class="sub">$349.99 + 10.000% San&nbsp;Jose sales tax. Standard UPS Ground shipping already included in the quoted price.</div>
+    <div class="src">Costco item page + CDTFA rate table, read 17 Aug 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="lbl">Warranty stack</div>
+    <div class="big">Lifetime</div>
+    <div class="sub">VOLT lifetime warranty on brass fixtures, LED bulbs and transformers — under Costco's no-expiry satisfaction guarantee.</div>
+    <div class="src">voltlighting.com/warranty + Costco return policy, read 17 Aug 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="lbl">Review consensus</div>
+    <div class="big">4.8 ★</div>
+    <div class="sub">437 ratings on the exact kit at Costco. Independent of VOLT's own site, which shows only VOLT-hosted reviews.</div>
+    <div class="src">Costco product listing, read 17 Aug 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="lbl">Same-brand price spread</div>
+    <div class="big">2.06×</div>
+    <div class="sub">$349.99 at Costco vs $719.97 at Home Depot for a comparable 6-light VOLT brass kit with transformer.</div>
+    <div class="src">Costco + Home Depot listings, read 17 Aug 2026.</div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="kicker">The finding that reframes everything</div>
+  <h3>In this category the brand decision is nearly free. The channel decision costs you $400.</h3>
+  <p>I went into this expecting the report to be a fight between manufacturers — VOLT against Kichler against FX Luminaire. It isn't. Three of the four serious candidates turned out to be <b>the same brass, from the same manufacturer, under the same lifetime warranty</b>, sold through three different storefronts at wildly different prices:</p>
+  <ul>
+    <li><b>Costco</b> — VOLT 6-light brass path kit, 100W transformer, 100&nbsp;ft direct-burial cable, bulbs, stakes, hubs and wire strippers: <b>$349.99</b>, shipping included. <span class="chip c-green">Best price</span></li>
+    <li><b>Home Depot</b> — VOLT Conehead brass 6-pack kit, 100W transformer, cable, hubs: <b>$719.97</b>. <span class="chip c-red">2.06× the Costco price</span></li>
+    <li><b>voltlighting.com direct</b> — Conehead brass path light alone at <b>$72.99</b> list ($65.69 on sale), transformer, cable and bulbs all extra. <span class="chip c-amber">$438 in fixtures before you've bought a transformer</span></li>
+  </ul>
+  <p style="margin-bottom:0">These are not identical SKUs — Costco's kit and Home Depot's Conehead kit are different fixture models, and I could not open either page to compare shade diameters side by side. But they are the same metal, the same manufacturer and the same warranty document. <b>Nothing in the $370 gap is buying you a better light.</b> It is buying you a different shelf. That single fact reorganised this entire report: the question stopped being <em>which brand</em> and became <em>which counter</em>.</p>
+</div>
+
+<!-- ═══════════ 4 · WHAT WE'RE WORKING WITH ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 02</p>
+  <h2 class="sec-title" id="brief">What we're working with</h2>
+
+  <p class="lede">Your brief is four sentences long, and three of them are load-bearing. Read closely, they decide almost everything.</p>
+
+  <h3>"Research for Garden Light"</h3>
+  <p>Read literally, this is a product category, not a company. Combined with <em>"I am buying a physical product, not hiring anyone,"</em> I have scoped this to <b>low-voltage (12V) LED garden and path lighting fixtures</b> for a residential landscape — the thing a homeowner buys in a box and stakes into a bed. I have deliberately <b>not</b> scoped it to solar stake lights, string lights, or a hired landscape-lighting contractor.</p>
+  <p><span class="chip c-amber">Ask</span> If you meant a specific business trading as "Garden Light," or you meant string/festoon lighting rather than path lighting, tell me and I will re-run this — the candidate set changes completely.</p>
+
+  <h3>"We're located at San Jose, CA 95138"</h3>
+  <p>95138 is Silver Creek, on San Jose's eastern edge below the Mt. Hamilton foothills. Three consequences, all real:</p>
+  <ul>
+    <li><b>Sales tax is 10.000%</b> as of 1 April 2026 — the highest bracket in the county, and it materially changes landed price on a $700 basket. San Jose city rate is a full 0.25 points above the unincorporated Santa Clara County rate of 9.750%.
+      <div class="src"><span class="s1">CDTFA — <a href="https://cdtfa.ca.gov/formspubs/L1022.pdf">Special Notice L-1022, New Sales and Use Tax Rates</a> · cdtfa.ca.gov</span><span class="s2">(California Department of Tax and Fee Administration — the state agency that sets and publishes every district tax rate in California; this is the authoritative record, not an estimate. Read 17 Aug 2026 via search extract.)</span></div>
+    </li>
+    <li><b>You are inside the Lick Observatory light-cooperation zone.</b> The City of San Jose has, since 1980, run a deliberately restrained street-lighting policy — low-pressure sodium citywide except the downtown core — specifically so UC's Lick Observatory on Mt. Hamilton can keep doing frontline research over a city of a million people. That is a street-lighting policy and it does <b>not</b> regulate what you stake in your own flowerbed, but it is the local norm, and it is the reason a warm, shielded, downward-throwing fixture is the neighbourly choice here rather than a bright uplight.
+      <div class="src"><span class="s1">UC Lick Observatory — <a href="https://mthamilton.ucolick.org/public/lighting/Cooperation2.html">Santa Clara Valley Lighting and Lick Observatory: Cooperation</a> · mthamilton.ucolick.org</span><span class="s2">(University of California Observatories, the operator of Lick Observatory — a public university research institution documenting its own decades-long lighting agreement with the City of San Jose. Primary account of the policy, though written by an interested party. Read 17 Aug 2026 via search extract.)</span></div>
+    </li>
+    <li><b>Costco Senter Road is roughly six miles from you</b> (2201 Senter Rd, San Jose 95112, (408) 275-0199) — which matters, because the recommended kit's return path is a counter you can drive to, not a shipping label you have to fight for. <span class="chip c-amber">Unconfirmed</span> — I could not open Costco's warehouse page to confirm current hours; call before you drive.</li>
+  </ul>
+
+  <h3>"Add the images for the doors so I can easily see it"</h3>
+  <p><span class="chip c-amber">Ask</span> The word <b>"doors"</b> does not belong to a garden-lighting brief. I have read it as a carry-over from a previous report template and interpreted it as <em>"show me the fixtures."</em> §03 does exactly that. If you genuinely meant doors — gate lights, door-mounted wall lanterns — say so and I will rebuild.</p>
+  <p>One honest constraint on that request: this machine cannot download images, and the artifact viewer blocks remote image loading anyway. So §03 is <b>scale drawings, not vendor photographs</b> — each fixture drawn from its published height and shade-diameter figures, all at one common scale so you can compare silhouettes and sizes at a glance. Every drawing links straight to the vendor's own photo.</p>
+
+  <h3>What you did not say — and how I resolved it</h3>
+  <p>You never stated a priority. No budget, no fixture count, no style, no deadline. Every recommendation below therefore runs on one stated assumption, and you should overrule it if it's wrong:</p>
+  <div class="callout blue" style="margin:14px 0 18px">
+    <div class="kicker">Working assumption</div>
+    <p style="margin-bottom:0"><b>Buy once. Serviceable forever. Purchasable today.</b> You want a fixture that survives twenty Bay Area summers, whose failure mode is a $6 bulb rather than a $120 replacement fixture, from a seller who will still honour the warranty in year eight — and you want to be able to click Buy at the end of this document. I am weighting durability and serviceability above lowest sticker price, and above smart features.</p>
+  </div>
+
+  <div class="callout red">
+    <div class="kicker">The single rule that eliminates candidates</div>
+    <h3>If the LED is sealed into the fixture, the fixture is a consumable — and it's out.</h3>
+    <p style="margin-bottom:0">Every long-warranty landscape fixture on the market fails the same way: not the brass, not the lens, but the <b>light engine and its driver</b>. In a lamp-ready fixture — a socket that takes a standard G4 bi-pin or MR16 bulb — that failure costs you a few dollars and ninety seconds with the shade off. In an integrated-LED fixture, the same failure means digging up the stake and replacing the whole unit, and any warranty on it is a warranty on your paperwork, not on your evening. <b>Lamp-ready solid brass, or it does not make the matrix.</b> This rule alone eliminates Philips Hue Calla, Hampton Bay, every solar stake light, and most of Kichler's integrated Design Pro range.</p>
+  </div>
+</div>
+
+<!-- ═══════════ 5 · FIXTURES ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 03</p>
+  <h2 class="sec-title" id="fixtures">See the fixtures</h2>
+  <p class="lede">All six drawn to one scale, so heights and shade widths compare honestly. These are dimensioned drawings from each vendor's published spec — <b>not vendor photographs</b>, which this machine is blocked from downloading. Tap any name for the vendor's own photo.</p>
+
+  <div class="gallery">
+
+    <!-- VOLT Max Spread -->
+    <div class="fx">
+      <svg viewBox="0 0 150 180" role="img" aria-label="VOLT Max Spread brass path light, 25 inches tall with a 9 inch mushroom shade on a slim stem.">
+        <line x1="8" y1="150" x2="142" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+        <g fill="var(--brass)">
+          <path d="M52 25 Q75 8 98 25 Q75 33 52 25 Z"/>
+          <ellipse cx="75" cy="25" rx="23" ry="3.4" fill="var(--brass-lite)"/>
+          <rect x="72.6" y="27" width="4.8" height="123" />
+          <rect x="68" y="27" width="14" height="6" rx="2"/>
+        </g>
+        <ellipse cx="75" cy="31" rx="13" ry="3" fill="#f2c97e" opacity=".85"/>
+        <path d="M74 150 L76 172 L75 176 L74 172 Z" fill="var(--ink-3)"/>
+        <g stroke="var(--ink-3)" stroke-width=".8" opacity=".6">
+          <line x1="118" y1="25" x2="118" y2="150"/><line x1="114" y1="25" x2="122" y2="25"/><line x1="114" y1="150" x2="122" y2="150"/>
+          <line x1="52" y1="16" x2="98" y2="16"/><line x1="52" y1="12" x2="52" y2="20"/><line x1="98" y1="12" x2="98" y2="20"/>
+        </g>
+        <text x="126" y="90" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">25&quot;</text>
+        <text x="66" y="10" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">9&quot;</text>
+      </svg>
+      <div class="fx-body">
+        <div class="fx-name">VOLT Max Spread <span class="chip c-green">Lamp-ready</span></div>
+        <div class="fx-spec">Solid cast brass, bronze finish · 25″ tall, 9″ shade · G4 bi-pin bulb, 150–425 lm options · 16 ft light spread · 10″ Hammer stake · UL &amp; cUL listed · lifetime warranty</div>
+        <a class="fx-link" href="https://www.voltlighting.com/max-spread-brass-path-light">See VOLT's photo →</a>
+      </div>
+    </div>
+
+    <!-- VOLT Conehead -->
+    <div class="fx">
+      <svg viewBox="0 0 150 180" role="img" aria-label="VOLT Conehead brass path light, 24 inch stem with a 7 inch conical hat.">
+        <line x1="8" y1="150" x2="142" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+        <g fill="var(--brass)">
+          <path d="M57 33 L75 15 L93 33 Z"/>
+          <ellipse cx="75" cy="33" rx="18" ry="2.8" fill="var(--brass-lite)"/>
+          <rect x="72.8" y="35" width="4.4" height="115"/>
+          <rect x="68.5" y="35" width="13" height="5.5" rx="2"/>
+        </g>
+        <ellipse cx="75" cy="38" rx="10.5" ry="2.6" fill="#f2c97e" opacity=".85"/>
+        <path d="M74 150 L76 170 L75 174 L74 170 Z" fill="var(--ink-3)"/>
+        <g stroke="var(--ink-3)" stroke-width=".8" opacity=".6">
+          <line x1="118" y1="35" x2="118" y2="150"/><line x1="114" y1="35" x2="122" y2="35"/><line x1="114" y1="150" x2="122" y2="150"/>
+          <line x1="57" y1="24" x2="93" y2="24"/><line x1="57" y1="20" x2="57" y2="28"/><line x1="93" y1="20" x2="93" y2="28"/>
+        </g>
+        <text x="126" y="95" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">24&quot;</text>
+        <text x="68" y="18" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">7&quot;</text>
+      </svg>
+      <div class="fx-body">
+        <div class="fx-name">VOLT Conehead <span class="chip c-green">Lamp-ready</span></div>
+        <div class="fx-spec">Cast brass · 24″ stem, 7″ conical hat · 3W 2700K G4 LED included in HD kit · 9″/10″ stake · UL &amp; cUL listed · lifetime warranty · $72.99 list direct</div>
+        <a class="fx-link" href="https://www.voltlighting.com/conehead-brass-path-light">See VOLT's photo →</a>
+      </div>
+    </div>
+
+    <!-- Kichler 15310 -->
+    <div class="fx">
+      <svg viewBox="0 0 150 180" role="img" aria-label="Kichler 15310 eight inch dome path light, 21 inches tall.">
+        <line x1="8" y1="150" x2="142" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+        <g fill="#6c5f52">
+          <path d="M54 45 Q75 27 96 45 Q75 51 54 45 Z"/>
+          <ellipse cx="75" cy="45" rx="21" ry="3.2" fill="#8b7c6c"/>
+          <rect x="72.4" y="47" width="5.2" height="103"/>
+          <rect x="67" y="47" width="16" height="6" rx="2"/>
+        </g>
+        <ellipse cx="75" cy="51" rx="12" ry="3" fill="#f2c97e" opacity=".8"/>
+        <path d="M74 150 L76 170 L75 174 L74 170 Z" fill="var(--ink-3)"/>
+        <g stroke="var(--ink-3)" stroke-width=".8" opacity=".6">
+          <line x1="118" y1="45" x2="118" y2="150"/><line x1="114" y1="45" x2="122" y2="45"/><line x1="114" y1="150" x2="122" y2="150"/>
+          <line x1="54" y1="36" x2="96" y2="36"/><line x1="54" y1="32" x2="54" y2="40"/><line x1="96" y1="32" x2="96" y2="40"/>
+        </g>
+        <text x="126" y="100" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">21&quot;</text>
+        <text x="62" y="30" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">8.25&quot;</text>
+      </svg>
+      <div class="fx-body">
+        <div class="fx-name">Kichler 15310 8″ Dome <span class="chip c-green">Lamp-ready</span></div>
+        <div class="fx-spec">Aluminium, textured bronze (15310AZT) or centennial brass (15310CBR) · 21″ H × 8.25″ W · 12V, 8″ ground stake · rated for harsh coastal · 5–15 yr warranty by collection · $114.99 / $149.99</div>
+        <a class="fx-link" href="https://www.kichler.com/products/landscape-lighting/path-and-spread/led-retrofit-centennial-brass-path-light-15310cbr">See Kichler's photo →</a>
+      </div>
+    </div>
+
+    <!-- Hue Calla -->
+    <div class="fx">
+      <svg viewBox="0 0 150 180" role="img" aria-label="Philips Hue Calla bollard, 9.9 inches tall and 4.1 inches in diameter.">
+        <line x1="8" y1="150" x2="142" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+        <g fill="#2b3038">
+          <rect x="65" y="101" width="20" height="49" rx="2.5"/>
+          <ellipse cx="75" cy="101" rx="10" ry="3"/>
+          <rect x="61" y="146" width="28" height="5" rx="2"/>
+        </g>
+        <ellipse cx="75" cy="101" rx="7.5" ry="2.2" fill="#cbb8ff"/>
+        <ellipse cx="75" cy="112" rx="26" ry="7" fill="#cbb8ff" opacity=".18"/>
+        <g stroke="var(--ink-3)" stroke-width=".8" opacity=".6">
+          <line x1="112" y1="101" x2="112" y2="150"/><line x1="108" y1="101" x2="116" y2="101"/><line x1="108" y1="150" x2="116" y2="150"/>
+          <line x1="65" y1="93" x2="85" y2="93"/><line x1="65" y1="89" x2="65" y2="97"/><line x1="85" y1="89" x2="85" y2="97"/>
+        </g>
+        <text x="120" y="128" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">9.9&quot;</text>
+        <text x="60" y="87" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">4.1&quot;</text>
+      </svg>
+      <div class="fx-body">
+        <div class="fx-name">Philips Hue Calla <span class="chip c-red">Sealed LED</span></div>
+        <div class="fx-spec">Black aluminium bollard · 9.9″ H × 4.1″ dia · integrated 8W LED, 640 lm, 16M colours · IP65, UL wet-rated · 25,000 hr rated life · 2 yr warranty · needs Hue Bridge</div>
+        <a class="fx-link" href="https://www.homedepot.com/p/Philips-Hue-Calla-Outdoor-Low-Voltage-Black-640-Lumen-Plug-In-Color-Changing-Integrated-LED-Smart-Bollard-Light-Extension-1-Pack-802082/306165387">See Home Depot's photo →</a>
+      </div>
+    </div>
+
+    <!-- Hampton Bay -->
+    <div class="fx">
+      <svg viewBox="0 0 150 180" role="img" aria-label="Hampton Bay budget path light, tiered plastic shade on a short stem.">
+        <line x1="8" y1="150" x2="142" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+        <g fill="#33383f">
+          <path d="M60 88 L90 88 L86 82 L64 82 Z"/>
+          <path d="M64 96 L86 96 L83 90 L67 90 Z"/>
+          <rect x="72.8" y="97" width="4.4" height="53"/>
+          <rect x="69" y="97" width="12" height="4" rx="1.5"/>
+        </g>
+        <ellipse cx="75" cy="99" rx="9" ry="2.4" fill="#f2d9a0" opacity=".75"/>
+        <path d="M74 150 L76 168 L75 172 L74 168 Z" fill="var(--ink-3)"/>
+        <g stroke="var(--ink-3)" stroke-width=".8" opacity=".6">
+          <line x1="112" y1="82" x2="112" y2="150"/><line x1="108" y1="82" x2="116" y2="82"/><line x1="108" y1="150" x2="116" y2="150"/>
+        </g>
+        <text x="120" y="118" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">~14&quot;</text>
+      </svg>
+      <div class="fx-body">
+        <div class="fx-name">Hampton Bay DL10103BKS <span class="chip c-red">Sealed LED</span></div>
+        <div class="fx-spec">Plastic/composite, black · 6-pack kit with transformer and cable · 552 lm total · integrated LED, not replaceable · 5 yr warranty · 90-day returns · $113.29 for the set
+        <br><span class="chip c-amber">Height unconfirmed</span></div>
+        <a class="fx-link" href="https://www.homedepot.com/p/Hampton-Bay-552-Lumen-Low-Voltage-Integrated-LED-Black-Outdoor-Landscape-Path-Light-Kit-6-Pack-DL10103BKS/301790369">See Home Depot's photo →</a>
+      </div>
+    </div>
+
+    <!-- Gama Sonic -->
+    <div class="fx">
+      <svg viewBox="0 0 150 180" role="img" aria-label="Gama Sonic solar path light with a solar panel top on a bollard stem.">
+        <line x1="8" y1="150" x2="142" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+        <g fill="#3b4149">
+          <rect x="60" y="76" width="30" height="5" rx="1.5"/>
+          <rect x="66" y="81" width="18" height="16" rx="2"/>
+          <rect x="72.8" y="97" width="4.4" height="53"/>
+        </g>
+        <rect x="61.5" y="72" width="27" height="4.5" rx="1" fill="#1d3a5c"/>
+        <g stroke="#4a7fb5" stroke-width=".6">
+          <line x1="70" y1="72" x2="70" y2="76.5"/><line x1="79" y1="72" x2="79" y2="76.5"/>
+        </g>
+        <rect x="66.5" y="83" width="17" height="12" fill="#f2d9a0" opacity=".55"/>
+        <path d="M74 150 L76 168 L75 172 L74 168 Z" fill="var(--ink-3)"/>
+        <g stroke="var(--ink-3)" stroke-width=".8" opacity=".6">
+          <line x1="112" y1="72" x2="112" y2="150"/><line x1="108" y1="72" x2="116" y2="72"/><line x1="108" y1="150" x2="116" y2="150"/>
+        </g>
+        <text x="120" y="114" font-size="8.5" fill="var(--ink-3)" font-family="ui-monospace,monospace">~16&quot;</text>
+      </svg>
+      <div class="fx-body">
+        <div class="fx-name">Gama Sonic solar path light <span class="chip c-red">Sealed LED + battery</span></div>
+        <div class="fx-spec">Cast aluminium · solar, no wiring at all · ~50 lm warm output · 1.6W panel, dusk-to-dawn, ~2 nights on a charge · Li-ion pack ≈2,000 charges ≈5 yrs · 2 yr warranty
+        <br><span class="chip c-amber">Height &amp; price unconfirmed</span></div>
+        <a class="fx-link" href="https://gamasonic.com/product/luxor-solar-pathway-light-black-2-pk/">See Gama Sonic's photo →</a>
+      </div>
+    </div>
+
+  </div>
+  <p class="tnote" style="margin-top:14px">Drawing scale: 1 inch ≈ 5 px, common across all six. Where a published height was unavailable I have marked the drawing Unconfirmed rather than guessing a silhouette — Hampton Bay and Gama Sonic dimensions are indicative only.</p>
+</div>
+
+<!-- ═══════════ 6 · MATRIX ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 04</p>
+  <h2 class="sec-title" id="matrix">Comparison matrix</h2>
+  <p class="lede">Four candidates survived the lamp-ready rule or earned an exemption. FX Luminaire and the solar field were cut before this table — see §06 for why, stated fairly.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Criterion</th>
+        <th>VOLT via Costco</th>
+        <th>VOLT direct</th>
+        <th>VOLT via Home Depot</th>
+        <th>Kichler 15310</th>
+        <th>Philips Hue Calla</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="crit">Live purchase URL</td>
+        <td class="win"><a href="https://www.costco.com/p/-/volt-low-voltage-led-outdoor-path-light-6-pack-kit-with-100w-transformer/100505043">costco.com #100505043</a><br><span class="chip c-green">Direct</span></td>
+        <td><a href="https://www.voltlighting.com/6-max-spread-brass-path-area-light-kit">voltlighting.com</a><br><span class="chip c-green">Direct</span></td>
+        <td><a href="https://www.homedepot.com/p/VOLT-Low-Voltage-Cast-Brass-Conehead-Bronze-Path-Light-Kit-6-Pack-BDL-HD-KIT1/317078466">homedepot.com #317078466</a><br><span class="chip c-green">Direct</span></td>
+        <td><a href="https://www.amazon.com/Kichler-15310AZT-1-Light-Textured-Architectural/dp/B001BA3LUE">amazon.com B001BA3LUE</a><br><span class="chip c-amber">Brand site is spec-only</span></td>
+        <td><a href="https://www.homedepot.com/p/Philips-Hue-Calla-Outdoor-Low-Voltage-Black-640-Lumen-Plug-In-Color-Changing-Integrated-LED-Smart-Bollard-Light-Extension-1-Pack-802082/306165387">homedepot.com #306165387</a><br><span class="chip c-green">Direct</span></td>
+      </tr>
+      <tr>
+        <td class="crit">Price for 6 lights + transformer</td>
+        <td class="win num">$349.99<br><small>cable, bulbs, stakes, hubs, strippers all included</small></td>
+        <td class="num">≈$438 fixtures alone<br><small>6 × $72.99 Conehead; transformer, cable, bulbs extra <span class="chip c-amber">Kit price unconfirmed</span></small></td>
+        <td class="num">$719.97<br><small>$669.97 with a new HD card</small></td>
+        <td class="num">≈$689.94 fixtures alone<br><small>6 × $114.99 bronze; transformer + cable extra</small></td>
+        <td class="num">≈$640<br><small>$130 base + 5 × $90 ext. + ~$60 Bridge</small></td>
+      </tr>
+      <tr>
+        <td class="crit">Landed, incl. 10.000% SJ tax</td>
+        <td class="win num"><b>$384.99</b><br><small>shipping included</small></td>
+        <td class="num">≈$700+<br><span class="chip c-amber">Unconfirmed</span></td>
+        <td class="num">$791.97</td>
+        <td class="num">≈$1,050+<br><span class="chip c-amber">Est.</span></td>
+        <td class="num">≈$704</td>
+      </tr>
+      <tr>
+        <td class="crit">Material</td>
+        <td class="win">Solid cast brass<br><span class="chip c-green">No coating to peel</span></td>
+        <td class="win">Solid cast brass<br><span class="chip c-green">No coating to peel</span></td>
+        <td class="win">Cast brass<br><span class="chip c-green">No coating to peel</span></td>
+        <td>Aluminium body<br><span class="chip c-amber">Brass finish option ≠ solid brass</span></td>
+        <td>Aluminium<br><span class="chip c-amber">Painted</span></td>
+      </tr>
+      <tr>
+        <td class="crit">Bulb serviceable?</td>
+        <td class="win">Yes — GU4/G4 bi-pin<br><span class="chip c-green">Lamp-ready</span></td>
+        <td class="win">Yes — G4 bi-pin<br><span class="chip c-green">Lamp-ready</span></td>
+        <td class="win">Yes — G4 bi-pin<br><span class="chip c-green">Lamp-ready</span></td>
+        <td class="win">Yes — LED retrofit socket<br><span class="chip c-green">Lamp-ready</span></td>
+        <td>No — sealed<br><span class="chip c-red">Whole unit is the consumable</span></td>
+      </tr>
+      <tr>
+        <td class="crit">Warranty on fixture</td>
+        <td class="win">Lifetime<br><small>brass fixtures, bulbs &amp; transformers</small></td>
+        <td class="win">Lifetime</td>
+        <td class="win">Lifetime</td>
+        <td>5–15 yr by collection<br><small>lifetime on Pro/Contractor transformers</small></td>
+        <td>2 years<br><span class="chip c-red">Shortest in the field</span></td>
+      </tr>
+      <tr>
+        <td class="crit">Return window</td>
+        <td class="win">No expiry<br><span class="chip c-green">Costco satisfaction guarantee</span></td>
+        <td>Shipping covered both ways<br><span class="chip c-amber">Must ship the defective unit first</span></td>
+        <td>90 days</td>
+        <td>Retailer-dependent<br><span class="chip c-amber">Unconfirmed</span></td>
+        <td>90 days</td>
+      </tr>
+      <tr>
+        <td class="crit">Review consensus</td>
+        <td class="win">4.8★ / 437 ratings<br><small>on this exact kit</small></td>
+        <td>4.1★ / 79 (Trustpilot)<br><span class="chip c-amber">Polarised</span></td>
+        <td>Reviews exist<br><span class="chip c-amber">Count unconfirmed</span></td>
+        <td><span class="chip c-amber">Not verified</span></td>
+        <td>Broadly positive in trade press<br><span class="chip c-amber">Directional only</span></td>
+      </tr>
+      <tr>
+        <td class="crit">Local return counter</td>
+        <td class="win">Costco Senter Rd, ~6 mi<br><span class="chip c-green">Drive-in</span></td>
+        <td>None — Florida ship-back<br><span class="chip c-red">Postal only</span></td>
+        <td class="win">Home Depot, multiple in SJ<br><span class="chip c-green">Drive-in</span></td>
+        <td>Amazon locker / UPS</td>
+        <td class="win">Home Depot, multiple in SJ</td>
+      </tr>
+      <tr>
+        <td class="crit">Barrier to buy</td>
+        <td>Costco membership required<br><span class="chip c-amber">Ask — do you have one?</span></td>
+        <td class="win">None</td>
+        <td class="win">None</td>
+        <td class="win">None</td>
+        <td class="win">None (Bridge is a cost, not a barrier)</td>
+      </tr>
+      <tr>
+        <td class="crit">Dark-sky manners</td>
+        <td class="win">Shaded, downward, 2700K<br><span class="chip c-green">Good neighbour</span></td>
+        <td class="win">Shaded, downward, 2700K</td>
+        <td class="win">Shaded, downward, 2700K</td>
+        <td class="win">Shaded dome, downward</td>
+        <td>Upward-emitting bollard<br><span class="chip c-amber">Poorest fit for a Lick-adjacent property</span></td>
+      </tr>
+      <tr class="verdict-row-t">
+        <td class="crit">Verdict</td>
+        <td class="win"><span class="chip c-green">Buy this</span><br><small>Best price, best warranty stack, best return path</small></td>
+        <td><span class="chip c-blue">Back-up</span><br><small>Buy here if you want a specific fixture style or no membership</small></td>
+        <td><span class="chip c-amber">Overpriced twin</span><br><small>Same brand, same warranty, $407 more landed</small></td>
+        <td><span class="chip c-amber">Good, not better</span><br><small>Costs more, warrants less, isn't solid brass</small></td>
+        <td><span class="chip c-red">Different product</span><br><small>Only if colour + app control is the actual goal</small></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Winning cell shaded green per row. Landed prices apply the 10.000% San Jose rate to the pre-tax figure; Costco's quoted price already includes standard UPS Ground shipping. Kichler and VOLT-direct totals are builds, not published kit prices, and are labelled as estimates.</p>
+
+  <div class="src"><span class="s1">Costco — <a href="https://www.costco.com/p/-/volt-low-voltage-led-outdoor-path-light-6-pack-kit-with-100w-transformer/100505043">VOLT Low Voltage LED Outdoor Path Light 6-pack Kit with 100W Transformer, item 100505043</a> · costco.com</span><span class="s2">(Costco Wholesale's own e-commerce listing — the seller's published price, contents list and member rating for the exact SKU. Primary for price and contents. Read 17 Aug 2026 via search extract.)</span></div>
+  <div class="src"><span class="s1">The Home Depot — <a href="https://www.homedepot.com/p/VOLT-Low-Voltage-Cast-Brass-Conehead-Bronze-Path-Light-Kit-6-Pack-BDL-HD-KIT1/317078466">VOLT Low Voltage Cast Brass Conehead Bronze Path Light Kit (6-Pack), BDL-HD-KIT1</a> · homedepot.com</span><span class="s2">(Home Depot's own product listing — the retailer's published price for a comparable VOLT brass 6-light kit. Primary for price. Read 17 Aug 2026 via search extract.)</span></div>
+</div>
+
+<!-- ═══════════ 7 · RATINGS ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 05</p>
+  <h2 class="sec-title" id="ratings">Ratings, every platform</h2>
+  <p class="lede">Including the platforms that returned nothing. An empty platform is not a red flag when that platform doesn't serve this category — a brass path light is not a plumber, and BBB, Yelp and Angi were never going to have much to say.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead>
+      <tr><th>Platform</th><th>VOLT</th><th>Kichler</th><th>Philips Hue</th><th>Hampton Bay</th><th>What the platform is worth here</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="crit">Costco (product)</td>
+        <td class="win num">4.8★ · 437</td><td class="num">—</td><td class="num">—</td><td class="num">—</td>
+        <td>Highest value in this report. Verified-purchase, member-only, on the exact SKU.</td>
+      </tr>
+      <tr>
+        <td class="crit">Trustpilot (company)</td>
+        <td class="num">4.1★ · 79</td><td class="num">—</td><td class="num">—</td><td class="num">—</td>
+        <td>Company-level, self-selecting, low volume. Directional. Useful for reading complaint <em>shape</em>, not score.</td>
+      </tr>
+      <tr>
+        <td class="crit">Houzz</td>
+        <td class="num">5.0★ <span class="chip c-amber">count unknown</span></td><td class="num">—</td><td class="num">—</td><td class="num">—</td>
+        <td>A perfect 5.0 with an unstated denominator tells you almost nothing. Discounted.</td>
+      </tr>
+      <tr>
+        <td class="crit">BBB</td>
+        <td class="num">No rating<br><small>not accredited</small></td><td class="num">—</td><td class="num">—</td><td class="num">—</td>
+        <td><b>Not a finding.</b> BBB states it has insufficient information to rate VOLT LLC. That is an absence of data, not a negative signal.</td>
+      </tr>
+      <tr>
+        <td class="crit">Home Depot (product)</td>
+        <td class="num">Reviews present<br><span class="chip c-amber">unconfirmed</span></td><td class="num">—</td><td class="num">Present</td><td class="num">Present</td>
+        <td>Verified-purchase and useful — but I could not open the review pages to read counts or content.</td>
+      </tr>
+      <tr>
+        <td class="crit">Amazon (product)</td>
+        <td class="num"><span class="chip c-amber">Not verified</span></td><td class="num"><span class="chip c-amber">Not verified</span></td><td class="num"><span class="chip c-amber">Not verified</span></td><td class="num">—</td>
+        <td>Listings confirmed to exist by ASIN; star ratings could not be retrieved. Genuinely open.</td>
+      </tr>
+      <tr>
+        <td class="crit">Yelp / Angi / Thumbtack</td>
+        <td class="num">n/a</td><td class="num">n/a</td><td class="num">n/a</td><td class="num">n/a</td>
+        <td><b>Meaningless here, not damning.</b> These platforms rate service providers. You are buying a boxed product, so their silence carries no information.</td>
+      </tr>
+      <tr>
+        <td class="crit">G2 / Capterra / Gartner</td>
+        <td class="num">n/a</td><td class="num">n/a</td><td class="num">n/a</td><td class="num">n/a</td>
+        <td>Software review platforms. Not applicable to landscape hardware.</td>
+      </tr>
+      <tr class="verdict-row-t">
+        <td class="crit">Total reviews I could actually count</td>
+        <td class="win num">516</td><td class="num">0</td><td class="num">0</td><td class="num">0</td>
+        <td>437 Costco + 79 Trustpilot. Everything else was visible but unreadable from here.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="src"><span class="s1">Trustpilot — <a href="https://www.trustpilot.com/review/voltlighting.com">VOLT Lighting reviews</a> · trustpilot.com</span><span class="s2">(Trustpilot — an established open review platform; reviews are self-submitted and self-selecting rather than verified-purchase, so it is directional colour on complaint patterns, not a reliable score. Read 17 Aug 2026 via search extract.)</span></div>
+  <div class="src"><span class="s1">Better Business Bureau — <a href="https://www.bbb.org/us/fl/lutz/profile/lighting-systems/volt-lighting-0653-90155309">VOLT Lighting business profile, Lutz FL</a> · bbb.org</span><span class="s2">(BBB — a long-established non-profit accreditation and complaint-handling body; authoritative for whether a complaint record exists. Here it returned "insufficient information to issue a rating," which is a null result, not an adverse one. Read 17 Aug 2026 via search extract.)</span></div>
+</div>
+
+<!-- ═══════════ 8 · PROFILES ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 06</p>
+  <h2 class="sec-title" id="profiles">Candidate profiles, ranked</h2>
+
+  <!-- 1 -->
+  <div class="rank"><span class="num gold">01</span><h3 style="margin:0">VOLT brass path kit, bought through Costco</h3></div>
+  <div class="factsheet">
+    <b>Factsheet —</b> VOLT LLC, 15486 N Nebraska Ave, Lutz, FL 33549 · Florida entity <span style="font-family:var(--mono)">L08000078552</span>, status ACTIVE, reinstatement filed 14 Nov 2024 · founded 2008 by Alan Brynjolfsson · factory-direct manufacturer, also owns AMP Lighting and VOLT Grow · sold here through Costco item #100505043 at $349.99 · lifetime warranty on brass fixtures, LED bulbs and transformers.
+  </div>
+  <p><b>What it is.</b> Six solid-cast-brass path lights, a 100W low-voltage transformer, two junction hubs, 2700K GU4 bulbs, hammer stakes, 100 ft of direct-burial cable and a pair of wire strippers — a complete, no-second-order system for $349.99 with UPS Ground included. It is online-only at Costco and limited to five per member.</p>
+  <p><b>Why it ranks first.</b> Not because VOLT is the best manufacturer in landscape lighting — that is genuinely arguable, and FX Luminaire has a better claim to it. It ranks first because this is the only row in the matrix where a lifetime-warranty brass fixture, a complete system, a verified-purchase 4.8★ from 437 buyers, a drive-in return counter six miles from your house, and the lowest price in the field all land in the same box.</p>
+
+  <h4>Verbatim, from customers</h4>
+  <blockquote>
+    <p>"The customer service aspect is amazing and they actually answer the phone, and when anything is wrong they just replace it for free and quickly."</p>
+    <cite>Trustpilot reviewer, VOLT Lighting company page. Read 17 Aug 2026. <span class="chip c-amber">Unverified purchase</span></cite>
+  </blockquote>
+  <blockquote>
+    <p>"Quality has been good overall, but when we have had issues, it is extremely frustrating that we have to ship back the defective fixture before VOLT will send out a new one."</p>
+    <cite>Trustpilot reviewer, VOLT Lighting company page. Read 17 Aug 2026. <span class="chip c-amber">Unverified purchase</span></cite>
+  </blockquote>
+  <p style="font-size:14px;color:var(--ink-3)"><b>Note on what I have deliberately not quoted:</b> Trustpilot also carries an allegation that VOLT resells returned or burned-out fixtures as new. I am not treating that as a finding. It is an anonymous, unverified, uncorroborated claim on a self-submission platform, I could not open the review to read it in full, and I found nothing in any regulatory or court record to support it. It is recorded here only so you know it exists and that I looked.</p>
+
+  <h4>How the owner responds to reviews</h4>
+  <p>I could not open Trustpilot, Houzz or the Costco review pages, so I cannot show you a single owner reply verbatim. <span class="chip c-red">Dead end</span> What I can report from the warranty page itself is the posture: VOLT states it processes warranty claims <b>seven days a week</b> and covers shipping in both directions on continental-US returns. That is an unusually generous written commitment, and it sits in direct tension with the customer complaint above about having to ship first. Both can be true — free shipping still means you are without a working light for a week.</p>
+
+  <h4>The honest case against</h4>
+  <ul class="tight">
+    <li><b>You need a Costco membership.</b> If you don't have one, the pick's real cost is $384.99 plus a membership fee, and the arithmetic against VOLT-direct narrows considerably. <span class="chip c-amber">Ask</span></li>
+    <li><b>Online-only, limit five.</b> You cannot walk into Senter Road and put it in a cart, and if your garden needs twelve lights you are placing two orders.</li>
+    <li><b>The 100W transformer is the smaller one.</b> VOLT's own kits at other channels ship a 150W unit. 100W runs six 3W lamps with enormous headroom — but if you plan to grow the system past a dozen fixtures plus spotlights, you will outgrow it and buy a transformer twice.</li>
+    <li><b>Fixture model is not confirmed.</b> Costco's listing did not name which VOLT fixture is in the box. It is brass, it is 6-pack, it is 100W — but whether it is a Max Spread, a Conehead or a Costco-specific shade, I could not determine. <span class="chip c-amber">Unconfirmed</span></li>
+    <li><b>The Florida reinstatement.</b> VOLT LLC's most recent Sunbiz event is a REINSTATEMENT on 14 Nov 2024, which means the entity was administratively dissolved at some earlier point — almost always a missed annual report, occasionally something more. I could not read the filing history to find out which. <span class="chip c-amber">Unconfirmed</span></li>
+  </ul>
+  <div class="src"><span class="s1">Florida Department of State, Division of Corporations — <a href="https://search.sunbiz.org/">Sunbiz entity record, VOLT LLC, document L08000078552</a> · search.sunbiz.org</span><span class="s2">(Sunbiz is the Florida Secretary of State's official corporate registry — the authoritative public record for entity status, registered agent, address and filing events. Tier-one government source. Read 17 Aug 2026 via search extract.)</span></div>
+  <div class="src"><span class="s1">VOLT Lighting — <a href="https://www.voltlighting.com/warranty">Warranty Information</a> · voltlighting.com</span><span class="s2">(The vendor's own published warranty document — primary and binding on the vendor for coverage and exclusions, but self-interested on tone and reliability. Read 17 Aug 2026 via search extract.)</span></div>
+
+  <hr class="rule">
+
+  <!-- 2 -->
+  <div class="rank"><span class="num">02</span><h3 style="margin:0">VOLT direct — voltlighting.com</h3></div>
+  <div class="factsheet">
+    <b>Factsheet —</b> Same company, same brass, same lifetime warranty · full catalogue rather than one kit · Conehead brass path light $72.99 list / $65.69 sale · Max Spread brass path light, 25″ tall, 9″ shade, 16 ft spread, G4 bi-pin, 10″ Hammer stake, UL &amp; cUL listed · returns shipped free both ways, continental US · Trustpilot 4.1★ / 79.
+  </div>
+  <p><b>The genuine case for it.</b> Choice. Costco sells you one kit; VOLT sells you thirty fixture styles, four finishes, five bulb wattages, black brass, copper, mini versions, RGBW versions, and stem lengths. If you care what the fixture looks like in daylight — and in a garden you will look at these unlit far more hours than lit — this is where that decision gets made. There is no membership, no purchase limit, and their support bench is the deepest in the field: seven-day warranty processing and, by multiple customer accounts, a phone that gets answered.</p>
+  <p><b>Why it's second and not first.</b> Price, and only price. Six Conehead fixtures at list is $437.94 before you have bought a single bulb, a transformer or a foot of cable. Add those and you are comfortably past $700 landed for the same brass Costco is selling complete at $384.99.</p>
+  <p><b>The honest case against.</b> The one structural weakness is the return path: Florida is the only counter, the warranty asks you to ship the defective fixture before the replacement goes out, and that is the exact friction their unhappiest reviewers describe. Free return shipping softens it; it doesn't remove it.</p>
+
+  <hr class="rule">
+
+  <!-- 3 -->
+  <div class="rank"><span class="num">03</span><h3 style="margin:0">Kichler 15310 8″ Dome path light</h3></div>
+  <div class="factsheet">
+    <b>Factsheet —</b> Kichler Lighting, a Coleto Brands company, 400 Executive Center Drive Suite 100, Greenville, SC 29615 · customer care (866) 558-5706, Mon–Fri 8am–5pm ET · 15310AZT textured architectural bronze $114.99, 15310CBR centennial brass $149.99 · 21″ H × 8.25″ W, 8″ ground stake, 12V · landscape warranty 5–15 years by collection and housing material; lifetime on Pro and Contractor Series transformers.
+  </div>
+  <p><b>What it's genuinely good at.</b> Kichler is a real premium brand with a deep dealer network, a specific rating for harsh coastal environments, and a warranty structure that is honest about what it covers — including an explicit and correct statement that patina and finish fading are normal and not warranted. Their Design Pro line is well regarded by installers, and their 15-year cover on integrated LED landscape products is the strongest integrated-LED warranty I found anywhere in this research.</p>
+  <p><b>Why it doesn't win.</b> Three things, none of them a knock on quality. First, it costs more: $689.94 for six bronze fixtures before transformer or cable, roughly double the Costco kit landed. Second, "centennial brass" is a finish on an aluminium housing, not solid brass — a different and shorter-lived proposition in a wet bed. Third, the warranty is 5–15 years depending on collection, and I could not confirm which band the 15310 sits in. <span class="chip c-amber">Unconfirmed</span> Against a lifetime warranty on solid brass, an unconfirmed band between 5 and 15 years is not a competitive answer.</p>
+  <p><b>Be fair to it:</b> if you walk into a lighting showroom, hold a Kichler dome and a VOLT Max Spread, and prefer the Kichler — buy the Kichler. It is a good fixture. It conflicts with the priority I assumed for you, which is a different thing from being worse.</p>
+  <div class="src"><span class="s1">Kichler Lighting — <a href="https://www.kichler.com/customer-care/warranty-information">Warranty Coverage for Kichler Products</a> · kichler.com</span><span class="s2">(The manufacturer's own published warranty terms — primary and binding for coverage periods, exclusions and the claims contact. Read 17 Aug 2026 via search extract.)</span></div>
+
+  <hr class="rule">
+
+  <!-- 4 -->
+  <div class="rank"><span class="num">04</span><h3 style="margin:0">Philips Hue Calla — the special-role candidate</h3></div>
+  <div class="factsheet">
+    <b>Factsheet —</b> Signify (Philips Hue) · black aluminium bollard, 9.9″ H × 4.1″ dia · integrated 8W LED, 640 lm, 16 million colours, dimmable · IP65, UL-certified for wet locations · 25,000 hr rated life · <b>2-year warranty</b> · requires a Hue Bridge (~$60) plus a power supply · base kit ~$130, extension ~$90.
+  </div>
+  <p><b>The role it plays.</b> This is the only candidate that does something the others physically cannot: change colour, schedule itself from an app, respond to Alexa, HomeKit and Google Assistant, and turn your front path amber for Halloween and green for Christmas without you touching it. If that is what you actually want from garden lighting, none of the brass fixtures above are a substitute and you should stop reading the rest of this report.</p>
+  <p><b>Why it fails the rule.</b> Sealed LED. When the 8W engine or its driver dies — and 25,000 hours is roughly nine years at dusk-to-dawn — the fixture is landfill and the warranty expired seven years earlier. At ~$704 landed for six, you are paying VOLT-direct money for a two-year product.</p>
+  <p><b>The San Jose footnote.</b> A bollard that emits sideways and upward is the least dark-sky-considerate shape in this report, on a property sitting under Mt. Hamilton. Not illegal, not even discouraged by any ordinance I could find that applies to private landscape lighting — but worth knowing before you install six of them.</p>
+
+  <hr class="rule">
+
+  <h3>Cut before the matrix — and why, fairly</h3>
+  <p><b>FX Luminaire (Hunter Industries).</b> Arguably the best-engineered system in the category: solid brass and composite fixtures, the strongest control platform, and a 10-year LED fixture warranty that extends to 10 years when FX fixtures and FX transformers are installed together on the same project. It is cut for one reason and it is your reason, not theirs: <b>you cannot buy it.</b> FX sells through authorised distributors and dealers, not direct to consumers. There is no live purchase URL to give you. Returns carry a 25% restocking fee, a six-month window, and a requirement that the product was never energised. That is a professional-channel product sold on professional-channel terms, and it is a perfectly good answer for someone hiring an installer — which you explicitly are not.
+  <div class="src"><span class="s1">FX Luminaire — <a href="https://www.fxl.com/support/led-path-lights-warranty">LED Path Lights Warranty</a> and <a href="https://www.fxl.com/distributors">Distributors</a> · fxl.com</span><span class="s2">(Hunter Industries' own brand site for FX Luminaire — primary for warranty length, the fixture-plus-transformer extension condition, restocking terms and the distributor-only channel. Read 17 Aug 2026 via search extract.)</span></div>
+  </p>
+  <p><b>Hampton Bay DL10103BKS (Home Depot).</b> At $113.29 for six lights, a transformer and cable, this is by a distance the cheapest complete system in the report, it carries a 5-year warranty and 90-day returns, and for a rental, a staging job or a path you might re-route next year it is the rational buy. It is cut because the LED is integrated and the body is composite: it is a five-year product priced like a five-year product, and it conflicts head-on with the buy-once assumption. If that assumption is wrong, this is your answer and it saves you $260.</p>
+  <p><b>Solar (Gama Sonic and the wider field).</b> Zero wiring, zero trenching, zero electricity, and a 2-year warranty. Cut on physics, not on brand: roughly 50 lumens per fixture against 150–425 from a wired VOLT, a lithium pack rated for about 2,000 charges — call it five years — and a run-time of about two nights on a full charge, which in a Bay Area December is the difference between a lit path and a dark one. Solar is the right answer for a spot with no cable route. It is the wrong answer for a main path you walk every night.</p>
+</div>
+
+<!-- ═══════════ 9 · COST ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 07</p>
+  <h2 class="sec-title" id="cost">What this should cost</h2>
+  <p class="lede">Line-item, at published prices, for a six-fixture path system installed by you on a weekend. Then two independent sanity checks on the total.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>Line item</th><th>Published range</th><th>The pick includes it?</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td class="crit">6 × brass path fixture</td><td class="num">$65.69–$149.99 ea<br><small>$394–$900 for six</small></td><td class="win">Yes — in the $349.99</td><td>VOLT Conehead list/sale price; Kichler 15310AZT/CBR</td></tr>
+      <tr><td class="crit">Low-voltage transformer, 100–150W, timer + photocell</td><td class="num">$100–$200<br><span class="chip c-amber">Standalone price unconfirmed</span></td><td class="win">Yes — 100W unit included</td><td>VOLT 150W Slim Line, Amazon B07PP9Y1N8 — price not retrievable</td></tr>
+      <tr><td class="crit">12/2 direct-burial cable, 100 ft</td><td class="num">$74–$80<br><small>$0.80/ft at 100 ft; $0.74/ft at 500 ft</small></td><td class="win">Yes — 100 ft spool included</td><td>C2C Lights published spool pricing</td></tr>
+      <tr><td class="crit">Upgrade to 10/2 cable (long runs)</td><td class="num">$1.20/ft</td><td>No</td><td>C2C Lights</td></tr>
+      <tr><td class="crit">6 × LED bulb, G4/GU4, 2700K, 1.5–4W</td><td class="num">150–425 lm per bulb<br><span class="chip c-amber">Unit price unconfirmed</span></td><td class="win">Yes — 2700K GU4 included</td><td>VOLT G4 bi-pin range</td></tr>
+      <tr><td class="crit">Junction hubs / waterproof connectors</td><td class="num">Bundled in kits</td><td class="win">Yes — 2 hubs included</td><td>Costco kit contents list</td></tr>
+      <tr><td class="crit">6 × ground stake</td><td class="num">Bundled</td><td class="win">Yes</td><td>Costco kit contents list</td></tr>
+      <tr><td class="crit">Wire strippers</td><td class="num">$12–$25 retail</td><td class="win">Yes — included</td><td>Costco kit contents list</td></tr>
+      <tr><td class="crit">Outdoor GFCI receptacle, if you don't have one</td><td class="num">Electrician call-out<br><span class="chip c-amber">Not priced here</span></td><td>No</td><td>NEC 210.8 — see §08</td></tr>
+      <tr><td class="crit">Shipping</td><td class="num">$0</td><td class="win">Included in Costco price</td><td>Costco listing</td></tr>
+      <tr><td class="crit">Sales tax, San Jose</td><td class="num">10.000%<br><small>= $35.00 on $349.99</small></td><td>Added at checkout</td><td>CDTFA L-1022, eff. 1 Apr 2026</td></tr>
+      <tr class="verdict-row-t"><td class="crit">Landed total, the pick</td><td class="num"><b>$384.99</b></td><td class="win">Complete system, nothing else to buy</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Sanity check, from below</h3>
+  <p>Strip the kit to parts at the cheapest published prices I found: six VOLT Conehead fixtures at the $65.69 sale price is $394.14 — <b>more than the entire Costco kit</b>, before a transformer, before cable, before bulbs. Add a $100 transformer and a $74 cable spool and you are at $568 pre-tax, $625 landed. The kit is <b>$240 cheaper than its own cheapest parts bill.</b> That is the check passing loudly: $349.99 is not merely competitive, it is below the sum of its published components.</p>
+
+  <h3>Sanity check, from above</h3>
+  <p>The same manufacturer's comparable brass 6-light kit at Home Depot is $719.97, or $791.97 landed. Kichler's six fixtures alone are $689.94 before a transformer. Six Hue Calla bollards plus a Bridge is roughly $704 landed. <b>Everything credible in this category clusters between $690 and $800 for six lights.</b> $384.99 sits 46% below that band. When a price is that far below the field, the honest question is what's missing — and here the answer appears to be "a Costco membership and your choice of shade," not "quality." But that gap is exactly why you should open the listing and read the contents line yourself before you buy.</p>
+
+  <div class="src"><span class="s1">C2C Lights — <a href="https://www.c2clights.com/product/12-2-direct-burial-wire-100-foot-spool/">12/2 Direct Burial Wire, 100 Foot Spool</a> · c2clights.com</span><span class="s2">(A landscape-lighting supply retailer's published spool pricing. A trade retailer, not an independent price index — use it as a market reference point for cable cost, not as an authority. Read 17 Aug 2026 via search extract.)</span></div>
+</div>
+
+<!-- ═══════════ 10 · POLICY ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 08</p>
+  <h2 class="sec-title" id="policy">The policy layer</h2>
+
+  <h3>The governing law, and what you lose if it goes wrong</h3>
+  <p><b>California Energy Code, Title 24 Part 6, §150.0(k) — residential lighting.</b> All lighting <em>attached to the residence or to other buildings on the same lot</em> must be high-efficacy, controlled by a manual on/off switch plus one automatic control type: a photocontrol combined with either a motion sensor or an automatic time-switch. Any manual override to ON must return to automatic operation within six hours. The 2025 code edition is the current one.</p>
+  <p><b>What it means for you:</b> a wall lantern bolted to your house is squarely covered. Six freestanding brass path lights staked in a bed, fed from a plug-in transformer, are the classic grey zone — they are not attached to a building, and low-voltage landscape work generally does not trigger a permit that would bring Title 24 compliance into scope. <span class="chip c-amber">Unconfirmed for San Jose specifically.</span> <b>What you lose if it goes wrong:</b> realistically, a correction notice at a future permit inspection, not a fine today. And the practical mitigation is free — the recommended kit ships with a transformer whose timer and photocell already satisfy the control requirement, so buying compliant costs you nothing.</p>
+  <div class="src"><span class="s1">California Energy Commission — <a href="https://www.energy.ca.gov/filebrowser/download/8638?fid=8638">2025 Single-Family Residential Compliance Manual, Chapter 6 (Lighting)</a> · energy.ca.gov</span><span class="s2">(The California Energy Commission is the state agency that writes and enforces the Title 24 Part 6 energy code; its compliance manual is the authoritative interpretation of §150.0(k). Tier-one government source. Read 17 Aug 2026 via search extract.)</span></div>
+
+  <p><b>NEC Article 411 — low-voltage lighting systems.</b> Landscape lighting operating at 30V or less falls under Article 411, and systems at 50V or less are generally exempt from permit requirements in most jurisdictions. Separately, <b>NEC 210.8</b> requires GFCI protection on all 15- and 20-amp, 125-volt outdoor receptacles — which is the outlet your transformer plugs into. One important subtlety: GFCI on the transformer's primary side does <b>not</b> extend GFCI protection to the 12V secondary circuit feeding your fixtures.</p>
+  <p><span class="chip c-red">Dead end — close it yourself</span> I could not confirm San Jose's specific permit position on low-voltage landscape lighting. <b>Call San Jose Building Division before you dig if you're routing cable near anything structural.</b> The city's permit centre is the authority; a fifteen-minute call closes this.</p>
+
+  <h3>Vendor policies, side by side</h3>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>Policy</th><th>Costco</th><th>VOLT direct</th><th>Home Depot</th><th>FX Luminaire</th></tr></thead>
+    <tbody>
+      <tr><td class="crit">Return window</td><td class="win">No expiry on general merchandise (electronics 90 days — path lights are not electronics)</td><td>Not stated as a window; shipping covered both ways, continental US</td><td>90 days</td><td>6 months</td></tr>
+      <tr><td class="crit">Restocking fee</td><td class="win">None stated</td><td class="win">None stated</td><td class="win">None stated</td><td>25%</td></tr>
+      <tr><td class="crit">Return channel</td><td class="win">Any warehouse counter, or online</td><td>Ship to Florida</td><td class="win">Any store</td><td>Through your distributor</td></tr>
+      <tr><td class="crit">Condition required</td><td class="win">Satisfaction-based</td><td>Defective unit shipped back first</td><td>Standard</td><td>Unused, unopened, never energised</td></tr>
+      <tr><td class="crit">Barrier</td><td>Membership required</td><td class="win">None</td><td class="win">None</td><td>Trade account required</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="src"><span class="s1">Costco Wholesale — <a href="https://customerservice.costco.com/app/answers/detail/a_id/1191/~/what-is-costcos-return-policy">What is Costco's return policy?</a> · customerservice.costco.com</span><span class="s2">(Costco's own published policy page — primary and binding on Costco. The 90-day carve-out is enumerated and covers televisions, computers, appliances, cameras, phones and wearables; landscape lighting is not on that list. Read 17 Aug 2026 via search extract.)</span></div>
+
+  <h3>Warranty terms, read closely</h3>
+  <p><b>VOLT lifetime warranty — what's in.</b> Brass and copper fixtures, low-voltage transformers, and LED bulbs, whether bought individually or as part of a kit. Covered components are named: fixture body, glare guard, knuckle, O-rings and seals, surface mounts, socket assembly, protective lens, and the integrated LED source and optic where fitted. Claims processed seven days a week; shipping covered both ways in the continental US.</p>
+  <p><b>What's out — and these matter.</b> Power surges, spikes, or voltage outside acceptable range. Applying DC where AC is required or vice versa. Non-approved electronic transformers and dimmers — <b>which means using a third-party transformer can void the fixture warranty.</b> Acts of God. Water damage to non-underwater products that are submerged, mounted wrong, badly assembled, or hit by excessive spray — so keep them clear of the irrigation heads. Transformers with improper mounting or wiring. And <b>normal patina or discolouration of finishes</b>: brass will go from bright to brown to green, that is the material behaving correctly, and no one warrants it. Kichler's warranty says the same thing about finish fading and about expected coastal corrosion.</p>
+
+  <h3>Third-party risk</h3>
+  <ul class="tight">
+    <li><b>Channel risk.</b> Buying VOLT through Costco means your counterparty for returns is Costco and your counterparty for warranty is VOLT. That is a feature — two independent routes to a remedy — but if Costco drops the SKU, replacement fixtures come from VOLT at VOLT's prices.</li>
+    <li><b>Entity risk.</b> VOLT LLC's Florida registration is ACTIVE, but the last event on file is a reinstatement dated 14 Nov 2024. A lifetime warranty is only as good as the entity behind it. Costco's guarantee is not.</li>
+    <li><b>Transformer lock-in.</b> The exclusion for "non-approved electronic transformers" means the cheapest path to expanding this system later is another VOLT transformer, not a bargain one.</li>
+    <li><b>Bridge dependency (Hue only).</b> The Calla is inert without a Hue Bridge and, in practice, without Signify's cloud remaining available. That is a real long-horizon risk that brass does not have.</li>
+  </ul>
+
+  <h3>Your contract protections</h3>
+  <ul class="tight">
+    <li><b>Costco's satisfaction guarantee</b> is the strongest single protection available to you in this purchase, and it has no expiry date for this product class. It sits <em>on top of</em> the manufacturer warranty, not instead of it.</li>
+    <li><b>Card chargeback rights</b> apply on any of these channels — pay by credit card, not debit.</li>
+    <li><b>California implied warranty of merchantability</b> under the Song-Beverly Consumer Warranty Act attaches to consumer goods sold in California. <span class="chip c-amber">Not verified in this report</span> — I could not open a primary text to confirm the current duration and scope, so treat this as a pointer to check, not a stated right.</li>
+    <li><b>Keep the box and the receipt.</b> Every warranty above is conditioned on proof of purchase, and VOLT's on correct installation. Photograph the transformer wiring before you bury the cable.</li>
+  </ul>
+</div>
+
+<!-- ═══════════ 11 · AUDIT ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 09</p>
+  <h2 class="sec-title" id="audit">Claim-by-claim audit — VOLT Lighting</h2>
+  <p class="lede">VOLT's marketing is what started this recommendation, so VOLT's marketing gets audited. Each claim is checked against an independent record where one exists, and labelled honestly where one doesn't.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>The claim</th><th>Status</th><th>What I found</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="crit">"Founded 2008" / "more than 15 years"</td>
+        <td><span class="chip c-green">Verified</span></td>
+        <td>Florida Sunbiz carries VOLT LLC under document number <span style="font-family:var(--mono)">L08000078552</span> — the "L08" prefix is a 2008 filing. Registered agent Brynjolfsson, matching the named founder Alan Brynjolfsson. Independent government record, consistent with the marketing.</td>
+      </tr>
+      <tr>
+        <td class="crit">"Headquartered in Lutz, Florida"</td>
+        <td><span class="chip c-green">Verified</span></td>
+        <td>Sunbiz lists 15486 N Nebraska Ave, Lutz, FL 33549. Matches the address on the BBB profile. Two independent records agree.</td>
+      </tr>
+      <tr>
+        <td class="crit">"Entity in good standing"</td>
+        <td><span class="chip c-amber">Verified with a caveat</span></td>
+        <td>Status is ACTIVE — but the most recent filing event is a <b>REINSTATEMENT on 14 Nov 2024</b>, which necessarily means the entity had been administratively dissolved beforehand. Usually a missed annual report. I could not read the filing history to confirm the cause. <b>Contradiction surfaced:</b> nothing in VOLT's marketing mentions a lapse; nothing obliges them to.</td>
+      </tr>
+      <tr>
+        <td class="crit">"Lifetime warranty on brass fixtures, LED bulbs and transformers"</td>
+        <td><span class="chip c-green">Verified — with real exclusions</span></td>
+        <td>The written warranty says exactly this, and names covered components specifically. But the exclusion list is substantial and includes third-party transformers, power surges, misdirected irrigation spray, and all patina. "Lifetime" here means the metal, not the appearance and not the circumstances.</td>
+      </tr>
+      <tr>
+        <td class="crit">"Largest manufacturer of professional-grade landscape lighting in the USA"</td>
+        <td><span class="chip c-red">Not verified</span></td>
+        <td>Self-asserted on VOLT's own About page. I found no trade association ranking, market-share study, regulatory filing, or independent industry source that measures this. It is not disproven — it is unmeasured. <b>Treat it as advertising copy.</b></td>
+      </tr>
+      <tr>
+        <td class="crit">"Dark Sky Approved" (on Max Spread and other path lights)</td>
+        <td><span class="chip c-red">Not verified</span></td>
+        <td>DarkSky International runs a real, searchable, third-party Approved Luminaires database — this is a checkable claim. I could not open the database to confirm the specific SKU is listed. <b>A failed search is not proof of absence.</b> Close it yourself: search the manufacturer name in the DarkSky luminaire database, linked in §12.</td>
+      </tr>
+      <tr>
+        <td class="crit">"We design, manufacture and distribute all of our outdoor lighting products"</td>
+        <td><span class="chip c-amber">Unconfirmed</span></td>
+        <td>Self-reported, with no customs, corporate or trade record available to me either way. Common in this industry for "manufacture" to mean design plus contract production. No contradiction found — just no confirmation.</td>
+      </tr>
+      <tr>
+        <td class="crit">"5 national distribution centers" · owns AMP Lighting and VOLT Grow</td>
+        <td><span class="chip c-amber">Unconfirmed</span></td>
+        <td>Reported in a Florida economic-development profile and on VOLT's own material. The AMP Lighting brand does exist as a separate storefront, which is consistent. No independent corporate record read.</td>
+      </tr>
+      <tr>
+        <td class="crit">"World-class customer service"</td>
+        <td><span class="chip c-amber">Contradicted in part</span></td>
+        <td>Trustpilot sits at 4.1★ from 79 reviews — respectable, not world-class, and polarised. The recurring specific complaint is the ship-back-first warranty process, which is a real structural friction, not a mood. The recurring specific praise is that a human answers the phone. <b>Both appear repeatedly.</b></td>
+      </tr>
+      <tr>
+        <td class="crit">Third-party allegation: "resells returned/burned-out fixtures as new"</td>
+        <td><span class="chip c-red">Not a finding</span></td>
+        <td>Anonymous, unverified, uncorroborated, on a self-submission platform, and I could not open the review to read it in context. No regulatory, court or consumer-agency record supports it. <b>Recorded only to show it was found and considered. It carries no weight in this recommendation.</b></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="src"><span class="s1">VOLT Lighting — <a href="https://www.voltlighting.com/volt-about-us">About VOLT</a> · voltlighting.com</span><span class="s2">(The vendor's own corporate page — primary evidence of what VOLT claims about itself, and nothing more. Every factual claim on it needs an outside check, which is what this table does. Read 17 Aug 2026 via search extract.)</span></div>
+  <div class="src"><span class="s1">DarkSky International — <a href="https://darksky.org/what-we-do/darksky-approved/darksky-approved-luminaires-program/luminaires/">Search DarkSky Approved Luminaires</a> · darksky.org</span><span class="s2">(DarkSky International, formerly the International Dark-Sky Association — the recognised non-profit that certifies fixtures against light-pollution criteria. Its searchable database is the authoritative check on any "Dark Sky Approved" claim. Read 17 Aug 2026 via search extract; database itself not reachable.)</span></div>
+</div>
+
+<!-- ═══════════ 12 · PLAIN ENGLISH ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 10</p>
+  <h2 class="sec-title" id="plain">My assessment, in plain English</h2>
+
+  <h3>The situation, simply</h3>
+  <p>You want lights along a garden path. There are maybe six brands worth taking seriously. Four of them make a good light. The differences between the good ones are small.</p>
+  <p>The difference between where you buy them is not small. It is about four hundred dollars.</p>
+
+  <h3>Why the priority beats price</h3>
+  <p>Here is the thing worth understanding. These lights sit outdoors. They get watered. They get frozen a little and baked a lot. Something inside them will fail. It always does.</p>
+  <p>When it fails, one of two things happens. Either you unscrew the top and drop in a new bulb — a few dollars, two minutes. Or you dig the whole thing out of the ground and buy a new one, because the light part is glued inside.</p>
+  <p>That single difference is worth more over ten years than any price you'll pay today. So I ranked on it first. And then, happily, the fixture that wins on that also happens to be the cheapest one on the table. That doesn't usually happen.</p>
+
+  <h3>The recommendation</h3>
+  <p><b>Buy the VOLT six-light brass path kit from Costco. $349.99. About $385 after tax. It ships free.</b></p>
+  <p><b>The headline reason:</b> it is solid brass with a lifetime warranty, sold by a shop that will take it back with no deadline.</p>
+  <p>Three more, in order:</p>
+  <ol>
+    <li><b>It is complete.</b> Six lights, the power box, a hundred feet of cable, bulbs, stakes, connectors, even the wire strippers. Nothing else to order.</li>
+    <li><b>It is cheaper than its own parts.</b> Six of the same maker's fixtures bought separately cost more than this whole kit. That is not a discount, that is an anomaly in your favour.</li>
+    <li><b>You have two ways to get your money back.</b> Costco's guarantee, and VOLT's warranty. Most people get one.</li>
+  </ol>
+  <p><b>The honest catch:</b> you need a Costco membership, and you can't hold the fixture before you buy it. If neither of those works for you, the recommendation changes.</p>
+
+  <h3>The runner-up</h3>
+  <p>Buy direct from voltlighting.com. Same metal, same warranty, far more choice of shape and finish, no membership. You'll pay roughly twice as much by the time you've added a transformer and cable, and if something breaks you'll be posting it to Florida. Worth it if you care what the fixtures look like in daylight — and you might.</p>
+
+  <h3>Who I didn't pick, and why</h3>
+  <ul>
+    <li><b>Kichler.</b> A properly good brand. Costs about double, and "brass" is a finish on aluminium rather than solid metal.</li>
+    <li><b>FX Luminaire.</b> Probably the best-made system in this report. You cannot buy it — trade only. That's all.</li>
+    <li><b>Philips Hue.</b> Genuinely lovely if you want colour and an app. It's a two-year product at a seven-hundred-dollar price, and the light is glued in.</li>
+    <li><b>Hampton Bay.</b> A hundred and thirteen dollars for a complete set is a real bargain, and for a rental I'd tell you to buy it. It won't see ten years.</li>
+    <li><b>Solar.</b> Fifty lumens and two nights of battery. Fine for a corner with no cable. Not for a path you walk.</li>
+  </ul>
+
+  <h3>The uncomfortable part</h3>
+  <p>I could not open a single one of these web pages. Not the Costco listing, not VOLT's warranty, not the tax table. This machine's network blocks all of it. Everything above came from search-engine extracts of those pages — which are usually accurate and occasionally are not.</p>
+  <p>What that means practically: the $349.99 is very likely right, but you should look at it before you click. So is the 4.8 stars. So is the 10% tax. I have given you every link and every phone number to check them, and I have told you which specific facts I'd check first. I would rather hand you a report that says what it doesn't know than one that sounds certain and isn't.</p>
+  <p>The second uncomfortable thing: Costco's listing doesn't name which VOLT fixture is in the box. It's brass, it's six, it comes with a transformer. It might not be the shape you'd have chosen.</p>
+
+  <h3>What I'd actually do, in order</h3>
+  <ol>
+    <li><b>Open the Costco listing.</b> Confirm $349.99, confirm it's still in stock, and read the contents line. Two minutes.</li>
+    <li><b>Look at the photo.</b> Decide whether you like the fixture. If you don't, stop and go to voltlighting.com instead.</li>
+    <li><b>Check you have an outdoor GFCI outlet</b> within reach of where the transformer will live. If you don't, that's an electrician call and it's the only thing that can blow this budget.</li>
+    <li><b>Buy it.</b> Pay by credit card.</li>
+    <li><b>Before you dig,</b> lay the cable on the grass and switch it on at dusk. Move the lights around for two evenings. Then bury it. Everyone who skips this step re-digs.</li>
+    <li><b>Set the transformer's timer</b> to photocell-on, off at midnight. Cheaper to run, kinder to Mt. Hamilton, and it satisfies the state's control rule for free.</li>
+    <li><b>Photograph the wiring, keep the receipt and the box.</b> Both warranties need proof of purchase.</li>
+  </ol>
+</div>
+
+<!-- ═══════════ 13 · EMAILS ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 11</p>
+  <h2 class="sec-title" id="emails">Copy-paste-ready emails</h2>
+  <p class="lede">Identical scope in every one, so the answers compare cleanly. Each asks for itemised pricing, an insurance certificate sent directly by the broker, and the guarantee in writing. Fill in the two bracketed fields before sending.</p>
+  <p style="font-size:14px;color:var(--ink-3)"><b>One honest note.</b> You are buying a boxed product, not hiring a contractor, so the insurance-certificate request is not load-bearing here — a manufacturer's product liability certificate is a reasonable ask and a good tell about who you're dealing with, but nobody is coming onto your property. I've kept it because you asked for it, and because a vendor's willingness to produce one is genuinely informative. If a supplier balks at that single item, don't read much into it.</p>
+
+  <div class="email">
+    <div class="email-hd">
+      <div class="to">VOLT Lighting — sales &amp; warranty<span>voltlighting.com/contact · factory-direct manufacturer</span></div>
+      <button class="copy" data-target="e1">Copy</button>
+    </div>
+    <pre id="e1">Subject: Quote request — 6-fixture brass path lighting system, San Jose CA 95138
+
+Hello,
+
+I'm a homeowner in San Jose, CA 95138 planning a six-fixture low-voltage
+path lighting system that I will install myself this month. I'm pricing the
+same scope with three suppliers so I can compare like for like. Could you
+quote the following?
+
+SCOPE — identical across all quotes
+  · 6 × solid brass path light, lamp-ready (replaceable bulb, not integrated LED)
+  · 6 × LED bulb, 2700K, 150-425 lumens — please state the wattage you'd
+    recommend for a walkway and why
+  · 1 × low-voltage transformer sized for this load, with timer and photocell
+  · 100 ft × 12/2 direct burial cable
+  · Waterproof junction hubs / connectors and ground stakes for all six
+
+PLEASE PROVIDE
+  1. Itemized pricing — every line above priced separately, plus shipping to
+     95138 and California sales tax shown as its own line. Not a bundled
+     number.
+  2. Your product liability insurance certificate, sent to me directly by
+     your broker or insurer rather than forwarded by you.
+  3. Your warranty and satisfaction guarantee in writing, as a document or a
+     link to the governing terms — specifically confirming: what "lifetime"
+     covers on the fixture body versus the bulb versus the transformer; whether
+     I must return a defective unit before a replacement ships; who pays
+     shipping in each direction; and whether using a third-party transformer
+     voids fixture coverage.
+
+THREE SPECIFIC QUESTIONS
+  a. Is the fixture you're quoting listed in the DarkSky International
+     Approved Luminaires database? If so, please give me the model name as it
+     appears there.
+  b. What is the exact model in the 6-pack kit currently sold through Costco
+     as item 100505043, and how does it differ from what you're quoting?
+  c. Confirm the fixtures are UL/cUL listed and state the IP rating.
+
+I'd like to decide within a week. Thank you.
+
+[YOUR NAME]
+[YOUR PHONE]
+San Jose, CA 95138</pre>
+  </div>
+
+  <div class="email">
+    <div class="email-hd">
+      <div class="to">Costco Wholesale — member service<span>costco.com · re: item 100505043</span></div>
+      <button class="copy" data-target="e2">Copy</button>
+    </div>
+    <pre id="e2">Subject: Product question — item 100505043, VOLT LED path light 6-pack kit
+
+Hello,
+
+I'm considering item 100505043 (VOLT Low Voltage LED Outdoor Path Light
+6-pack Kit with 100W Transformer) for delivery to San Jose, CA 95138, and I
+have five questions before I order.
+
+  1. ITEMIZED CONTENTS — please confirm the complete contents list and, in
+     particular, the exact VOLT fixture model name and the fixture height and
+     shade diameter. The listing says "path light" but does not name the model.
+  2. LANDED PRICE — please confirm the current price, that standard shipping
+     is included, and the total I would pay with California sales tax added
+     for a 95138 delivery address. I'd like each shown as a separate line.
+  3. GUARANTEE IN WRITING — please confirm in writing that this item falls
+     under Costco's standard satisfaction guarantee with no time limit, and
+     is not classified in the 90-day electronics category. If there is any
+     time limit on this SKU, please state it.
+  4. MANUFACTURER WARRANTY — please confirm that VOLT's lifetime warranty on
+     brass fixtures, bulbs and transformers applies to units purchased
+     through Costco, and tell me who I contact first if a fixture fails in
+     year six.
+  5. INSURANCE — please provide, or tell me how to request, the product
+     liability insurance certificate for this item, sent directly by the
+     insurer or broker rather than forwarded.
+
+Also: are the bulbs replaceable (a standard G4/GU4 bi-pin socket), or is the
+LED integrated into the fixture? This is the single most important thing to
+me and the listing does not say.
+
+Thank you.
+
+[YOUR NAME]
+[YOUR PHONE]
+San Jose, CA 95138</pre>
+  </div>
+
+  <div class="email">
+    <div class="email-hd">
+      <div class="to">Kichler Lighting — customer care<span>(866) 558-5706 · Mon–Fri 8am–5pm ET · a Coleto Brands company</span></div>
+      <button class="copy" data-target="e3">Copy</button>
+    </div>
+    <pre id="e3">Subject: Quote and warranty question — 6 × 15310 path lights, San Jose CA 95138
+
+Hello,
+
+I'm a homeowner in San Jose, CA 95138 pricing a six-fixture low-voltage path
+lighting system I'll install myself. I'm comparing three suppliers on an
+identical scope. Could you quote, or direct me to an authorized dealer who
+can quote, the following?
+
+SCOPE — identical across all quotes
+  · 6 × Kichler 15310 8" Dome path light (please quote both 15310AZT textured
+    architectural bronze and 15310CBR centennial brass)
+  · 6 × compatible LED lamp, 2700K
+  · 1 × Kichler low-voltage transformer sized for this load, with timer and
+    photocell
+  · 100 ft × 12/2 direct burial cable
+  · Connectors and ground stakes for all six
+
+PLEASE PROVIDE
+  1. Itemized pricing — every line separately, plus shipping to 95138 and
+     California sales tax as its own line.
+  2. Your product liability insurance certificate, sent to me directly by your
+     broker or insurer rather than forwarded by you.
+  3. The warranty in writing — specifically: which warranty band the 15310
+     falls into, since your published terms say landscape coverage runs 5 to
+     15 years depending on collection and housing material. Please state the
+     exact number of years for this model, in writing.
+
+TWO SPECIFIC QUESTIONS
+  a. Is the 15310CBR "centennial brass" a solid brass housing, or an aluminum
+     housing with a brass-tone finish? Please be explicit — it changes my
+     decision.
+  b. Is the 15310 lamp-ready with a replaceable bulb, or is the LED
+     integrated? If replaceable, which lamp base?
+
+I'd like to decide within a week. Thank you.
+
+[YOUR NAME]
+[YOUR PHONE]
+San Jose, CA 95138</pre>
+  </div>
+</div>
+
+<!-- ═══════════ 14 · SOURCES ═══════════ -->
+<div class="card">
+  <p class="sec-eyebrow">Section 12</p>
+  <h2 class="sec-title" id="sources">Numbered sources, and the dead ends</h2>
+  <p class="lede">All read 17 August 2026. <b>Every source below was reached through a search-index extract of the page, not by opening the page.</b> That limitation applies uniformly and is restated here rather than repeated on each line.</p>
+
+  <div class="src-group">Tier 1 — Government and regulator records</div>
+  <ol class="sources">
+    <li><a href="https://cdtfa.ca.gov/formspubs/L1022.pdf">CDTFA Special Notice L-1022 — New Sales and Use Tax Rates</a> · cdtfa.ca.gov
+      <span class="note">California Department of Tax and Fee Administration, the state agency that administers sales and use tax. Establishes the San Jose rate of 10.000% effective 1 April 2026 and the Santa Clara County rate of 9.750%. Authoritative; nothing outranks it on tax.</span></li>
+    <li><a href="https://cdtfa.ca.gov/taxes-and-fees/rates.aspx">CDTFA — California City and County Sales and Use Tax Rates</a> · cdtfa.ca.gov
+      <span class="note">The same agency's live rate lookup. Use this to re-confirm the 95138 rate on the day you buy, since district rates change quarterly.</span></li>
+    <li><a href="https://search.sunbiz.org/">Florida Division of Corporations (Sunbiz) — VOLT LLC, document L08000078552</a> · search.sunbiz.org
+      <span class="note">The Florida Secretary of State's official corporate registry — the authoritative record for entity status, address, registered agent and filing events. Source for VOLT's 2008 formation, ACTIVE status, Lutz FL address, and the 14 Nov 2024 reinstatement.</span></li>
+    <li><a href="https://www.energy.ca.gov/filebrowser/download/8638?fid=8638">California Energy Commission — 2025 Single-Family Residential Compliance Manual, Chapter 6: Lighting</a> · energy.ca.gov
+      <span class="note">The CEC writes and enforces Title 24 Part 6. Its compliance manual is the authoritative interpretation of §150.0(k) residential outdoor lighting control requirements. Tier one.</span></li>
+    <li><a href="https://energycodeace.com/site/custom/public/reference-ace-2019/Documents/65residentialoutdoorlightingrequirements.htm">Energy Code Ace — 6.5 Residential Outdoor Lighting Requirements</a> · energycodeace.com
+      <span class="note">Energy Code Ace is the compliance-training programme funded by California's investor-owned utilities under CPUC direction. Not the code itself, but an official-channel plain-language restatement of it. Used only to corroborate the CEC manual.</span></li>
+  </ol>
+
+  <div class="src-group">Tier 2 — Vendors' own published material</div>
+  <ol class="sources" start="6">
+    <li><a href="https://www.voltlighting.com/warranty">VOLT Lighting — Warranty Information</a> · voltlighting.com
+      <span class="note">The vendor's binding warranty document. Primary for coverage, named components, exclusions, seven-day claims processing and both-way return shipping. Self-interested on everything else.</span></li>
+    <li><a href="https://www.voltlighting.com/volt-about-us">VOLT Lighting — About VOLT</a> · voltlighting.com
+      <span class="note">Corporate marketing page. Evidence of what VOLT claims, not of what is true. Every claim on it is audited in §09.</span></li>
+    <li><a href="https://www.voltlighting.com/max-spread-brass-path-light">VOLT — Max Spread Brass Path Light</a> · voltlighting.com
+      <span class="note">Vendor product page. Primary for dimensions (25″ tall, 9″ shade), 16 ft spread, G4 bi-pin socket, 10″ Hammer stake, UL &amp; cUL listing.</span></li>
+    <li><a href="https://www.voltlighting.com/conehead-brass-path-light">VOLT — Conehead Brass Path Light</a> · voltlighting.com
+      <span class="note">Vendor product page. Primary for the $72.99 list / $65.69 sale price used in the parts-bill sanity check.</span></li>
+    <li><a href="https://www.voltlighting.com/6-max-spread-brass-path-area-light-kit">VOLT — (6) Max Spread Path Light Kit</a> · voltlighting.com
+      <span class="note">Vendor kit page. Primary for kit contents (6 fixtures, 150W Slim Line transformer with timer and photocell, bulbs, cable, connector, stakes, conduit). Price could not be retrieved.</span></li>
+    <li><a href="https://www.kichler.com/customer-care/warranty-information">Kichler Lighting — Warranty Coverage for Kichler Products</a> · kichler.com
+      <span class="note">Manufacturer's binding warranty terms. Primary for the 5–15 year landscape range, 15-year integrated-LED cover, lifetime Pro/Contractor transformer cover, the finish/patina and coastal-corrosion exclusions, the Coleto Brands parent name and the (866) 558-5706 claims line.</span></li>
+    <li><a href="https://www.kichler.com/products/landscape-lighting/path-and-spread/led-retrofit-centennial-brass-path-light-15310cbr">Kichler — 8″ Dome Path Light, Centennial Brass 15310CBR</a> · kichler.com
+      <span class="note">Manufacturer product page. Primary for 21″ H × 8.25″ W dimensions, 8″ stake, 12V operation and the coastal-environment rating.</span></li>
+    <li><a href="https://www.fxl.com/support/led-path-lights-warranty">FX Luminaire — LED Path Lights Warranty</a> · fxl.com
+      <span class="note">Hunter Industries' brand site. Primary for the 10-year LED fixture warranty, the fixture-plus-transformer extension condition, the 25% restocking fee and the six-month unused-and-never-energised return requirement.</span></li>
+    <li><a href="https://www.fxl.com/distributors">FX Luminaire — Distributors</a> · fxl.com
+      <span class="note">Establishes the distributor-and-dealer-only channel, which is the sole reason FX was cut from the matrix.</span></li>
+    <li><a href="https://www.costco.com/p/-/volt-low-voltage-led-outdoor-path-light-6-pack-kit-with-100w-transformer/100505043">Costco — VOLT Low Voltage LED Outdoor Path Light 6-pack Kit with 100W Transformer, item 100505043</a> · costco.com
+      <span class="note">The retailer's own listing for the recommended SKU. Primary for the $349.99 price, contents list, 4.8★/437 member rating, online-only status, limit of five, and included UPS Ground shipping. <b>This is the single most load-bearing source in the report — open it first.</b></span></li>
+    <li><a href="https://customerservice.costco.com/app/answers/detail/a_id/1191/~/what-is-costcos-return-policy">Costco — What is Costco's return policy?</a> · customerservice.costco.com
+      <span class="note">Costco's published and binding policy. Primary for the no-expiry satisfaction guarantee and the enumerated 90-day electronics carve-out, which does not include landscape lighting.</span></li>
+    <li><a href="https://www.homedepot.com/p/VOLT-Low-Voltage-Cast-Brass-Conehead-Bronze-Path-Light-Kit-6-Pack-BDL-HD-KIT1/317078466">The Home Depot — VOLT Cast Brass Conehead Path Light Kit, 6-Pack, BDL-HD-KIT1</a> · homedepot.com
+      <span class="note">Retailer listing. Primary for the $719.97 price, the $669.97 new-card price and the kit contents used in the same-brand price-spread finding.</span></li>
+    <li><a href="https://www.homedepot.com/p/Hampton-Bay-552-Lumen-Low-Voltage-Integrated-LED-Black-Outdoor-Landscape-Path-Light-Kit-6-Pack-DL10103BKS/301790369">The Home Depot — Hampton Bay 552-Lumen Low Voltage LED Path Light Kit, 6-Pack, DL10103BKS</a> · homedepot.com
+      <span class="note">Retailer listing. Primary for the $113.29 price, kit contents, 5-year Hampton Bay warranty and 90-day return window.</span></li>
+    <li><a href="https://www.homedepot.com/p/Philips-Hue-Calla-Outdoor-Low-Voltage-Black-640-Lumen-Plug-In-Color-Changing-Integrated-LED-Smart-Bollard-Light-Extension-1-Pack-802082/306165387">The Home Depot — Philips Hue Calla Outdoor Smart Bollard Light, 802082</a> · homedepot.com
+      <span class="note">Retailer listing. Primary for the 640-lumen output, integrated-LED construction and current availability.</span></li>
+    <li><a href="https://gamasonic.com/product/luxor-solar-pathway-light-black-2-pk/">Gama Sonic — Luxor Solar Pathway Light</a> · gamasonic.com
+      <span class="note">Manufacturer product page. Primary for cast-aluminium construction, ~50 lumen output, 1.6W panel, dusk-to-dawn operation, ~2-night runtime, the ~2,000-charge lithium pack and the 2-year residential warranty.</span></li>
+    <li><a href="https://www.amazon.com/VOLT-150W-LED-Voltage-Transformer/dp/B07PP9Y1N8">Amazon — VOLT 150W Slim Line Low Voltage Transformer with Timer/Photocell, B07PP9Y1N8</a> · amazon.com
+      <span class="note">Marketplace listing confirming the product exists and is buyable. Price and rating could not be retrieved — see dead ends.</span></li>
+    <li><a href="https://www.amazon.com/Kichler-15310AZT-1-Light-Textured-Architectural/dp/B001BA3LUE">Amazon — Kichler 15310AZT 8″ Outdoor LED Path Light, B001BA3LUE</a> · amazon.com
+      <span class="note">Marketplace listing. Source of the $114.99 price used in the Kichler build.</span></li>
+  </ol>
+
+  <div class="src-group">Tier 3 — Review platforms and accreditation bodies</div>
+  <ol class="sources" start="23">
+    <li><a href="https://www.trustpilot.com/review/voltlighting.com">Trustpilot — VOLT Lighting</a> · trustpilot.com
+      <span class="note">Established open review platform. Self-submitted and self-selecting rather than verified-purchase, and 79 reviews is a thin sample for a company this size. Directional on the <em>shape</em> of complaints (ship-back-first friction) and praise (a human answers the phone); the 4.1★ score itself carries little weight.</span></li>
+    <li><a href="https://www.bbb.org/us/fl/lutz/profile/lighting-systems/volt-lighting-0653-90155309">Better Business Bureau — VOLT Lighting, Lutz FL</a> · bbb.org
+      <span class="note">Long-established non-profit accreditation and complaint body. Returned "not accredited; insufficient information to issue a rating." <b>That is a null result and is not treated as adverse anywhere in this report.</b></span></li>
+    <li><a href="https://www.houzz.com/professionals/lighting-showrooms-and-sales/volt%C2%AE-lighting-pfvwus-pf~664387800">Houzz — VOLT Lighting professional profile</a> · houzz.com
+      <span class="note">Home-design marketplace listing showing 5.0 out of 5 with no visible review count. A perfect score with an unknown denominator is not evidence; recorded for completeness and discounted in the ratings table.</span></li>
+    <li><a href="https://darksky.org/what-we-do/darksky-approved/darksky-approved-luminaires-program/luminaires/">DarkSky International — Search DarkSky Approved Luminaires</a> · darksky.org
+      <span class="note">DarkSky International (formerly the International Dark-Sky Association) is the recognised non-profit certifying fixtures against light-pollution criteria. Its searchable database is the authoritative test of any "Dark Sky Approved" claim. <b>Database not reachable from here — this is an open item, see dead ends.</b></span></li>
+  </ol>
+
+  <div class="src-group">Tier 4 — Industry, trade and reference bodies</div>
+  <ol class="sources" start="27">
+    <li><a href="https://mthamilton.ucolick.org/public/lighting/Cooperation2.html">UC Lick Observatory — Santa Clara Valley Lighting and Lick Observatory: Cooperation</a> · mthamilton.ucolick.org
+      <span class="note">University of California Observatories, the operator of Lick Observatory. Primary account of San Jose's low-pressure-sodium street-lighting policy adopted in 1980. Written by an interested party, and it documents a <em>street-lighting</em> policy, not a residential mandate — used only as local context, never as a rule that binds you.</span></li>
+    <li><a href="https://mthamilton.ucolick.org/public/lighting/Ordinance.html">UC Lick Observatory — Sample Lighting Ordinance</a> · mthamilton.ucolick.org
+      <span class="note">A model ordinance published by the observatory for local jurisdictions to adopt. <b>A template, not law.</b> Included so you can see what the local norm looks like in code form; it is not evidence that San Jose has adopted it.</span></li>
+    <li><a href="https://www.c2clights.com/product/12-2-direct-burial-wire-100-foot-spool/">C2C Lights — 12/2 Direct Burial Wire, 100 ft spool</a> · c2clights.com
+      <span class="note">A landscape-lighting supply retailer's published spool pricing ($0.80/ft at 100 ft, $0.78 at 250, $0.74 at 500; 10/2 at $1.20/ft). A trade retailer, not an independent price index — directional market reference only.</span></li>
+    <li><a href="https://sso.hunterindustries.com/sites/default/files/2017_fxl_distributor_agreement_and_pfp_final_.pdf">Hunter Industries — FX Luminaire Distributor Agreement</a> · hunterindustries.com
+      <span class="note">The manufacturer's own distributor contract, published on its single-sign-on domain. Corroborates the trade-only channel structure. Dated 2017 — treat the specific terms as possibly superseded.</span></li>
+  </ol>
+
+  <div class="src-group">Dead ends — with the number or URL to close them yourself</div>
+  <ol class="sources" start="31">
+    <li><b>Every page in this report.</b> Outbound web page access is blocked at this machine's network egress proxy; direct fetches to voltlighting.com, kichler.com, cdtfa.ca.gov, costco.com, homedepot.com, amazon.com, darksky.org and bbb.org all returned <span style="font-family:var(--mono)">EGRESS_BLOCKED</span> or a 403 CONNECT tunnel failure. Everything above came from search-index extracts.
+      <span class="note">How to close it: click any link. This is a limitation of the machine, not of the sources — every one of them is a normal public page.</span></li>
+    <li><b>VOLT's own 6-light kit price.</b> Could not be retrieved from voltlighting.com in any query. The VOLT-direct column in the matrix is therefore a parts build, not a published kit price.
+      <span class="note">Close it: <a href="https://www.voltlighting.com/6-max-spread-brass-path-area-light-kit">voltlighting.com/6-max-spread-brass-path-area-light-kit</a>, or call VOLT sales.</span></li>
+    <li><b>Which VOLT fixture is in the Costco kit.</b> The listing names contents but not the fixture model, height or shade diameter.
+      <span class="note">Close it: Costco member service, or ask VOLT directly using email #2 in §11.</span></li>
+    <li><b>The "Dark Sky Approved" claim.</b> The DarkSky Approved Luminaires database could not be searched from here, so the claim on VOLT's product pages is unconfirmed in both directions. <b>A failed search is not proof the listing doesn't exist.</b>
+      <span class="note">Close it: <a href="https://darksky.org/what-we-do/darksky-approved/darksky-approved-luminaires-program/luminaires/">the DarkSky luminaire database</a> — search by manufacturer.</span></li>
+    <li><b>The Kichler 15310's warranty band.</b> Kichler publishes 5–15 years "depending on the collection and housing material" but I could not determine which band this model sits in.
+      <span class="note">Close it: Kichler customer care, <b>(866) 558-5706</b>, Mon–Fri 8am–5pm ET.</span></li>
+    <li><b>San Jose's permit position on low-voltage landscape lighting.</b> NEC Article 411 systems are generally permit-exempt, but I could not confirm San Jose's specific rule.
+      <span class="note">Close it: San Jose Permit Center / Building Division. One call.</span></li>
+    <li><b>Amazon star ratings and review counts</b> for the VOLT Max Spread (B083F4CNHX), the VOLT 6-pack kit (B07CBT63VF), the VOLT transformer (B07PP9Y1N8) and the Kichler 15310 (B001BA3LUE). Listings confirmed to exist; ratings not retrievable.
+      <span class="note">Close it: open each ASIN. Five minutes total.</span></li>
+    <li><b>Costco Gold Star membership fee.</b> Referenced as a real cost in the honest-case-against but deliberately not priced, because I could not read a current figure.
+      <span class="note">Close it: <a href="https://www.costco.com/">costco.com</a> membership page, or the Senter Road warehouse on <b>(408) 275-0199</b>.</span></li>
+    <li><b>Costco Senter Road opening hours.</b> Reported as Mon–Fri 10:00–20:30, Sat 09:30–19:00, Sun 10:00–19:00 by a third-party store-hours aggregator, not by Costco. <b>Not treated as verified.</b>
+      <span class="note">Close it: <b>(408) 275-0199</b>.</span></li>
+    <li><b>Owner responses to reviews.</b> No review platform page could be opened, so not a single verbatim owner reply appears in this report — for any vendor.
+      <span class="note">Close it: <a href="https://www.trustpilot.com/review/voltlighting.com">Trustpilot</a>, and the review tabs on the Costco and Home Depot listings.</span></li>
+    <li><b>Song-Beverly Consumer Warranty Act scope.</b> Cited as a pointer in §08 but not verified against a primary legal text.
+      <span class="note">Close it: California Legislative Information, leginfo.legislature.ca.gov, Civil Code §1790 et seq.</span></li>
+  </ol>
+</div>
+
+<!-- ═══════════ 15 · FINAL VERDICT ═══════════ -->
+<div class="final" id="final">
+  <div class="fv-eyebrow">The final verdict</div>
+  <h2>Buy the VOLT six-light brass path kit from Costco.</h2>
+
+  <div class="pick">
+    <b>Costco item #100505043 — VOLT Low Voltage LED Outdoor Path Light 6-pack Kit with 100W Transformer, $349.99, $384.99 landed with San Jose tax, shipping included.</b><br>
+    <a href="https://www.costco.com/p/-/volt-low-voltage-led-outdoor-path-light-6-pack-kit-with-100w-transformer/100505043" style="font-size:15px">Open the listing, confirm the price and the contents line, and order it today.</a>
+  </div>
+
+  <h3>Why I chose it</h3>
+  <p>Because the priority I took from your brief — buy once, keep it serviceable, be able to act today — is satisfied completely by exactly one row of the matrix, and it happens to be the cheapest one. I did not expect that and I checked it twice.</p>
+  <p>The evidence carrying the most weight, in the order I weighted it:</p>
+  <p><b>First, the serviceability rule, weighted heaviest.</b> Solid cast brass with a standard bi-pin socket means the fixture's failure mode is a bulb, not a burial. That single structural fact is worth more to you across a decade than every price difference in this report combined, and it decides four of the six candidates without reference to cost.</p>
+  <p><b>Second, the doubled remedy, weighted next.</b> VOLT's written lifetime warranty on brass fixtures, bulbs and transformers is real, specific and names its covered components. Costco's satisfaction guarantee has no expiry date for this product class and a counter six miles from your house. You end up with two independent routes to a remedy — and the single most-repeated complaint about buying VOLT direct, the ship-it-back-first friction, is precisely the thing the Costco channel neutralises. That is not a coincidence I noticed after choosing; it is why I chose.</p>
+  <p><b>Third, the price, weighted last and still decisive.</b> $349.99 is $44 <em>below</em> the cost of six of the same maker's cheapest fixtures bought bare, at their sale price, before a transformer exists. When a complete kit undercuts its own parts bill, the burden of proof shifts: the question is no longer "is this good value" but "what's the catch," and after auditing it the catch is a membership card and a fixture shape you don't get to pick.</p>
+  <p><b>What I discounted.</b> Brand prestige — FX Luminaire is probably better engineered and it does not matter, because you cannot buy it. Trustpilot's 4.1 — seventy-nine self-selected reviews of a company this size is noise, and I read it for complaint shape only. The BBB null. The unverified resale allegation, which carries zero weight. And Houzz's 5.0, which with no denominator is not a number at all.</p>
+
+  <h3>Why I eliminated each of the others</h3>
+
+  <div class="elim">
+    <div class="en">VOLT direct — voltlighting.com</div>
+    <p style="margin:0"><b>Genuinely good at:</b> choice. Thirty fixture styles, four finishes, five wattages, stem-length options, and the deepest support bench in the field — seven-day warranty processing and a phone that gets answered. <b>What knocked it out:</b> roughly double the landed cost for the identical metal and the identical warranty, plus a Florida-only return path that asks you to ship the broken unit first. <b>Stays as a back-up — the designated runner-up.</b> If you don't have a Costco membership, or you look at the Costco photo and dislike the fixture, buy here without hesitation.</p>
+  </div>
+
+  <div class="elim">
+    <div class="en">VOLT via Home Depot</div>
+    <p style="margin:0"><b>Genuinely good at:</b> being the same brass, the same lifetime warranty and the same manufacturer, with no membership and a return counter in every part of San Jose. <b>What knocked it out:</b> $791.97 landed against $384.99 for a comparable six-light brass kit from the same maker. $407 for a different shelf. <b>Stays as a back-up</b> — a distant third, and only if you want to put your hands on the fixture in a store before buying.</p>
+  </div>
+
+  <div class="elim">
+    <div class="en">Kichler 15310 8″ Dome</div>
+    <p style="margin:0"><b>Genuinely good at:</b> being a properly premium brand with a real dealer network, an explicit harsh-coastal rating, and the most honest warranty document I read — it says plainly that patina and finish fade are normal and not covered, which is true and which cheaper brands leave you to discover. <b>What knocked it out:</b> $689.94 for six fixtures before a transformer, a warranty band of "5 to 15 years, depending" that nobody could narrow for this model, and "centennial brass" that is a finish on aluminium rather than solid metal. <b>Does not stay as a back-up</b> for the priority I assumed — but it is not a bad light, and if you hold one and prefer it, that preference is a legitimate reason to buy it.</p>
+  </div>
+
+  <div class="elim">
+    <div class="en">FX Luminaire</div>
+    <p style="margin:0"><b>Genuinely good at:</b> arguably the best-engineered system in this entire report — solid brass and composite fixtures, the strongest control platform in the category, and a 10-year LED warranty that extends when FX fixtures and FX transformers are installed together. <b>What knocked it out:</b> one thing only, and it is structural rather than a fault — trade-only distribution means there is no live purchase URL to hand you, and a 25% restocking fee on a never-energised six-month return is a professional's contract, not a homeowner's. <b>Does not stay as a back-up</b> while you are buying rather than hiring. The day you hire an installer, ask them about FX first.</p>
+  </div>
+
+  <div class="elim">
+    <div class="en">Philips Hue Calla</div>
+    <p style="margin:0"><b>Genuinely good at:</b> the one thing no brass fixture can do — 16 million colours, app scheduling, Alexa, HomeKit and Google Assistant, 640 lumens at IP65. If you want your path amber in October, this is not a compromise, it is the product. <b>What knocked it out:</b> a sealed LED and a 2-year warranty at roughly $704 landed for six. You would be paying premium-brass money for a fixture with an expiry date, and a bollard that throws light sideways is the least considerate shape available on a property under Mt. Hamilton. <b>Stays as a back-up in one specific case only:</b> if smart control turns out to be the actual goal, this wins outright and the rest of this report is irrelevant to you.</p>
+  </div>
+
+  <div class="elim">
+    <div class="en">Hampton Bay DL10103BKS</div>
+    <p style="margin:0"><b>Genuinely good at:</b> costing $113.29 for six lights, a transformer and cable — with a 5-year warranty and a 90-day return window, which for the money is not cynical, it is fair. <b>What knocked it out:</b> integrated LED in a composite body. It is a five-year product honestly priced as one, and it collides head-on with the buy-once assumption. <b>Stays as a back-up</b> if you are lighting a rental, staging a sale, or trialling a path route you may re-cut next spring.</p>
+  </div>
+
+  <div class="elim">
+    <div class="en">Solar — Gama Sonic and the wider field</div>
+    <p style="margin:0"><b>Genuinely good at:</b> requiring no trench, no cable, no transformer, no electrician and no electricity. For a bed with no route back to an outlet it is the only answer. <b>What knocked it out:</b> physics — about 50 lumens against 150–425 from a wired fixture, a lithium pack rated around 2,000 charges, and roughly two nights of runtime from a full charge, which is a coin-flip in a Bay Area December. <b>Stays as a back-up for a specific spot,</b> never for the main path.</p>
+  </div>
+
+  <h3>What would change my mind</h3>
+  <p><b>One fact: if the Costco kit turns out to use an integrated LED rather than a replaceable bulb.</b> Costco's listing names "Warm White (2700K) LED GU4 Bulbs" in the contents, and a GU4 bulb listed as a separate line item is a replaceable bulb in a socket — that is the whole basis of the pick. If you open the listing and find the LED is sealed into the fixture, the pick fails its own eliminating rule instantly and my recommendation flips to <b>VOLT direct at voltlighting.com</b>, where the socket type is stated explicitly on every product page. That is the one question worth asking before you pay, and it is question five in the Costco email in §11.</p>
+  <p>A second, softer trigger: if you tell me you have no Costco membership and don't want one, the arithmetic narrows enough that VOLT direct becomes the sensible pick on convenience alone.</p>
+
+  <h3>Confidence, and what sits unconfirmed underneath it</h3>
+  <p><b>High confidence on the reasoning. Moderate confidence on the specific numbers.</b></p>
+  <p>The logic is robust and would survive most of the numbers moving: lamp-ready solid brass beats sealed LED, a doubled remedy beats a single one, and the cheapest of three channels selling the same manufacturer's brass is the one to use. None of that depends on $349.99 being exactly right.</p>
+  <p>What sits unconfirmed underneath the call, honestly listed: I could not open a single source page — every figure here comes from a search-index extract. The exact VOLT fixture model in the Costco box is unnamed. The Costco membership fee is unpriced. The Dark Sky approval is unverified in both directions. Kichler's warranty band for the 15310 is unknown. And VOLT LLC's Florida reinstatement in November 2024 means the entity behind that lifetime warranty had lapsed at some point for reasons I could not read.</p>
+  <p style="margin-bottom:0">None of those, individually or together, changes the recommendation. All of them are closeable in about fifteen minutes with the links and phone numbers in §12. <b>Open the Costco listing, confirm the bulb is replaceable, and buy it.</b></p>
+</div>
+
+<p class="foot">
+  Garden Light RAC · prepared 17 August 2026 for a buyer at San Jose, CA 95138.<br>
+  All facts date-stamped at point of claim. All sources reached via search-index extract; none opened directly. Verify before purchase.
+</p>
+
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.dataset.target);
+    if(!el) return;
+    var text = el.innerText;
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1800);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+});
+function fallback(text, cb){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly','');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e){}
+  document.body.removeChild(ta);
+}
+</script>
