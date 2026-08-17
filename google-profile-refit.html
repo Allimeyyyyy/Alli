@@ -191,7 +191,10 @@ section{margin-bottom:30px; scroll-margin-top:16px}
 }
 
 /* ---------- tables ---------- */
-.tscroll{overflow-x:auto; margin:14px 0 4px; border:1px solid var(--rule); border-radius:5px; background:var(--card)}
+.tscroll{overflow-x:auto; max-width:100%; margin:14px 0 4px; border:1px solid var(--rule); border-radius:5px; background:var(--card)}
+/* grid/flex children default to min-width:auto, which lets a wide table blow
+   out its track instead of scrolling inside .tscroll */
+.finding>*,.phase>*,.shot>*{min-width:0}
 table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:600px}
 thead th{
   background:var(--card2); text-align:left; padding:10px 14px; color:var(--ink);
@@ -362,19 +365,19 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
     <div><b>Prepared for</b> Hung Phat USA</div>
     <div><b>Location</b> 1111 Story Rd, Ste 1063, San Jose CA 95122</div>
     <div><b>Date</b> 17 August 2026</div>
-    <div><b>Status</b> Proposal — awaiting asset handoff</div>
+    <div><b>Status</b> Research complete — awaiting photo library</div>
   </div>
   <div class="mast-body">
-    <p class="lede">Somebody sat in a car <em>forty-six minutes away</em>, typed your name, and the first thing Google showed them was a storefront photo with a <em>COVID-19 information sign</em> still taped in the window. That is the actual state of the profile — and it is also the whole argument for this project. This document covers how Google's business data really works in 2026, what is provably wrong today, the exact photo specs and shot list to fix it, and the copy you can paste into the fields this week.</p>
+    <p class="lede">Somebody sat in a car <em>forty-six minutes away</em>, typed your name, and the first thing Google showed them was a storefront photo with a <em>COVID-19 information sign</em> still taped in the window. That is the actual state of the profile — and it is the whole argument for this project. What follows covers how Google's business data really works in 2026, what is provably wrong across three boutiques and six social accounts, the photo specs and shot list that fix it, and paste-ready copy written in the voice you already use.</p>
   </div>
 </div>
 
 <!-- ================= SOURCING ================= -->
 <div class="sourcing" role="note">
   <div class="lab">Sourcing method — read this first</div>
-  <p>This environment's network policy blocked direct page loads of <b>hungphatusa.com</b>, <b>instagram.com</b>, and <b>support.google.com</b> (the proxy returned <span class="chip note">403 EGRESS_BLOCKED</span> on each). Research was gathered through domain-scoped web search, which surfaces those pages' own text without rendering them.</p>
-  <p><b>What this means for the image half of your request.</b> You asked me to look at the best images on your website and Instagram and use them as the guide. I could not open them, so I have <b>not</b> picked specific photos and I am not going to pretend otherwise. What this document gives you instead is the thing that actually makes a set consistent: a written look specification, a selection rubric you can run against your own library in an afternoon, and a shot list for what is missing. <b>Section 09</b> lists exactly what to send me to finish the selection pass.</p>
-  <p>Everything about Google's mechanics, specs, and policies is sourced and cited in <b>Section 10</b>. Facts about your business drawn from third-party directories are labelled where they conflict — those conflicts are themselves a finding.</p>
+  <p>Direct page loads of <b>hungphatusa.com</b>, <b>instagram.com</b>, and <b>support.google.com</b> are blocked by this session's egress policy (<span class="chip note">403</span> on each), and that policy is not something to route around. The research was therefore completed through domain-scoped search, which surfaces those pages' own text — including your About page, your Visit page, your collection structure, and the bio and post counts of every social account carrying your name.</p>
+  <p><b>One thing is still genuinely missing: the image files themselves.</b> Search returns a page's words, not its photographs. So I have not scored your library or picked the final set, and I am not going to pretend otherwise. Everything else you asked for is here — including your own brand voice, which turned out to be the most useful thing in this entire project. <b>Section 09</b> is now a short list.</p>
+  <p><b>What changed since the first draft.</b> Completing the research turned up a materially bigger picture: you are a <b>three-boutique business across two countries</b> with <b>at least six social accounts</b> carrying the name, and one claim in my first pass was wrong — the Business Profile Manager dashboard has <em>not</em> gone away for you, because multi-location businesses keep it. That correction is in Section 02 and it changes where your team should be working.</p>
 </div>
 
 <!-- ================= TOC ================= -->
@@ -441,16 +444,47 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
   <div class="finding">
     <div class="tag"><span class="chip fix">Fix now</span></div>
     <div>
-      <div class="ttl">Three Instagram accounts carry the brand</div>
-      <p><span class="m">@hungphatusa</span>, <span class="m">@hungphatusa.us</span>, and <span class="m">@hungphatusa_highjewelry</span> are all live and all describe the same San Jose store. Two of them are in the low hundreds of followers. Google's profile allows <b>one</b> Instagram link per platform, so this has to be resolved before anything gets linked, and it is also why "consistent" is currently impossible — there is no single account to be consistent with.</p>
+      <div class="ttl">Six accounts carry the brand. Four of them are the San Jose store.</div>
+      <p>This is the single largest obstacle to the consistency you asked for, and it is worse than it looked in the first draft.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>Account</th><th>Followers</th><th>Posts</th><th>Bio promises</th></tr></thead>
+        <tbody>
+          <tr><td class="k">@hungphatusa</td><td><span class="m">673</span></td><td><span class="m">236</span></td><td>"Complimentary 3D Wax Ring" · Worldwide Shipping</td></tr>
+          <tr><td class="k">@hungphatusa_us</td><td><span class="m">310</span></td><td><span class="m">590</span></td><td>"100,000+ GIA Certified Diamonds" · "FREE 3D Design" · Est. 2001</td></tr>
+          <tr><td class="k">@hungphatusa.us</td><td><span class="m">138</span></td><td><span class="m">165</span></td><td>"Luxury Feel, Better Price" · "Free 3D Designs" · cruise giveaway</td></tr>
+          <tr><td class="k">@hungphatusa_highjewelry</td><td colspan="2"><span class="m">not published</span></td><td>High jewelry</td></tr>
+          <tr><td class="k">@hungphatusa_vn</td><td><span class="m">847</span></td><td><span class="m">1,380</span></td><td>Vietnam showrooms</td></tr>
+        </tbody>
+      </table></div>
+      <p>Note the underscore and the dot: <span class="m">@hungphatusa_us</span> and <span class="m">@hungphatusa.us</span> are <b>different handles</b>. Four accounts point at one San Jose store, each advertising a different version of the same offer — a free 3D <em>design</em>, a complimentary 3D <em>wax ring</em>, and a better price. The Vietnam account, run by a different team, is larger than any of them.</p>
+      <p>Google accepts exactly <b>one</b> Instagram URL. Until you pick, there is nothing to be consistent <em>with</em>.</p>
+      <span class="ev">Also live: facebook.com/HungPhatUSA · facebook.com/HungPhatUSA.VN · facebook.com/HungPhatUSAVietnam · youtube.com/@hungphatusavietnam534</span>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip note">Scope</span></div>
+    <div>
+      <div class="ttl">You are a three-boutique business in two countries</div>
+      <p>Your own About page says it plainly: <em>"three boutiques across two countries — same craftsmen, same sourcing, same lifetime service."</em> San Jose, plus two Saigon locations, plus a separate Vietnamese domain at <span class="m">hungphatusa.vn</span>. This was invisible in the first pass and it changes the tooling: multi-location businesses do not manage profiles the way single-location ones do (Section 02).</p>
+      <p>The Saigon addresses also disagree between sources — your site describes one boutique "on Hai Ba Trung in District 3," while the Vietnamese listings give <span class="m">214 Lê Thánh Tôn, Q.1</span> and <span class="m">59 Lê Lợi, Q.1</span>. Somebody who knows the Vietnam operation needs to settle that before those profiles are touched.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip ok">Resolved</span></div>
+    <div>
+      <div class="ttl">The founding date is not actually a conflict</div>
+      <p>The three dates reconcile cleanly once the Vietnamese material is included: founded <b>1982</b>, San Jose flagship opened <b>2001</b>, Vietnam entry <b>2012</b>. Nothing contradicts anything. Google's <b>opening date</b> field describes <em>this location</em>, so San Jose's profile takes <b>2001</b> — and the 1982 origin belongs in the description, where it does more work anyway.</p>
+      <span class="ev">Confirm with the family before publishing — this is reconciled from public sources, not from your records.</span>
     </div>
   </div>
 
   <div class="finding">
     <div class="tag"><span class="chip note">Decide</span></div>
     <div>
-      <div class="ttl">Two phone numbers and three founding dates</div>
-      <p>Both <span class="m">408-299-0988</span> and <span class="m">888-999-1751</span> appear across directories. Separately, the web variously says "serving Santa Clara County since 1982," "flagship opened in San Jose in 2001," and "third-generation, with roots in Vietnam." All three can be true at once, but Google has exactly one <b>opening date</b> field and one <b>primary phone</b> field. Pick the canonical answer for each and use it everywhere, forever.</p>
+      <div class="ttl">Two phone numbers</div>
+      <p>Both <span class="m">408-299-0988</span> and <span class="m">888-999-1751</span> circulate. Google has one primary phone field. The local 408 number is generally the stronger choice on a Maps listing — area codes read as genuinely local — with the toll-free number added as a secondary.</p>
     </div>
   </div>
 
@@ -475,8 +509,19 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
 
   <p>Most of the frustration with Google Business Profile comes from people managing it with a mental model that stopped being true in 2024. Here is the current one.</p>
 
-  <h3>There is no dashboard anymore</h3>
-  <p>The standalone manager at <span class="m">business.google.com</span> was retired in late 2024. You now edit the profile <b>in place</b>: sign in to the owning Google account, search your own business name in Google Search or open it in Maps, and the owner controls appear directly on the listing — <b>Edit profile</b>, <b>Photos</b>, <b>Promote</b>, <b>Reviews</b>. If your team is still looking for a dashboard, that is why nothing has been updated.</p>
+  <div class="callout fix">
+    <div class="h">Correction to my first draft</div>
+    <p>I originally wrote that the dashboard is gone. That is true for single-location businesses and <b>false for you</b>. Because you run three boutiques, Business Profile Manager at <span class="m">business.google.com/locations</span> is still live and is the correct place for your team to work. I had the multi-location picture wrong when I wrote it; the rest of this section is the corrected version.</p>
+  </div>
+
+  <h3>Where the profile is edited depends on how many locations you have</h3>
+  <p>Google split the surfaces, which is why advice on this subject contradicts itself so often.</p>
+  <ul class="tick">
+    <li><b>Single location</b> — no dashboard. You edit in place: sign in to the owning Google account, search your own name in Google Search or open the listing in Maps, and the owner controls appear on the listing itself.</li>
+    <li><b>Multiple locations — this is you</b> — <span class="m">business.google.com/locations</span> still exists as <b>Business Profile Manager</b>. It gives you every location in one list, bulk edits, business groups, bulk verification, and proper user roles. None of that is exposed by the Search-and-Maps editing surface.</li>
+  </ul>
+  <p>Practical consequence: if your team has been editing San Jose by searching for it in Maps, they have been using the weaker of the two tools and have no view of the Vietnam profiles at all. Move them to Business Profile Manager and create a business group for the three boutiques.</p>
+  <p class="tnote">Bulk <b>chain</b> verification is available at ten or more locations, so at three you will still verify each boutique individually. The group is for management and access control, not verification.</p>
 
   <h3>Three levels of access, and they are not equal</h3>
   <div class="tscroll"><table>
@@ -506,8 +551,15 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
     <li><b>Attributes</b> — the filter checkboxes: identifies as Asian-owned, by appointment, in-store shopping, wheelchair accessible, offers custom orders. These feed Maps' filtering UI.</li>
     <li><b>Social links</b> — Google now supports Facebook, Instagram, LinkedIn, Pinterest, TikTok, X, and YouTube. One URL per platform, live within minutes to 72 hours.</li>
     <li><b>Special hours</b> — holiday overrides. For this business <b>Tết</b> matters more than any federal holiday, and Google surfaces holiday hours prominently.</li>
-    <li><b>Products</b> — a native catalogue, or a Merchant Center feed for the full Shopify inventory.</li>
+    <li><b>Products</b> — a native catalogue, or a Merchant Center feed for the full Shopify inventory. You list over 1,200 products and advertise 100,000+ certified diamonds; almost none of that is reachable from Maps today.</li>
   </ul>
+
+  <h3>Q&amp;A is being replaced by an AI layer, and it raises the stakes on everything above</h3>
+  <p>The old customer Q&amp;A panel is giving way to <b>Ask Maps</b>, which answers a visitor's questions in real time by reading your profile rather than waiting for a human to reply. You cannot write its answers directly. What you can do is control what it reads.</p>
+  <div class="callout gold">
+    <div class="h">Why the boring fields suddenly matter more</div>
+    <p>Every empty field used to cost you a filter match. Now it costs you an answer. When someone asks Maps "do they do ring resizing?" or "is there parking?" or "do they speak Vietnamese?", the reply is assembled from your categories, services, attributes, and description. A thin profile does not merely rank poorly — it produces vague or wrong answers to questions from people already trying to buy. The services list in Section 07 is the highest-leverage unglamorous hour on this whole project.</p>
+  </div>
 </div></section>
 
 <!-- ================= 03 ================= -->
@@ -631,7 +683,27 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
   <span class="snum">Section 05</span>
   <h2>The look: one visual system, three surfaces</h2>
 
-  <p>This is the consistency spec you asked for. It is written as rules rather than as a set of picked files, because I could not open your site or Instagram — but rules are what makes a set consistent anyway. Files chosen by taste drift; files chosen against a written spec do not.</p>
+  <p>This is the consistency spec you asked for. It is written as rules rather than as a set of picked files — I still cannot see your photographs. But rules are what make a set consistent anyway: files chosen by taste drift, files chosen against a written spec do not.</p>
+
+  <h3>You already wrote the art direction. It is sitting on your About page.</h3>
+  <p>The most valuable thing the research turned up is not a Google specification. It is your own copy, and it is far better than anything I would have written for you:</p>
+
+  <div class="callout gold">
+    <div class="h">hungphatusa.com/pages/about-us — "Three generations, one quiet bench."</div>
+    <p><em>"It started with a small bench in Vietnam, a loupe, and a father teaching his son how to hold a stone to the light. Many decades and an ocean later — the bench has moved. The work has not."</em></p>
+    <p><em>"We did not set out to be the largest jeweler. We set out to be your jeweler — the one your sister visits before a proposal, the one your mother trusts with the pieces she loves, the one your daughter will visit when it is her turn."</em></p>
+    <p><em>"Every piece is designed, cast, set, and finished under our own roof — by jewelers we trained, to a standard we set."</em></p>
+  </div>
+
+  <p>That copy makes the visual direction almost self-selecting, and it resolves the question you actually asked. <b>Consistency is not a colour palette you apply to Google. It is your existing story, told in photographs.</b> Three commitments follow from it directly:</p>
+
+  <ul class="tick">
+    <li><b>The bench is the hero, not the product.</b> Your story is about a bench, hands, and a standard — so the photographs that carry the brand are the workshop, the loupe, the setter's hands. Frame 10 in the shot list is not a nice-to-have; it is the literal subject of your About page, and it is entirely absent from Google today.</li>
+    <li><b>Quiet, not loud.</b> "One quiet bench" rules out the whole vocabulary of discount jewellery marketing — starbursts, price flashes, sparkle overlays, black velvet drama. It also happens to rule out precisely what Google rejects. Your brand voice and Google's photo policy want the same thing, which almost never happens.</li>
+    <li><b>People, across generations.</b> "The one your sister visits before a proposal… the one your daughter will visit when it is her turn" is a promise about relationships. Team and consultation photographs are not filler in this set — they are the proof of the central claim.</li>
+  </ul>
+
+  <p>Your homepage line — <b>"Your jeweler for life"</b> — is the sentence every image in the set should be able to support. If a candidate photograph could equally belong to a mall chain running a diamond sale, it fails, regardless of how good it looks.</p>
 
   <h3>The material logic</h3>
   <p>Your brand's distinguishing materials are <b>warm gold, jade, and lacquer red</b> — that is what the storefront arch already says, and it is what separates you from every chain jeweller shooting on black velvet. The photography should be built around making those three read true, and everything else in the spec follows from that.</p>
@@ -693,6 +765,7 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
     <li><b>+1</b> — It shows something a customer needs to know: where the door is, what the room feels like, who will serve them, what the work looks like.</li>
     <li><b>−2</b> — It is already published on Instagram or the website as the identical file. Re-export a different frame from the same shoot instead.</li>
     <li><b>−3</b> — Anything dated: COVID signage, expired promotions, retired displays, old fit-out.</li>
+    <li><b>Instant fail, regardless of score</b> — it could belong to a mall chain running a diamond sale. That is the "quiet bench" test, and it is the one that keeps the set yours.</li>
   </ul>
 
   <h3>How the three surfaces stay consistent</h3>
@@ -701,7 +774,7 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
     <thead><tr><th>Surface</th><th>Gets</th><th>Job</th></tr></thead>
     <tbody>
       <tr><td class="k">Google Business Profile</td><td>Un-branded originals. Wide and 4:3 crops. Room, door, bench, team, then product.</td><td>Answer "is this place real, open, and worth the drive?"</td></tr>
-      <tr><td class="k">hungphatusa.com</td><td>A <b>Visit</b> or <b>Our Showroom</b> page carrying the same shoot, same look, plus the JSON-LD block from Section 07.</td><td>Confirm the Google data from your own domain, and give the shoot a permanent home.</td></tr>
+      <tr><td class="k">hungphatusa.com</td><td>Your <b>Visit</b> page at <span class="m">/pages/our_store</span> and <b>About</b> at <span class="m">/pages/about-us</span> — both already exist. Add the shoot and the JSON-LD from Section 07 rather than building anything new.</td><td>Confirm the Google data from your own domain, and give the bench photographs the home the copy is already asking for.</td></tr>
       <tr><td class="k">Instagram (one account)</td><td>Square and vertical crops of the same shoot, pinned to the grid and saved as a <b>Showroom</b> highlight.</td><td>Depth and personality — and the link target from Google's social field.</td></tr>
     </tbody>
   </table></div>
@@ -790,9 +863,9 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
   <div class="shot">
     <div class="n">10</div>
     <div>
-      <div class="t">The bench</div>
-      <p class="d">Hands working — loupe, torch, polishing wheel. Face optional, craft mandatory.</p>
-      <p class="why">"Designed and crafted in house" is a claim until there is a photograph of the bench.</p>
+      <div class="t">The bench <span class="chip gold" style="vertical-align:3px">Brand hero</span></div>
+      <p class="d">Hands working — loupe, torch, polishing wheel, a stone held to the light. Face optional, craft mandatory. Shoot this one longest; it is worth several frames, not one.</p>
+      <p class="why">Your About page is <em>titled</em> "Three generations, one quiet bench," and opens on a father teaching his son to hold a stone to the light. That photograph does not currently exist anywhere Google can see. Of everything on this list, this is the frame that makes the profile unmistakably yours.</p>
     </div>
   </div>
   <div class="shot">
@@ -847,8 +920,8 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
     <div class="n">17</div>
     <div>
       <div class="t">360° panorama set</div>
-      <p class="d">Entry, main floor, showroom, bar. Either a Google Street View trusted photographer or a competent 360 rig.</p>
-      <p class="why">Optional and the most expensive item here — but a virtual tour is a strong differentiator on a mall listing where every neighbour has flat photos. Treat it as phase two.</p>
+      <p class="d">Entry, main floor, showroom, bar. A Google Street View trusted photographer gives the profile a verified badge; a competent 360 rig does not. Market rate for a space your size runs roughly <span class="m">$350–$895</span>, with around <span class="m">$550</span> typical for a ten-panorama tour. One-time cost, no recurring fee.</p>
+      <p class="why">The one item here with a real outside cost, and the only one I would call optional. On a mall listing where every neighbour has flat photos, a tour is a strong differentiator — and it is the natural way to show a showroom and a bar that people cannot see from the walkway.</p>
     </div>
   </div>
 
@@ -884,14 +957,17 @@ ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); fon
   </table></div>
 
   <h3>Description</h3>
-  <p>The field allows 750 characters, but Google truncates the visible portion at roughly 250. The draft below is 487 characters and is built so the cut falls exactly at a sentence end — the reader sees a complete thought either way.</p>
+  <p>The field allows 750 characters, but Google truncates the visible portion at roughly 250. This draft is 505 characters, carries the reconciled dates, and is written in <b>your</b> voice — the "under our own roof, by jewelers we trained, to a standard we set" line is lifted almost intact from your About page, which is exactly the point. The cut falls at character 249, on a full stop.</p>
   <div class="copyblk">
-    <div class="bar"><span class="lb"><b>Description</b> · 487 / 750 characters</span><button class="copybtn" data-copy="desc">Copy</button></div>
-    <pre id="desc">Hung Phat USA is a third-generation family jeweler in San Jose's Grand Century Mall, crafting fine jewelry in house since 2001. We specialize in custom engagement rings: natural and lab-grown diamonds, GIA-certified stones, 3D design before you buy.</pre>
+    <div class="bar"><span class="lb"><b>Description</b> · 505 / 750 characters</span><button class="copybtn" data-copy="desc">Copy</button></div>
+    <pre id="desc">Hung Phat USA is a third-generation family jeweler in San Jose's Grand Century Mall — founded in 1982, on Story Road since 2001. We design, cast, set, and finish every piece under our own roof, by jewelers we trained, to a standard we set ourselves.</pre>
     <span class="fold">↑ 249 characters — everything above this line is what most people see</span>
-    <pre> Our showroom carries high jewelry, jade, gold, and luxury watches, and our bench handles sizing, restoration, appraisal, and repair on site. Every piece starts as a sketch and finishes under our own polish. Vietnamese and English spoken.</pre>
+    <pre> Custom engagement rings in natural and lab-grown diamonds, GIA-certified stones, and a 3D design you approve before we cut anything. High jewelry, jade, gold and watches, with sizing, restoration and repair at our own bench. Vietnamese and English spoken.</pre>
   </div>
-  <p class="tnote">Replace <b>2001</b> with whichever founding date you make canonical. No URLs, no phone numbers, no HTML — all three are rejected in this field.</p>
+  <p class="tnote">No URLs, no phone numbers, no HTML — all three are rejected in this field. Confirm 1982 and 2001 with the family before publishing.</p>
+
+  <h3>Opening date</h3>
+  <p>Set San Jose's opening date to <b>2001</b>. The field describes the location, not the company, so the 1982 founding belongs in the description where it earns trust rather than in a field that would simply be wrong. When the Saigon profiles are set up, each gets its own true date.</p>
 
   <h3>Services</h3>
   <p>Add each as a separate service with its own one-line description. This is the highest-return unglamorous task on the list.</p>
@@ -929,14 +1005,24 @@ Jewelry cleaning and inspection</pre>
   <p>Pick one true set and publish it identically to Google, the website, Yelp, Apple Maps, Bing, and Facebook on the same day. Then add <b>special hours</b> for: Tết (Lunar New Year — including any multi-day closure), Thanksgiving, Christmas Eve and Day, New Year's Day, and July 4th. Holiday hours are one of the few profile elements Google displays with a coloured warning, which means it is also one of the few that generates a bad first impression when wrong.</p>
 
   <h3>Social links</h3>
-  <p>Resolve the three-account problem first. Choose the account you will actually run, redirect the audience of the other two into it via bio links and a pinned post, and then leave them dormant rather than deleting them — a deleted handle can be claimed by anyone.</p>
+  <p>Resolve the four-account problem first. My recommendation: keep <b>@hungphatusa</b> as canonical — it has the most followers of the US accounts, the cleanest handle, and a bio that already matches the brand. But <span class="m">@hungphatusa_us</span> carries 590 posts against its 236, so check which one holds the better archive before you commit; that decision is yours and it is not reversible cheaply.</p>
+  <p>Once chosen: point the others' bios at it, pin a post on each explaining the move, and then leave them <b>dormant rather than deleted</b> — a deleted handle can be claimed by anyone, and yours are worth squatting on. Leave <span class="m">@hungphatusa_vn</span> alone; it belongs to the Vietnam operation and will be linked from the Saigon profiles, not from San Jose.</p>
   <div class="copyblk">
-    <div class="bar"><span class="lb"><b>Social fields</b> · one URL per platform</span><button class="copybtn" data-copy="soc">Copy</button></div>
-    <pre id="soc">Instagram   https://www.instagram.com/hungphatusa/        [confirm this is the canonical account]
-Facebook    https://www.facebook.com/HungPhatUSA/
+    <div class="bar"><span class="lb"><b>Social fields</b> · San Jose profile · one URL per platform</span><button class="copybtn" data-copy="soc">Copy</button></div>
+    <pre id="soc">Instagram   https://www.instagram.com/hungphatusa/        [confirm canonical — see note above]
+Facebook    https://www.facebook.com/HungPhatUSA/          [the US page, not .VN or Vietnam]
 TikTok      [add if active]
-YouTube     [add if active]</pre>
+YouTube     [the VN channel is not the San Jose channel — omit unless a US channel exists]</pre>
   </div>
+
+  <h3>Posts</h3>
+  <p>One post a week, indefinitely. The limit is 1,500 characters but mobile truncates around 80–100, so the first line has to carry the whole message on its own. Attach a CTA every time — <b>Book</b>, <b>Learn more</b>, <b>Call now</b>, <b>Get offer</b> — and UTM-tag the destination so the traffic is attributable.</p>
+  <ul class="tick">
+    <li><b>Tết</b> — the most important post of your year. Plan it weeks out, with special hours attached.</li>
+    <li><b>The 3D design offer</b> — settle on <em>one</em> version of it across all channels first; right now three accounts describe it three different ways.</li>
+    <li><b>New arrivals</b> — straight from the Shopify collections, one piece per post.</li>
+    <li><b>The bench</b> — a piece in progress, sketch through polish. This is the story your About page already tells and almost nothing else in local search looks like it.</li>
+  </ul>
 
   <h3>Website link, with tracking</h3>
   <p>Tag the website field so the Google traffic is separable in analytics. Without this you cannot prove any of this work paid off.</p>
@@ -1001,9 +1087,10 @@ YouTube     [add if active]</pre>
   <div class="phase">
     <div class="when">Phase 0<span>Half a day</span></div>
     <div>
-      <div class="t">Access and ownership</div>
-      <p>Establish who holds primary owner on the Google profile. Add two current staff as owners so the business is never locked out again. Remove former employees and dormant agency accounts. Confirm the profile is fully verified — if it is mid-verification, finish that before anything else. Search Maps for duplicate listings and report any for merge.</p>
-      <p><b>Blocker check:</b> everything downstream depends on this. If the primary owner is unreachable, the reclaim process runs on Google's timeline, not yours — start it today.</p>
+      <div class="t">Access, ownership, and the baseline</div>
+      <p>Sign in to <b>Business Profile Manager</b> at <span class="m">business.google.com/locations</span> — not Maps — and create a business group for the three boutiques. Establish who holds primary owner. Add two current staff as owners so the business is never locked out again. Remove former employees and dormant agency accounts. Confirm verification is complete; nothing saves reliably until it is.</p>
+      <p><b>Export the Performance report the same day.</b> Google keeps only a rolling six months and then deletes it permanently. Every day you wait, a month of the pre-project baseline is gone for good — and without it you cannot prove any of this worked.</p>
+      <p><b>Blocker check:</b> everything downstream depends on ownership. If the primary owner is unreachable, the reclaim process runs on Google's timeline, not yours — start it today.</p>
     </div>
   </div>
 
@@ -1011,7 +1098,8 @@ YouTube     [add if active]</pre>
     <div class="when">Phase 1<span>Week 1</span></div>
     <div>
       <div class="t">Decide the canonical facts</div>
-      <p>One founding date. One primary phone. One set of hours. One Instagram account. One address format including the suite. Write them down in a single document that every staff member and vendor works from — this is the reference every later phase copies from.</p>
+      <p>One primary phone. One set of hours. One Instagram account. One address format including the suite. One wording of the 3D design offer. Confirm 1982 / 2001 / 2012. Write them down in a single document that every staff member and vendor works from — this is the reference every later phase copies from, in both countries.</p>
+      <p>While you are here: search Maps for your own name and confirm there is exactly one San Jose listing. If duplicates exist, merge them <b>carefully</b> — reviews transfer, but owner replies frequently do not, and Google processes one merge at a time. With a 5.0 rating you have a lot to lose in a careless merge.</p>
     </div>
   </div>
 
@@ -1048,45 +1136,57 @@ YouTube     [add if active]</pre>
   </div>
 
   <div class="phase">
-    <div class="when">Phase 6<span>Ongoing</span></div>
+    <div class="when">Phase 6<span>Month 2</span></div>
+    <div>
+      <div class="t">Put the catalogue on the map</div>
+      <p>You sell 1,200+ products and advertise 100,000+ certified diamonds, and almost none of it is reachable from a Maps listing. Link Merchant Center to the profile and turn on <b>free local listings</b>, which put in-stock items in front of nearby shoppers at no media cost. If you run Shopify POS with real inventory, <b>pickup today</b> becomes available on top of it.</p>
+      <p>Treat this as its own project rather than a checkbox — feed quality is the whole game, and jewellery feeds are fussy about GTINs and product identifiers. Start with the strongest few hundred SKUs, not all 1,200.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 7<span>Ongoing</span></div>
     <div>
       <div class="t">Keep it alive</div>
-      <p>One Google post per week — new arrivals, Tết pieces, the 3D design offer. Three to five new photos per week. Reply to every review inside 48 hours. Re-check hours before every holiday. Review the profile's performance metrics monthly against the baseline you took before Phase 3.</p>
+      <p>One Google post per week. Three to five new photos per week. Reply to every review inside 48 hours — responses are read by most customers before they buy, and they are a ranking input. Re-check hours before every holiday, Tết first. Export the Performance report monthly so you are never again at the mercy of the six-month window.</p>
     </div>
   </div>
 
   <h3>What to measure</h3>
-  <p>Screenshot the profile's performance panel <b>before</b> the shoot so there is a baseline. The numbers that matter: searches that surfaced you (direct vs. discovery), profile views, direction requests, calls, and website clicks. Direction requests are the closest proxy for foot traffic, and photo work moves them faster than anything else on this list.</p>
+  <p>The Performance report — Google renamed it from Insights, which is why half the internet still calls it the wrong thing — gives you views, calls, direction requests, website clicks, messages, bookings, and, since March 2026, offers. Views count unique visitors once per day. The searches breakdown refreshes at the start of each month and can lag five days.</p>
+  <p>The number to watch is <b>direction requests</b>: it is the closest available proxy for someone actually driving to Story Road, and photo work moves it faster than anything else on this list. Compare against the baseline you exported in Phase 0 — and remember that the baseline only exists if somebody actually exports it, because Google will delete it.</p>
 </div></section>
 
 <!-- ================= 09 ================= -->
 <section id="s9"><div class="ask">
   <div class="eyebrow">Section 09</div>
   <h2>What I need from you</h2>
-  <p>Two of these unblock work I could not do in this pass. The rest are decisions only you can make.</p>
+  <p>The research is finished. One thing still blocks me, and the rest are calls only you can make.</p>
 
-  <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">To finish the image selection</h4>
+  <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">The one blocker</h4>
   <ul class="tick">
-    <li><b>The photo library itself</b> — a Drive folder, a Dropbox link, or the files dropped into this repo. With the actual images I can score them against the Section 05 rubric, pick the 25–35 that go on Google, flag what needs re-export, and tell you exactly which of the 17 shots you already have covered.</li>
-    <li><b>Which Instagram account is canonical</b> — and screenshots of the grid if the account is private or otherwise unreachable from here.</li>
+    <li><b>The photo library.</b> Search returns a page's words, not its pictures, so this is the piece I genuinely cannot get to. Send a Drive or Dropbox link, or drop the files into this repo, and I will score them against the Section 05 rubric, select the 25–35 that go on Google, flag what needs re-exporting without branding, and tell you exactly which of the 17 frames you already have — so the shoot only covers what is actually missing.</li>
   </ul>
 
   <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">Decisions</h4>
   <ul class="tick">
-    <li><b>Founding year</b> — 1982, 2001, or a phrasing that honours both ("serving Santa Clara County since 1982, in Grand Century Mall since 2001")</li>
-    <li><b>Primary phone</b> — the local 408 number or the toll-free 888</li>
+    <li><b>Which Instagram account survives</b> — @hungphatusa has the followers, @hungphatusa_us has more than twice the posts. This is the decision the whole consistency plan hangs on.</li>
+    <li><b>Primary phone</b> — the local 408 or the toll-free 888</li>
     <li><b>True opening hours</b>, including whether weekends differ</li>
-    <li><b>Whether to publish the Asian-owned / Vietnamese-owned attribute</b></li>
-    <li><b>Whether the 360° virtual tour is in scope</b> — it is the one item with a meaningful outside cost</li>
+    <li><b>Confirm 1982 / 2001 / 2012</b> — reconciled from public sources, not from your records</li>
+    <li><b>One wording for the 3D design offer</b> — free design, complimentary wax ring, or both, stated identically everywhere</li>
+    <li><b>Whether to publish the Vietnamese-owned attribute</b></li>
+    <li><b>Whether the virtual tour is in scope</b> at roughly $350–$895</li>
+    <li><b>Whether the two Saigon boutiques are in scope for me</b>, or stay with the Vietnam team. Their addresses conflict across sources and someone has to settle that regardless.</li>
   </ul>
 
   <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">Access</h4>
   <ul class="tick">
-    <li>Confirmation of who currently holds <b>primary owner</b> on the Google profile</li>
+    <li>Who currently holds <b>primary owner</b> on the Google profile</li>
     <li>Whether any listing-management service or agency still has a connection pushing data</li>
   </ul>
 
-  <p style="margin-top:22px"><b>The one thing to do before anything else:</b> take the COVID-19 sign out of the window. It is in the photograph a customer sees from a car forty-six minutes away, and it will still be in that photograph until a better one replaces it.</p>
+  <p style="margin-top:22px"><b>Two things to do before anything else</b>, both free and both losing value every day you wait: <b>export the Performance report</b>, because Google is deleting the oldest month of your baseline on a rolling basis — and <b>take the COVID-19 sign out of the window</b>, because it is in the photograph a customer sees from a car forty-six minutes away, and it will stay in that photograph until a better one replaces it.</p>
 </div></section>
 
 <!-- ================= 10 ================= -->
@@ -1104,6 +1204,30 @@ YouTube     [add if active]</pre>
       <li>Report inappropriate photos or videos on your Business Profile <span class="u">support.google.com/business/answer/6130451</span></li>
       <li>Manage your social media links <span class="u">support.google.com/business/answer/13580646</span></li>
       <li>Manage products in Merchant Center <span class="u">support.google.com/business/answer/13161234</span></li>
+      <li>Bulk location management overview <span class="u">support.google.com/business/answer/3217744</span></li>
+      <li>Manage agency business groups <span class="u">support.google.com/business/answer/7655842</span></li>
+      <li>Understand your Business Profile performance &amp; insights <span class="u">support.google.com/business/answer/9918094</span></li>
+      <li>Local inventory ads and free local listings overview — Merchant Center Help <span class="u">support.google.com/merchants/answer/14615117</span></li>
+      <li>Pickup today — Merchant Center Help <span class="u">support.google.com/merchants/answer/14634281</span></li>
+      <li>Manage locations at scale — Business Profile APIs <span class="u">developers.google.com/my-business/content/manage-locations</span></li>
+    </ol>
+  </div>
+
+  <div class="srcgrp">
+    <h4>Multi-location, duplicates, tours, and measurement</h4>
+    <ol class="src">
+      <li>Is the Google Business Profile Manager going away for multi-location businesses as well? — Search Engine Land <span class="u">searchengineland.com/is-the-google-business-profile-manager-going-away-for-multi-locations-businesses-as-well-383863</span></li>
+      <li>How to Add Multiple Locations on Google Business Profile — EmbedSocial <span class="u">embedsocial.com/blog/how-to-add-multiple-locations-on-google-business-profile/</span></li>
+      <li>Duplicate Google Business Profiles: Merge or Remove Safely — Reinstate Labs <span class="u">reinstatelabs.com/blogs/duplicate-google-business-profiles-fix-merge-remove</span></li>
+      <li>How to Merge Duplicate Google Business Profile Listings 2026 — GetPin <span class="u">getpin.com/google-business-profile-en/how-to-merge-duplicate-google-business-profile-listings-2026/</span></li>
+      <li>GBP Performance Report: Insights Is Now Performance (2026) — MBADV <span class="u">mbadv.agency/google-business-profile/understanding-performance-reports-in-gbp</span></li>
+      <li>Google Business Profile quietly adds offers data to performance metrics docs — PPC Land <span class="u">ppc.land/google-business-profile-quietly-adds-offers-data-to-performance-metrics-docs/</span></li>
+      <li>How to Interpret Google Business Profile Performance Metrics — Sterling Sky <span class="u">sterlingsky.ca/interpret-google-business-profile-performance/</span></li>
+      <li>Google Business Profile Q&amp;A Guide 2026 (Ask Maps) — Maps Agent <span class="u">maps-agent.com/blog/google-business-profile-questions-answers</span></li>
+      <li>2026 Guide To Google Business Profile Posts &amp; Tips — Social Champ <span class="u">socialchamp.com/blog/guide-to-google-business-profile-posts/</span></li>
+      <li>Google Street View Trusted pricing — 360 Virtual Business Tours <span class="u">360virtualbusinesstours.com/faqs/how-much-does-google-street-view-cost/</span></li>
+      <li>Google Business Virtual Tour &amp; Business View: Add 360 Photos (2026) — Travvir <span class="u">travvir.com/blog/en/google-business-virtual-tour</span></li>
+      <li>Google local inventory — Shopify Help Center <span class="u">help.shopify.com/en/manual/online-sales-channels/google/shopping-on-google/local-inventory</span></li>
     </ol>
   </div>
 
@@ -1140,11 +1264,19 @@ YouTube     [add if active]</pre>
     <h4>Hung Phat USA — public record (used to identify conflicts)</h4>
     <ol class="src">
       <li>Hung Phat — Your jeweler for life (official site) <span class="u">hungphatusa.com</span></li>
-      <li>Hung Phat USA — Yelp, San Jose <span class="u">yelp.com/biz/hung-phat-usa-san-jose</span></li>
-      <li>Hung Phat USA | Custom Engagement Rings — Instagram <span class="u">instagram.com/hungphatusa/</span></li>
-      <li>Hung Phat USA — Instagram <span class="u">instagram.com/hungphatusa.us/</span></li>
-      <li>Hung Phat USA — Instagram <span class="u">instagram.com/hungphatusa_highjewelry/</span></li>
-      <li>Hung Phat USA — Your Diamond World — Facebook <span class="u">facebook.com/HungPhatUSA/</span></li>
+      <li><b>Our Story — "Three generations, one quiet bench."</b> — source of the brand voice in Section 05 <span class="u">hungphatusa.com/pages/about-us</span></li>
+      <li>Visit — the existing store page <span class="u">hungphatusa.com/pages/our_store</span></li>
+      <li>Fine Jewelry — full catalogue, 1,200+ products <span class="u">hungphatusa.com/collections/all</span></li>
+      <li>One of A Kind / High Jewelry <span class="u">hungphatusa.com/pages/one-of-a-kind</span></li>
+      <li>Hưng Phát USA Việt Nam — Vietnamese operation <span class="u">hungphatusa.vn</span></li>
+      <li>Hung Phat USA — Yelp, San Jose (617 reviews, 808 photos) <span class="u">yelp.com/biz/hung-phat-usa-san-jose</span></li>
+      <li>Instagram — @hungphatusa · 673 followers, 236 posts <span class="u">instagram.com/hungphatusa/</span></li>
+      <li>Instagram — @hungphatusa_us · 310 followers, 590 posts <span class="u">instagram.com/hungphatusa_us/</span></li>
+      <li>Instagram — @hungphatusa.us · 138 followers, 165 posts <span class="u">instagram.com/hungphatusa.us/</span></li>
+      <li>Instagram — @hungphatusa_highjewelry <span class="u">instagram.com/hungphatusa_highjewelry/</span></li>
+      <li>Instagram — @hungphatusa_vn · 847 followers, 1,380 posts <span class="u">instagram.com/hungphatusa_vn/</span></li>
+      <li>Facebook — Hung Phat USA (US page) <span class="u">facebook.com/HungPhatUSA/</span></li>
+      <li>Facebook — Hưng Phát USA Việt Nam <span class="u">facebook.com/HungPhatUSA.VN/</span></li>
       <li>Hung Phat USA — Apple Maps <span class="u">maps.apple.com/place?place-id=IAD777F428CF90E01</span></li>
       <li>Grand Century Mall — Visit San Jose <span class="u">sanjose.org/listings/grand-century-mall</span></li>
     </ol>
