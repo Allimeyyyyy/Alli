@@ -1,0 +1,1279 @@
+<title>Patio Door Product RAC</title>
+<style>
+  :root{
+    --ground:#eceff4; --card:#fff; --card-2:#f7f9fc; --ink:#141922; --ink-2:#38414f;
+    --muted:#5c6675; --line:#dde3ec; --line-2:#c9d3e0;
+    --accent:#1d4ed8; --accent-soft:#e8eeff; --accent-ink:#1a3fae;
+    --green:#0f7a4d; --green-soft:#e3f5ec; --green-line:#9bd7bb;
+    --amber:#b45309; --amber-soft:#fdf1e0; --amber-line:#f0cd9a;
+    --red:#b42318; --red-soft:#fdeceb; --red-line:#f3b9b4;
+    --shadow:0 1px 2px rgba(20,25,34,.05), 0 6px 18px -6px rgba(20,25,34,.10);
+    --shadow-lg:0 2px 4px rgba(20,25,34,.06), 0 18px 44px -14px rgba(20,25,34,.18);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --radius:14px;
+    /* drawing tokens */
+    --d-glass:#bcd6ea; --d-glass-2:#d6e6f3; --d-sky:#e7eff8;
+    --d-wood:#b98b53; --d-wood-dk:#8d6538; --d-clad:#4b5563; --d-clad-dk:#333c47;
+    --d-vinyl:#f2f4f7; --d-vinyl-dk:#c8ced8; --d-hw:#9aa3af; --d-screen:#5d6675;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0e1218; --card:#161c25; --card-2:#1c232e; --ink:#e9edf3; --ink-2:#c3cbd6;
+      --muted:#93a0b1; --line:#28313d; --line-2:#3a4552;
+      --accent:#7ea2ff; --accent-soft:#1a2338; --accent-ink:#a8c0ff;
+      --green:#5ed3a0; --green-soft:#12261d; --green-line:#2c5f47;
+      --amber:#f0b26b; --amber-soft:#291d0f; --amber-line:#6b4a22;
+      --red:#f38b82; --red-soft:#2a1614; --red-line:#6e3630;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -6px rgba(0,0,0,.5);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 18px 44px -14px rgba(0,0,0,.6);
+      --d-glass:#3f5f7d; --d-glass-2:#4e7093; --d-sky:#223244;
+      --d-wood:#9a7346; --d-wood-dk:#6f4f2c; --d-clad:#3d4653; --d-clad-dk:#2a323c;
+      --d-vinyl:#aeb6c2; --d-vinyl-dk:#79828f; --d-hw:#78818e; --d-screen:#8891a0;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0e1218; --card:#161c25; --card-2:#1c232e; --ink:#e9edf3; --ink-2:#c3cbd6;
+    --muted:#93a0b1; --line:#28313d; --line-2:#3a4552;
+    --accent:#7ea2ff; --accent-soft:#1a2338; --accent-ink:#a8c0ff;
+    --green:#5ed3a0; --green-soft:#12261d; --green-line:#2c5f47;
+    --amber:#f0b26b; --amber-soft:#291d0f; --amber-line:#6b4a22;
+    --red:#f38b82; --red-soft:#2a1614; --red-line:#6e3630;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -6px rgba(0,0,0,.5);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 18px 44px -14px rgba(0,0,0,.6);
+    --d-glass:#3f5f7d; --d-glass-2:#4e7093; --d-sky:#223244;
+    --d-wood:#9a7346; --d-wood-dk:#6f4f2c; --d-clad:#3d4653; --d-clad-dk:#2a323c;
+    --d-vinyl:#aeb6c2; --d-vinyl-dk:#79828f; --d-hw:#78818e; --d-screen:#8891a0;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--ground); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62; -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px; margin:0 auto; padding:26px 20px 90px; display:flex; flex-direction:column; gap:26px}
+
+  h1,h2,h3,h4{text-wrap:balance; margin:0; line-height:1.22; letter-spacing:-.019em}
+  h1{font-size:clamp(2rem,5.2vw,3.05rem); font-weight:800}
+  h2{font-size:clamp(1.4rem,3vw,1.85rem); font-weight:750}
+  h3{font-size:1.14rem; font-weight:700}
+  h4{font-size:1rem; font-weight:700}
+  p{margin:0}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px}
+  a:focus-visible,button:focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:5px}
+  strong{font-weight:680; color:var(--ink)}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:clamp(20px,3.2vw,32px); display:flex; flex-direction:column; gap:16px}
+  .eyebrow{font-size:.71rem; font-weight:750; letter-spacing:.13em; text-transform:uppercase; color:var(--muted)}
+  .sec-no{font-family:var(--mono); font-size:.78rem; color:var(--accent); font-weight:700}
+  .lede{font-size:1.06rem; color:var(--ink-2)}
+  .muted{color:var(--muted)} .small{font-size:.87rem} .tiny{font-size:.8rem}
+  hr{border:0; border-top:1px solid var(--line); margin:2px 0}
+
+  .chip{display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:750; letter-spacing:.045em; text-transform:uppercase; padding:3px 8px; border-radius:999px; border:1px solid; white-space:nowrap; vertical-align:middle}
+  .chip.v{background:var(--green-soft); color:var(--green); border-color:var(--green-line)}
+  .chip.u{background:var(--amber-soft); color:var(--amber); border-color:var(--amber-line)}
+  .chip.n{background:var(--red-soft); color:var(--red); border-color:var(--red-line)}
+  .chip.a{background:var(--accent-soft); color:var(--accent-ink); border-color:var(--line-2)}
+  .chip.neutral{background:var(--card-2); color:var(--muted); border-color:var(--line)}
+
+  .banner{background:var(--amber-soft); border:1px solid var(--amber-line); border-radius:var(--radius); padding:16px 20px; display:flex; flex-direction:column; gap:7px}
+  .banner .t{font-weight:780; color:var(--amber); font-size:.82rem; letter-spacing:.09em; text-transform:uppercase}
+
+  .hero{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-lg); overflow:hidden}
+  .hero-art{display:block; width:100%; height:auto; background:var(--d-sky); border-bottom:1px solid var(--line)}
+  .hero-body{padding:clamp(22px,3.4vw,34px); display:flex; flex-direction:column; gap:13px}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+
+  .toc{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:2px}
+  .toc a{display:flex; gap:11px; padding:8px 10px; border-radius:8px; text-decoration:none; color:var(--ink-2); font-size:.93rem; align-items:baseline}
+  .toc a:hover{background:var(--accent-soft); color:var(--accent-ink)}
+  .toc .n{font-family:var(--mono); font-size:.78rem; color:var(--accent); font-weight:700; min-width:1.5em}
+
+  .verdict{background:var(--green-soft); border:1.5px solid var(--green-line); border-radius:var(--radius); padding:clamp(18px,3vw,28px); display:flex; flex-direction:column; gap:15px}
+  .verdict .role{font-size:.71rem; font-weight:780; letter-spacing:.12em; text-transform:uppercase; color:var(--green)}
+  .vrow{display:flex; flex-direction:column; gap:3px}
+  .vrow .nm{font-size:1.16rem; font-weight:770; color:var(--ink)}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(212px,1fr)); gap:14px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:17px 18px; display:flex; flex-direction:column; gap:5px}
+  .stat .fig{font-size:1.92rem; font-weight:800; letter-spacing:-.035em; font-variant-numeric:tabular-nums; line-height:1.05}
+  .stat .lab{font-size:.79rem; font-weight:730; letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+  .stat .sub{font-size:.85rem; color:var(--muted); line-height:1.45}
+
+  .call{border-radius:var(--radius); padding:19px 22px; display:flex; flex-direction:column; gap:9px; border:1px solid}
+  .call h4{font-size:.79rem; font-weight:780; letter-spacing:.11em; text-transform:uppercase}
+  .call.blue{background:var(--accent-soft); border-color:var(--line-2)} .call.blue h4{color:var(--accent-ink)}
+  .call.green{background:var(--green-soft); border-color:var(--green-line)} .call.green h4{color:var(--green)}
+  .call.amber{background:var(--amber-soft); border-color:var(--amber-line)} .call.amber h4{color:var(--amber)}
+  .call.red{background:var(--red-soft); border-color:var(--red-line)} .call.red h4{color:var(--red)}
+
+  .rule{background:var(--ink); color:var(--ground); border-radius:var(--radius); padding:20px 24px; display:flex; flex-direction:column; gap:7px}
+  .rule .t{font-size:.74rem; font-weight:780; letter-spacing:.12em; text-transform:uppercase; opacity:.68}
+  .rule .b{font-size:1.11rem; font-weight:680; line-height:1.5}
+
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--card)}
+  table{border-collapse:collapse; width:100%; min-width:700px; font-size:.9rem}
+  th,td{text-align:left; padding:10px 13px; border-bottom:1px solid var(--line); vertical-align:top}
+  thead th{background:var(--card-2); font-size:.73rem; font-weight:760; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); position:sticky; top:0}
+  tbody tr:last-child td{border-bottom:0}
+  td.crit{font-weight:680; color:var(--ink); background:var(--card-2); white-space:nowrap}
+  td.win{background:var(--green-soft); box-shadow:inset 3px 0 0 var(--green)}
+  tr.verdict-row td{background:var(--ink); color:var(--ground); font-weight:700; border-bottom:0}
+  tr.verdict-row td.crit{background:var(--ink); color:var(--ground)}
+  .num{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:.87rem}
+
+  /* product cards */
+  .prod{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--card); box-shadow:var(--shadow)}
+  .prod-top{display:grid; grid-template-columns:250px 1fr; gap:0; align-items:stretch}
+  .prod-art{background:var(--d-sky); border-right:1px solid var(--line); padding:16px; display:flex; align-items:center; justify-content:center}
+  .prod-art svg{width:100%; height:auto; max-width:210px}
+  .prod-hd{padding:18px 20px; display:flex; flex-direction:column; gap:9px; justify-content:center}
+  .rank{font-family:var(--mono); font-size:1.4rem; font-weight:800; color:var(--accent); line-height:1}
+  .prod-bd{padding:18px 20px; display:flex; flex-direction:column; gap:15px; border-top:1px solid var(--line)}
+  .fact{font-family:var(--mono); font-size:.83rem; color:var(--ink-2); background:var(--card-2); border:1px solid var(--line); border-radius:9px; padding:11px 13px; line-height:1.7}
+  .block{border-left:3px solid var(--line-2); padding:2px 0 2px 15px; display:flex; flex-direction:column; gap:6px}
+  .block.against{border-left-color:var(--red)}
+  .block.resp{border-left-color:var(--accent)}
+  .block .h{font-size:.75rem; font-weight:770; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+  .buy{display:inline-flex; align-items:center; gap:7px; align-self:flex-start; background:var(--accent); color:#fff; font-size:.84rem; font-weight:730; letter-spacing:.03em;
+       padding:9px 16px; border-radius:8px; text-decoration:none; border:1px solid transparent}
+  .buy:hover{filter:brightness(1.08)}
+  :root[data-theme="dark"] .buy, :root:not([data-theme="light"]) .buy{color:#0e1218}
+  @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .buy{color:#fff}}
+  .buy.ghost{background:transparent; color:var(--accent); border-color:var(--line-2)}
+
+  ul,ol{margin:0; padding-left:1.25em; display:flex; flex-direction:column; gap:7px}
+  li::marker{color:var(--muted)}
+  ol.ranked{counter-reset:r; list-style:none; padding-left:0}
+  ol.ranked li{counter-increment:r; padding-left:2.1em; position:relative}
+  ol.ranked li::before{content:counter(r); position:absolute; left:0; top:.05em; font-family:var(--mono); font-weight:750; color:var(--accent); font-size:.86rem;
+    border:1px solid var(--line-2); border-radius:6px; width:1.55em; height:1.55em; display:grid; place-items:center; line-height:1}
+
+  .mail{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .mail-hd{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 15px; background:var(--card-2); border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .mail-hd .to{font-size:.85rem; font-weight:700}
+  .mail pre{margin:0; padding:17px 19px; font-family:var(--mono); font-size:.83rem; line-height:1.68; white-space:pre-wrap; word-wrap:break-word; color:var(--ink-2); background:var(--card)}
+  button.copy{font-family:var(--sans); font-size:.76rem; font-weight:730; letter-spacing:.04em; text-transform:uppercase; padding:6px 13px; border-radius:7px;
+    border:1px solid var(--line-2); background:var(--card); color:var(--accent-ink); cursor:pointer; transition:background .15s,color .15s}
+  button.copy:hover{background:var(--accent-soft)}
+  button.copy.ok{background:var(--green-soft); color:var(--green); border-color:var(--green-line)}
+
+  .src{display:flex; gap:13px; padding:12px 0; border-bottom:1px solid var(--line)}
+  .src:last-child{border-bottom:0}
+  .src .n{font-family:var(--mono); font-size:.83rem; font-weight:700; color:var(--accent); min-width:2.1em}
+  .src .b{display:flex; flex-direction:column; gap:3px; min-width:0}
+  .src .b .ttl{font-weight:650; font-size:.94rem; word-break:break-word}
+  .src .b .why{font-style:italic; font-size:.85rem; color:var(--muted); line-height:1.5}
+
+  .final{background:var(--ink); color:var(--ground); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:clamp(24px,4vw,40px); display:flex; flex-direction:column; gap:20px}
+  .final h2,.final h3{color:#fff}
+  .final .eyebrow{color:rgba(255,255,255,.6)}
+  .final a{color:#9dbaff} .final strong{color:#fff}
+  .final hr{border-top-color:rgba(255,255,255,.15)}
+  .final .pick{font-size:1.24rem; font-weight:730; line-height:1.5; color:#fff}
+  .kill{display:flex; flex-direction:column; gap:4px; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.13)}
+  .kill:last-child{border-bottom:0}
+  .kill .nm{font-weight:740; color:#fff}
+
+  .legend{display:flex; flex-wrap:wrap; gap:14px; font-size:.8rem; color:var(--muted)}
+  .legend span{display:inline-flex; align-items:center; gap:6px}
+  .sw{width:13px; height:13px; border-radius:3px; border:1px solid var(--line-2); display:inline-block}
+
+  @media (max-width:720px){
+    .prod-top{grid-template-columns:1fr}
+    .prod-art{border-right:0; border-bottom:1px solid var(--line)}
+    .prod-art svg{max-width:180px}
+  }
+  @media (max-width:640px){
+    body{font-size:15.8px}
+    .wrap{padding:16px 13px 60px; gap:20px}
+    .prod-hd,.prod-bd{padding:15px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+  @media print{
+    body{background:#fff}
+    .wrap{max-width:100%; padding:0; gap:16px}
+    .card,.hero,.prod,.stat,.mail{box-shadow:none; break-inside:avoid}
+    .final{background:#fff; color:#000; border:2px solid #000}
+    .final h2,.final h3,.final .pick,.final strong,.kill .nm{color:#000}
+    .final .eyebrow{color:#444} .final a{color:#000}
+    .rule{background:#fff; color:#000; border:2px solid #000}
+    tr.verdict-row td{background:#eee; color:#000}
+    button.copy{display:none} .scroll{overflow:visible}
+    .buy{border:1px solid #000; color:#000!important; background:#fff}
+    a[href^="http"]::after{content:" (" attr(href) ")"; font-size:.7rem; color:#555; word-break:break-all}
+  }
+</style>
+
+<div class="wrap">
+
+  <!-- 1 -->
+  <div class="banner">
+    <div class="t">Confidential — prepared for a single reader</div>
+    <p class="small">Prepared for the buyer at <strong>San Jose, CA 95138</strong> (California Title 24 <strong>Climate Zone 4</strong>). All facts read <strong>17 August 2026</strong> unless separately date-stamped. This is a <strong>product</strong> assessment — what to buy, not who to hire.</p>
+    <p class="small"><strong>Status chips govern every claim.</strong> <span class="chip v">Verified</span> primary record opened. <span class="chip u">Unconfirmed</span> single source, uncorroborated. <span class="chip n">Not verified</span> record could not be opened. <span class="chip a">Ask</span> put it to the seller in writing.</p>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <svg class="hero-art" viewBox="0 0 1060 300" role="img" aria-label="Scale elevation drawing of a two-panel sliding patio door with an integrated retractable screen partly drawn across the left panel">
+      <defs>
+        <linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#cfe0f5"/><stop offset="100%" stop-color="#eaf1fa"/></linearGradient>
+        <linearGradient id="hgl" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity=".55"/><stop offset="45%" stop-color="#ffffff" stop-opacity=".08"/><stop offset="100%" stop-color="#ffffff" stop-opacity=".34"/>
+        </linearGradient>
+      </defs>
+      <rect width="1060" height="300" fill="url(#hsky)"/>
+      <circle cx="880" cy="72" r="120" fill="#fff" opacity=".33"/>
+      <path d="M0 240 Q170 196 330 236 T680 228 T1060 244 L1060 300 L0 300Z" fill="#7fa87f" opacity=".42"/>
+      <path d="M0 262 Q220 232 460 262 T1060 258 L1060 300 L0 300Z" fill="#5d8a62" opacity=".38"/>
+      <rect x="196" y="34" width="668" height="248" rx="5" fill="#2f3a49"/>
+      <rect x="206" y="44" width="648" height="228" rx="3" fill="#8a949f" opacity=".25"/>
+      <rect x="216" y="54" width="304" height="208" rx="2" fill="#4a5563"/>
+      <rect x="228" y="66" width="280" height="184" fill="#b9d2e8" opacity=".62"/>
+      <rect x="228" y="66" width="280" height="184" fill="url(#hgl)"/>
+      <rect x="540" y="54" width="304" height="208" rx="2" fill="#3d4756"/>
+      <rect x="552" y="66" width="280" height="184" fill="#b9d2e8" opacity=".5"/>
+      <rect x="552" y="66" width="280" height="184" fill="url(#hgl)"/>
+      <g opacity=".5">
+        <rect x="552" y="66" width="112" height="184" fill="#2f3a49" opacity=".3"/>
+        <g stroke="#1f2733" stroke-width=".7" opacity=".55">
+          <path d="M556 66v184M562 66v184M568 66v184M574 66v184M580 66v184M586 66v184M592 66v184M598 66v184M604 66v184M610 66v184M616 66v184M622 66v184M628 66v184M634 66v184M640 66v184M646 66v184M652 66v184M658 66v184"/>
+          <path d="M552 70h112M552 76h112M552 82h112M552 88h112M552 94h112M552 100h112M552 106h112M552 112h112M552 118h112M552 124h112M552 130h112M552 136h112M552 142h112M552 148h112M552 154h112M552 160h112M552 166h112M552 172h112M552 178h112M552 184h112M552 190h112M552 196h112M552 202h112M552 208h112M552 214h112M552 220h112M552 226h112M552 232h112M552 238h112M552 244h112"/>
+        </g>
+        <rect x="662" y="66" width="6" height="184" rx="2" fill="#2f3a49"/>
+      </g>
+      <rect x="528" y="140" width="9" height="48" rx="4" fill="#c9ced6"/>
+      <rect x="846" y="146" width="7" height="36" rx="3" fill="#c9ced6"/>
+      <rect x="196" y="276" width="668" height="12" rx="3" fill="#242c38"/>
+    </svg>
+    <div class="hero-body">
+      <div class="eyebrow">Research · Assessment · Comparison</div>
+      <h1>Patio Door Product RAC</h1>
+      <p class="lede">Six sliding patio doors you can actually order, benchmarked against the product in the video that started this — the <strong>Pella Lifestyle Series slider with Rolscreen</strong>. Assessed for Title 24 Climate Zone 4 compliance, warranty strength and buy-route reality.</p>
+      <div class="hero-meta">
+        <span class="chip neutral">Facts read 17 Aug 2026</span>
+        <span class="chip u">Confidence: low on price, moderate on product</span>
+        <span class="chip n">0 prices verified</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE DISCLOSURE -->
+  <div class="card">
+    <div class="eyebrow">About the pictures in this report</div>
+    <h3>These are scale drawings, not photographs — and here's why</h3>
+    <p class="small">You asked for images so you wouldn't have to visit each website. I need to be straight with you about what you're getting. <strong>Every image in this report is a technical elevation I drew to each door's published configuration — not a product photo.</strong> Two hard constraints forced that:</p>
+    <ul class="small">
+      <li><strong>I couldn't download any photos.</strong> This machine's egress policy returned a hard 403 for every retailer, manufacturer and image host I tried — lowes.com, homedepot.com, pella.com, milgard.com, andersenwindows.com, even Wikimedia's image CDN.</li>
+      <li><strong>Hotlinking wouldn't work either.</strong> Published artifacts run under a strict content-security policy that blocks images from external hosts. A linked product photo would render as a broken box for you, which is worse than an honest drawing.</li>
+    </ul>
+    <p class="small">So each drawing shows the things that actually differ between these doors and that a marketing photo tends to hide: <strong>panel count and which panel moves, frame material and colour, stile width (how much frame eats your view), screen type and where it lives, and handle position.</strong> Where a drawing reflects an unconfirmed spec, the card says so. For true photographs, the purchase URL on each card opens the manufacturer's own gallery.</p>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--d-clad)"></i> Aluminium-clad exterior</span>
+      <span><i class="sw" style="background:var(--d-wood)"></i> Wood interior</span>
+      <span><i class="sw" style="background:var(--d-vinyl)"></i> Vinyl frame</span>
+      <span><i class="sw" style="background:var(--d-glass)"></i> Insulating glass</span>
+      <span><i class="sw" style="background:var(--d-screen)"></i> Screen mesh</span>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="card">
+    <div class="eyebrow">Contents</div>
+    <nav class="toc">
+      <a href="#call"><span class="n">01</span><span>The call</span></a>
+      <a href="#working"><span class="n">02</span><span>What we're working with</span></a>
+      <a href="#matrix"><span class="n">03</span><span>Comparison matrix</span></a>
+      <a href="#ratings"><span class="n">04</span><span>Ratings, every platform</span></a>
+      <a href="#profiles"><span class="n">05</span><span>Product profiles, ranked</span></a>
+      <a href="#cost"><span class="n">06</span><span>What this should cost</span></a>
+      <a href="#policy"><span class="n">07</span><span>The policy layer</span></a>
+      <a href="#audit"><span class="n">08</span><span>Claim-by-claim audit: Pella</span></a>
+      <a href="#plain"><span class="n">09</span><span>My assessment, in plain English</span></a>
+      <a href="#emails"><span class="n">10</span><span>Copy-paste emails</span></a>
+      <a href="#sources"><span class="n">11</span><span>Sources, including dead ends</span></a>
+      <a href="#final"><span class="n">12</span><span>Final verdict</span></a>
+    </nav>
+  </div>
+
+  <!-- 01 THE CALL -->
+  <section class="card" id="call">
+    <div><span class="sec-no">01</span> <span class="eyebrow">The call</span></div>
+    <h2>The call</h2>
+
+    <div class="verdict">
+      <div class="vrow">
+        <div class="role">The pick</div>
+        <div class="nm">Pella Lifestyle Series aluminium-clad wood sliding patio door — configured <em>with</em> Rolscreen <span class="chip u">Rolscreen availability unconfirmed on retail SKU</span></div>
+        <p class="small">It is the door in your video, it is orderable, and nothing else in this set combines clad wood with a screen that disappears into the frame. Open the Lowe's listing below, then read §01's reframe before you click buy — the retail SKU may not carry the feature you actually want.</p>
+        <a class="buy" href="https://www.lowes.com/pd/Pella-Lifestyle-Series-72-in-x-80-in-x-4-9-16-in-Jamb-Low-E-argon-Clear-glass-White-Clad-wood-Left-hand-Sliding-Patio-Door/5016131747">Open the Lowe's listing →</a>
+      </div>
+      <hr>
+      <div class="vrow">
+        <div class="role">The runner-up</div>
+        <div class="nm">Milgard Tuscany V400 vinyl sliding patio door <span class="chip v">strongest warranty with a live buy URL</span></div>
+        <p class="small">Full lifetime warranty including glass breakage, configurable to Title 24 Climate Zone 4, and sold on Lowe's with real SKUs. Vinyl, and no integrated retractable screen — that's the trade.</p>
+        <a class="buy ghost" href="https://www.lowes.com/pd/Milgard-V400-Tuscany-Series-60-in-x-80-in-x-4-5-8-in-Jamb-White-Vinyl-Left-hand-Sliding-Patio-Door-with-Low-E-argon-Glass-Screen-Included/5016113959">Open the Lowe's listing →</a>
+      </div>
+      <hr>
+      <div class="vrow">
+        <div class="role">Special role — buy only for one specific reason</div>
+        <div class="nm">JELD-WEN vinyl slider with blinds between the glass</div>
+        <p class="small">Not a general recommendation. The right answer only if your door faces afternoon sun and you want shading with nothing to clean. Blinds sealed inside the glass unit — and, on Milgard's equivalent, that's the one component whose warranty drops from lifetime to ten years.</p>
+        <a class="buy ghost" href="https://www.lowes.com/pd/JELD-WEN-Blinds-Between-The-Glass-White-Vinyl-Left-Hand-Sliding-Double-Door-Sliding-Patio-Door-with-Screen-Common-72-in-x-80-in-Actual-71-5-in-x-79-5-in/50295409">Open the Lowe's listing →</a>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="lab">Products assessed</div>
+        <div class="fig">6</div>
+        <div class="sub">Across clad wood, vinyl and wood/Perma-Shield, all orderable to a 72×80 rough opening.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Prices verified</div>
+        <div class="fig" style="color:var(--red)">0</div>
+        <div class="sub">Every retailer was blocked from this machine. Not one price in this report was seen on a live page.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Title 24 CZ4 ceiling</div>
+        <div class="fig num">0.30 / 0.23</div>
+        <div class="sub">Max U-factor / max SHGC. Maximums, not targets — 0.31 fails inspection.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Best warranty in set</div>
+        <div class="fig">Anlin</div>
+        <div class="sub">Lifetime including parts, labour <em>and</em> shipping, transferable to one subsequent owner. No direct buy URL, which is what knocks it out.</div>
+      </div>
+    </div>
+
+    <div class="call amber">
+      <h4>The finding that reframes everything</h4>
+      <p><strong>Rolscreen is an option, not a standard feature — and the retail listings don't appear to carry it.</strong></p>
+      <p class="small">The retracting screen is almost certainly what made you send that video twice. But Pella's own description is that Rolscreen retractable screens are <em>"available on"</em> casement windows and sliding patio doors <span class="chip u">Unconfirmed</span>. Available on means optional. Meanwhile every Pella Lifestyle listing I could surface at retail describes the glass and the swing hand — "Low-E argon", "left-hand", "tempered clear" — and <strong>none of them mentions Rolscreen at all</strong>.</p>
+      <p class="small">That splits your purchase into two different transactions, and they may be mutually exclusive:</p>
+      <ul class="small">
+        <li><strong>The direct-purchase path</strong> — a Lowe's SKU with a price on screen, which may deliver a Lifestyle Series door with a conventional sliding screen on an outboard track. Right frame, right glass, wrong screen.</li>
+        <li><strong>The Rolscreen path</strong> — a configured order through Pella, which gets you the feature but returns you to quote-based pricing with no published number.</li>
+      </ul>
+      <p class="small">This reframes the whole report. The question is not "which door is best." It is <strong>"is the retracting screen worth leaving the fixed-price channel for?"</strong> Everything in §09 turns on that, and it is the one question I cannot answer for you — it depends on how much that feature was doing in your head when you sent the link. <span class="chip a">Ask</span> — one phone call to Lowe's with the SKU settles it.</p>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="card" id="working">
+    <div><span class="sec-no">02</span> <span class="eyebrow">Evidence</span></div>
+    <h2>What we're working with</h2>
+
+    <h3>Your evidence, read closely</h3>
+    <p>One YouTube link, sent twice. It resolves to <strong>"Pella Lifestyle Series Sliding Patio Door with Rolscreen,"</strong> published 3 October 2019 — manufacturer marketing, not a review or an independent test.</p>
+    <blockquote class="fact">Source: YouTube — video ID xhFeiPwxFMM, "Pella Lifestyle Series Sliding Patio Door with Rolscreen," pub. 3 Oct 2019 · youtube.com/watch?v=xhFeiPwxFMM <span class="chip n">Not verified</span><br><em>(Video title and publication date resolved via web search only — youtube.com is blocked from this machine, so I never watched it. Manufacturer-published promotional content regardless: evidence of Pella's claims, not of performance. Read 17 Aug 2026.)</em></blockquote>
+
+    <p>Four things follow, and the fourth is the one that costs money:</p>
+    <ol class="ranked">
+      <li><strong>You named a product, so you are shopping a specification, not a style.</strong> That is genuinely easier to buy well — a spec can be matched, priced and compared across brands. It also means brand loyalty is optional: what you want is a set of attributes, and several manufacturers sell them.</li>
+      <li><strong>The Rolscreen is the differentiator.</strong> Retracts into the frame instead of sitting on an outboard track. Most sliders in this market do not do this. If it were removed from the video, nothing else in it would be unusual.</li>
+      <li><strong>Lifestyle Series is aluminium-clad wood.</strong> Wood interior, clad exterior. A different product class — and a different maintenance commitment — from the vinyl doors that dominate California replacement work.</li>
+      <li><strong>You are in Climate Zone 4, which sets a hard legal ceiling on the glass.</strong> This is the constraint most buyers discover after ordering. See the rule below.</li>
+    </ol>
+
+    <div class="call blue">
+      <h4>The priority I have inferred — correct me if it's wrong</h4>
+      <p class="small">Because you sent a product video rather than a budget, twice, I am treating your priority as <strong>getting that specific door experience — clad wood, disappearing screen — over lowest price</strong>. Every ranking below flows from that. <span class="chip a">Ask</span></p>
+      <p class="small">If your real priority is "a good sliding door at a sensible price and I just liked the look," then Milgard Tuscany V400 becomes the pick outright and the Pella route drops away. One line from you re-cuts the whole thing.</p>
+    </div>
+
+    <h3>The single rule that eliminates candidates</h3>
+    <div class="rule">
+      <div class="t">The elimination rule</div>
+      <div class="b">If the exact configuration you are ordering cannot show a U-factor of <strong>0.30 or lower</strong> and an SHGC of <strong>0.23 or lower</strong> on its NFRC label, it is out — no matter how good the door, the brand or the price. These are legal maximums for Climate Zone 4, not targets. A door rated 0.31 does not pass inspection.</div>
+    </div>
+    <blockquote class="fact">Source: California Energy Commission — Title 24 Building Energy Efficiency Standards, 2025 cycle (in effect for 2026) · energy.ca.gov <span class="chip n">Not verified — could not open</span><br><em>(The California Energy Commission is the state agency that writes and enforces the Title 24 energy code — the authoritative source for fenestration U-factor and SHGC limits by climate zone. San Jose sits in Climate Zone 4. The 0.30 / 0.23 ceiling and the "maximums, not targets" framing were relayed by search summary and by Milgard's own Title 24 guidance; <strong>the Commission's own code text was not opened</strong>, so confirm before ordering. Relayed 17 Aug 2026.)</em></blockquote>
+    <p class="small"><strong>Why this rule does the real work.</strong> It is objective, it is checkable on a sticker, and it is the only criterion in this report that can void a purchase outright. It also cuts across brand: a Pella, a Milgard and a JELD-WEN can each pass or fail depending on the glass package you tick. That is why every email in §10 asks for the NFRC number in writing <em>before</em> money moves — the rating belongs to the configuration, not to the brand on the box.</p>
+    <p class="small muted">One honest caveat on the rule: the 0.30/0.23 pair is the widely-cited prescriptive limit, and Title 24 also permits a whole-building performance path where a single non-compliant component can be offset elsewhere. For a one-door replacement the prescriptive path is what you will be held to. <span class="chip a">Ask</span> your permit desk — San José Development Services, <strong>408-535-3555</strong>.</p>
+  </section>
+
+  <!-- 03 MATRIX -->
+  <section class="card" id="matrix">
+    <div><span class="sec-no">03</span> <span class="eyebrow">Comparison</span></div>
+    <h2>Comparison matrix</h2>
+    <p class="small muted">Winning cell per row shaded green. Where nothing wins outright, nothing is shaded. Chips carry the status of that cell, not of the product overall.</p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Criterion</th><th>Pella Lifestyle</th><th>Milgard Tuscany V400</th><th>Anlin Malibu</th><th>Andersen 200 Narroline</th><th>JELD-WEN V-4500</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Frame material</td>
+            <td class="win">Aluminium-clad wood — matches the video <span class="chip u">Unconfirmed</span></td>
+            <td>Vinyl <span class="chip u">Unconfirmed</span></td>
+            <td>Vinyl <span class="chip u">Unconfirmed</span></td>
+            <td>Wood with Perma-Shield exterior <span class="chip u">Unconfirmed</span></td>
+            <td>Vinyl <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Integrated retractable screen</td>
+            <td class="win">Rolscreen — optional, not confirmed on retail SKU <span class="chip a">Ask</span></td>
+            <td>No — conventional screen included <span class="chip u">Unconfirmed</span></td>
+            <td>No — conventional screen <span class="chip u">Unconfirmed</span></td>
+            <td>No — conventional screen <span class="chip u">Unconfirmed</span></td>
+            <td>No — conventional screen included <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Direct purchase URL</td>
+            <td class="win">Yes — multiple Lowe's SKUs <span class="chip u">Unconfirmed live</span></td>
+            <td class="win">Yes — multiple Lowe's SKUs <span class="chip u">Unconfirmed live</span></td>
+            <td>No — authorised dealer quote only <span class="chip u">Unconfirmed</span></td>
+            <td>Yes — Home Depot SKU <span class="chip u">Unconfirmed live</span></td>
+            <td class="win">Yes — multiple Lowe's SKUs <span class="chip u">Unconfirmed live</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Published price</td>
+            <td>None seen <span class="chip n">Not verified</span></td>
+            <td>None seen <span class="chip n">Not verified</span></td>
+            <td>None — quote only <span class="chip n">Not verified</span></td>
+            <td>A ~$1,955 figure surfaced for a 200 Series unit, possibly a different model <span class="chip n">Not verified</span></td>
+            <td>None seen <span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Warranty headline</td>
+            <td>Limited lifetime on wood/fibreglass <span class="chip u">Unconfirmed</span></td>
+            <td>Full lifetime incl. glass breakage; transfers 10 yrs <span class="chip u">Unconfirmed</span></td>
+            <td class="win">Lifetime incl. parts, labour <em>and</em> shipping; transfers to one owner <span class="chip u">Unconfirmed</span></td>
+            <td>20 yrs glass / 10 yrs non-glass <span class="chip u">Unconfirmed</span></td>
+            <td>Not surfaced <span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Title 24 CZ4 compliance</td>
+            <td>Config-dependent <span class="chip a">Ask</span></td>
+            <td class="win">Explicitly marketed as Title 24 configurable <span class="chip u">Unconfirmed</span></td>
+            <td>Engineered for California <span class="chip u">Unconfirmed</span></td>
+            <td>Config-dependent <span class="chip a">Ask</span></td>
+            <td>Config-dependent <span class="chip a">Ask</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Glass-breakage cover</td>
+            <td>Not surfaced <span class="chip a">Ask</span></td>
+            <td class="win">Included in lifetime warranty <span class="chip u">Unconfirmed</span></td>
+            <td>Covered under lifetime terms <span class="chip u">Unconfirmed</span></td>
+            <td>20-year glass term <span class="chip u">Unconfirmed</span></td>
+            <td>Not surfaced <span class="chip n">Not verified</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Long-run parts independence</td>
+            <td>Proprietary, dealer channel <span class="chip u">Unconfirmed</span></td>
+            <td>Widely stocked in CA <span class="chip u">Unconfirmed</span></td>
+            <td class="win">CA manufacturer, labour+shipping covered <span class="chip u">Unconfirmed</span></td>
+            <td>Proprietary but large network <span class="chip u">Unconfirmed</span></td>
+            <td>Commodity vinyl hardware <span class="chip u">Unconfirmed</span></td>
+          </tr>
+          <tr class="verdict-row">
+            <td class="crit">Verdict</td>
+            <td><strong>PICK</strong> — the video door, if Rolscreen confirms</td>
+            <td><strong>RUNNER-UP</strong> — best warranty you can click-buy</td>
+            <td>Back-up — no buy URL</td>
+            <td>Eliminated — no retracting screen, entry line</td>
+            <td>Budget fallback / blinds variant</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 RATINGS -->
+  <section class="card" id="ratings">
+    <div><span class="sec-no">04</span> <span class="eyebrow">Platform data</span></div>
+    <h2>Ratings, every platform</h2>
+
+    <div class="call red">
+      <h4>The most important thing on this page is an absence</h4>
+      <p class="small"><strong>Consumer Reports does not test patio doors.</strong> That is the single most useful rating fact I found, and it is a negative one — the one organisation that runs independent, advertising-free product testing has no ratings in this category at all <span class="chip u">Unconfirmed</span>. There is no equivalent of a Consumer Reports score for a sliding patio door. Anyone who tells you a door is "top rated" is quoting either a retailer's own star widget or a brand-perception survey.</p>
+      <p class="small">Beyond that: I could not open Lowe's, Home Depot, BBB or any review platform from this machine. Star ratings and review counts below are <strong>relayed by search summaries of pages I never saw</strong>, and I have left cells empty rather than estimate. Empty means unknown, not zero. <strong>No customer review is quoted anywhere in this report</strong>, because I could not read one in context.</p>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Product</th><th>Lowe's / Home Depot</th><th>Manufacturer site</th><th>Independent test</th><th>Brand-trust survey</th><th>Total reviews seen</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">Pella Lifestyle Series</td>
+            <td>Listed, multiple SKUs; ratings not relayed <span class="chip n">Not verified</span></td>
+            <td>Spec sheet + brochure published <span class="chip u">Unconfirmed</span></td>
+            <td>None — category untested <span class="chip u">Unconfirmed</span></td>
+            <td>Pella ranked among top patio door brands, 2024 <span class="chip u">Unconfirmed</span></td>
+            <td class="num">unknown</td>
+          </tr>
+          <tr>
+            <td class="crit">Milgard Tuscany V400</td>
+            <td>Listed at Lowe's, 3+ SKUs; ratings not relayed <span class="chip n">Not verified</span></td>
+            <td>Brochure + Title 24 guidance published <span class="chip u">Unconfirmed</span></td>
+            <td>None — category untested <span class="chip u">Unconfirmed</span></td>
+            <td>Milgard ranked among top patio door brands, 2024 <span class="chip u">Unconfirmed</span></td>
+            <td class="num">unknown</td>
+          </tr>
+          <tr>
+            <td class="crit">Anlin Malibu</td>
+            <td>Not sold at big-box <span class="chip u">Unconfirmed</span></td>
+            <td>Product + warranty pages published <span class="chip u">Unconfirmed</span></td>
+            <td>None — category untested <span class="chip u">Unconfirmed</span></td>
+            <td>Not ranked in the survey I saw <span class="chip n">Not verified</span></td>
+            <td class="num">unknown</td>
+          </tr>
+          <tr>
+            <td class="crit">Andersen 200 Narroline</td>
+            <td>Home Depot SKU 309514327 <span class="chip n">Not verified</span></td>
+            <td>Product + parts pages published <span class="chip u">Unconfirmed</span></td>
+            <td>None — category untested <span class="chip u">Unconfirmed</span></td>
+            <td>Andersen ranked first for brand trust, 2024 <span class="chip u">Unconfirmed</span></td>
+            <td class="num">unknown</td>
+          </tr>
+          <tr>
+            <td class="crit">JELD-WEN V-4500</td>
+            <td>Listed at Lowe's, many SKUs <span class="chip n">Not verified</span></td>
+            <td>Not surfaced <span class="chip n">Not verified</span></td>
+            <td>None — category untested <span class="chip u">Unconfirmed</span></td>
+            <td>JELD-WEN ranked among top brands, 2024 <span class="chip u">Unconfirmed</span></td>
+            <td class="num">unknown</td>
+          </tr>
+          <tr class="verdict-row">
+            <td class="crit">Total reviews confirmed</td>
+            <td class="num">0</td><td class="num">0</td><td class="num">0</td><td>1 survey, 5 brands</td><td class="num">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <blockquote class="fact">Source: Lifestory Research — "America's Most Trusted Patio Door" brand study, 2024 · lifestoryresearch.com <span class="chip n">Not verified — not opened</span><br><em>(A market-research firm's annual <strong>brand-perception survey</strong>: it measures what consumers believe about brands, not how doors perform. It is not a product test, has no laboratory component, and rankings of this kind are widely reproduced in vendor marketing. <strong>Treat as directional only</strong> — it tells you which names people trust, which is not the same as which door lasts. Relayed 17 Aug 2026.)</em></blockquote>
+    <p class="small"><strong>How to read a category with no independent testing.</strong> When nobody tests the product, the warranty document becomes your best available proxy for manufacturer confidence — it is the only claim a company must actually honour with money. That is why §07 gives warranty terms more space than ratings, and why Anlin and Milgard rise on this report despite thin review footprints. A firm that covers labour and shipping on a lifetime claim is making a costlier promise than one that scores well in a perception survey.</p>
+    <p class="small muted">On empty platforms, per your rules: Anlin showing nothing at Lowe's or Home Depot is <strong>meaningless, not a red flag</strong> — it sells through authorised dealers by design, so a big-box absence is a distribution choice, not a quality signal.</p>
+  </section>
+
+  <!-- 05 PROFILES -->
+  <section class="card" id="profiles">
+    <div><span class="sec-no">05</span> <span class="eyebrow">Products</span></div>
+    <h2>Product profiles, ranked</h2>
+    <p class="small muted">Ranked against the inferred priority in §02: the video's door experience over lowest price. Each drawing is a scale elevation of the published configuration. Every profile carries its honest case against — including the pick's.</p>
+
+    <!-- 1 PELLA -->
+    <div class="prod">
+      <div class="prod-top">
+        <div class="prod-art">
+          <svg viewBox="0 0 220 260" role="img" aria-label="Elevation: two-panel aluminium-clad wood slider, wood interior, retractable screen shown partly drawn across the right panel">
+            <rect x="6" y="6" width="208" height="248" rx="3" fill="var(--d-clad-dk)"/>
+            <rect x="12" y="12" width="196" height="236" rx="2" fill="var(--d-wood)"/>
+            <rect x="18" y="18" width="88" height="224" fill="var(--d-clad)"/>
+            <rect x="24" y="24" width="76" height="212" fill="var(--d-glass)"/>
+            <rect x="114" y="18" width="88" height="224" fill="var(--d-clad)"/>
+            <rect x="120" y="24" width="76" height="212" fill="var(--d-glass-2)"/>
+            <g opacity=".62"><rect x="120" y="24" width="30" height="212" fill="var(--d-screen)" opacity=".38"/><rect x="150" y="24" width="4" height="212" fill="var(--d-clad-dk)"/></g>
+            <rect x="106" y="112" width="7" height="38" rx="3" fill="var(--d-hw)"/>
+            <path d="M150 246 h44 m0 0 l-7-5 m7 5 l-7 5" stroke="var(--d-clad-dk)" stroke-width="2" fill="none"/>
+            <rect x="6" y="248" width="208" height="8" rx="2" fill="var(--d-clad-dk)"/>
+          </svg>
+        </div>
+        <div class="prod-hd">
+          <div style="display:flex; gap:12px; align-items:baseline"><span class="rank">1</span><h3>Pella Lifestyle Series — clad wood slider</h3></div>
+          <p class="small muted">The door in your video. Wood interior, aluminium-clad exterior, optional Rolscreen.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip u">Rolscreen unconfirmed at retail</span><span class="chip a">Title 24 config</span></div>
+          <a class="buy" href="https://www.lowes.com/pd/Pella-Lifestyle-Series-72-in-x-80-in-x-4-9-16-in-Jamb-Low-E-argon-Clear-glass-White-Clad-wood-Left-hand-Sliding-Patio-Door/5016131747">Buy — Lowe's, clad-wood LH, Low-E argon →</a>
+        </div>
+      </div>
+      <div class="prod-bd">
+        <div class="fact">72″×80″ nominal (71¼″×79½″ actual) · 4-9/16″ jamb · aluminium-clad wood · Low-E argon · left- and right-hand SKUs · Lowe's item 5016131747; related Lifestyle SKUs 5016009581, 5013949217, 5013949211, 3554866 · warranty: limited lifetime on wood and fibreglass <span class="chip u">Unconfirmed</span></div>
+        <blockquote class="fact">Source: Lowe's — Pella Lifestyle Series product listings · lowes.com <span class="chip n">Not verified — 403 blocked</span><br><em>(The retailer's own live product pages — authoritative for price, availability and the exact configuration sold, and the only place a real transactable number exists. Item numbers and titles were relayed by search; <strong>lowes.com is blocked from this machine so no price or stock status was seen</strong>. Relayed 17 Aug 2026.)</em></blockquote>
+        <blockquote class="fact">Source: Pella — Lifestyle Series B2B spec sheet and brochure (PDF) · assets.contentstack.io / media.pella.com <span class="chip n">Not verified — not opened</span><br><em>(The manufacturer's own technical literature — the authoritative record for U-factor, SHGC and warranty text, and legally accountable marketing. It would have answered the Title 24 question outright. Not opened. Relayed 17 Aug 2026.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; how the maker responds</div>
+          <p class="small"><strong>None reproduced — deliberately.</strong> I could not open a single review page, so I have no quote I could attribute to a named reviewer and no way to see how Pella answers complaints on retail listings. Inventing either would be worse than the gap. Close it in ten minutes: open the Lowe's SKU above, sort reviews <em>lowest first</em>, and look specifically for the words "screen", "roller" and "leak" — those three predict long-run satisfaction on sliders better than the average star does.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>The feature you want may not be in the box.</strong> Covered in §01, and it is the central risk of this pick. Retail listings describe glass and handing, never Rolscreen.</p>
+          <p class="small"><strong>Wood is a maintenance commitment.</strong> A clad-wood door has a real wood interior that needs finishing and, in a sunny south-facing opening, periodic re-finishing. Vinyl does not. That is a twenty-year chore you are choosing.</p>
+          <p class="small"><strong>Warranty is the weakest of the three serious contenders.</strong> "Limited lifetime on wood and fibreglass" reads well, but Milgard and Anlin both publish more specific promises — glass breakage in Milgard's case, labour and shipping in Anlin's. Pella's advantage here is the product, not the paperwork.</p>
+          <p class="small"><strong>And no price.</strong> I could not see one. It is the most expensive product class in this report and the only one where I have no figure at all.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 MILGARD -->
+    <div class="prod">
+      <div class="prod-top">
+        <div class="prod-art">
+          <svg viewBox="0 0 220 260" role="img" aria-label="Elevation: two-panel white vinyl slider with conventional screen on an outboard track at the right">
+            <rect x="6" y="6" width="208" height="248" rx="3" fill="var(--d-vinyl-dk)"/>
+            <rect x="12" y="12" width="196" height="236" rx="2" fill="var(--d-vinyl)"/>
+            <rect x="18" y="18" width="84" height="224" fill="var(--d-vinyl-dk)"/>
+            <rect x="25" y="25" width="70" height="210" fill="var(--d-glass)"/>
+            <rect x="110" y="18" width="84" height="224" fill="var(--d-vinyl-dk)"/>
+            <rect x="117" y="25" width="70" height="210" fill="var(--d-glass-2)"/>
+            <rect x="194" y="18" width="14" height="224" fill="var(--d-screen)" opacity=".4"/>
+            <rect x="102" y="110" width="8" height="40" rx="3" fill="var(--d-hw)"/>
+            <path d="M146 246 h44 m0 0 l-7-5 m7 5 l-7 5" stroke="var(--d-vinyl-dk)" stroke-width="2" fill="none"/>
+            <rect x="6" y="248" width="208" height="8" rx="2" fill="var(--d-vinyl-dk)"/>
+          </svg>
+        </div>
+        <div class="prod-hd">
+          <div style="display:flex; gap:12px; align-items:baseline"><span class="rank">2</span><h3>Milgard Tuscany V400 — vinyl slider</h3></div>
+          <p class="small muted">The strongest warranty you can reach through a direct purchase link.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip v">Glass breakage covered</span><span class="chip u">Title 24 configurable</span></div>
+          <a class="buy" href="https://www.lowes.com/pd/Milgard-V400-Tuscany-Series-60-in-x-80-in-x-4-5-8-in-Jamb-White-Vinyl-Left-hand-Sliding-Patio-Door-with-Low-E-argon-Glass-Screen-Included/5016113959">Buy — Lowe's, 60×80 LH, screen included →</a>
+        </div>
+      </div>
+      <div class="prod-bd">
+        <div class="fact">Sizes at Lowe's: 60″×80″ (item 5016113959) · 96″×80″ (5016113957) · 72″×96″ (5016113949) · 4-5/8″ jamb · white vinyl · Low-E argon · screen included · Milgard Full Lifetime Warranty incl. glass breakage, transferable 10 years from purchase <span class="chip u">Unconfirmed</span> · blinds-between-glass variant carries a 10-year specialty glass warranty <span class="chip u">Unconfirmed</span></div>
+        <blockquote class="fact">Source: Milgard — V400 Tuscany Series sliding patio door pages, Title 24 guidance and brochure (PDF) · milgard.com <span class="chip n">Not verified — 403 blocked</span><br><em>(The manufacturer's own product and warranty literature — authoritative for what Milgard commits to and legally accountable for it; Milgard is a Tacoma-based maker operating since 1958. Source of the full-lifetime and glass-breakage terms and the Title 24 configurability claim. Site blocked from this machine. Relayed 17 Aug 2026.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; how the maker responds</div>
+          <p class="small">None reproduced, same reason. Worth knowing when you read the listing reviews: a <strong>transferable</strong> warranty is unusual and materially valuable if you might sell — Milgard's transfers for ten years from purchase, which is a genuine resale asset a star rating will never show you.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>It is not the door in your video, and it can't be.</strong> Vinyl frame, conventional screen on an outboard track. If the retracting screen and the wood interior are what you actually want, this door does not provide either, and no configuration will change that.</p>
+          <p class="small"><strong>None of the Lowe's sizes is a plain 72×80.</strong> The three SKUs I surfaced are 60×80, 96×80 and 72×96 — so a standard 6-foot opening may need a special order rather than a click. <span class="chip a">Ask</span></p>
+          <p class="small"><strong>Vinyl in a sun-facing opening.</strong> White vinyl is the standard California answer and performs well, but dark-framed vinyl in direct sun has a weaker track record for thermal movement than clad wood or fibreglass. If your opening bakes, ask specifically about frame colour limits.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 ANLIN -->
+    <div class="prod">
+      <div class="prod-top">
+        <div class="prod-art">
+          <svg viewBox="0 0 220 260" role="img" aria-label="Elevation: two-panel white vinyl slider, California-engineered, conventional screen at left">
+            <rect x="6" y="6" width="208" height="248" rx="3" fill="var(--d-vinyl-dk)"/>
+            <rect x="12" y="12" width="196" height="236" rx="2" fill="var(--d-vinyl)"/>
+            <rect x="12" y="18" width="14" height="224" fill="var(--d-screen)" opacity=".4"/>
+            <rect x="26" y="18" width="84" height="224" fill="var(--d-vinyl-dk)"/>
+            <rect x="33" y="25" width="70" height="210" fill="var(--d-glass-2)"/>
+            <rect x="118" y="18" width="84" height="224" fill="var(--d-vinyl-dk)"/>
+            <rect x="125" y="25" width="70" height="210" fill="var(--d-glass)"/>
+            <rect x="110" y="110" width="8" height="40" rx="3" fill="var(--d-hw)"/>
+            <path d="M74 246 h-44 m0 0 l7-5 m-7 5 l7 5" stroke="var(--d-vinyl-dk)" stroke-width="2" fill="none"/>
+            <rect x="6" y="248" width="208" height="8" rx="2" fill="var(--d-vinyl-dk)"/>
+          </svg>
+        </div>
+        <div class="prod-hd">
+          <div style="display:flex; gap:12px; align-items:baseline"><span class="rank">3</span><h3>Anlin Malibu — vinyl slider</h3></div>
+          <p class="small muted">Best warranty in the entire set. No way to click-buy it.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip v">Parts + labour + shipping</span><span class="chip n">No direct purchase URL</span></div>
+          <a class="buy ghost" href="https://anlin.com/malibu-patio-doors/sliding-patio-doors/">Product page — dealer quote only →</a>
+        </div>
+      </div>
+      <div class="prod-bd">
+        <div class="fact">Vinyl sliding patio door engineered specifically for California · options for grids, colours, hardware finishes, screens and energy-efficient glass packages · limited lifetime warranty covering parts, labour <strong>and shipping</strong> at no cost, transferable to one subsequent homeowner <span class="chip u">Unconfirmed</span> · Bay Area authorised dealers include AMG Doors &amp; Windows <span class="chip u">Unconfirmed</span></div>
+        <blockquote class="fact">Source: Anlin Windows &amp; Doors — Malibu sliding patio door and warranty pages · anlin.com <span class="chip n">Not verified — not opened</span><br><em>(The manufacturer's own site — authoritative for its warranty commitment and legally accountable for it. Anlin is a California manufacturer building specifically for California code and climate, which is why it appears here despite no big-box presence. Source of the parts/labour/shipping and transferability terms. Relayed 17 Aug 2026.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; how the maker responds</div>
+          <p class="small">None reproduced. Note the structural point instead: Anlin's warranty promises to cover <strong>labour and shipping</strong>, not just to post you a part. That is the single most expensive commitment any manufacturer in this report makes, and it is the closest thing to evidence of confidence available in a category nobody independently tests.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>It fails your own brief.</strong> You asked that every surviving product arrive with a live, direct purchase URL. Anlin sells exclusively through authorised dealers — there is no page where you can see a price and buy. That is what knocks it out, and it is a distribution decision rather than a fault: <strong>an absence from Lowe's is meaningless for a dealer-only brand, not a red flag.</strong></p>
+          <p class="small"><strong>Same product-class gap as Milgard.</strong> Vinyl, conventional screen. Not the video's door.</p>
+          <p class="small"><strong>Warranty terms are relayed, not read.</strong> Every superlative above came from search summaries of pages I could not open. A warranty is exactly the document where exclusions live in the fine print. <span class="chip a">Ask</span> for the full PDF before believing any of it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 ANDERSEN -->
+    <div class="prod">
+      <div class="prod-top">
+        <div class="prod-art">
+          <svg viewBox="0 0 220 260" role="img" aria-label="Elevation: two-panel wood gliding door with white Perma-Shield exterior and pine interior, conventional screen at right">
+            <rect x="6" y="6" width="208" height="248" rx="3" fill="#9aa3ae"/>
+            <rect x="12" y="12" width="196" height="236" rx="2" fill="#e8eaee"/>
+            <rect x="18" y="18" width="84" height="224" fill="#cfd4db"/>
+            <rect x="25" y="25" width="70" height="210" fill="var(--d-glass)"/>
+            <rect x="110" y="18" width="84" height="224" fill="#cfd4db"/>
+            <rect x="117" y="25" width="70" height="210" fill="var(--d-glass-2)"/>
+            <rect x="194" y="18" width="14" height="224" fill="var(--d-screen)" opacity=".4"/>
+            <rect x="102" y="110" width="8" height="40" rx="3" fill="var(--d-hw)"/>
+            <rect x="18" y="236" width="176" height="6" fill="var(--d-wood)" opacity=".85"/>
+            <path d="M146 246 h44 m0 0 l-7-5 m7 5 l-7 5" stroke="#9aa3ae" stroke-width="2" fill="none"/>
+            <rect x="6" y="248" width="208" height="8" rx="2" fill="#9aa3ae"/>
+          </svg>
+        </div>
+        <div class="prod-hd">
+          <div style="display:flex; gap:12px; align-items:baseline"><span class="rank">4</span><h3>Andersen 200 Series Narroline gliding door</h3></div>
+          <p class="small muted">The most trusted brand name here, on its entry-level line.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip u">Only price figure in the report</span><span class="chip n">No retracting screen</span></div>
+          <a class="buy ghost" href="https://www.homedepot.com/p/Andersen-71-1-4-in-x-79-1-2-in-200-Series-Narroline-White-Universal-Gliding-Patio-Door-with-Pine-Interior-Moving-Panel-9180299/309514327">Buy — Home Depot, 71¼×79½ universal →</a>
+        </div>
+      </div>
+      <div class="prod-bd">
+        <div class="fact">71¼″×79½″ · white exterior, pine interior · universal handing · Home Depot item 309514327, Andersen part 9180299 · warranty: limited 20 years on glass, 10 years on non-glass components <span class="chip u">Unconfirmed</span> · a ~$1,955 figure surfaced for a 200 Series Perma-Shield unit, <strong>possibly a different model</strong> <span class="chip n">Not verified</span></div>
+        <blockquote class="fact">Source: The Home Depot — Andersen 200 Series Narroline gliding patio door listing · homedepot.com <span class="chip n">Not verified — 403 blocked</span><br><em>(The retailer's live product page — authoritative for price, stock and configuration. The $1,955 figure was relayed by a search summary and, on the summary's own wording, may attach to a different 200 Series model; <strong>treat it as an order-of-magnitude hint, not a price</strong>. Site blocked from this machine. Relayed 17 Aug 2026.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; how the maker responds</div>
+          <p class="small">None reproduced. One useful structural note: Andersen publishes a dedicated parts store with the individual panel listed as an orderable item, which is a meaningful signal about long-run serviceability — you can see that a replacement panel exists as a catalogue product rather than a special order.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>Narroline is the entry line, not the flagship.</strong> Andersen's reputation rests largely on its A-Series and E-Series; the 200 Series is the value tier. Buying it on the strength of "Andersen is the most trusted brand" is buying the survey, not the door.</p>
+          <p class="small"><strong>Weakest warranty of the serious contenders</strong> — 20 years glass, 10 years everything else, against lifetime terms from Milgard and Anlin. On a component-by-component basis that is the least protection here.</p>
+          <p class="small"><strong>No retracting screen, and a pine interior you must finish.</strong> It takes on the maintenance burden of wood without delivering the video's headline feature.</p>
+          <p class="small"><strong>In fairness:</strong> it is a genuinely well-made door from the most trusted name in the category, universally handed (so no left/right ordering mistake), and it is the only product here with any price signal at all. A buyer who wanted a solid wood-interior slider without the Pella premium could choose it happily.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 JELD-WEN -->
+    <div class="prod">
+      <div class="prod-top">
+        <div class="prod-art">
+          <svg viewBox="0 0 220 260" role="img" aria-label="Elevation: two-panel white vinyl slider, budget tier, conventional screen at right">
+            <rect x="6" y="6" width="208" height="248" rx="3" fill="var(--d-vinyl-dk)"/>
+            <rect x="12" y="12" width="196" height="236" rx="2" fill="var(--d-vinyl)"/>
+            <rect x="18" y="18" width="86" height="224" fill="var(--d-vinyl-dk)"/>
+            <rect x="26" y="26" width="70" height="208" fill="var(--d-glass)"/>
+            <rect x="112" y="18" width="86" height="224" fill="var(--d-vinyl-dk)"/>
+            <rect x="120" y="26" width="70" height="208" fill="var(--d-glass-2)"/>
+            <rect x="198" y="18" width="10" height="224" fill="var(--d-screen)" opacity=".4"/>
+            <rect x="104" y="110" width="8" height="40" rx="3" fill="var(--d-hw)"/>
+            <path d="M148 246 h42 m0 0 l-7-5 m7 5 l-7 5" stroke="var(--d-vinyl-dk)" stroke-width="2" fill="none"/>
+            <rect x="6" y="248" width="208" height="8" rx="2" fill="var(--d-vinyl-dk)"/>
+          </svg>
+        </div>
+        <div class="prod-hd">
+          <div style="display:flex; gap:12px; align-items:baseline"><span class="rank">5</span><h3>JELD-WEN V-4500 — vinyl slider</h3></div>
+          <p class="small muted">The budget floor, and the blinds-between-glass specialist.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip v">True 72×80 available</span><span class="chip n">Warranty not surfaced</span></div>
+          <a class="buy ghost" href="https://www.lowes.com/pd/JELD-WEN-Clear-Glass-White-Vinyl-Left-Hand-Sliding-Double-Door-Sliding-Patio-Door-with-Screen-Common-72-in-x-80-in-Actual-71-5-in-x-79-5-in/50295433">Buy — Lowe's V-4500, 72×80 LH →</a>
+        </div>
+      </div>
+      <div class="prod-bd">
+        <div class="fact">72″×80″ nominal (71½″×79½″ actual) · 4-9/16″ jamb · white vinyl · Low-E argon · screen included · Lowe's item 50295433; variants incl. grilles (5000000323 / 5000000325), blinds-between-glass (50295409) and a pet-door version (50419022) <span class="chip u">Unconfirmed</span></div>
+        <blockquote class="fact">Source: Lowe's — JELD-WEN V-4500 and related sliding patio door listings · lowes.com <span class="chip n">Not verified — 403 blocked</span><br><em>(Retailer's live product pages — authoritative for price, stock and configuration. Item numbers and titles relayed by search; no price seen. Notably this is the only product family here offering an exact 72×80 in several variants. Relayed 17 Aug 2026.)</em></blockquote>
+        <div class="block resp">
+          <div class="h">Customer quotes &amp; how the maker responds</div>
+          <p class="small">None reproduced. The relevant gap is documentary rather than anecdotal: <strong>I could not surface JELD-WEN's warranty terms at all</strong>, which is why it sits fifth despite having the widest size availability. In a category with no independent testing, an unreadable warranty is a real deficit.</p>
+        </div>
+        <div class="block against">
+          <div class="h">The honest case against</div>
+          <p class="small"><strong>Nothing about it matches your video.</strong> Vinyl, outboard screen, value tier.</p>
+          <p class="small"><strong>Warranty unknown.</strong> Every competitor here published something I could at least relay. This one did not surface.</p>
+          <p class="small"><strong>In fairness:</strong> it is the only product with a true 72×80 in multiple variants including blinds-between-glass and a factory pet door, and it is almost certainly the cheapest legitimate way to a compliant, screened, Low-E slider. If the quotes for the Pella come back frightening, this is the honest fallback — not a bad door, just a plainer one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 COST -->
+  <section class="card" id="cost">
+    <div><span class="sec-no">06</span> <span class="eyebrow">Money</span></div>
+    <h2>What this should cost</h2>
+
+    <div class="call red">
+      <h4>I have no verified prices. None. Read this before the table.</h4>
+      <p class="small">Your brief asks that every surviving product arrive with a <strong>full landed price</strong>. I cannot deliver that, and I am not going to fake it. Lowe's, Home Depot and every manufacturer site returned a hard 403 from this machine's egress policy, so <strong>not one number below was seen on a live page</strong>. The only figure that surfaced at all — roughly $1,955 for an Andersen 200 Series unit — came with a caveat in the search summary itself that it may attach to a different model.</p>
+      <p class="small">What follows is therefore <strong>a landed-cost worksheet, not a price list</strong>. Its job is to make sure nothing is missing when you open the real listings, and to give you a shape to check the real numbers against.</p>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Line item</th><th>Range / basis</th><th>Status</th><th>What to watch</th></tr></thead>
+        <tbody>
+          <tr><td class="crit">Door unit — vinyl, 72×80, Low-E, screen</td><td class="num">$500–1,400</td><td><span class="chip n">Not verified</span></td><td>Category-wide range relayed by search; the low end is basic stock, the high end is grids/blinds variants.</td></tr>
+          <tr><td class="crit">Door unit — wood / Perma-Shield</td><td class="num">≈$1,955</td><td><span class="chip n">Not verified</span></td><td>The single Andersen figure. May be a different model. Treat as order-of-magnitude only.</td></tr>
+          <tr><td class="crit">Door unit — aluminium-clad wood (the pick)</td><td class="num">no figure</td><td><span class="chip n">Not verified</span></td><td><strong>The gap that matters most.</strong> Nothing surfaced for Lifestyle Series at any retailer.</td></tr>
+          <tr><td class="crit">Rolscreen option</td><td class="num">no figure</td><td><span class="chip a">Ask</span></td><td>May not be orderable at retail at all. This is the first question to settle.</td></tr>
+          <tr><td class="crit">Title 24 glass upgrade, if needed</td><td class="num">no figure</td><td><span class="chip a">Ask</span></td><td>Only applies if the stock glass misses 0.30 / 0.23. Ask before ordering, not after.</td></tr>
+          <tr><td class="crit">Delivery / freight</td><td class="num">varies</td><td><span class="chip a">Ask</span></td><td>An 80-inch door is a freight item, not parcel. Often not shown until checkout.</td></tr>
+          <tr><td class="crit">Sales tax</td><td class="num">confirm at checkout</td><td><span class="chip a">Ask</span></td><td>Santa Clara County rate applies. I have not verified the current rate and will not guess it.</td></tr>
+          <tr><td class="crit">Installation labour</td><td class="num">$200–1,000</td><td><span class="chip n">Not verified</span></td><td>Relayed category range, "depending on size and complexity". Excluded from the product totals below.</td></tr>
+          <tr><td class="crit">Building permit</td><td class="num">ask city</td><td><span class="chip a">Ask</span></td><td>San José Development Services, 408-535-3555.</td></tr>
+          <tr class="verdict-row"><td class="crit">Indicative landed total, unit only</td><td class="num">$500 – $2,000+</td><td>Directional only</td><td>Clad wood likely exits the top of this band. No figure exists to confirm it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Two-sided sanity check on the total</h3>
+    <div class="stats">
+      <div class="stat">
+        <div class="lab">Bottom-up</div>
+        <div class="fig num">$500–2,000+</div>
+        <div class="sub">Summing unit costs by material tier. Open-ended at the top precisely because the clad-wood tier — the one you want — has no published figure anywhere I could reach.</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Top-down</div>
+        <div class="fig num">$512–14,286</div>
+        <div class="sub">A relayed retail-category range with a typical price around $2,186. Enormous, because it spans stock vinyl through custom multi-panel systems.</div>
+      </div>
+    </div>
+    <p class="small"><strong>What the check actually tells you — and it is not reassuring.</strong> The two methods agree only in the sense that one contains the other. A top-down band spanning <span class="num">$512</span> to <span class="num">$14,286</span> is not a forecast; it is a statement that this category has no meaningful central price. That is the honest finding: <strong>a "typical" patio door price is close to useless as a benchmark</strong>, because material tier drives the number far more than size does.</p>
+    <p class="small">So the actionable version is a rule of thumb rather than a range: <strong>expect vinyl to land in the high hundreds, wood-interior around two thousand, and clad wood above that.</strong> If a clad-wood Lifestyle quote comes back near the vinyl band, something is wrong with the configuration — most likely it isn't the door you think it is. That inversion test is worth more than any number in this section.</p>
+    <blockquote class="fact">Source: category price ranges relayed from retail aggregation and vendor comparison pages <span class="chip n">Not verified — excluded as load-bearing</span><br><em>(The "$512 to $14,286, typical $2,186" band and the "$300–500 basic vinyl / $3,000–10,000 premium" tiering both surfaced through comparison and buying-guide pages of the SEO-listicle class your brief excludes. Reproduced <strong>only</strong> to be transparent about the origin of the numbers above, and explicitly not relied on for any recommendation. Relayed 17 Aug 2026.)</em></blockquote>
+  </section>
+
+  <!-- 07 POLICY -->
+  <section class="card" id="policy">
+    <div><span class="sec-no">07</span> <span class="eyebrow">Law, warranty, risk</span></div>
+    <h2>The policy layer</h2>
+
+    <h3>The governing law, and what you lose if it goes wrong</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Rule</th><th>What it says</th><th>Effective</th><th>What you lose if it goes wrong</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="crit">Title 24, Part 6 — fenestration limits</td>
+            <td>Residential fenestration in the regulated climate zones must meet a maximum U-factor of <span class="num">0.30</span> and maximum SHGC of <span class="num">0.23</span>. San Jose is Climate Zone 4.</td>
+            <td>2025 code cycle, in effect for 2026 <span class="chip u">Unconfirmed</span></td>
+            <td><strong>The most expensive mistake available to you.</strong> A non-compliant door fails inspection after it is installed. You then own a door you cannot legally keep, having already paid freight on an 80-inch glass unit that is difficult and costly to return.</td>
+          </tr>
+          <tr>
+            <td class="crit">Safety glazing in door panels</td>
+            <td>Glazing in fixed and operable panels of sliding doors is a hazardous location and must be safety (tempered) glass.</td>
+            <td>Adopted building code <span class="chip u">Unconfirmed</span></td>
+            <td>Little practical risk — every product here is factory-tempered. Matters only if you were tempted by a salvage or custom-glass route.</td>
+          </tr>
+          <tr>
+            <td class="crit">Permit for door replacement</td>
+            <td>Replacing a patio door in an existing opening generally requires a building permit in San José; a walk-in "Simple Projects" counter exists for residential work.</td>
+            <td>Current <span class="chip u">Unconfirmed</span></td>
+            <td>Unpermitted work can surface at resale and in insurance claims. Call <strong>408-535-3555</strong> and confirm for your address.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <blockquote class="fact">Source: California Energy Commission Title 24 (2025 cycle) via Milgard's Title 24 guidance and search-relayed code commentary · milgard.com/blog/title-24-windows-and-patio-doors <span class="chip n">Not verified — 403 blocked</span><br><em>(Milgard is a manufacturer, not a regulator — its Title 24 page is <strong>vendor guidance with an interest in selling compliant product</strong>, so it is directional on the code and authoritative only on its own products. The underlying authority is the California Energy Commission. Both were unreachable. Relayed 17 Aug 2026.)</em></blockquote>
+
+    <h3>Vendor policies, side by side</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Policy</th><th>Pella Lifestyle</th><th>Milgard Tuscany</th><th>Anlin Malibu</th><th>Andersen 200</th></tr></thead>
+        <tbody>
+          <tr><td class="crit">Warranty length</td><td>Limited lifetime, wood &amp; fibreglass <span class="chip u">Unconfirmed</span></td><td class="win">Full lifetime <span class="chip u">Unconfirmed</span></td><td class="win">Limited lifetime <span class="chip u">Unconfirmed</span></td><td>20 yrs glass / 10 yrs other <span class="chip u">Unconfirmed</span></td></tr>
+          <tr><td class="crit">Glass breakage</td><td>Not surfaced <span class="chip a">Ask</span></td><td class="win">Included <span class="chip u">Unconfirmed</span></td><td>Under lifetime terms <span class="chip u">Unconfirmed</span></td><td>20-yr glass term <span class="chip u">Unconfirmed</span></td></tr>
+          <tr><td class="crit">Labour covered</td><td>Not surfaced <span class="chip a">Ask</span></td><td>Not surfaced <span class="chip a">Ask</span></td><td class="win">Yes — plus shipping <span class="chip u">Unconfirmed</span></td><td>Not surfaced <span class="chip a">Ask</span></td></tr>
+          <tr><td class="crit">Transferable</td><td>Not surfaced <span class="chip a">Ask</span></td><td>10 yrs from purchase <span class="chip u">Unconfirmed</span></td><td class="win">To one subsequent owner <span class="chip u">Unconfirmed</span></td><td>Not surfaced <span class="chip a">Ask</span></td></tr>
+          <tr><td class="crit">Blinds-between-glass term</td><td>Not surfaced <span class="chip a">Ask</span></td><td>Drops to 10 yrs <span class="chip u">Unconfirmed</span></td><td>Not surfaced <span class="chip a">Ask</span></td><td>Not surfaced <span class="chip a">Ask</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small"><strong>The pattern worth noticing.</strong> Every manufacturer here says "lifetime" and every one means something different by it. Milgard's covers the glass breaking. Anlin's covers the technician's time and the freight. Pella's is scoped to material type. Andersen's is not lifetime at all. <strong>"Lifetime warranty" is not a comparable unit</strong> — the only comparison that means anything is component-by-component, which is exactly what §10's emails request in writing.</p>
+
+    <h3>Third-party risk</h3>
+    <ul>
+      <li><strong>Retailer vs manufacturer.</strong> Buying through Lowe's or Home Depot means the retailer handles the transaction but the <em>manufacturer</em> owns the warranty. Two companies, one door, and a seam between them. Establish before buying which one you call when the roller fails.</li>
+      <li><strong>Installation voids things.</strong> Manufacturer warranties are routinely conditional on correct installation. If you buy the unit yourself and hire an installer separately, a leak dispute has both parties pointing at each other. Buying supply-and-install from one accountable party removes that seam.</li>
+      <li><strong>Freight damage.</strong> An 80-inch glass unit ships by freight. Inspect before signing the delivery note — a signature usually closes your claim.</li>
+      <li><strong>Discontinuation.</strong> The longest-term risk in a proprietary system. A lifetime warranty on a discontinued series is worth whatever the maker still stocks.</li>
+    </ul>
+
+    <h3>Your protections — the checklist</h3>
+    <ol class="ranked">
+      <li>NFRC-certified U-factor and SHGC for <em>your exact configuration</em>, in writing, before ordering. The number belongs to the config, not the brand.</li>
+      <li>Full warranty PDF — not a marketing summary — read before purchase, checking specifically what voids it.</li>
+      <li>Written confirmation of whether Rolscreen (or any retractable screen) is included in the SKU you are buying.</li>
+      <li>Return and restocking terms for a special-order door, in writing. Special orders are frequently non-returnable — this is where the Title 24 risk becomes financial.</li>
+      <li>Delivery inspection rights preserved: note damage on the delivery paperwork before signing.</li>
+      <li>If you also hire an installer: a certificate of insurance sent directly by their broker, and one named party accountable for leaks.</li>
+      <li>Permit pulled before work starts. San José Development Services, 408-535-3555.</li>
+    </ol>
+  </section>
+
+  <!-- 08 AUDIT -->
+  <section class="card" id="audit">
+    <div><span class="sec-no">08</span> <span class="eyebrow">Marketing audit</span></div>
+    <h2>Claim-by-claim audit: the Pella video that started this</h2>
+    <p class="small muted">The marketing that prompted this is Pella's own. Audited fairly means separating the definitionally true, the plausible-but-untested and the unfalsifiable — while being explicit that I could not watch the video or open Pella's specification sheet.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Claim</th><th>Source of the claim</th><th>Audit</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="crit">"Lifestyle Series sliding patio door with Rolscreen"</td><td>Video title</td><td>Names a real product line with a real proprietary feature. Both exist and are sold.</td><td><span class="chip v">Verified</span></td></tr>
+          <tr><td class="crit">Rolscreen "rolls out of sight when not in use"</td><td>Pella product copy, relayed</td><td>The central differentiator, and the likely reason you sent the link. No cycle-life rating, no mesh spec, no independent test — and I could not open the spec sheet.</td><td><span class="chip u">Unconfirmed</span></td></tr>
+          <tr><td class="crit">Rolscreen is "available on" sliding patio doors</td><td>Pella product copy, relayed</td><td><strong>The audit's key finding.</strong> "Available on" means optional. Every retail Lifestyle listing I surfaced describes glass and handing and mentions no retractable screen. The feature that sold you the door may not be in the box you can buy.</td><td><span class="chip u">Contradiction surfaced</span></td></tr>
+          <tr><td class="crit">Footbolt adds ventilation and security</td><td>Video description, relayed</td><td>A footbolt locks the door partly open. Real, mechanically ordinary, offered by several makers. Not distinctive.</td><td><span class="chip u">Unconfirmed</span></td></tr>
+          <tr><td class="crit">"Best limited lifetime warranty for wood windows and patio doors"</td><td>Pella marketing</td><td><strong>Carefully bounded, and the bounding is the point.</strong> The superlative is scoped to <em>wood</em> products — it does not claim to beat Milgard's or Anlin's vinyl terms, and on the evidence here it would not: neither glass breakage nor labour-and-shipping cover surfaced for Pella. True as written, weaker than it sounds.</td><td><span class="chip u">Unconfirmed</span></td></tr>
+          <tr><td class="crit">"Advanced Low-E insulating glass … balanced insulation"</td><td>Pella product copy, relayed</td><td><strong>Unfalsifiable as phrased.</strong> No U-factor, no SHGC, no comparator — and those two numbers are precisely what decides legality in Climate Zone 4. Meaningless until converted to figures.</td><td><span class="chip n">Not verified</span></td></tr>
+          <tr><td class="crit">"Beauty of wood at a more approachable price point"</td><td>Cost-aggregator paraphrase, not Pella</td><td>Approachable relative to Pella's own Architect Series, not to the market. Internal-range positioning being read as market positioning. Clad wood remains the premium tier here.</td><td><span class="chip n">Not verified</span></td></tr>
+          <tr><td class="crit">Implied: this is a product you simply buy</td><td>Structural implication of the video</td><td>The video shows a finished door. It does not mention configuration, climate-zone compliance, handing, jamb depth or screen options — all of which you must decide correctly before a single price exists.</td><td><span class="chip u">Contradiction surfaced</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="call amber">
+      <h4>Contradictions surfaced across the report</h4>
+      <ul class="small">
+        <li><strong>Pella:</strong> the hero feature is optional, and absent from every retail listing I could surface. <span class="chip a">Ask</span></li>
+        <li><strong>Pella:</strong> a "best warranty" superlative scoped narrowly to wood, in a set where two vinyl competitors publish materially stronger component cover. <span class="chip a">Ask</span></li>
+        <li><strong>Milgard:</strong> markets Title 24 compliance broadly, but its blinds-between-glass option drops that component to a 10-year term — a warranty cliff inside a "full lifetime" product. <span class="chip a">Ask</span></li>
+        <li><strong>Andersen:</strong> ranked first for brand trust in a consumer survey while the specific model available at retail is its entry tier with the weakest warranty in the set. No contradiction in Andersen's own claims — but a real gap between brand reputation and this product.</li>
+        <li><strong>Category-wide:</strong> every maker says "lifetime" and no two mean the same thing.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 09 PLAIN ENGLISH -->
+  <section class="card" id="plain">
+    <div><span class="sec-no">09</span> <span class="eyebrow">In plain English</span></div>
+    <h2>My assessment, in plain English</h2>
+
+    <h3>The situation, simply</h3>
+    <p>You saw a patio door in a video and you want to buy one. It's a Pella. There are five or six doors you could realistically order, and they split into two groups: vinyl doors that are cheaper, well warranted and completely ordinary to look at, and wood doors that cost more and look like the video.</p>
+    <p>There's a catch nobody mentions. The clever bit in that video — the screen that rolls away into the frame — is an <em>optional extra</em>. The versions of that door I can find for sale online don't say they include it. So you might buy the right door and get the wrong screen.</p>
+    <p>There's also a rule you can't get around. San Jose is in Climate Zone 4, and California law caps how much heat a new door can let through. If the glass you order misses that number, it fails inspection <em>after</em> it's installed. That's the expensive way to find out.</p>
+    <p>And I have to tell you plainly: <strong>I couldn't see a single price.</strong> Every shop and manufacturer site was blocked from this machine. I have real product links and real part numbers, but no prices at all.</p>
+
+    <h3>Why your priority beats price</h3>
+    <p>You've now sent me that video twice. Nobody does that about a door they're lukewarm on. So I've assumed you want <em>that</em> door — the wood inside, the screen that vanishes — rather than the cheapest thing that slides.</p>
+    <p>That's the right way round, for one unglamorous reason. This is the biggest moving object in your house and you'll touch it every day for twenty years. The gap between the cheap door and the nice door is probably a four-figure sum once. The gap between liking it and tolerating it is every single day. Price matters least on the things you use most.</p>
+
+    <h3>The recommendation</h3>
+    <p><strong>Buy the Pella Lifestyle Series — but confirm the screen before you pay.</strong></p>
+    <p class="small"><strong>The headline reason:</strong> it's the only door here that's actually the one you asked about. Nothing else combines a wood interior with a screen that disappears.</p>
+    <p class="small">Then, in order:</p>
+    <ol class="ranked">
+      <li><strong>You can buy it directly.</strong> Lowe's lists it with real item numbers, so there's a fixed-price route that doesn't need a salesman in your kitchen.</li>
+      <li><strong>Wood inside is a different room.</strong> Vinyl is fine and sensible. Wood changes how the wall feels. That's what you reacted to in the video.</li>
+      <li><strong>The brand is genuinely well regarded</strong> and the door is orderable in both left and right hand, so it'll fit whichever way your opening runs.</li>
+    </ol>
+    <p class="small"><strong>The honest catch:</strong> two of them, actually. The retracting screen may not be available on the version you can click-buy — which is the whole reason you wanted it. And it has the weakest warranty of the three serious doors here: Milgard covers your glass if it breaks, Anlin covers the repairman's time and the shipping, and Pella's promise is narrower than either.</p>
+
+    <h3>The runner-up</h3>
+    <p><strong>Milgard Tuscany V400.</strong> If the screen turns out to be unavailable or absurdly priced, buy this instead and don't feel bad about it. Lifetime warranty that covers the glass breaking, transfers to a buyer if you sell within ten years, built to pass California's energy rules, and sold at Lowe's with real item numbers. It's vinyl and the screen sits on an outboard track like every other door in your street. It is the sensible purchase, and it's very nearly the smart one.</p>
+
+    <h3>Who you didn't pick, and why</h3>
+    <ul>
+      <li><strong>Anlin Malibu</strong> — the best warranty of anything here by a distance: parts, labour <em>and</em> shipping, transferable to the next owner, built in California for California. Only knocked out because you can't buy it online — dealer quote only, which breaks your own rule about a direct purchase link. If you relax that, it's arguably the smartest buy in this report.</li>
+      <li><strong>Andersen 200 Narroline</strong> — most trusted brand name in the category, and universally handed so you can't order the wrong side. But this is their budget line, the warranty is the weakest here, and it gives you wood's upkeep without the disappearing screen.</li>
+      <li><strong>JELD-WEN V-4500</strong> — the cheapest honest way to a compliant, screened door, and the only one that comes in an exact 72×80 in several versions. Keep it in your pocket if the Pella price frightens you. I couldn't find its warranty anywhere, which is the only real mark against it.</li>
+      <li><strong>The blinds-inside-the-glass version</strong> — only if your door faces the afternoon sun and you hate cleaning blinds. Note that on Milgard's equivalent, that sealed unit drops from lifetime cover to ten years.</li>
+    </ul>
+
+    <div class="call red">
+      <h4>The uncomfortable part you should know</h4>
+      <p class="small">This report looks more certain than it is. It has product links, part numbers and a clear ranking — but <strong>I could not open a single one of those pages.</strong> No price, no stock status, no review, no warranty document, no spec sheet. Everything reached me through a search engine's summary of pages I never saw.</p>
+      <p class="small">The product links are real and were returned by search, but I cannot promise any of them is live, in stock, or the exact configuration described. <strong>Check every link and every number before you spend money.</strong></p>
+      <p class="small">One more, in fairness: I found nothing bad about any of these doors — but that's because nobody independently tests patio doors, not because they're all excellent. Consumer Reports doesn't cover the category at all. I have ranked these on warranty paperwork and specification, which is the best available evidence, and it is genuinely weaker evidence than a test would be.</p>
+    </div>
+
+    <h3>What I'd actually do, in order</h3>
+    <ol class="ranked">
+      <li><strong>Measure your opening properly</strong> — width, height and jamb depth (4-9/16″ vs 4-5/8″ matters), and note whether the moving panel should slide left or right as you look from inside.</li>
+      <li><strong>Call Lowe's with item 5016131747</strong> and ask one question: can this be ordered with Rolscreen, and what does it cost? That single answer decides this purchase.</li>
+      <li><strong>Ask for the NFRC numbers</strong> for that exact configuration. You need U-factor 0.30 or lower and SHGC 0.23 or lower. Get it in writing.</li>
+      <li><strong>Call 408-535-3555</strong> and confirm whether you need a permit and what it costs.</li>
+      <li><strong>Send the emails in §10</strong> — same specification to each, so the prices actually compare.</li>
+      <li><strong>Get the full warranty PDF</strong> for whichever you're leaning toward, and read what voids it.</li>
+      <li><strong>Check the return terms</strong> before ordering. Special-order doors are often non-returnable — which is exactly where the energy-code risk turns into lost money.</li>
+      <li><strong>Then buy</strong> — and inspect the delivery for damage before you sign anything.</li>
+    </ol>
+  </section>
+
+  <!-- 10 EMAILS -->
+  <section class="card" id="emails">
+    <div><span class="sec-no">10</span> <span class="eyebrow">Outreach</span></div>
+    <h2>Copy-paste emails</h2>
+    <p class="small muted">Identical specification across all three so the quotes genuinely compare. Each asks for itemised pricing, the NFRC certified ratings, and the guarantee in writing — plus, where an installer is involved, an insurance certificate sent directly by their broker. Replace the bracketed details before sending.</p>
+
+    <div class="mail">
+      <div class="mail-hd"><span class="to">1 · To Lowe's / Pella — the pick</span><button class="copy" data-t="m1">Copy</button></div>
+      <pre id="m1">Subject: Pre-purchase questions — Pella Lifestyle Series sliding patio door, item 5016131747
+
+Hello,
+
+I'm ready to buy a sliding patio door for my home in San Jose, CA 95138,
+and I'm looking at the Pella Lifestyle Series clad-wood slider, Lowe's
+item 5016131747 (72 in x 80 in, 4-9/16 in jamb, Low-E argon, left-hand).
+
+Before I order, I need five things confirmed in writing.
+
+1. ROLSCREEN. Can this item be ordered with the Pella Rolscreen
+   retractable screen? If yes, what is the item number and the added
+   cost? If no, which Pella product number DOES include Rolscreen in a
+   72 x 80 sliding configuration, and what does it cost?
+   This is the single feature I am buying the door for, so please be
+   specific rather than general.
+
+2. ENERGY COMPLIANCE. My address is in California Title 24 Climate
+   Zone 4. I need the NFRC-certified ratings for the exact
+   configuration you would ship me:
+   - U-factor (must be 0.30 or lower)
+   - SHGC (must be 0.23 or lower)
+   If the standard glass package does not meet both, please quote the
+   glass upgrade that does.
+
+3. ITEMIZED PRICE. Please break out, as separate lines:
+   - Door unit
+   - Rolscreen or screen option
+   - Any Title 24 glass upgrade
+   - Freight / delivery to 95138
+   - Sales tax
+   - Installation, if you offer it, priced separately
+
+4. WARRANTY. Please send the full written warranty document, not a
+   summary. I specifically want to know: is glass breakage covered, is
+   labor covered, is shipping of warranty parts covered, is it
+   transferable if I sell, and what voids it?
+
+5. RETURNS. Is this a special order, and if so what are the return and
+   restocking terms? I need to know this before I pay, because if the
+   door fails energy-code inspection I need to understand my exposure.
+
+Two more: what is the lead time to 95138, and does the price include a
+professional measure before the order is placed?
+
+If installation is quoted, please also have your insurance broker send
+me a certificate of insurance directly — general liability and workers'
+comp, with me as certificate holder. Not a forwarded PDF.
+
+Thank you,
+[Your name]
+[Address, San Jose, CA 95138]
+[Phone]</pre>
+    </div>
+
+    <div class="mail">
+      <div class="mail-hd"><span class="to">2 · To Lowe's / Milgard — the runner-up</span><button class="copy" data-t="m2">Copy</button></div>
+      <pre id="m2">Subject: Pre-purchase questions — Milgard Tuscany V400 sliding patio door
+
+Hello,
+
+I'm ready to buy a sliding patio door for my home in San Jose, CA 95138,
+and I'm looking at the Milgard Tuscany V400 vinyl slider. I've seen
+Lowe's items 5016113959 (60 x 80), 5016113957 (96 x 80) and 5016113949
+(72 x 96).
+
+First question: I need a 72 in x 80 in unit with a 4-9/16 in jamb. Is
+that available as a stock item, and if so what is the item number? If it
+is special order only, please say so.
+
+Then, five things I need confirmed in writing.
+
+1. SCREEN. Please confirm the screen included, and whether any
+   retractable or integrated screen option exists for this door.
+
+2. ENERGY COMPLIANCE. My address is in California Title 24 Climate
+   Zone 4. I need the NFRC-certified ratings for the exact
+   configuration you would ship me:
+   - U-factor (must be 0.30 or lower)
+   - SHGC (must be 0.23 or lower)
+   If the standard glass package does not meet both, please quote the
+   glass upgrade that does.
+
+3. ITEMIZED PRICE. Please break out, as separate lines:
+   - Door unit
+   - Screen
+   - Any Title 24 glass upgrade
+   - Freight / delivery to 95138
+   - Sales tax
+   - Installation, if you offer it, priced separately
+
+4. WARRANTY. I understand the Tuscany carries a full lifetime warranty
+   including glass breakage, transferable for 10 years from purchase.
+   Please send the full written warranty document confirming that, and
+   tell me whether labor and shipping of warranty parts are covered.
+   If I were to choose the blinds-between-the-glass option, please
+   confirm what warranty term applies to that glass unit specifically —
+   I have seen a 10-year term referenced.
+
+5. RETURNS. Is this a special order, and what are the return and
+   restocking terms?
+
+Two more: what is the lead time to 95138, and does the price include a
+professional measure before the order is placed?
+
+If installation is quoted, please also have your insurance broker send
+me a certificate of insurance directly — general liability and workers'
+comp, with me as certificate holder. Not a forwarded PDF.
+
+Thank you,
+[Your name]
+[Address, San Jose, CA 95138]
+[Phone]</pre>
+    </div>
+
+    <div class="mail">
+      <div class="mail-hd"><span class="to">3 · To an Anlin authorised dealer — the warranty benchmark</span><button class="copy" data-t="m3">Copy</button></div>
+      <pre id="m3">Subject: Quote request — Anlin Malibu sliding patio door, San Jose 95138
+
+Hello,
+
+I'm buying a sliding patio door for my home in San Jose, CA 95138 and
+I'd like a written quote for the Anlin Malibu vinyl slider.
+
+Specification, so this quote compares directly against two others I'm
+collecting:
+- 72 in x 80 in nominal, two-panel sliding configuration
+- Please confirm the jamb depth you would supply
+- Low-E, argon-filled insulating glass
+- Screen included — please state what type
+- Please confirm handing options and lead time
+
+Five things I need in writing with the quote.
+
+1. ENERGY COMPLIANCE. My address is in California Title 24 Climate
+   Zone 4. I need the NFRC-certified ratings for the exact
+   configuration you would supply:
+   - U-factor (must be 0.30 or lower)
+   - SHGC (must be 0.23 or lower)
+
+2. ITEMIZED PRICE. Please break out, as separate lines:
+   - Door unit
+   - Screen
+   - Any glass upgrade required for Title 24
+   - Delivery
+   - Sales tax
+   - Installation, priced separately from the unit
+
+3. WARRANTY. I understand Anlin's limited lifetime warranty covers
+   parts, labor and shipping at no cost, and transfers to one
+   subsequent homeowner. Please send the full written warranty
+   document confirming that, and tell me exactly what voids it —
+   particularly whether it requires installation by an authorized
+   dealer.
+
+4. INSTALLATION. If you are quoting installation, please provide your
+   CSLB license number and the legal entity name, and have your
+   insurance broker send me a certificate of insurance DIRECTLY —
+   general liability and workers' comp, with me as certificate holder.
+   Not a PDF forwarded by a salesperson.
+
+5. RETURNS AND DEPOSIT. What are the cancellation terms? Please note
+   that under California law a home improvement deposit may not exceed
+   the lesser of $1,000 or 10% of the contract price.
+
+One more: is there any product in your range with an integrated
+retractable screen — one that rolls away into the frame rather than
+sliding on an outboard track? That feature is my main interest.
+
+Thank you,
+[Your name]
+[Address, San Jose, CA 95138]
+[Phone]</pre>
+    </div>
+  </section>
+
+  <!-- 11 SOURCES -->
+  <section class="card" id="sources">
+    <div><span class="sec-no">11</span> <span class="eyebrow">Provenance</span></div>
+    <h2>Sources, including the ones that failed</h2>
+    <div class="call red">
+      <h4>Read this first — it governs every source below</h4>
+      <p class="small"><strong>I could not open any of these pages.</strong> This machine's egress policy returned a hard 403 for every retailer, manufacturer, regulator and image host attempted. Everything below was located and summarised by a search engine; I read snippets, never pages. Under your own rule — never cite anything you cannot open and read yourself — <em>none</em> of these fully qualifies. They are listed so you can close them yourself, not to imply verification.</p>
+    </div>
+
+    <h3>Tier 1 — Government &amp; regulator</h3>
+    <div class="src"><span class="n">1.</span><span class="b"><span class="ttl">California Energy Commission — Title 24 Building Energy Efficiency Standards, 2025 cycle · <a href="https://www.energy.ca.gov/programs-and-topics/programs/building-energy-efficiency-standards">energy.ca.gov</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(The state agency that writes and enforces California's energy code — the authoritative source for the U-factor and SHGC ceilings that decide whether your door is legal. San Jose is Climate Zone 4. The 0.30 / 0.23 figures reached me only through secondary summaries. <strong>The single most important number in this report and I did not read it at source.</strong> Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">2.</span><span class="b"><span class="ttl">City of San José — Development Services Permit Center · <a href="https://www.sanjoseca.gov/your-government/departments-offices/planning-building-code-enforcement/building-division/online-permits">sanjoseca.gov</a> · <strong>408-535-3555</strong> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(The municipal authority issuing permits and inspecting work in San José — authoritative for permit requirement and fee at your address, and the body that would fail a non-compliant door. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">3.</span><span class="b"><span class="ttl">San José Building Code 2022, Ch. 24 "Glass and Glazing" · <a href="https://up.codes/viewer/san-jose/ca-building-code-2022/chapter/24/glass-and-glazing">up.codes</a> <span class="chip n">Not opened</span></span><span class="why">(Third-party republisher of adopted municipal codes — accurate as a mirror, but the operative text is the code as adopted by the city. Cited for the safety-glazing requirement in sliding door panels. Relayed 17 Aug 2026.)</span></span></div>
+
+    <h3>Tier 2 — Manufacturer &amp; retailer published material</h3>
+    <div class="src"><span class="n">4.</span><span class="b"><span class="ttl">Pella — Lifestyle Series B2B spec sheet (PDF) · <a href="https://assets.contentstack.io/v3/assets/bltf589e66bcaecd79c/blte942ae5a5da961bf/PLS-B2B-SpecSheet.pdf">assets.contentstack.io — PLS-B2B-SpecSheet.pdf</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(Pella's own technical specification sheet for trade — would have given the U-factor, SHGC and Rolscreen availability that §08 marks unverifiable. <strong>The most decision-relevant document I failed to open.</strong> Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">5.</span><span class="b"><span class="ttl">Pella — Lifestyle Series overview and shop pages · <a href="https://www.pella.com/shop/doors/patio-doors/lifestyle-series/sliding-patio-doors/">pella.com</a> · <a href="https://media.pella.com/professional/adm/Misc/PellaLifestyleSeries_Overview.pdf">media.pella.com overview PDF</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Manufacturer's own product and warranty literature — authoritative for what Pella commits to and legally accountable for it, though promotional in nature. Source of the Rolscreen "available on" wording and the limited-lifetime warranty claim. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">6.</span><span class="b"><span class="ttl">Lowe's — Pella Lifestyle Series listings, items 5016131747, 5016009581, 5013949217, 5013949211, 3554866 · <a href="https://www.lowes.com/pd/Pella-Lifestyle-Series-72-in-x-80-in-x-4-9-16-in-Jamb-Low-E-argon-Clear-glass-White-Clad-wood-Left-hand-Sliding-Patio-Door/5016131747">lowes.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Retailer's live product pages — the authoritative record for price, stock and the exact configuration sold, and the only place a transactable number exists. Item numbers relayed by search; <strong>no price or stock status was seen</strong>. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">7.</span><span class="b"><span class="ttl">Milgard — V400 Tuscany Series sliding patio doors, Title 24 guidance, brochure (PDF) · <a href="https://www.milgard.com/doors/V400/sliding">milgard.com/doors/V400/sliding</a> · <a href="https://www.milgard.com/blog/title-24-windows-and-patio-doors">Title 24 guidance</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Manufacturer's own literature — authoritative for Milgard's warranty commitment; Milgard is a Tacoma-based maker operating since 1958. Its Title 24 page is <strong>vendor guidance with an interest in selling compliant product</strong> — directional on the code, authoritative only on its own doors. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">8.</span><span class="b"><span class="ttl">Lowe's — Milgard V400 listings, items 5016113959, 5016113957, 5016113949 · <a href="https://www.lowes.com/pd/Milgard-V400-Tuscany-Series-60-in-x-80-in-x-4-5-8-in-Jamb-White-Vinyl-Left-hand-Sliding-Patio-Door-with-Low-E-argon-Glass-Screen-Included/5016113959">lowes.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Retailer's live product pages — authoritative for price, stock and configuration. Source of the observation that no plain 72×80 stock SKU surfaced for this series. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">9.</span><span class="b"><span class="ttl">Anlin Windows &amp; Doors — Malibu sliding patio doors and warranty · <a href="https://anlin.com/malibu-patio-doors/sliding-patio-doors/">anlin.com</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(Manufacturer's own site — authoritative for its warranty commitment and legally accountable for it. A California manufacturer building for California code and climate. Source of the parts/labour/shipping and transferability terms. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">10.</span><span class="b"><span class="ttl">Andersen — 200 Series Narroline gliding patio door and parts store · <a href="https://www.andersenwindows.com/windows-and-doors/doors/sliding-patio-doors/200-series-narroline-gliding-patio-door">andersenwindows.com</a> · <a href="https://parts.andersenwindows.com/detail_9032591__d_gliding_nlgd_pnl.html">parts.andersenwindows.com</a> <span class="chip n">FAILED — not opened</span></span><span class="why">(Manufacturer's own product and parts catalogue — authoritative for specification and, usefully, for whether replacement panels exist as stock items. Source of the 20-year glass / 10-year non-glass warranty terms. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">11.</span><span class="b"><span class="ttl">The Home Depot — Andersen 200 Series Narroline, item 309514327 · <a href="https://www.homedepot.com/p/Andersen-71-1-4-in-x-79-1-2-in-200-Series-Narroline-White-Universal-Gliding-Patio-Door-with-Pine-Interior-Moving-Panel-9180299/309514327">homedepot.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Retailer's live product page — authoritative for price and stock. Source of the ~$1,955 figure, which the search summary itself flagged as possibly attaching to a different 200 Series model. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">12.</span><span class="b"><span class="ttl">Lowe's — JELD-WEN V-4500 and variants, items 50295433, 50295409, 5000000323, 5000000325, 50419022 · <a href="https://www.lowes.com/pd/JELD-WEN-Clear-Glass-White-Vinyl-Left-Hand-Sliding-Double-Door-Sliding-Patio-Door-with-Screen-Common-72-in-x-80-in-Actual-71-5-in-x-79-5-in/50295433">lowes.com</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(Retailer's live product pages — authoritative for price, stock and configuration. The only product family surfacing an exact 72×80 across several variants. Attempted 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">13.</span><span class="b"><span class="ttl">YouTube — "Pella Lifestyle Series Sliding Patio Door with Rolscreen" · <a href="https://www.youtube.com/watch?v=xhFeiPwxFMM">youtube.com/watch?v=xhFeiPwxFMM</a> <span class="chip n">FAILED — 403 blocked</span></span><span class="why">(The video you sent — manufacturer-published promotional content, evidence of Pella's claims rather than of performance. Title and 3 Oct 2019 date resolved via search; I never watched it. Attempted 17 Aug 2026.)</span></span></div>
+
+    <h3>Tier 3–4 — Review platforms, surveys and trade bodies</h3>
+    <div class="src"><span class="n">14.</span><span class="b"><span class="ttl">Consumer Reports — patio doors <span class="chip n">NO COVERAGE — category not tested</span></span><span class="why">(Independent, advertising-free product-testing nonprofit — <strong>would have been the single most authoritative source in this report</strong>. Search indicates it does not test patio doors at all, so no independent laboratory rating exists for this category from any comparable body. This absence is itself the most important rating finding in §04. Relayed 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">15.</span><span class="b"><span class="ttl">Lifestory Research — "America's Most Trusted Patio Door" brand study, 2024 · <a href="https://www.lifestoryresearch.com/2024-best-patio-door-ranking-review">lifestoryresearch.com</a> <span class="chip n">Not opened — directional only</span></span><span class="why">(A market-research firm's annual <strong>brand-perception survey</strong> — it measures consumer belief, not product performance, and has no laboratory component. Widely reproduced in vendor marketing. Source of the Andersen-first ranking. <strong>Treat as directional; it is not a test.</strong> Relayed 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">16.</span><span class="b"><span class="ttl">NFRC — National Fenestration Rating Council certified ratings · <a href="https://www.nfrc.org/">nfrc.org</a> <span class="chip n">Not attempted — no product lookup performed</span></span><span class="why">(The independent nonprofit that certifies and publishes U-factor and SHGC ratings for fenestration products — the neutral authority behind the label on every door here, and the body whose numbers determine Title 24 compliance. Its Certified Products Directory would let you verify any configuration yourself. <strong>Listed because it is the right place for you to close the biggest gap in this report.</strong> Not queried 17 Aug 2026.)</span></span></div>
+
+    <h3>Tier 5 — Excluded, and why</h3>
+    <div class="src"><span class="n">17.</span><span class="b"><span class="ttl">Brand-comparison and cost-guide pages: aprodoor.com, wellstemfg.com, gladiatorwindowanddoors.com, jpexteriorstx.com, window-concepts.com, hotianwindows.com, brennancorp.com, 1stwindows.com, replacementwindowsreviews.co <span class="chip n">EXCLUDED as load-bearing</span></span><span class="why">(SEO comparison and "2026 buying guide" pages, several published by companies that sell the products they rank — the source class your brief excludes. They dominated every brand-comparison and pricing search I ran. Their material is reflected only where §06 discloses the origin of category price bands, and in the general brand/material framing; <strong>no recommendation in this report rests on them.</strong> Relayed 17 Aug 2026.)</span></span></div>
+    <div class="src"><span class="n">18.</span><span class="b"><span class="ttl">Forums — DoItYourself.com, vinyl-replacement-windows.com discussion boards <span class="chip n">Colour only — not load-bearing</span></span><span class="why">(Anonymous user discussion boards. Per your rules these are supporting colour at most and never evidence; no claim in this report rests on them, and no forum post is quoted. Noted only because they appeared repeatedly in category searches. Relayed 17 Aug 2026.)</span></span></div>
+
+    <div class="call amber">
+      <h4>My dead ends — close these yourself</h4>
+      <ul class="small">
+        <li><strong>Every price in this report.</strong> The biggest gap. Open the six product URLs above; they are real listings and each should show a live price.</li>
+        <li><strong>Rolscreen availability on Lowe's item 5016131747</strong> — the question that decides the whole purchase. Call Lowe's with the item number.</li>
+        <li><strong>NFRC ratings for your exact configuration</strong> — search the free Certified Products Directory at <a href="https://www.nfrc.org/">nfrc.org</a>, or demand the numbers in writing per §10.</li>
+        <li><strong>Title 24 code text at source</strong> — the 0.30 / 0.23 pair came only from secondary summaries. California Energy Commission, <a href="https://www.energy.ca.gov/">energy.ca.gov</a>.</li>
+        <li><strong>Permit requirement for your address</strong> — San José Development Services, <strong>408-535-3555</strong>.</li>
+        <li><strong>JELD-WEN's warranty</strong> — never surfaced at all. Ask the retailer for the PDF.</li>
+        <li><strong>Whether a 72×80 Milgard Tuscany V400 exists as a stock SKU</strong> — only 60×80, 96×80 and 72×96 surfaced.</li>
+        <li><strong>All star ratings and review counts</strong> — I have none. Every product page above carries them.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 12 FINAL -->
+  <section class="final" id="final">
+    <div class="eyebrow">The closing argument</div>
+    <h2>Final verdict</h2>
+
+    <p class="pick">Buy the <strong>Pella Lifestyle Series aluminium-clad wood sliding patio door</strong> — and make the call to Lowe's about Rolscreen the thing you do before you do anything else, because that one answer is the purchase.</p>
+
+    <hr>
+
+    <h3>Why I chose it</h3>
+    <p>Because you sent the same video twice, and people do not do that about a door they merely approve of. Read as evidence of priority, that is the strongest signal in this whole exercise — stronger than any spec sheet I could not open. You want a specific experience: wood on the inside, and a screen that isn't there until you want it. Only one product in this set delivers it.</p>
+    <p>I weighted three things heavily. First, that signal of what you actually want, which no amount of warranty arithmetic overrides. Second, the existence of a real retail SKU — it means this is a purchase you can complete at a fixed price rather than a negotiation, which was your explicit requirement. Third, the fact that the clad-wood tier is genuinely not substitutable: vinyl is a fine material and a worse room.</p>
+    <p>I weighted two things lightly, and deliberately. Brand-trust survey rankings, because they measure belief rather than performance. And review volume, because I could not read a single review and would not pretend a count is a quality signal. In a category with no independent testing at all, I leaned on warranty paperwork and specification — the only claims a manufacturer must honour with money — and I have been explicit that Pella's paperwork is the weakest of the three serious contenders. I am recommending it on the product, not the promise.</p>
+
+    <hr>
+
+    <h3>Why I eliminated each of the others</h3>
+    <div class="kill">
+      <div class="nm">Milgard Tuscany V400 — stays as the back-up, and a close one</div>
+      <p class="small">Genuinely the best warranty you can reach through a click: full lifetime including glass breakage, transferable for ten years, explicitly built to pass California's energy code. If this were a pure value decision it would win outright. Knocked out on product class — vinyl frame, outboard screen — which means it cannot deliver the thing you asked about twice. <strong>Back-up: yes, first reserve.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Anlin Malibu — the one I'd most like to recommend and can't</div>
+      <p class="small">The strongest warranty in the report by a clear distance: parts, labour <em>and</em> shipping, transferable to the next owner, from a manufacturer building specifically for California. Knocked out by your own brief — it sells dealer-only, so there is no live purchase URL and no published price, and you asked that every survivor arrive with both. That is a distribution model, not a flaw, and its absence from big-box shelves says nothing about the door. <strong>Back-up: yes, if you relax the buy-online requirement — at which point it is arguably the smartest purchase here.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Andersen 200 Series Narroline — not a back-up</div>
+      <p class="small">The most trusted name in the category, universally handed so you cannot order the wrong side, and the only product here with any price signal at all. Knocked out because the trust attaches to Andersen's flagship lines while this is the value tier: the weakest warranty in the set at 20 years on glass and 10 on everything else, and a pine interior that takes on wood's upkeep without giving you the retracting screen. <strong>Back-up: no — Milgard beats it on warranty and Pella beats it on product.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">JELD-WEN V-4500 — stays as the budget floor</div>
+      <p class="small">The most flexible sizing in the report, the only true 72×80 across several variants, screen included, and almost certainly the cheapest legitimate route to a compliant door. Knocked out because its warranty never surfaced anywhere — in a category nobody independently tests, an unreadable warranty is a real deficit, not a footnote. <strong>Back-up: yes, if the Pella number lands somewhere you don't want to go.</strong></p>
+    </div>
+    <div class="kill">
+      <div class="nm">Blinds-between-the-glass variants — a specific tool, not a choice</div>
+      <p class="small">Genuinely excellent at one job: shading a sun-facing opening with nothing to dust. Knocked out as a general recommendation because sealing a mechanism inside the glass unit is where warranties shorten — on Milgard's equivalent the term drops from lifetime to ten years. <strong>Back-up: for that one scenario only.</strong></p>
+    </div>
+
+    <hr>
+
+    <h3>What would change my mind</h3>
+    <p><strong>Rolscreen availability.</strong> If Lowe's confirms that item 5016131747 cannot be ordered with a retractable screen, and Pella's configured route carries a meaningful premium over the retail SKU for that one feature, <strong>I flip to Milgard Tuscany V400</strong> without hesitation. At that point you would be paying a clad-wood premium for a door with the same outboard screen as the vinyl competitor, while accepting a weaker warranty — and the entire basis of my recommendation would be gone. One phone call decides it.</p>
+    <p>A narrower second trigger: if the Lifestyle configuration you want cannot show U-factor ≤ 0.30 and SHGC ≤ 0.23 on an NFRC label without an expensive glass upgrade, the same flip applies — Milgard already markets that compliance as standard.</p>
+
+    <hr>
+
+    <h3>Confidence, and what sits unconfirmed underneath it</h3>
+    <p><span class="chip u">Moderate on the product, near-zero on the price</span> — and the split is the honest headline. The product reasoning I hold with reasonable confidence: clad wood is not substitutable by vinyl, a retractable screen exists in exactly one of these ranges, and Title 24 sets a hard ceiling that belongs to the configuration rather than the brand. None of that depends on the pages I could not open.</p>
+    <p>Underneath it, though: <strong>not one price was verified</strong>, and not one product page, review, warranty document or spec sheet was opened. The Rolscreen question — the hinge of the entire recommendation — is unresolved. Every warranty term here is relayed from a summary of a document I never read, and warranty documents are precisely where exclusions hide. The Title 24 numbers that drive my elimination rule came from secondary sources, not the Energy Commission. The one price figure in the report may attach to the wrong model. And no independent body tests this product category at all, so even a perfect research run would not have produced a performance ranking.</p>
+    <p>Act on it today by measuring your opening and calling Lowe's with that item number. Do not order anything until the screen question and the NFRC numbers are answered in writing.</p>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll("button.copy").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var el = document.getElementById(btn.dataset.t);
+      if(!el) return;
+      var done = function(){
+        var prev = btn.textContent;
+        btn.textContent = "Copied";
+        btn.classList.add("ok");
+        setTimeout(function(){ btn.textContent = prev; btn.classList.remove("ok"); }, 1800);
+      };
+      var text = el.innerText;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+      } else { fallback(text, done); }
+    });
+  });
+  function fallback(text, done){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly","");
+    ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+</script>
