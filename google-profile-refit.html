@@ -1,0 +1,1180 @@
+<title>Hung Phat Google Refit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ============================================================
+   TOKENS — jeweler's materials: paper, ink, antique gold, jade,
+   lacquer red. Gold is the only accent; semantics are separate.
+   ============================================================ */
+:root{
+  --paper:#F2F4F1;        /* warm-neutral ground, faint jade-grey bias */
+  --paper2:#E8EBE7;
+  --card:#FFFFFF;
+  --card2:#F7F8F6;
+  --ink:#1B211D;          /* near-black, green bias */
+  --ink2:#3B453F;
+  --muted:#63706A;
+  --faint:#8B968F;
+  --rule:#DDE2DC;
+  --rule2:#ECEFEA;
+
+  --gold:#8A6A21;         /* antique gold — structure + accent */
+  --gold2:#6E5318;
+  --gold-soft:#F4EEDE;
+  --gold-line:#E3D5B0;
+
+  --jade:#1F6B5B;         /* good / done */
+  --jade-bg:#E4F0EC;
+  --jade-line:#BEDCD3;
+
+  --lacquer:#9E2A2B;      /* fix now */
+  --lacquer-bg:#FAE7E6;
+  --lacquer-line:#EEC6C4;
+
+  --slate:#43546B;        /* note / neutral info */
+  --slate-bg:#EAEEF3;
+  --slate-line:#CBD6E1;
+
+  --shadow:0 1px 2px rgba(27,33,29,.05), 0 4px 14px rgba(27,33,29,.05);
+  --shadow-lg:0 2px 6px rgba(27,33,29,.06), 0 18px 44px rgba(27,33,29,.10);
+
+  --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme:dark){
+    --paper:#15181A; --paper2:#1A1E20; --card:#1E2224; --card2:#191D1F;
+    --ink:#EDF1EE; --ink2:#C2CBC5; --muted:#94A099; --faint:#6F7A74;
+    --rule:#2E3538; --rule2:#252B2D;
+    --gold:#D9AE5A; --gold2:#EBC272; --gold-soft:#2A2417; --gold-line:#4A3D1E;
+    --jade:#5FBFA5; --jade-bg:#12271F; --jade-line:#204C3F;
+    --lacquer:#E0736B; --lacquer-bg:#2A1615; --lacquer-line:#553029;
+    --slate:#9FB4CB; --slate-bg:#1B2229; --slate-line:#33414F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.45), 0 18px 44px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15181A; --paper2:#1A1E20; --card:#1E2224; --card2:#191D1F;
+  --ink:#EDF1EE; --ink2:#C2CBC5; --muted:#94A099; --faint:#6F7A74;
+  --rule:#2E3538; --rule2:#252B2D;
+  --gold:#D9AE5A; --gold2:#EBC272; --gold-soft:#2A2417; --gold-line:#4A3D1E;
+  --jade:#5FBFA5; --jade-bg:#12271F; --jade-line:#204C3F;
+  --lacquer:#E0736B; --lacquer-bg:#2A1615; --lacquer-line:#553029;
+  --slate:#9FB4CB; --slate-bg:#1B2229; --slate-line:#33414F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+  --shadow-lg:0 2px 6px rgba(0,0,0,.45), 0 18px 44px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:15.5px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px; margin:0 auto; padding:34px 22px 70px}
+p{margin:0 0 13px; color:var(--ink2); max-width:68ch}
+a{color:var(--gold2); text-decoration:none; border-bottom:1px solid var(--gold-line)}
+a:hover{border-bottom-color:var(--gold)}
+strong,b{color:var(--ink); font-weight:650}
+h1,h2,h3,h4{font-family:var(--serif); color:var(--ink); margin:0; text-wrap:balance; font-weight:600}
+
+/* ---------- masthead ---------- */
+.mast{
+  background:var(--card); border:1px solid var(--rule); border-radius:6px;
+  box-shadow:var(--shadow-lg); overflow:hidden; margin-bottom:20px;
+}
+.mast-top{
+  background:linear-gradient(103deg,#221B0C 0%,#3A2C10 45%,#1C1710 100%);
+  padding:30px 34px 26px; position:relative;
+}
+.mast-top::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
+  background:linear-gradient(90deg,#8A6A21,#D9AE5A 40%,#8A6A21 70%,#6E5318);
+}
+.eyebrow{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.19em; text-transform:uppercase;
+  font-weight:600; color:#D9AE5A;
+}
+.mast-top h1{
+  color:#FBF7EE; font-size:40px; line-height:1.08; letter-spacing:-.02em; margin:11px 0 0;
+}
+.mast-top h1 .sub{display:block; font-size:20px; color:#C9B383; font-style:italic; margin-top:7px; letter-spacing:0}
+.mast-meta{
+  display:flex; flex-wrap:wrap; gap:0 26px; padding:15px 34px;
+  border-bottom:1px solid var(--rule2); background:var(--card2);
+  font-family:var(--mono); font-size:11.5px; color:var(--muted);
+}
+.mast-meta b{color:var(--ink2); font-weight:600}
+.mast-body{padding:24px 34px 28px}
+.lede{font-size:17.5px; line-height:1.55; color:var(--ink2); max-width:66ch}
+.lede em{color:var(--ink); font-style:italic}
+
+/* ---------- sourcing banner ---------- */
+.sourcing{
+  background:var(--slate-bg); border:1px solid var(--slate-line); border-radius:6px;
+  padding:17px 20px; margin-bottom:22px;
+}
+.sourcing .lab{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:700; color:var(--slate); margin-bottom:7px;
+}
+.sourcing p{font-size:14px; margin-bottom:9px; max-width:none}
+.sourcing p:last-child{margin-bottom:0}
+
+/* ---------- chips ---------- */
+.chip{
+  display:inline-block; font-family:var(--mono); font-size:10.5px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase; padding:2px 7px; border-radius:3px;
+  border:1px solid; vertical-align:2px; white-space:nowrap;
+}
+.chip.fix{color:var(--lacquer); background:var(--lacquer-bg); border-color:var(--lacquer-line)}
+.chip.ok{color:var(--jade); background:var(--jade-bg); border-color:var(--jade-line)}
+.chip.note{color:var(--slate); background:var(--slate-bg); border-color:var(--slate-line)}
+.chip.gold{color:var(--gold2); background:var(--gold-soft); border-color:var(--gold-line)}
+
+/* ---------- table of contents ---------- */
+.toc{
+  background:var(--card); border:1px solid var(--rule); border-radius:6px;
+  padding:20px 24px; margin-bottom:26px; box-shadow:var(--shadow);
+}
+.toc h4{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--gold2); font-weight:700; margin-bottom:12px; padding-bottom:8px;
+  border-bottom:1px solid var(--gold-line);
+}
+.toc ol{margin:0; padding:0; list-style:none; columns:2; column-gap:34px}
+.toc li{
+  break-inside:avoid; font-size:14px; padding:5px 0; counter-increment:toc;
+  border-bottom:1px solid var(--rule2);
+}
+.toc ol{counter-reset:toc}
+.toc li::before{
+  content:counter(toc,decimal-leading-zero); font-family:var(--mono); font-size:10.5px;
+  color:var(--gold); margin-right:10px; font-weight:700;
+}
+.toc a{border-bottom:none; color:var(--ink2)}
+.toc a:hover{color:var(--gold2)}
+
+/* ---------- sections ---------- */
+section{margin-bottom:30px; scroll-margin-top:16px}
+.card{
+  background:var(--card); border:1px solid var(--rule); border-radius:6px;
+  padding:28px 32px 30px; box-shadow:var(--shadow);
+}
+.snum{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; color:var(--gold2);
+  font-weight:700; text-transform:uppercase; display:block; margin-bottom:9px;
+}
+.card > h2{
+  font-size:27px; letter-spacing:-.02em; line-height:1.2;
+  padding-bottom:13px; border-bottom:2px solid var(--gold-line); margin-bottom:17px;
+}
+.card h3{font-size:19px; letter-spacing:-.01em; margin:26px 0 9px}
+.card h3:first-of-type{margin-top:4px}
+.card h4{font-size:15.5px; margin:18px 0 7px}
+
+/* ---------- findings ---------- */
+.finding{
+  border-top:1px solid var(--rule); padding:15px 0 14px;
+  display:grid; grid-template-columns:96px 1fr; gap:0 18px; align-items:start;
+}
+.finding:last-child{border-bottom:1px solid var(--rule)}
+.finding .tag{padding-top:2px}
+.finding .ttl{font-weight:650; color:var(--ink); font-size:15px; margin-bottom:4px; font-family:var(--serif); font-size:17px}
+.finding p{margin:0 0 6px; font-size:14.5px}
+.finding p:last-child{margin-bottom:0}
+.ev{
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+  background:var(--card2); border-left:2px solid var(--gold-line);
+  padding:7px 11px; margin-top:8px; display:block; border-radius:0 3px 3px 0;
+}
+
+/* ---------- tables ---------- */
+.tscroll{overflow-x:auto; margin:14px 0 4px; border:1px solid var(--rule); border-radius:5px; background:var(--card)}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:600px}
+thead th{
+  background:var(--card2); text-align:left; padding:10px 14px; color:var(--ink);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  font-weight:700; border-bottom:1.5px solid var(--gold-line); white-space:nowrap;
+}
+td{padding:11px 14px; border-bottom:1px solid var(--rule2); color:var(--ink2); vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.k{font-weight:650; color:var(--ink); white-space:nowrap}
+td .m{font-family:var(--mono); font-size:12.5px; color:var(--ink); font-variant-numeric:tabular-nums}
+.tnote{font-size:12.5px; color:var(--muted); margin:8px 0 0}
+
+/* ---------- shot list ---------- */
+.shot{
+  display:grid; grid-template-columns:38px 1fr; gap:0 16px;
+  padding:14px 0; border-top:1px solid var(--rule2);
+}
+.shot:first-of-type{border-top:1px solid var(--rule)}
+.shot:last-of-type{border-bottom:1px solid var(--rule)}
+.shot .n{
+  font-family:var(--mono); font-size:13px; font-weight:700; color:var(--gold2);
+  background:var(--gold-soft); border:1px solid var(--gold-line); border-radius:3px;
+  width:34px; height:26px; display:flex; align-items:center; justify-content:center;
+  font-variant-numeric:tabular-nums;
+}
+.shot .t{font-family:var(--serif); font-size:17px; font-weight:600; color:var(--ink); margin-bottom:3px}
+.shot .d{font-size:14px; color:var(--ink2); margin:0}
+.shot .why{font-size:13px; color:var(--muted); font-style:italic; margin:5px 0 0}
+.shot.prio .n{background:var(--lacquer-bg); border-color:var(--lacquer-line); color:var(--lacquer)}
+
+/* ---------- callouts ---------- */
+.callout{border-radius:5px; padding:15px 18px; margin:16px 0; border:1px solid}
+.callout .h{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+  font-weight:700; margin-bottom:6px;
+}
+.callout p{margin:0 0 8px; font-size:14.5px; max-width:none}
+.callout p:last-child{margin-bottom:0}
+.callout.fix{background:var(--lacquer-bg); border-color:var(--lacquer-line)}
+.callout.fix .h{color:var(--lacquer)}
+.callout.ok{background:var(--jade-bg); border-color:var(--jade-line)}
+.callout.ok .h{color:var(--jade)}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold-line)}
+.callout.gold .h{color:var(--gold2)}
+
+/* ---------- lists ---------- */
+ul.tick{list-style:none; margin:8px 0 14px; padding:0}
+ul.tick li{position:relative; padding-left:21px; margin-bottom:7px; font-size:14.5px; color:var(--ink2)}
+ul.tick li::before{
+  content:""; position:absolute; left:2px; top:9px; width:7px; height:7px;
+  background:var(--gold); transform:rotate(45deg);
+}
+ul.tick.no li::before{background:var(--lacquer)}
+ul.tick.yes li::before{background:var(--jade)}
+ul.plain{margin:8px 0 14px; padding-left:20px}
+ul.plain li{margin-bottom:6px; font-size:14.5px; color:var(--ink2)}
+
+/* ---------- copy blocks ---------- */
+.copyblk{border:1px solid var(--rule); border-radius:5px; margin:14px 0; overflow:hidden; background:var(--card2)}
+.copyblk .bar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:9px 14px; background:var(--card); border-bottom:1px solid var(--rule);
+}
+.copyblk .bar .lb{
+  font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.05em;
+}
+.copyblk .bar .lb b{color:var(--ink)}
+.copybtn{
+  font-family:var(--sans); font-size:12px; font-weight:650; color:#FBF7EE;
+  background:var(--gold2); border:none; border-radius:4px; padding:6px 13px;
+  cursor:pointer; transition:background .15s;
+}
+.copybtn:hover{background:var(--gold)}
+.copybtn.done{background:var(--jade)}
+.copyblk pre{
+  margin:0; padding:14px 16px; font-family:var(--mono); font-size:12.5px; line-height:1.62;
+  color:var(--ink2); white-space:pre-wrap; word-wrap:break-word; overflow-x:auto;
+}
+.fold{
+  display:block; border-top:1px dashed var(--lacquer-line); margin:0;
+  font-family:var(--mono); font-size:10.5px; color:var(--lacquer); letter-spacing:.08em;
+  padding:5px 16px; background:var(--lacquer-bg); text-transform:uppercase; font-weight:700;
+}
+
+/* ---------- phases ---------- */
+.phase{
+  display:grid; grid-template-columns:104px 1fr; gap:0 20px;
+  padding:16px 0; border-top:1px solid var(--rule);
+}
+.phase:last-of-type{border-bottom:1px solid var(--rule)}
+.phase .when{
+  font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--gold2);
+  letter-spacing:.05em; text-transform:uppercase; padding-top:3px;
+}
+.phase .when span{display:block; color:var(--muted); font-weight:500; margin-top:3px; letter-spacing:0; text-transform:none}
+.phase .t{font-family:var(--serif); font-size:18px; font-weight:600; color:var(--ink); margin-bottom:5px}
+.phase p{margin:0 0 7px; font-size:14.5px}
+.phase p:last-child{margin-bottom:0}
+
+/* ---------- ask block ---------- */
+.ask{
+  background:linear-gradient(160deg,#221B0C,#3A2C10 60%,#1C1710);
+  border:1px solid #4A3D1E; border-radius:8px; padding:30px 32px; margin-top:30px;
+  box-shadow:var(--shadow-lg);
+}
+.ask .eyebrow{color:#D9AE5A}
+.ask h2{color:#FBF7EE; font-size:26px; margin:10px 0 13px; letter-spacing:-.02em}
+.ask p{color:#DACDB4; font-size:15px; max-width:64ch}
+.ask ul.tick li{color:#DACDB4}
+.ask ul.tick li::before{background:#D9AE5A}
+.ask strong{color:#FBF7EE}
+.ask a{color:#EBC272; border-bottom-color:#6E5318}
+
+/* ---------- sources ---------- */
+.srcgrp{margin-top:18px}
+.srcgrp h4{
+  font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--gold2); margin-bottom:9px; padding-bottom:6px; border-bottom:1px solid var(--gold-line);
+}
+ol.src{margin:0; padding:0; list-style:none; counter-reset:s}
+ol.src li{
+  counter-increment:s; position:relative; padding:7px 0 7px 32px;
+  border-bottom:1px solid var(--rule2); font-size:13px;
+}
+ol.src li::before{
+  content:counter(s); position:absolute; left:0; top:8px; font-family:var(--mono); font-size:10.5px;
+  color:var(--gold2); background:var(--gold-soft); border-radius:3px; width:23px; height:19px;
+  display:flex; align-items:center; justify-content:center; font-weight:700;
+}
+ol.src .u{color:var(--muted); word-break:break-all; font-family:var(--mono); font-size:11.5px}
+
+.foot{margin-top:28px; text-align:center; color:var(--faint); font-size:12px; line-height:1.75}
+
+/* ---------- responsive ---------- */
+@media (max-width:760px){
+  .wrap{padding:20px 14px 50px}
+  .mast-top{padding:24px 20px 22px}
+  .mast-top h1{font-size:30px}
+  .mast-meta,.mast-body{padding-left:20px; padding-right:20px}
+  .card{padding:22px 18px 24px}
+  .card > h2{font-size:23px}
+  .toc ol{columns:1}
+  .finding{grid-template-columns:1fr; gap:6px}
+  .phase{grid-template-columns:1fr; gap:6px}
+  .ask{padding:24px 20px}
+}
+@media print{
+  body{background:#fff}
+  .card,.mast,.toc{box-shadow:none}
+  .copybtn{display:none}
+  section{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:focus-visible{outline:2.5px solid var(--gold); outline-offset:2px; border-radius:3px}
+</style>
+
+<div class="wrap">
+
+<!-- ================= MASTHEAD ================= -->
+<div class="mast">
+  <div class="mast-top">
+    <div class="eyebrow">Local Search &middot; Google Business Profile &middot; Art Direction</div>
+    <h1>The Google Refit
+      <span class="sub">Rebuilding what Hung Phat looks like on Maps, Search, and every dashboard that borrows from them</span>
+    </h1>
+  </div>
+  <div class="mast-meta">
+    <div><b>Prepared for</b> Hung Phat USA</div>
+    <div><b>Location</b> 1111 Story Rd, Ste 1063, San Jose CA 95122</div>
+    <div><b>Date</b> 17 August 2026</div>
+    <div><b>Status</b> Proposal — awaiting asset handoff</div>
+  </div>
+  <div class="mast-body">
+    <p class="lede">Somebody sat in a car <em>forty-six minutes away</em>, typed your name, and the first thing Google showed them was a storefront photo with a <em>COVID-19 information sign</em> still taped in the window. That is the actual state of the profile — and it is also the whole argument for this project. This document covers how Google's business data really works in 2026, what is provably wrong today, the exact photo specs and shot list to fix it, and the copy you can paste into the fields this week.</p>
+  </div>
+</div>
+
+<!-- ================= SOURCING ================= -->
+<div class="sourcing" role="note">
+  <div class="lab">Sourcing method — read this first</div>
+  <p>This environment's network policy blocked direct page loads of <b>hungphatusa.com</b>, <b>instagram.com</b>, and <b>support.google.com</b> (the proxy returned <span class="chip note">403 EGRESS_BLOCKED</span> on each). Research was gathered through domain-scoped web search, which surfaces those pages' own text without rendering them.</p>
+  <p><b>What this means for the image half of your request.</b> You asked me to look at the best images on your website and Instagram and use them as the guide. I could not open them, so I have <b>not</b> picked specific photos and I am not going to pretend otherwise. What this document gives you instead is the thing that actually makes a set consistent: a written look specification, a selection rubric you can run against your own library in an afternoon, and a shot list for what is missing. <b>Section 09</b> lists exactly what to send me to finish the selection pass.</p>
+  <p>Everything about Google's mechanics, specs, and policies is sourced and cited in <b>Section 10</b>. Facts about your business drawn from third-party directories are labelled where they conflict — those conflicts are themselves a finding.</p>
+</div>
+
+<!-- ================= TOC ================= -->
+<div class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#s1">What people see right now</a></li>
+    <li><a href="#s2">How Google's business data actually works</a></li>
+    <li><a href="#s3">Why your edits disappear</a></li>
+    <li><a href="#s4">The photo and video spec sheet</a></li>
+    <li><a href="#s5">The look: one visual system, three surfaces</a></li>
+    <li><a href="#s6">The shot list</a></li>
+    <li><a href="#s7">The copy deck — paste-ready</a></li>
+    <li><a href="#s8">Rollout, in order</a></li>
+    <li><a href="#s9">What I need from you</a></li>
+    <li><a href="#s10">Sources</a></li>
+  </ol>
+</div>
+
+<!-- ================= 01 ================= -->
+<section id="s1"><div class="card">
+  <span class="snum">Section 01</span>
+  <h2>What people see right now</h2>
+
+  <p>Two categories of problem: what the photos say, and what the data says. Both are visible from outside the account.</p>
+
+  <h3>From the in-car screenshot you sent</h3>
+
+  <div class="finding">
+    <div class="tag"><span class="chip fix">Fix now</span></div>
+    <div>
+      <div class="ttl">The lead photo is dated to 2020</div>
+      <p>The large image in the carousel is your entrance, and pinned in the right-hand window is a blue-and-white <b>COVID-19 information placard</b>. Beside it sits a floor standee advertising 3D design. Neither belongs in a 2026 first impression, and the COVID sign in particular timestamps the whole profile as abandoned.</p>
+      <span class="ev">Observed: primary carousel image, Tesla navigation destination card, "Hung Phat USA", 5.0 stars, "Closed until 11:00 am"</span>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip fix">Fix now</span></div>
+    <div>
+      <div class="ttl">The second image is the back of someone's head</div>
+      <p>The adjacent thumbnail is a crowd shot — an event, photographed from behind attendees, with a red backdrop and no product or store visible. That is a customer or event upload that Google has promoted into a primary slot because there is nothing better competing for it. You do not fix this by deleting it (you can't — see Section 02); you fix it by flooding the slot with better work.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip note">Design</span></div>
+    <div>
+      <div class="ttl">Your photos are being cropped to squares by surfaces you don't control</div>
+      <p>On that Tesla screen your images render as a wide tile and a near-square tile. Apple CarPlay, the Maps bottom sheet, and Search's mobile carousel all crop differently. Any photo whose subject lives near an edge, or whose meaning depends on fine detail, is destroyed at that size. This is a composition constraint, not a resolution one, and it drives every framing rule in Section 05.</p>
+    </div>
+  </div>
+
+  <h3>From the public record</h3>
+
+  <div class="finding">
+    <div class="tag"><span class="chip fix">Fix now</span></div>
+    <div>
+      <div class="ttl">Three different sets of opening hours are in circulation</div>
+      <p>Yelp publishes 11:00&nbsp;am–5:30&nbsp;pm, Monday through Sunday. Other directories carry 11:00&nbsp;am–6:00&nbsp;pm weekdays with 10:30&nbsp;am–6:00&nbsp;pm weekends. Your Google card says closed until 11:00&nbsp;am. At least two of these are wrong, and conflicting hours are one of the signals that makes Google distrust — and silently revert — your edits.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip fix">Fix now</span></div>
+    <div>
+      <div class="ttl">Three Instagram accounts carry the brand</div>
+      <p><span class="m">@hungphatusa</span>, <span class="m">@hungphatusa.us</span>, and <span class="m">@hungphatusa_highjewelry</span> are all live and all describe the same San Jose store. Two of them are in the low hundreds of followers. Google's profile allows <b>one</b> Instagram link per platform, so this has to be resolved before anything gets linked, and it is also why "consistent" is currently impossible — there is no single account to be consistent with.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip note">Decide</span></div>
+    <div>
+      <div class="ttl">Two phone numbers and three founding dates</div>
+      <p>Both <span class="m">408-299-0988</span> and <span class="m">888-999-1751</span> appear across directories. Separately, the web variously says "serving Santa Clara County since 1982," "flagship opened in San Jose in 2001," and "third-generation, with roots in Vietnam." All three can be true at once, but Google has exactly one <b>opening date</b> field and one <b>primary phone</b> field. Pick the canonical answer for each and use it everywhere, forever.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="tag"><span class="chip note">Technical</span></div>
+    <div>
+      <div class="ttl">Your website isn't confirming any of this back to Google</div>
+      <p>The site runs on Shopify, which does not emit <span class="m">LocalBusiness</span> structured data by default. That means the one source Google trusts most — your own domain — is currently silent on your address, hours, and phone. Fixing this is a single JSON-LD block, provided in Section 07.</p>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <div class="h">Why this is worth a real budget</div>
+    <p>Profiles with photos draw roughly <b>42% more direction requests</b> and <b>35% more website clicks</b> than profiles without. Businesses carrying 10+ photos see up to double the customer actions. Top-three local results average around <b>250 images</b>; positions four through ten average under 200. Photos are not decoration on a Maps listing — they are most of the listing.</p>
+  </div>
+</div></section>
+
+<!-- ================= 02 ================= -->
+<section id="s2"><div class="card">
+  <span class="snum">Section 02</span>
+  <h2>How Google's business data actually works</h2>
+
+  <p>Most of the frustration with Google Business Profile comes from people managing it with a mental model that stopped being true in 2024. Here is the current one.</p>
+
+  <h3>There is no dashboard anymore</h3>
+  <p>The standalone manager at <span class="m">business.google.com</span> was retired in late 2024. You now edit the profile <b>in place</b>: sign in to the owning Google account, search your own business name in Google Search or open it in Maps, and the owner controls appear directly on the listing — <b>Edit profile</b>, <b>Photos</b>, <b>Promote</b>, <b>Reviews</b>. If your team is still looking for a dashboard, that is why nothing has been updated.</p>
+
+  <h3>Three levels of access, and they are not equal</h3>
+  <div class="tscroll"><table>
+    <thead><tr><th>Role</th><th>Can do</th><th>Cannot do</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Primary owner</td><td>Everything: edit all fields, add and remove users, transfer ownership, delete the profile</td><td>—</td></tr>
+      <tr><td class="k">Owner</td><td>Edit all fields, add and remove managers</td><td>Remove the primary owner; delete the profile</td></tr>
+      <tr><td class="k">Manager</td><td>Edit most fields, post, upload photos, reply to reviews</td><td>Add or remove users; change ownership</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tnote">First task of this project, before anything else: confirm who holds <b>primary owner</b>. If it is a former employee, an agency you no longer use, or an email nobody can open, every other step here is blocked.</p>
+
+  <h3>You cannot delete customer photos</h3>
+  <p>You control only the photos uploaded from the business account. Customer uploads — including that crowd shot — can only be <b>reported</b>, and only on policy grounds: irrelevant to the business, copyrighted, offensive, spam, or misleading. Review takes roughly one to seven business days. Google will not remove a photo because you dislike it, and filing the same request repeatedly slows the queue rather than speeding it.</p>
+
+  <div class="callout ok">
+    <div class="h">The practical answer</div>
+    <p>Report what genuinely violates policy, then <b>outnumber</b> the rest. Google surfaces recent, high-quality, high-engagement imagery. A steady stream of good owner photos pushes weak customer uploads down the carousel far more reliably than removal requests do.</p>
+  </div>
+
+  <h3>Google picks the cover photo, not you</h3>
+  <p>You can nominate a cover and a logo, and Google treats both as strong hints — then its own algorithm decides what actually leads on any given surface and query. You improve your odds with an image that is high resolution, genuinely representative, uncluttered in the background, weighted toward the top half of the frame, and — critically — <b>original</b>. Google now runs duplicate and copyright checks against uploads, so an image already published elsewhere is a weaker candidate than a fresh file.</p>
+
+  <h3>The fields most businesses never fill</h3>
+  <ul class="tick">
+    <li><b>Services</b> — each one listed individually with its own short description. A store listed only as "Jewelry store" does not surface for <span class="m">ring resizing near me</span> or <span class="m">jewelry appraisal san jose</span>, which are far less competitive queries than "jewelry store."</li>
+    <li><b>Attributes</b> — the filter checkboxes: identifies as Asian-owned, by appointment, in-store shopping, wheelchair accessible, offers custom orders. These feed Maps' filtering UI.</li>
+    <li><b>Social links</b> — Google now supports Facebook, Instagram, LinkedIn, Pinterest, TikTok, X, and YouTube. One URL per platform, live within minutes to 72 hours.</li>
+    <li><b>Special hours</b> — holiday overrides. For this business <b>Tết</b> matters more than any federal holiday, and Google surfaces holiday hours prominently.</li>
+    <li><b>Products</b> — a native catalogue, or a Merchant Center feed for the full Shopify inventory.</li>
+  </ul>
+</div></section>
+
+<!-- ================= 03 ================= -->
+<section id="s3"><div class="card">
+  <span class="snum">Section 03</span>
+  <h2>Why your edits disappear</h2>
+
+  <p>This is the part that makes people give up, so it is worth understanding before you start typing.</p>
+
+  <p>Google does not treat your edit as truth. It treats it as <b>one claim among several</b> and reconciles it against your website, third-party directories, aggregator feeds, and public "suggest an edit" submissions from Maps users. When those disagree, the edit sits in review — usually minutes, occasionally up to thirty days — and may be quietly rejected or reverted.</p>
+
+  <div class="tscroll"><table>
+    <thead><tr><th>Symptom</th><th>Real cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">Edit stuck "pending"</td>
+        <td>Name, address, or category changes trigger a deeper review cycle than hours or description</td>
+        <td>Change one high-risk field at a time; leave a week between them</td>
+      </tr>
+      <tr>
+        <td class="k">Hours revert</td>
+        <td>Conflicting hours published on Yelp and other directories outweigh a single unsupported edit</td>
+        <td>Correct the directories <b>first</b>, then Google — Section 08, Phase 4</td>
+      </tr>
+      <tr>
+        <td class="k">Data reappears after deletion</td>
+        <td>A listing-management tool, an old agency account, or a POS/booking integration is still syncing stale records</td>
+        <td>Audit every connected service; disconnect the ones nobody owns</td>
+      </tr>
+      <tr>
+        <td class="k">Nothing saves at all</td>
+        <td>Profile is unverified or mid-verification (postcard, email, or video)</td>
+        <td>Complete verification before touching anything else</td>
+      </tr>
+      <tr>
+        <td class="k">Photos vanish after upload</td>
+        <td>Policy rejection — watermark, overlaid text, phone number, large logo, stock imagery, or a duplicate of an image found elsewhere</td>
+        <td>Re-export clean originals per Section 04</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout fix">
+    <div class="h">The rule that follows from all of this</div>
+    <p>Fix the sources, then the profile. Editing Google while Yelp, Apple Maps, Bing, Facebook, and your own website still publish the old address, hours, and phone is how a profile ends up reverting for months. The order in Section 08 is deliberate.</p>
+  </div>
+
+  <h3>A note on the suite number</h3>
+  <p>You are inside Grand Century Mall, and <span class="m">1111 Story Rd</span> is shared by dozens of businesses. Suite <span class="m">1063</span> is what distinguishes you — it is also the number visible on your own storefront in the current lead photo. Format it identically in every single place: Google, the website, Yelp, Apple Maps, Bing, invoices. Mall addresses are a common source of duplicate and merged listings, so while you are in there, search Maps for your own name and confirm there is exactly <b>one</b> Hung Phat USA listing. If a duplicate exists, report it for merge rather than editing it into agreement.</p>
+</div></section>
+
+<!-- ================= 04 ================= -->
+<section id="s4"><div class="card">
+  <span class="snum">Section 04</span>
+  <h2>The photo and video spec sheet</h2>
+
+  <p>Hand this table to whoever exports the files. Every number here is a Google requirement or recommendation, not a preference.</p>
+
+  <div class="tscroll"><table>
+    <thead><tr><th>Slot</th><th>Pixel target</th><th>Aspect</th><th>Format &amp; weight</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">Logo</td>
+        <td><span class="m">720 × 720</span></td>
+        <td><span class="m">1:1</span></td>
+        <td>JPG or PNG<br><span class="m">10 KB – 5 MB</span></td>
+        <td>Absolute minimum 250 × 250. Mark on a clean ground, generous margin — it renders as a small circle or square.</td>
+      </tr>
+      <tr>
+        <td class="k">Cover</td>
+        <td><span class="m">1920 × 1080</span><br>min <span class="m">1024 × 576</span></td>
+        <td><span class="m">16:9</span></td>
+        <td>JPG or PNG<br><span class="m">10 KB – 5 MB</span></td>
+        <td>Upload larger than the minimum for clarity. Also worth testing at <span class="m">1332 × 750</span>, which survives both landscape and square crops.</td>
+      </tr>
+      <tr>
+        <td class="k">General photos</td>
+        <td><span class="m">1600 × 1200</span> or larger<br>min <span class="m">250 × 250</span></td>
+        <td>4:3 or 3:2</td>
+        <td>JPG or PNG<br><span class="m">10 KB – 5 MB</span></td>
+        <td>Google's stated recommendation is 720 × 720 or better; go well past it. Deliver a square-safe centre.</td>
+      </tr>
+      <tr>
+        <td class="k">Post images</td>
+        <td><span class="m">1200 × 900</span></td>
+        <td><span class="m">4:3</span></td>
+        <td>JPG or PNG</td>
+        <td>Different aspect from the profile photos — do not reuse Instagram squares here without re-cropping.</td>
+      </tr>
+      <tr>
+        <td class="k">Video</td>
+        <td>720p or higher</td>
+        <td>16:9 or vertical</td>
+        <td>MP4<br><span class="m">≤ 30 s, ≤ 75 MB</span></td>
+        <td>Longer or heavier files get re-compressed and look worse. One 30-second walkthrough beats five clips.</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3>What gets an image rejected</h3>
+  <ul class="tick no">
+    <li><b>Overlaid text beyond roughly 10% of the frame.</b> Phone numbers and large logos are auto-rejected.</li>
+    <li><b>Watermarks</b>, especially another company's branding. A small, subtle corner mark sometimes survives, but it is a coin flip and not worth the risk on a hero image.</li>
+    <li><b>Stock photography.</b> Purchased or licensed stock is explicitly disallowed and may be removed.</li>
+    <li><b>Heavy filters or significant alteration.</b> Google's standard is that the image represents reality — in focus, well lit, not stylised into fiction.</li>
+    <li><b>Duplicates.</b> Google runs duplicate and copyright checks. An image already all over your Instagram is a weaker upload than a fresh export from the same shoot.</li>
+    <li><b>Promotional banners, borders, and collages.</b> These read as advertisements, not photographs.</li>
+  </ul>
+
+  <div class="callout fix">
+    <div class="h">This is the one that will bite you</div>
+    <p>Jewellery marketing assets are almost always built with a logo lockup, a price, or a promotional line baked in. Those are exactly the files that get rejected. <b>Google needs the un-branded originals</b> — the frame before the graphic designer touched it. Budget for pulling raw exports out of the archive, not repurposing finished ads.</p>
+  </div>
+
+  <h3>How many, and how often</h3>
+  <p>Google's own floor is three photos per category — three exterior, three interior, three team. That is a floor, not a target. Given that top-ranked local results carry hundreds of images, plan for an initial set of <b>25–35 strong files</b> and then a sustained drip. Recency is itself a signal, so <b>3–5 new photos per week</b> beats thirty uploaded in one afternoon and then silence for a year.</p>
+</div></section>
+
+<!-- ================= 05 ================= -->
+<section id="s5"><div class="card">
+  <span class="snum">Section 05</span>
+  <h2>The look: one visual system, three surfaces</h2>
+
+  <p>This is the consistency spec you asked for. It is written as rules rather than as a set of picked files, because I could not open your site or Instagram — but rules are what makes a set consistent anyway. Files chosen by taste drift; files chosen against a written spec do not.</p>
+
+  <h3>The material logic</h3>
+  <p>Your brand's distinguishing materials are <b>warm gold, jade, and lacquer red</b> — that is what the storefront arch already says, and it is what separates you from every chain jeweller shooting on black velvet. The photography should be built around making those three read true, and everything else in the spec follows from that.</p>
+
+  <div class="tscroll"><table>
+    <thead><tr><th>Variable</th><th>The rule</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">White balance</td>
+        <td>Lock to <span class="m">4800–5200 K</span> across the entire set. One value, every frame.</td>
+        <td>Your current entrance photo has warm gold signage fighting cold blue case lighting in the same frame. Mixed temperature is the single fastest way to make a set look unplanned.</td>
+      </tr>
+      <tr>
+        <td class="k">Key light</td>
+        <td>Soft front-left key, plus one hard specular kicker for stones.</td>
+        <td>Soft light renders gold and jade accurately; you need the hard source separately or diamonds go flat and grey.</td>
+      </tr>
+      <tr>
+        <td class="k">Grounds</td>
+        <td>Exactly two: a warm ivory sweep for product, and the real showroom for everything else.</td>
+        <td>Two grounds reads as a system. Five reads as a folder. Skip black velvet — it disappears in a small Maps tile and reads as generic.</td>
+      </tr>
+      <tr>
+        <td class="k">Framing</td>
+        <td>Shoot 4:3 or 3:2, compose so a centre-square crop still works. Subject in the middle third.</td>
+        <td>You do not control the crop on Tesla, CarPlay, or the Maps sheet.</td>
+      </tr>
+      <tr>
+        <td class="k">Weighting</td>
+        <td>On exterior and cover candidates, put the signal in the <b>top half</b> of the frame.</td>
+        <td>Google's cover selection favours it, and bottom-crop is the most common trim.</td>
+      </tr>
+      <tr>
+        <td class="k">Post-processing</td>
+        <td>Exposure, white balance, lens correction, light dust cleanup. Nothing else.</td>
+        <td>Filters and heavy retouching trip the "significant alteration" rule.</td>
+      </tr>
+      <tr>
+        <td class="k">Graphics</td>
+        <td>Zero. No logo, no text, no border, no price.</td>
+        <td>Rejection risk, and it makes a photo read as an ad.</td>
+      </tr>
+      <tr>
+        <td class="k">People</td>
+        <td>Staff yes, with a signed release. Customers only with written permission.</td>
+        <td>Team photos are one of Google's three recommended categories, and they convert.</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3>The selection rubric — run this on your existing library</h3>
+  <p>You said you have a lot of good images. Most of them are probably good for Instagram and wrong for Google, which rewards a different thing entirely. Score each candidate; anything below 5 does not go on Google.</p>
+  <ul class="tick">
+    <li><b>+1</b> — It survives a centre-square crop with the subject intact.</li>
+    <li><b>+1</b> — It is a genuine, un-retouched-looking photograph of <em>this</em> store, these people, or these pieces.</li>
+    <li><b>+1</b> — No text, logo, watermark, border, or price anywhere in the frame.</li>
+    <li><b>+1</b> — White balance sits in the locked range and gold reads gold, not orange or green.</li>
+    <li><b>+1</b> — Long edge is at least 1600 px, file is between 10 KB and 5 MB.</li>
+    <li><b>+1</b> — It shows something a customer needs to know: where the door is, what the room feels like, who will serve them, what the work looks like.</li>
+    <li><b>−2</b> — It is already published on Instagram or the website as the identical file. Re-export a different frame from the same shoot instead.</li>
+    <li><b>−3</b> — Anything dated: COVID signage, expired promotions, retired displays, old fit-out.</li>
+  </ul>
+
+  <h3>How the three surfaces stay consistent</h3>
+  <p>Consistency here does not mean posting the same file everywhere — Google actively penalises that. It means one look, three edits of it.</p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Surface</th><th>Gets</th><th>Job</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Google Business Profile</td><td>Un-branded originals. Wide and 4:3 crops. Room, door, bench, team, then product.</td><td>Answer "is this place real, open, and worth the drive?"</td></tr>
+      <tr><td class="k">hungphatusa.com</td><td>A <b>Visit</b> or <b>Our Showroom</b> page carrying the same shoot, same look, plus the JSON-LD block from Section 07.</td><td>Confirm the Google data from your own domain, and give the shoot a permanent home.</td></tr>
+      <tr><td class="k">Instagram (one account)</td><td>Square and vertical crops of the same shoot, pinned to the grid and saved as a <b>Showroom</b> highlight.</td><td>Depth and personality — and the link target from Google's social field.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tnote">Same shoot, same light, three crops. Someone who sees the Maps carousel and then taps through to Instagram should recognise the room instantly. That recognition is the entire point of "consistent."</p>
+</div></section>
+
+<!-- ================= 06 ================= -->
+<section id="s6"><div class="card">
+  <span class="snum">Section 06</span>
+  <h2>The shot list</h2>
+
+  <p>Numbered as a shooting order, not a ranking — it runs outside-in, which is also how a customer arrives. A competent photographer covers all of it in half a day. The red-numbered frames are the ones that replace something currently broken.</p>
+
+  <div class="shot prio">
+    <div class="n">01</div>
+    <div>
+      <div class="t">Storefront, straight on</div>
+      <p class="d">The gold arch and the <b>HUNG PHÁT</b> sign, square to the lens, suite number 1063 legible. Mall lighting, no people crossing frame.</p>
+      <p class="why">This is the cover candidate. It is also the single image that tells a driver they have arrived.</p>
+    </div>
+  </div>
+  <div class="shot prio">
+    <div class="n">02</div>
+    <div>
+      <div class="t">Storefront, three-quarter</div>
+      <p class="d">From the mall walkway at an angle, showing the entry in the context of the neighbouring units.</p>
+      <p class="why">Wayfinding. A straight-on shot tells you what it looks like; the angle tells you how to find it.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">03</div>
+    <div>
+      <div class="t">Storefront, lit</div>
+      <p class="d">Late in the day with the sign and cases glowing, ambient mall light dropped.</p>
+      <p class="why">Google recommends exteriors at different times of day, and this is the frame that reads as luxury.</p>
+    </div>
+  </div>
+  <div class="shot prio">
+    <div class="n">04</div>
+    <div>
+      <div class="t">The threshold</div>
+      <p class="d">Standing at the doorway looking in. <b>Before shooting: remove the COVID-19 placard and the floor standee.</b> Clean glass, plants dressed, nothing taped anywhere.</p>
+      <p class="why">This directly replaces the image currently leading your profile.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">05</div>
+    <div>
+      <div class="t">Main floor, wide</div>
+      <p class="d">The room as a room — cases lit and even, floor clear, no staff or customers.</p>
+      <p class="why">Scale and ambience. One of Google's three required interiors.</p>
+    </div>
+  </div>
+  <div class="shot prio">
+    <div class="n">06</div>
+    <div>
+      <div class="t">The new showroom</div>
+      <p class="d">Wide, then one detail frame of the material finish — stone, wood, metal, whatever the fit-out is built from.</p>
+      <p class="why">You built it; nothing on Google currently knows it exists.</p>
+    </div>
+  </div>
+  <div class="shot prio">
+    <div class="n">07</div>
+    <div>
+      <div class="t">The bar — hero</div>
+      <p class="d">Full view, dressed and lit, glassware placed, seating angled toward camera.</p>
+      <p class="why">This is your genuine differentiator. No other jeweller in that mall has a bar, and it is the image most likely to make someone screenshot the listing and send it to their partner.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">08</div>
+    <div>
+      <div class="t">The bar — detail</div>
+      <p class="d">Tight on the counter surface, a poured glass, the seat backs. Shallow depth.</p>
+      <p class="why">Texture frames carry the sense of quality that a wide shot flattens.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">09</div>
+    <div>
+      <div class="t">The design station</div>
+      <p class="d">The consultation desk with a 3D render live on screen, ring wax and loose stones on the mat.</p>
+      <p class="why">Your $20 unlimited 3D design offer is a real hook, and this is what proves it happens here.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">10</div>
+    <div>
+      <div class="t">The bench</div>
+      <p class="d">Hands working — loupe, torch, polishing wheel. Face optional, craft mandatory.</p>
+      <p class="why">"Designed and crafted in house" is a claim until there is a photograph of the bench.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">11</div>
+    <div>
+      <div class="t">Team, group</div>
+      <p class="d">Everyone, in the showroom, in whatever they actually wear to work. Not a studio backdrop.</p>
+      <p class="why">One of Google's three recommended categories, and a family business should look like one.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">12</div>
+    <div>
+      <div class="t">Team, at work with a client</div>
+      <p class="d">A jeweller across the counter mid-consultation. <b>Written release required.</b></p>
+      <p class="why">Shows the service, not just the staff.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">13</div>
+    <div>
+      <div class="t">Engagement ring, hero</div>
+      <p class="d">On an ivory sweep or on the hand, hard kicker for the stone, warm fill.</p>
+      <p class="why">Your highest-intent category. One immaculate frame, not twelve near-identical ones.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">14</div>
+    <div>
+      <div class="t">Jade</div>
+      <p class="d">A jade piece shot to render the stone's actual depth and translucency — backlight it.</p>
+      <p class="why">Culturally specific, commercially distinctive, and it is what a customer searching for a Vietnamese jeweller is hoping to see.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">15</div>
+    <div>
+      <div class="t">High jewellery set</div>
+      <p class="d">One statement piece or a matched suite, shot on the same ivory ground for continuity with 13 and 14.</p>
+      <p class="why">Sets the ceiling. Tells people the top of your range exists.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">16</div>
+    <div>
+      <div class="t">Walk-in video, 30 seconds</div>
+      <p class="d">Single continuous move: mall walkway → through the door → past the cases → the bar → the design desk. Stabilised, no music needed, no titles. MP4, under 75 MB.</p>
+      <p class="why">Answers "what is it like inside" better than fifteen stills, and almost no competitor has one.</p>
+    </div>
+  </div>
+  <div class="shot">
+    <div class="n">17</div>
+    <div>
+      <div class="t">360° panorama set</div>
+      <p class="d">Entry, main floor, showroom, bar. Either a Google Street View trusted photographer or a competent 360 rig.</p>
+      <p class="why">Optional and the most expensive item here — but a virtual tour is a strong differentiator on a mall listing where every neighbour has flat photos. Treat it as phase two.</p>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <div class="h">Before the photographer arrives</div>
+    <p>Strip every piece of dated signage from the shooting area — the COVID placard first. Clean the glass, including the inside of the cases. Turn off or replace any case lighting that is a different colour temperature from the rest of the room. Dress the bar as though a client is about to sit down. The set dressing costs an hour and determines about half the final quality.</p>
+  </div>
+</div></section>
+
+<!-- ================= 07 ================= -->
+<section id="s7"><div class="card">
+  <span class="snum">Section 07</span>
+  <h2>The copy deck — paste-ready</h2>
+
+  <p>Everything below is written to Google's limits and can go into the fields today, independent of the photo shoot. Confirm the factual choices marked in brackets before pasting.</p>
+
+  <h3>Business name</h3>
+  <p>Exactly <b>Hung Phat USA</b>. Nothing appended — no "Fine Jewelry," no "San Jose," no "Custom Engagement Rings." Keyword-stuffing the name field is one of the few things that will get a profile suspended rather than merely rejected, and it is not worth the ranking it does not actually buy.</p>
+
+  <h3>Categories</h3>
+  <p>Primary category carries the most ranking weight of any single field on the profile. Secondary categories are nearly free and open up much less competitive queries — set them all, but only the ones that are genuinely true.</p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Slot</th><th>Category</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Primary</td><td><b>Jewelry store</b></td><td>Highest-volume intent, and the category the profile should be judged on</td></tr>
+      <tr><td class="k">Secondary</td><td>Jewelry designer</td><td>Captures custom-design intent, far less competitive</td></tr>
+      <tr><td class="k">Secondary</td><td>Diamond dealer</td><td>You carry GIA-certified loose stones</td></tr>
+      <tr><td class="k">Secondary</td><td>Goldsmith</td><td>In-house bench work</td></tr>
+      <tr><td class="k">Secondary</td><td>Jewelry repair service</td><td>"Ring resizing near me" is high-intent and thinly contested</td></tr>
+      <tr><td class="k">Secondary</td><td>Jewelry appraiser</td><td>Only if you formally appraise — verify before adding</td></tr>
+      <tr><td class="k">Secondary</td><td>Watch store</td><td>Only if watches are a real, stocked category</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Description</h3>
+  <p>The field allows 750 characters, but Google truncates the visible portion at roughly 250. The draft below is 487 characters and is built so the cut falls exactly at a sentence end — the reader sees a complete thought either way.</p>
+  <div class="copyblk">
+    <div class="bar"><span class="lb"><b>Description</b> · 487 / 750 characters</span><button class="copybtn" data-copy="desc">Copy</button></div>
+    <pre id="desc">Hung Phat USA is a third-generation family jeweler in San Jose's Grand Century Mall, crafting fine jewelry in house since 2001. We specialize in custom engagement rings: natural and lab-grown diamonds, GIA-certified stones, 3D design before you buy.</pre>
+    <span class="fold">↑ 249 characters — everything above this line is what most people see</span>
+    <pre> Our showroom carries high jewelry, jade, gold, and luxury watches, and our bench handles sizing, restoration, appraisal, and repair on site. Every piece starts as a sketch and finishes under our own polish. Vietnamese and English spoken.</pre>
+  </div>
+  <p class="tnote">Replace <b>2001</b> with whichever founding date you make canonical. No URLs, no phone numbers, no HTML — all three are rejected in this field.</p>
+
+  <h3>Services</h3>
+  <p>Add each as a separate service with its own one-line description. This is the highest-return unglamorous task on the list.</p>
+  <div class="copyblk">
+    <div class="bar"><span class="lb"><b>Services</b> · one per line</span><button class="copybtn" data-copy="svc">Copy</button></div>
+    <pre id="svc">Custom engagement ring design
+3D CAD jewelry design
+Loose diamond consultation (GIA-certified)
+Lab-grown diamond selection
+Wedding band fitting
+Jade jewelry
+High jewelry and one-of-a-kind pieces
+Ring resizing
+Jewelry repair and restoration
+Stone setting and replacement
+Jewelry appraisal
+Watch repair and battery replacement
+Gold buying and trade-in
+Jewelry cleaning and inspection</pre>
+  </div>
+  <p class="tnote">Delete any line you do not actually offer. A service listed and not delivered generates one-star reviews faster than it generates traffic.</p>
+
+  <h3>Attributes</h3>
+  <ul class="tick yes">
+    <li><b>Identifies as Asian-owned</b> / <b>Identifies as Vietnamese-owned</b> — if you choose to publish it. Google surfaces this as a filter, and in this market it is an asset.</li>
+    <li><b>In-store shopping</b>, <b>In-store pickup</b>, <b>Delivery</b> — match to what the Shopify store actually supports</li>
+    <li><b>Accepts appointments</b> / <b>Appointment required for consultation</b></li>
+    <li><b>Wheelchair-accessible entrance</b> and <b>restroom</b> — mall-level, verify</li>
+    <li><b>Offers custom orders</b> — core to the business</li>
+    <li><b>Credit cards</b>, <b>debit cards</b>, <b>mobile payments</b>, <b>financing</b> if offered</li>
+    <li><b>Languages spoken: Vietnamese, English</b></li>
+  </ul>
+
+  <h3>Hours</h3>
+  <p>Pick one true set and publish it identically to Google, the website, Yelp, Apple Maps, Bing, and Facebook on the same day. Then add <b>special hours</b> for: Tết (Lunar New Year — including any multi-day closure), Thanksgiving, Christmas Eve and Day, New Year's Day, and July 4th. Holiday hours are one of the few profile elements Google displays with a coloured warning, which means it is also one of the few that generates a bad first impression when wrong.</p>
+
+  <h3>Social links</h3>
+  <p>Resolve the three-account problem first. Choose the account you will actually run, redirect the audience of the other two into it via bio links and a pinned post, and then leave them dormant rather than deleting them — a deleted handle can be claimed by anyone.</p>
+  <div class="copyblk">
+    <div class="bar"><span class="lb"><b>Social fields</b> · one URL per platform</span><button class="copybtn" data-copy="soc">Copy</button></div>
+    <pre id="soc">Instagram   https://www.instagram.com/hungphatusa/        [confirm this is the canonical account]
+Facebook    https://www.facebook.com/HungPhatUSA/
+TikTok      [add if active]
+YouTube     [add if active]</pre>
+  </div>
+
+  <h3>Website link, with tracking</h3>
+  <p>Tag the website field so the Google traffic is separable in analytics. Without this you cannot prove any of this work paid off.</p>
+  <div class="copyblk">
+    <div class="bar"><span class="lb"><b>Website field</b> · UTM-tagged</span><button class="copybtn" data-copy="utm">Copy</button></div>
+    <pre id="utm">https://www.hungphatusa.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp_profile</pre>
+  </div>
+
+  <h3>The structured data your site is missing</h3>
+  <p>Paste this into the Shopify theme's <span class="m">theme.liquid</span>, immediately before the closing <span class="m">&lt;/head&gt;</span> tag, so it appears on every page. Fill the bracketed values before publishing, and validate with Google's Rich Results Test afterward. Every value must match the Google profile character for character.</p>
+  <div class="copyblk">
+    <div class="bar"><span class="lb"><b>JSON-LD</b> · JewelryStore schema</span><button class="copybtn" data-copy="jsonld">Copy</button></div>
+    <pre id="jsonld">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "JewelryStore",
+  "name": "Hung Phat USA",
+  "url": "https://www.hungphatusa.com/",
+  "logo": "https://www.hungphatusa.com/[path-to-logo.png]",
+  "image": "https://www.hungphatusa.com/[path-to-storefront.jpg]",
+  "telephone": "+1-408-299-0988",
+  "email": "sales@hungphatusa.com",
+  "priceRange": "$$$",
+  "currenciesAccepted": "USD",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1111 Story Rd, Ste 1063",
+    "addressLocality": "San Jose",
+    "addressRegion": "CA",
+    "postalCode": "95122",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "[from Google Maps — right-click your pin, copy coordinates]",
+    "longitude": "[from Google Maps — right-click your pin, copy coordinates]"
+  },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "11:00",
+    "closes": "[confirm — 17:30 or 18:00]"
+  }],
+  "sameAs": [
+    "https://www.instagram.com/hungphatusa/",
+    "https://www.facebook.com/HungPhatUSA/"
+  ],
+  "hasMap": "[paste your Google Maps place URL]"
+}
+&lt;/script&gt;</pre>
+  </div>
+  <p class="tnote">Structured data does not put you on Maps — only a verified profile does that. What it does is stop your own domain from being silent, which is what currently lets stale third-party data win the reconciliation described in Section 03.</p>
+</div></section>
+
+<!-- ================= 08 ================= -->
+<section id="s8"><div class="card">
+  <span class="snum">Section 08</span>
+  <h2>Rollout, in order</h2>
+
+  <p>The sequence matters more than the speed. Doing phase 4 before phase 2 is how edits revert.</p>
+
+  <div class="phase">
+    <div class="when">Phase 0<span>Half a day</span></div>
+    <div>
+      <div class="t">Access and ownership</div>
+      <p>Establish who holds primary owner on the Google profile. Add two current staff as owners so the business is never locked out again. Remove former employees and dormant agency accounts. Confirm the profile is fully verified — if it is mid-verification, finish that before anything else. Search Maps for duplicate listings and report any for merge.</p>
+      <p><b>Blocker check:</b> everything downstream depends on this. If the primary owner is unreachable, the reclaim process runs on Google's timeline, not yours — start it today.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 1<span>Week 1</span></div>
+    <div>
+      <div class="t">Decide the canonical facts</div>
+      <p>One founding date. One primary phone. One set of hours. One Instagram account. One address format including the suite. Write them down in a single document that every staff member and vendor works from — this is the reference every later phase copies from.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 2<span>Week 1</span></div>
+    <div>
+      <div class="t">Text fields on Google</div>
+      <p>Categories, description, services, attributes, hours, special hours, social links, UTM-tagged website. Change high-risk fields — name, address, primary category — one at a time with days between them. In the same session, report the genuinely policy-violating customer photos.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 3<span>Week 2</span></div>
+    <div>
+      <div class="t">The shoot</div>
+      <p>Half a day, Section 06 shot list, Section 05 look spec. Set-dress first. Deliver un-branded originals at the sizes in Section 04, plus square and vertical crops for Instagram from the same frames.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 4<span>Week 2–3</span></div>
+    <div>
+      <div class="t">Directories, then the drip</div>
+      <p>Publish the canonical facts to Yelp, Apple Maps, Bing Places, Facebook, the BBB, and the chamber listing — identical strings everywhere. Then begin uploading photos to Google at 3–5 per week rather than all at once. Set the cover and logo early in the sequence so Google has time to consider them.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 5<span>Week 3–4</span></div>
+    <div>
+      <div class="t">The website side</div>
+      <p>Add the JSON-LD block. Build or refresh a <b>Visit</b> page carrying the same shoot, the same hours, an embedded map, and the suite number. Validate with the Rich Results Test.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="when">Phase 6<span>Ongoing</span></div>
+    <div>
+      <div class="t">Keep it alive</div>
+      <p>One Google post per week — new arrivals, Tết pieces, the 3D design offer. Three to five new photos per week. Reply to every review inside 48 hours. Re-check hours before every holiday. Review the profile's performance metrics monthly against the baseline you took before Phase 3.</p>
+    </div>
+  </div>
+
+  <h3>What to measure</h3>
+  <p>Screenshot the profile's performance panel <b>before</b> the shoot so there is a baseline. The numbers that matter: searches that surfaced you (direct vs. discovery), profile views, direction requests, calls, and website clicks. Direction requests are the closest proxy for foot traffic, and photo work moves them faster than anything else on this list.</p>
+</div></section>
+
+<!-- ================= 09 ================= -->
+<section id="s9"><div class="ask">
+  <div class="eyebrow">Section 09</div>
+  <h2>What I need from you</h2>
+  <p>Two of these unblock work I could not do in this pass. The rest are decisions only you can make.</p>
+
+  <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">To finish the image selection</h4>
+  <ul class="tick">
+    <li><b>The photo library itself</b> — a Drive folder, a Dropbox link, or the files dropped into this repo. With the actual images I can score them against the Section 05 rubric, pick the 25–35 that go on Google, flag what needs re-export, and tell you exactly which of the 17 shots you already have covered.</li>
+    <li><b>Which Instagram account is canonical</b> — and screenshots of the grid if the account is private or otherwise unreachable from here.</li>
+  </ul>
+
+  <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">Decisions</h4>
+  <ul class="tick">
+    <li><b>Founding year</b> — 1982, 2001, or a phrasing that honours both ("serving Santa Clara County since 1982, in Grand Century Mall since 2001")</li>
+    <li><b>Primary phone</b> — the local 408 number or the toll-free 888</li>
+    <li><b>True opening hours</b>, including whether weekends differ</li>
+    <li><b>Whether to publish the Asian-owned / Vietnamese-owned attribute</b></li>
+    <li><b>Whether the 360° virtual tour is in scope</b> — it is the one item with a meaningful outside cost</li>
+  </ul>
+
+  <h4 style="color:#FBF7EE; font-size:15px; margin:20px 0 6px">Access</h4>
+  <ul class="tick">
+    <li>Confirmation of who currently holds <b>primary owner</b> on the Google profile</li>
+    <li>Whether any listing-management service or agency still has a connection pushing data</li>
+  </ul>
+
+  <p style="margin-top:22px"><b>The one thing to do before anything else:</b> take the COVID-19 sign out of the window. It is in the photograph a customer sees from a car forty-six minutes away, and it will still be in that photograph until a better one replaces it.</p>
+</div></section>
+
+<!-- ================= 10 ================= -->
+<section id="s10"><div class="card">
+  <span class="snum">Section 10</span>
+  <h2>Sources</h2>
+  <p>All read 17 August 2026 via domain-scoped search. Google's own help pages are cited where they are the authority, though the network policy prevented loading them directly.</p>
+
+  <div class="srcgrp">
+    <h4>Google — official documentation</h4>
+    <ol class="src">
+      <li>Manage your Business Profile photos and videos — Google Business Profile Help <span class="u">support.google.com/business/answer/6103862</span></li>
+      <li>Edit your Business Profile — Google Business Profile Help <span class="u">support.google.com/business/answer/3039617</span></li>
+      <li>Understand what happens to your Business Profile edits <span class="u">support.google.com/business/answer/3038311</span></li>
+      <li>Report inappropriate photos or videos on your Business Profile <span class="u">support.google.com/business/answer/6130451</span></li>
+      <li>Manage your social media links <span class="u">support.google.com/business/answer/13580646</span></li>
+      <li>Manage products in Merchant Center <span class="u">support.google.com/business/answer/13161234</span></li>
+    </ol>
+  </div>
+
+  <div class="srcgrp">
+    <h4>Specs, policy, and mechanics</h4>
+    <ol class="src">
+      <li>Google Business Profile Image Sizes: 2026 Cheat Sheet — Humble Help Studio <span class="u">humblehelp.studio/blog/google-business-profile-image-size-guide</span></li>
+      <li>Google Business Profile Image &amp; Video Sizes Guide (2026) — PostFast <span class="u">postfa.st/sizes/google-business-profile</span></li>
+      <li>Google Business Profile Photo Size: Complete 2026 Guide — GMB Briefcase <span class="u">gmbbriefcase.com/blog/photo-size-for-google-my-business/</span></li>
+      <li>Google Business Profile Editor: 2026 Complete Walkthrough — Gatilab <span class="u">gatilab.com/gbp-editor/</span></li>
+      <li>How to Change a Cover Photo on Google Business Profile — Sterling Sky <span class="u">sterlingsky.ca/cover-photos-google-business-profile/</span></li>
+      <li>Why is Google Rejecting My Google Business Profile Photos? — Whitespark <span class="u">whitespark.ca/blog/why-is-google-rejecting-my-google-business-profile-photos/</span></li>
+      <li>Common Reasons Google Rejects Photos on a Business Profile — BizIQ <span class="u">biziq.com/blog/common-reasons-google-rejects-photos-on-a-business-profile/</span></li>
+      <li>Google Business Profile Edits Stuck Pending? Fixes (2026) — PiggyBank SEO <span class="u">piggybankseo.com/google-business-profile-edits-pending/</span></li>
+      <li>Remove Photos From Google Business Profile (2026 Guide) — Reputation Rhino <span class="u">reputationrhino.com/remove-google-business-photos/</span></li>
+      <li>Google Business Profile Character Limits: Complete Guide for 2026 — Letter Counter <span class="u">lettercounter.org/blog/google-business-profile-character-limit/</span></li>
+      <li>Google Business Profile Video Requirements — GeoVideo <span class="u">getgeovideo.com/blog/google-business-profile-video-best-practices-2026</span></li>
+    </ol>
+  </div>
+
+  <div class="srcgrp">
+    <h4>Local SEO for jewellers, and impact data</h4>
+    <ol class="src">
+      <li>How to Draw More Customers With Your Jewelry Store Google Business Profile — GMB Everywhere <span class="u">gmbeverywhere.com/categories/jewelry-store-google-business-profile</span></li>
+      <li>Local SEO for Jewelry Stores: The Complete Guide for Shopify and WooCommerce Owners — CG Colors <span class="u">cgcolors.com/blog/local-seo-for-jewelry-stores-the-complete-guide-for-shopify-and-woocommerce-owners/</span></li>
+      <li>Local SEO for Shopify Stores With Physical Locations — 1Digital Agency <span class="u">1digitalagency.com/blog/local-seo-for-shopify-stores-with-physical-locations-complete-setup-guide-70339/</span></li>
+      <li>How Photos on Your Google Business Profile Affect Where You Rank — Omnyra <span class="u">omnyra.ai/blog/google-maps-photos-guide</span></li>
+      <li>Google Business Profile Statistics 2026 — Searchlab <span class="u">searchlab.nl/en/statistics/google-business-profile-statistics-2026</span></li>
+      <li>27 Google Business Profile Statistics You Need to Know in 2026 — WiserNotify <span class="u">wisernotify.com/blog/google-business-profile-statistics/</span></li>
+    </ol>
+  </div>
+
+  <div class="srcgrp">
+    <h4>Hung Phat USA — public record (used to identify conflicts)</h4>
+    <ol class="src">
+      <li>Hung Phat — Your jeweler for life (official site) <span class="u">hungphatusa.com</span></li>
+      <li>Hung Phat USA — Yelp, San Jose <span class="u">yelp.com/biz/hung-phat-usa-san-jose</span></li>
+      <li>Hung Phat USA | Custom Engagement Rings — Instagram <span class="u">instagram.com/hungphatusa/</span></li>
+      <li>Hung Phat USA — Instagram <span class="u">instagram.com/hungphatusa.us/</span></li>
+      <li>Hung Phat USA — Instagram <span class="u">instagram.com/hungphatusa_highjewelry/</span></li>
+      <li>Hung Phat USA — Your Diamond World — Facebook <span class="u">facebook.com/HungPhatUSA/</span></li>
+      <li>Hung Phat USA — Apple Maps <span class="u">maps.apple.com/place?place-id=IAD777F428CF90E01</span></li>
+      <li>Grand Century Mall — Visit San Jose <span class="u">sanjose.org/listings/grand-century-mall</span></li>
+    </ol>
+  </div>
+</div></section>
+
+<p class="foot">
+  Prepared 17 August 2026 · Google's specs, limits, and policies change without notice — re-confirm any number before a large shoot.<br>
+  Image selection pass pending asset handoff (Section 09).
+</p>
+
+</div>
+
+<script>
+document.querySelectorAll('.copybtn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.dataset.copy);
+    if(!el) return;
+    var text = el.innerText;
+    // the description block is split across two <pre> elements by the fold marker
+    if(btn.dataset.copy === 'desc'){
+      var pres = el.parentElement.querySelectorAll('pre');
+      text = Array.prototype.map.call(pres, function(p){ return p.innerText; }).join('');
+    }
+    navigator.clipboard.writeText(text).then(function(){
+      var old = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+    });
+  });
+});
+</script>
