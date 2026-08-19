@@ -1,0 +1,1211 @@
+<title>Business Checkbook RAC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#eef1f6;            /* light grey, slight blue bias */
+    --bg2:#e6eaf1;
+    --card:#ffffff;
+    --card2:#f7f9fc;
+    --ink:#18202f;          /* near-black slate */
+    --ink2:#3d4759;
+    --muted:#68728a;
+    --faint:#8a93a6;
+    --line:#e3e8f0;
+    --line2:#eef2f8;
+    --accent:#2159d6;       /* blue */
+    --accent-ink:#1642a8;
+    --accent-soft:#e7eefc;
+    --good:#137a3b;  --good-bg:#e3f5ea;  --good-line:#bfe6cd;
+    --warn:#9a5b06;  --warn-bg:#fdf1d8;  --warn-line:#f4dca6;
+    --bad:#b3251f;   --bad-bg:#fce7e5;   --bad-line:#f4c6c2;
+    --ask:#4a5570;   --ask-bg:#eceff5;   --ask-line:#d6dcea;
+    --shadow:0 1px 2px rgba(24,32,47,.04), 0 6px 20px rgba(24,32,47,.06);
+    --shadow-lg:0 2px 4px rgba(24,32,47,.05), 0 16px 44px rgba(24,32,47,.10);
+    --radius:14px;
+    --radius-sm:9px;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+      --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+      --line:#2a3444; --line2:#232c3a;
+      --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+      --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+      --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+      --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+      --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f141d; --bg2:#141b26; --card:#1a2230; --card2:#151c28;
+    --ink:#eef2f8; --ink2:#c3ccdb; --muted:#96a0b4; --faint:#727d92;
+    --line:#2a3444; --line2:#232c3a;
+    --accent:#6f9bff; --accent-ink:#a9c4ff; --accent-soft:#1e2a44;
+    --good:#5fd08a; --good-bg:#12291c; --good-line:#1f5236;
+    --warn:#efb45a; --warn-bg:#2c2210; --warn-line:#5a4415;
+    --bad:#f38178; --bad-bg:#2d1513; --bad-line:#5c2723;
+    --ask:#aab4c8; --ask-bg:#20293a; --ask-line:#313c50;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.35);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.35), 0 16px 44px rgba(0,0,0,.5);
+  }
+
+  /* ============ BASE ============ */
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-size:16.5px; line-height:1.62;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:0 20px 90px}
+  h1,h2,h3,h4{line-height:1.2; text-wrap:balance; margin:0}
+  p{margin:0 0 14px}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  strong{font-weight:650}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* section rhythm */
+  section{margin-top:30px}
+  .card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:26px 28px;
+  }
+  .card + .card{margin-top:18px}
+  .sec-eyebrow{
+    font-size:12px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--accent-ink); font-weight:700; margin-bottom:8px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .sec-eyebrow .n{
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+    border:1px solid var(--line); border-radius:5px; padding:1px 6px;
+    background:var(--card2);
+  }
+  h2.sec-title{font-size:26px; letter-spacing:-.02em; margin-bottom:6px}
+  .sec-sub{color:var(--muted); font-size:15px; margin-bottom:18px}
+  h3.blk{font-size:18.5px; letter-spacing:-.01em; margin:22px 0 10px}
+  h4.mini{font-size:14px; letter-spacing:.02em; margin:16px 0 8px; color:var(--ink2)}
+
+  /* ============ CHIPS ============ */
+  .chip{
+    display:inline-flex; align-items:center; gap:5px; font-size:11.5px;
+    font-weight:650; letter-spacing:.02em; padding:2px 9px; border-radius:100px;
+    border:1px solid var(--line); white-space:nowrap; vertical-align:middle;
+    font-family:var(--sans);
+  }
+  .chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.8}
+  .chip.good{color:var(--good); background:var(--good-bg); border-color:var(--good-line)}
+  .chip.warn{color:var(--warn); background:var(--warn-bg); border-color:var(--warn-line)}
+  .chip.bad{color:var(--bad); background:var(--bad-bg); border-color:var(--bad-line)}
+  .chip.ask{color:var(--ask); background:var(--ask-bg); border-color:var(--ask-line)}
+  .chip.plain{color:var(--ink2); background:var(--card2)}
+  .chip.plain::before{display:none}
+
+  /* ============ CITATIONS ============ */
+  .cite{
+    font-size:12.5px; color:var(--muted); border-left:3px solid var(--line);
+    background:var(--card2); padding:8px 12px; border-radius:0 8px 8px 0;
+    margin:10px 0 16px;
+  }
+  .cite .src{color:var(--ink2); font-weight:600}
+  .cite .why{display:block; font-style:italic; color:var(--muted); margin-top:2px; font-size:12px}
+  .cite .date{color:var(--faint); font-variant-numeric:tabular-nums}
+
+  /* ============ BANNER ============ */
+  .banner{
+    background:linear-gradient(180deg,var(--warn-bg),var(--card));
+    border:1px solid var(--warn-line); border-radius:var(--radius);
+    padding:16px 20px; margin-top:20px; box-shadow:var(--shadow);
+    font-size:13.5px; color:var(--ink2);
+  }
+  .banner b{color:var(--warn)}
+  .banner .row1{display:flex; align-items:center; gap:10px; font-weight:700; color:var(--warn); font-size:13px; letter-spacing:.03em; text-transform:uppercase; margin-bottom:7px}
+
+  /* ============ HERO ============ */
+  .hero{
+    margin-top:22px; background:
+      radial-gradient(120% 140% at 88% -10%, var(--accent-soft), transparent 55%),
+      var(--card);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-lg);
+    overflow:hidden; position:relative;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:0}
+  .hero-l{padding:36px 34px 32px}
+  .hero-r{position:relative; min-height:300px; border-left:1px solid var(--line2); background:var(--card2)}
+  .hero .kicker{font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-ink); font-weight:700}
+  .hero h1{font-size:44px; letter-spacing:-.03em; margin:12px 0 8px; line-height:1.03}
+  .hero h1 .rac{color:var(--accent)}
+  .hero .lede{font-size:16px; color:var(--ink2); max-width:46ch}
+  .hero .expand{font-size:13px; color:var(--muted); margin-top:14px; display:flex; flex-wrap:wrap; gap:6px 16px}
+  .hero .expand b{color:var(--ink); font-weight:700}
+  .hero svg{display:block; width:100%; height:100%; position:absolute; inset:0}
+
+  /* ============ TOC ============ */
+  .toc{margin-top:18px}
+  .toc ol{list-style:none; margin:0; padding:0; columns:2; column-gap:26px}
+  .toc li{break-inside:avoid; margin-bottom:2px}
+  .toc a{display:flex; gap:10px; padding:7px 10px; border-radius:8px; color:var(--ink2); font-size:14px; align-items:baseline}
+  .toc a:hover{background:var(--card2); text-decoration:none; color:var(--ink)}
+  .toc .tn{font-family:var(--mono); font-size:12px; color:var(--accent); min-width:20px}
+
+  /* ============ VERDICT BOX ============ */
+  .verdict{
+    background:linear-gradient(155deg,var(--good-bg),var(--card) 70%);
+    border:1.5px solid var(--good-line); border-radius:var(--radius);
+    padding:24px 26px; box-shadow:var(--shadow);
+  }
+  .verdict .vtag{display:inline-flex; gap:7px; align-items:center; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--good)}
+  .verdict h3{font-size:23px; margin:10px 0 4px; letter-spacing:-.02em}
+  .verdict h3 .pk{color:var(--good)}
+  .verdict .vrow{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px}
+  .vcell{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px 15px}
+  .vcell .lab{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:4px}
+  .vcell .who{font-size:16px; font-weight:700; letter-spacing:-.01em}
+  .vcell .note{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+  /* stat cards */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; box-shadow:var(--shadow)}
+  .stat .big{font-size:29px; font-weight:750; letter-spacing:-.03em; color:var(--accent); line-height:1; font-variant-numeric:tabular-nums}
+  .stat .cap{font-size:12.5px; color:var(--ink2); margin-top:7px; line-height:1.4}
+  .stat .sub{font-size:11px; color:var(--faint); margin-top:5px}
+
+  /* callout */
+  .callout{
+    border:1.5px solid var(--accent); border-radius:var(--radius);
+    background:linear-gradient(160deg,var(--accent-soft),var(--card) 65%);
+    padding:20px 24px; margin-top:16px; box-shadow:var(--shadow);
+  }
+  .callout .ctitle{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-ink); font-weight:800; margin-bottom:7px; display:flex; align-items:center; gap:8px}
+  .callout h3{font-size:20px; letter-spacing:-.02em; margin-bottom:8px}
+  .callout p{font-size:15px; color:var(--ink2); margin-bottom:8px}
+
+  /* ============ TABLES ============ */
+  .tscroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); background:var(--card)}
+  table{border-collapse:collapse; width:100%; font-size:14px; min-width:640px}
+  .matrix{min-width:820px}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line2); vertical-align:top}
+  thead th{
+    position:sticky; top:0; background:var(--card2); z-index:2;
+    font-size:12px; letter-spacing:.03em; text-transform:uppercase; color:var(--muted);
+    font-weight:700; border-bottom:1.5px solid var(--line);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.crit, th.crit{font-weight:650; color:var(--ink); background:var(--card2); position:sticky; left:0; z-index:1; min-width:150px}
+  thead th.crit{z-index:3}
+  .cellwin{background:var(--good-bg); box-shadow:inset 3px 0 0 var(--good)}
+  .cellwin strong{color:var(--good)}
+  td.num{font-variant-numeric:tabular-nums}
+  .vrowfin td{background:var(--accent-soft); font-weight:650; border-top:1.5px solid var(--accent)}
+  .tnote{font-size:12px; color:var(--muted); margin-top:8px}
+
+  /* ============ PROFILES ============ */
+  .rankbadge{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:var(--accent); color:#fff; font-weight:750; font-size:15px; margin-right:2px}
+  .prof-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .prof-head h3{font-size:21px; letter-spacing:-.02em}
+  .factsheet{font-size:13.5px; color:var(--ink2); background:var(--card2); border:1px solid var(--line2); border-radius:9px; padding:11px 14px; margin:12px 0}
+  .quote{border-left:3px solid var(--accent); padding:4px 0 4px 15px; margin:12px 0; color:var(--ink2); font-style:italic}
+  .quote .attr{display:block; font-style:normal; font-size:12.5px; color:var(--muted); margin-top:5px}
+  .against{background:var(--bad-bg); border:1px solid var(--bad-line); border-radius:10px; padding:13px 16px; margin-top:12px}
+  .against .h{font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:800; color:var(--bad); margin-bottom:6px}
+  .against p{font-size:13.5px; color:var(--ink2); margin:0}
+  .deadend{font-size:12.5px; color:var(--muted); border:1px dashed var(--line); border-radius:9px; padding:10px 13px; margin-top:12px; background:var(--card2)}
+  .deadend b{color:var(--warn)}
+
+  /* brand banner (in-page SVG logo tile + official link) */
+  .brandbanner{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    border-radius:12px; padding:0 22px; min-height:92px; margin:0 0 16px;
+    overflow:hidden; position:relative;
+    background:linear-gradient(135deg,var(--bc,#333),var(--bc2,#111));
+    box-shadow:var(--shadow); flex-wrap:wrap;
+  }
+  .brandbanner .bb-logo{display:flex; align-items:center; padding:14px 0}
+  .brandbanner svg.wm{height:40px; width:auto; display:block}
+  .bb-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding:14px 0}
+  .bb-tag{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.72); font-weight:700}
+  .bb-link{
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.4); color:#fff;
+    font-size:12.5px; font-weight:650; padding:8px 14px; border-radius:8px; white-space:nowrap;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .bb-link:hover{background:rgba(255,255,255,.3); text-decoration:none}
+  .bb-link .u{font-family:var(--mono); font-size:11px; opacity:.85; font-weight:500}
+  .hdrlink{display:block; font-size:11px; font-weight:500; margin-top:3px}
+  .hdrlink a{font-family:var(--mono)}
+  @media (max-width:520px){ .bb-right{align-items:flex-start} .brandbanner{padding:14px 18px} }
+
+  ul.tick{list-style:none; margin:6px 0 14px; padding:0}
+  ul.tick li{position:relative; padding-left:24px; margin-bottom:7px; font-size:14.5px; color:var(--ink2)}
+  ul.tick li::before{content:""; position:absolute; left:2px; top:8px; width:9px; height:9px; border-radius:2px; background:var(--accent)}
+  ul.tick.g li::before{background:var(--good)}
+  ul.tick.r li::before{background:var(--bad)}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .subcard{background:var(--card2); border:1px solid var(--line2); border-radius:10px; padding:16px 18px}
+  .subcard h4{font-size:15px; margin-bottom:8px; letter-spacing:-.01em}
+
+  /* email */
+  .email{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:0; margin-top:14px; overflow:hidden}
+  .email-bar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 16px; background:var(--card); border-bottom:1px solid var(--line)}
+  .email-bar .to{font-size:13px; color:var(--ink2)} .email-bar .to b{color:var(--ink)}
+  .copybtn{font-family:var(--sans); font-size:12.5px; font-weight:650; color:#fff; background:var(--accent); border:none; border-radius:7px; padding:7px 14px; cursor:pointer; transition:background .15s}
+  .copybtn:hover{background:var(--accent-ink)}
+  .copybtn.done{background:var(--good)}
+  .email pre{margin:0; padding:16px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.6; color:var(--ink2); white-space:pre-wrap; word-wrap:break-word}
+
+  /* sources */
+  .srcgroup{margin-top:18px}
+  .srcgroup h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+  ol.srclist{margin:0; padding-left:0; list-style:none; counter-reset:src}
+  ol.srclist li{counter-increment:src; position:relative; padding:8px 0 8px 34px; border-bottom:1px solid var(--line2); font-size:13px}
+  ol.srclist li::before{content:counter(src); position:absolute; left:0; top:8px; font-family:var(--mono); font-size:11px; color:var(--accent); background:var(--accent-soft); border-radius:5px; width:24px; height:20px; display:flex; align-items:center; justify-content:center; font-weight:700}
+  ol.srclist .why{display:block; font-style:italic; color:var(--muted); font-size:12px; margin-top:2px}
+  ol.srclist .u{color:var(--muted); word-break:break-all}
+
+  /* final verdict */
+  .final{
+    background:linear-gradient(165deg,#0f2a5e,#123a86 55%,#0d244f);
+    color:#eaf1ff; border-radius:20px; padding:34px 34px 30px; margin-top:34px;
+    box-shadow:var(--shadow-lg); border:1px solid #1e4aa0;
+  }
+  .final .fk{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:#9dc0ff; font-weight:800}
+  .final h2{font-size:28px; letter-spacing:-.02em; margin:10px 0 14px; color:#fff}
+  .final p{color:#d3e1fb; font-size:15.5px}
+  .final .pick1{font-size:19px; color:#fff; font-weight:650; border-left:4px solid #6f9bff; padding-left:16px; margin:0 0 20px}
+  .final h4{color:#fff; font-size:15px; margin:22px 0 8px; letter-spacing:.02em}
+  .final .elim{border-top:1px solid #24509f; padding:12px 0; display:grid; grid-template-columns:130px 1fr; gap:16px}
+  .final .elim .nm{font-weight:700; color:#fff; font-size:14px}
+  .final .elim .bd{color:#cfe0fb; font-size:13.5px}
+  .final .conf{margin-top:22px; background:rgba(255,255,255,.07); border:1px solid #2a5aad; border-radius:12px; padding:16px 18px}
+  .final .conf .lab{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#9dc0ff; font-weight:800; margin-bottom:6px}
+  .final a{color:#a9c4ff}
+  .final .backup{display:inline-block; font-size:11px; font-weight:700; color:#0d244f; background:#9dc0ff; border-radius:5px; padding:1px 7px; margin-left:8px; letter-spacing:.03em}
+
+  .foot{margin-top:26px; text-align:center; color:var(--faint); font-size:12px; line-height:1.7}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-r{min-height:200px; border-left:none; border-top:1px solid var(--line2)}
+    .hero h1{font-size:36px}
+    .stats{grid-template-columns:1fr 1fr}
+    .verdict .vrow{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    .grid2{grid-template-columns:1fr}
+    .final .elim{grid-template-columns:1fr; gap:2px}
+  }
+  @media (max-width:480px){
+    body{font-size:16px}
+    .card{padding:20px 18px}
+    .stats{grid-template-columns:1fr}
+    .hero-l{padding:26px 22px}
+  }
+  @media print{
+    body{background:#fff}
+    .card,.hero,.verdict,.tscroll,.stat,.callout{box-shadow:none}
+    .copybtn{display:none}
+    .final{background:#0f2a5e !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    a{color:var(--ink)}
+    section{break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px}
+</style>
+
+<div class="wrap">
+
+  <!-- ===== CONFIDENTIALITY BANNER ===== -->
+  <div class="banner" role="note">
+    <div class="row1">🔒 Confidential — Prepared for Pacific Four Nine · Internal decision document</div>
+    <p style="margin:0">All facts in this report were read on <b>19 August 2026</b> and are date-stamped at the point of use. Check prices move constantly — they are promo-driven, membership-tiered and quantity-tiered — so treat every figure as an <b>order-of-magnitude guide</b>, not a quote. Re-confirm at checkout before you pay.</p>
+    <p style="margin:8px 0 0"><b>Sourcing method — read this first.</b> This environment's network policy blocked direct page loads (WebFetch) to every vendor and review site, exactly as it did on the POS report. Research was gathered through <b>web search that surfaces those pages' own text</b>, not by rendering each primary page byte-for-byte. Every figure is sourced to the correct official URL but is labelled <span class="chip warn" style="margin:0 2px">Search-derived</span> unless noted. Where a number traces back to a review article that may be quoting older pricing, it is tagged <span class="chip bad" style="margin:0 2px">Possibly stale</span>. No customer quotes are invented — review pages could not be opened, only their aggregate scores surfaced.</p>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-l">
+        <div class="kicker">Business Checks · Sourcing &amp; Fraud Exposure</div>
+        <h1>Checkbook <span class="rac">RAC</span></h1>
+        <p class="lede"><strong>R</strong>esearch · <strong>A</strong>ssessment · <strong>C</strong>omparison — where to actually buy bank checkbooks for <strong>Pacific Four Nine</strong>, and what the cheap box costs you elsewhere.</p>
+        <div class="expand">
+          <span>Cheapest credible: <b>Costco Checks</b></span>
+          <span>Bank markup: <b>4–8×</b></span>
+          <span>Real risk: <b>check fraud, not price</b></span>
+        </div>
+      </div>
+      <div class="hero-r" aria-hidden="true">
+        <svg viewBox="0 0 420 320" preserveAspectRatio="xMidYMid slice" role="img">
+          <defs>
+            <linearGradient id="chk" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef3fb"/>
+            </linearGradient>
+            <linearGradient id="bindr" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#2159d6"/><stop offset="1" stop-color="#123a86"/>
+            </linearGradient>
+          </defs>
+          <!-- binder / checkbook cover -->
+          <g transform="rotate(-6 150 180)">
+            <rect x="34" y="120" width="212" height="150" rx="10" fill="url(#bindr)"/>
+            <rect x="34" y="120" width="16" height="150" rx="6" fill="#0d2a63" opacity=".8"/>
+            <rect x="70" y="152" width="120" height="8" rx="4" fill="#ffffff" opacity=".55"/>
+            <rect x="70" y="170" width="76" height="6" rx="3" fill="#ffffff" opacity=".32"/>
+          </g>
+          <!-- back check -->
+          <g transform="rotate(4 240 120)">
+            <rect x="126" y="44" width="256" height="120" rx="7" fill="#dce5f4" stroke="#c3ccdb" stroke-width="1.2"/>
+          </g>
+          <!-- front check -->
+          <g transform="rotate(-2 240 130)">
+            <rect x="116" y="56" width="266" height="126" rx="7" fill="url(#chk)" stroke="#c9d3e4" stroke-width="1.4"/>
+            <rect x="132" y="70" width="86" height="7" rx="3.5" fill="#18202f" opacity=".68"/>
+            <rect x="132" y="83" width="62" height="5" rx="2.5" fill="#8a93a6" opacity=".7"/>
+            <text x="342" y="80" text-anchor="end" font-family="monospace" font-size="10" fill="#68728a">1042</text>
+            <line x1="132" y1="112" x2="300" y2="112" stroke="#c3ccdb" stroke-width="1.2"/>
+            <rect x="310" y="98" width="58" height="20" rx="3" fill="#e7eefc" stroke="#2159d6" stroke-width="1.1"/>
+            <text x="316" y="112" font-family="monospace" font-size="10" fill="#1642a8">$ ____</text>
+            <line x1="132" y1="134" x2="368" y2="134" stroke="#c3ccdb" stroke-width="1.2"/>
+            <path d="M236 152 q10 -13 20 -1 q9 11 19 -3 q7 -9 15 3" fill="none" stroke="#123a86" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="228" y1="158" x2="330" y2="158" stroke="#c3ccdb" stroke-width="1.2"/>
+            <!-- MICR line -->
+            <text x="132" y="174" font-family="monospace" font-size="11" letter-spacing="1.5" fill="#18202f">⑆000000000⑆ 00000000⑈ 1042</text>
+          </g>
+          <!-- security shield -->
+          <g transform="translate(300 196)">
+            <path d="M46 0 L88 15 v30 c0 27 -19 45 -42 54 c-23 -9 -42 -27 -42 -54 V15 Z" fill="#137a3b" opacity=".92"/>
+            <path d="M28 48 l13 14 l24 -28" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOC ===== -->
+  <section class="card toc" aria-label="Table of contents">
+    <div class="sec-eyebrow"><span class="n">TOC</span> What's in this report</div>
+    <ol>
+      <li><a href="#call"><span class="tn">01</span> The call — verdict, stats &amp; the reframe</a></li>
+      <li><a href="#evidence"><span class="tn">02</span> What you're actually buying</a></li>
+      <li><a href="#matrix"><span class="tn">03</span> Comparison matrix</a></li>
+      <li><a href="#ratings"><span class="tn">04</span> Reputation — every vendor</a></li>
+      <li><a href="#profiles"><span class="tn">05</span> Vendor profiles, ranked</a></li>
+      <li><a href="#cost"><span class="tn">06</span> What this should cost you</a></li>
+      <li><a href="#policy"><span class="tn">07</span> The fraud layer — the part that matters</a></li>
+      <li><a href="#audit"><span class="tn">08</span> Claim-by-claim audit — Costco Checks</a></li>
+      <li><a href="#plain"><span class="tn">09</span> My assessment, in plain English</a></li>
+      <li><a href="#emails"><span class="tn">10</span> Copy-paste: your bank, your printer, your order spec</a></li>
+      <li><a href="#sources"><span class="tn">11</span> Numbered sources</a></li>
+      <li><a href="#final"><span class="tn">12</span> Final verdict</a></li>
+    </ol>
+  </section>
+
+  <!-- ===== 01 THE CALL ===== -->
+  <section id="call">
+    <div class="sec-eyebrow"><span class="n">01</span> The call</div>
+    <h2 class="sec-title">The verdict, up front</h2>
+    <p class="sec-sub">One pick, one runner-up, two special-role options — and the number that reframes the whole question.</p>
+
+    <div class="verdict">
+      <div class="vtag">✓ Recommendation</div>
+      <h3>Order from <span class="pk">Costco Checks</span> (Harland Clarke) — and order fewer than you think you need.</h3>
+      <p style="margin-top:8px; color:var(--ink2)">It's the cheapest credible source for both hand-written business checks and computer/voucher checks, it carries real high-security stock, standard shipping is free, and it's a printer your bank sees every day. The membership you almost certainly already have is the whole qualification. <span class="chip warn">Search-derived pricing</span></p>
+      <div class="vrow">
+        <div class="vcell">
+          <div class="lab">Primary pick</div>
+          <div class="who">Costco Checks</div>
+          <div class="note">≈$15–$22 per 250 · free standard shipping · business + personal · logo optional</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Runner-up</div>
+          <div class="who">Sam's Club Checks</div>
+          <div class="note">Cheapest in bulk if you're a Sam's member instead — vouchers, payroll, high-security</div>
+        </div>
+        <div class="vcell">
+          <div class="lab">Special role</div>
+          <div class="who">Your own bank</div>
+          <div class="note">4–8× the price, but zero data hand-off — plus counter checks the same day if you're stuck</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="big tnum">$14.96</div>
+        <div class="cap">250 basic security checks, Costco Executive member price</div>
+        <div class="sub">Gold Star / Business: $18.70 · search-derived (§04)</div>
+      </div>
+      <div class="stat">
+        <div class="big tnum">$70–130</div>
+        <div class="cap">What the same 250 business checks cost ordered through a bank</div>
+        <div class="sub">vs. $35–70 direct from a printer · search-derived (§16)</div>
+      </div>
+      <div class="stat">
+        <div class="big tnum">63%</div>
+        <div class="cap">Of organizations hit by payment fraud, the share where checks were the instrument</div>
+        <div class="sub">2024 data; 58% reported check fraud in 2025 (§20, §22)</div>
+      </div>
+      <div class="stat">
+        <div class="big tnum">$2–4</div>
+        <div class="cap">Median all-in cost to <em>issue</em> one check — vs. 26–50¢ for an ACH payment</div>
+        <div class="sub">AFP via Nacha · the box price is the small number (§23)</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ctitle">↺ The reframe — the box is the cheap part</div>
+      <h3>Buying checks is a fraud decision wearing a stationery decision's clothes.</h3>
+      <p>The entire spread between the most expensive and cheapest place to buy 250 business checks is roughly <strong>$100</strong>. That's real, and this report will get it for you. But the same 250 checks put your <strong>routing number, account number and signature</strong> into circulation on paper, into the mail stream, and into a printer's order database — and check fraud is the one fraud category that is <em>growing</em> while check usage falls. B2B check use is at an all-time low of <strong>33%</strong>, yet checks remain the payment type most often hit by fraud (§22, §24).</p>
+      <p style="margin-bottom:0">So the correct order is: buy the <strong>smallest quantity</strong> that covers a year, on <strong>high-security stock</strong>, from a <strong>known printer</strong>, and spend the money you saved on <strong>positive pay</strong> at your bank. Then move every recurring vendor you can onto ACH inside QuickBooks — at $2–4 per check issued versus 26–50¢ per ACH, the payment method costs more than the paper ever will.</p>
+    </div>
+  </section>
+
+  <!-- ===== 02 EVIDENCE ===== -->
+  <section id="evidence">
+    <div class="sec-eyebrow"><span class="n">02</span> Decide this first</div>
+    <h2 class="sec-title">What you're actually buying</h2>
+    <p class="sec-sub">Four questions decide your vendor. Answer them before you open a single checkout page — the wrong format is a $200 mistake nobody refunds.</p>
+    <div class="card">
+      <h4 class="mini">1 · Hand-written or printed from QuickBooks?</h4>
+      <p>This is the fork in the road. <strong>Hand-written</strong> means a bound book — 3-on-a-page business checks with side-tear stubs in a 7-ring binder, or a desk/wallet book. <strong>Printed</strong> means laser <strong>voucher checks</strong> (one check plus two detachable stubs, letter-sized) that feed through your office printer and are filled in by QuickBooks. Since your books already run in QuickBooks, voucher stock is the format that keeps your check register reconciled without double entry. Most businesses end up buying <em>both</em>: a small hand-written book for one-offs, a box of voucher stock for AP runs. <span class="chip good">Structural — not price-dependent</span></p>
+
+      <h4 class="mini">2 · QuickBooks Online or Desktop?</h4>
+      <p>They print to <strong>different layouts</strong>, and check stock is not returnable once it carries your account number. Order stock explicitly sold as compatible with your version — Deluxe, Costco, Sam's Club, Checks In The Mail and Checks Unlimited all filter their catalogue by software compatibility. If you buy the wrong one, the amount lands in the wrong band and every check in the box is scrap. <span class="chip warn">Search-derived</span></p>
+      <div class="cite">
+        <span class="src">Source: Intuit — "Print checks on blank check stock" · quickbooks.intuit.com/learn-support/en-us/help-article/print-file/print-checks-blank-check-stock · <span class="date">read 19 Aug 2026</span></span>
+        <span class="why">(Intuit's own help article — authoritative for what QuickBooks can print and on what stock. Search-derived; direct page load was egress-blocked.)</span>
+      </div>
+
+      <h4 class="mini">3 · Pre-printed, or blank high-security stock?</h4>
+      <p>Pre-printed means your bank details are printed at the factory. <strong>Blank stock</strong> means you buy security paper with no account data on it and your software prints the bank line, the MICR line and the amount in one pass. Blank stock is dramatically cheaper per sheet at volume — roughly <strong>$20–50 per 250</strong> versus <strong>$50–80 per 250</strong> pre-printed, and about <strong>1,000 blanks for the price of 250</strong> pre-printed — and one box serves every bank account you hold. The costs are a printer setup, MICR toner if you want the highest teller-acceptance rate, and the fact that blank stock in a supply closet is worthless to a thief while a pre-printed box is not. <span class="chip warn">Search-derived</span></p>
+
+      <h4 class="mini">4 · How fast do you need them?</h4>
+      <p>Normal delivery from any printer is roughly <strong>1–2 weeks</strong> on free standard shipping; rush is available everywhere and costs more than the checks. If you need to write a check <em>today</em>, that isn't a purchasing problem — walk into your branch and ask for <strong>counter checks</strong>, printed on the spot against your account, typically <strong>$1–5 each</strong> and issued in small sheets. Don't buy an expensive rush box to solve a two-check emergency. <span class="chip warn">Search-derived</span></p>
+
+      <div class="callout" style="margin-top:20px; border-color:var(--bad); background:linear-gradient(160deg,var(--bad-bg),var(--card) 65%)">
+        <div class="ctitle" style="color:var(--bad)">▲ The rule that eliminates vendors</div>
+        <p style="margin:0"><strong>If the checkout hides a handling fee, pre-checks a monitoring subscription, or the printer isn't one your bank sees every day, it's out.</strong> Ordering checks means handing a stranger your routing number, account number, business name and address — the exact package needed to counterfeit a check. A vendor whose own checkout is designed to extract an extra $9 from you without consent has told you how it treats your data. This rule is what demotes Checks In The Mail and Checks Unlimited despite genuinely low sticker prices, and it's why "cheapest search result" is the wrong way to pick.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 MATRIX ===== -->
+  <section id="matrix">
+    <div class="sec-eyebrow"><span class="n">03</span> Head to head</div>
+    <h2 class="sec-title">Comparison matrix</h2>
+    <p class="sec-sub">Criteria down the left, sources across. Winning cell in each row shaded green. All figures read 19 Aug 2026, search-derived and promo-dependent unless noted. Table scrolls sideways.</p>
+    <div class="tscroll">
+      <table class="matrix" style="min-width:1180px">
+        <thead>
+          <tr>
+            <th class="crit">Criterion</th>
+            <th>Costco Checks <span class="chip good" style="font-size:10px">pick</span><span class="hdrlink"><a href="https://www.costco.com/f/-/check-services" target="_blank" rel="noopener">costco.com ↗</a></span></th>
+            <th>Sam's Club Checks<span class="hdrlink"><a href="https://www.samsclubchecks.com/c/business-products/237" target="_blank" rel="noopener">samsclubchecks.com ↗</a></span></th>
+            <th>Deluxe<span class="hdrlink"><a href="https://www.deluxe.com/shopdeluxe/pl/business-checks-banking-products/business-checks/_/N-wha0kw" target="_blank" rel="noopener">deluxe.com ↗</a></span></th>
+            <th>Checks In The Mail<span class="hdrlink"><a href="https://www.checksinthemail.com/" target="_blank" rel="noopener">checksinthemail.com ↗</a></span></th>
+            <th>Checks Unlimited<span class="hdrlink"><a href="https://www.checksunlimited.com/" target="_blank" rel="noopener">checksunlimited.com ↗</a></span></th>
+            <th>Your bank direct<span class="hdrlink"><a href="https://www.usnews.com/banking/articles/where-should-you-order-checks" target="_blank" rel="noopener">usnews.com ↗</a></span></th>
+            <th>Blank stock + print<span class="hdrlink"><a href="https://onlinecheckwriter.com/blank-check-stock/" target="_blank" rel="noopener">onlinecheckwriter.com ↗</a></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Entry price, ~250 business checks</td>
+            <td class="num cellwin"><strong>$14.96–$18.70</strong><br><span class="tnote">Executive vs Gold Star/Business tier</span></td>
+            <td class="num">≈$22.98 / 600 singles <span class="chip bad" style="font-size:10px">possibly stale</span></td>
+            <td class="num">$165.99 / 250 list<br><span class="tnote">before 40%-off / $50-off promos</span></td>
+            <td class="num">Low sticker; bulk tiers</td>
+            <td class="num">Low sticker; promo-driven</td>
+            <td class="num">$70–130</td>
+            <td class="num">$20–50 per 250 blanks</td>
+          </tr>
+          <tr>
+            <td class="crit">Cost per check at volume</td>
+            <td class="num cellwin"><strong>≈11¢</strong><br><span class="tnote">4,800 checks / $505.09</span></td>
+            <td class="num">≈3.2¢/single, 1,200 for $37.98 <span class="chip bad" style="font-size:10px">possibly stale</span></td>
+            <td class="num">≈39¢ (500 laser voucher, $192.99)</td>
+            <td class="num">Bulk-tier discounts, free ship</td>
+            <td class="num">Coupon-dependent</td>
+            <td class="num">28–52¢</td>
+            <td class="num cellwin"><strong>≈8–20¢</strong> + toner</td>
+          </tr>
+          <tr>
+            <td class="crit">Shipping</td>
+            <td class="cellwin"><strong>Free standard</strong></td>
+            <td>Free on qualifying orders</td>
+            <td>Paid; rush available</td>
+            <td>Free on bulk business orders</td>
+            <td>Free only with promo codes</td>
+            <td>Usually included in the fee</td>
+            <td>Varies by supplier</td>
+          </tr>
+          <tr>
+            <td class="crit">Membership required</td>
+            <td>Yes — Costco member</td>
+            <td>Yes — Sam's Club member</td>
+            <td class="cellwin"><strong>No</strong></td>
+            <td class="cellwin"><strong>No</strong></td>
+            <td class="cellwin"><strong>No</strong></td>
+            <td>Account holder only</td>
+            <td class="cellwin"><strong>No</strong></td>
+          </tr>
+          <tr>
+            <td class="crit">Business formats (3-on-a-page, voucher, payroll)</td>
+            <td class="cellwin"><strong>Manual, computer &amp; high-security</strong></td>
+            <td>Voucher, payroll, 3-per-page, desk</td>
+            <td class="cellwin"><strong>Widest catalogue in the field</strong></td>
+            <td>Full business range + tax forms</td>
+            <td>Business range, CPSA-compliant</td>
+            <td>Whatever the bank stocks</td>
+            <td>One stock, any layout</td>
+          </tr>
+          <tr>
+            <td class="crit">QuickBooks compatibility</td>
+            <td>Yes, software-compatible lines</td>
+            <td>Yes, software-compatible lines</td>
+            <td class="cellwin"><strong>80+ accounting packages, QBO &amp; Desktop</strong></td>
+            <td>Yes, filter by software</td>
+            <td>Yes, filter by software</td>
+            <td>Sometimes — ask</td>
+            <td>Yes — QuickBooks prints blank stock natively</td>
+          </tr>
+          <tr>
+            <td class="crit">Security stock</td>
+            <td>High-security options offered</td>
+            <td>High-security laser line</td>
+            <td class="cellwin"><strong>Deepest: chemically sensitive paper, microprint border, fluorescent fibers, erasure protection, hologram tier</strong></td>
+            <td>Standard + upgrade tiers</td>
+            <td>Standard + upgrade tiers</td>
+            <td>Bank-grade, varies</td>
+            <td>High-security blank stock available</td>
+          </tr>
+          <tr>
+            <td class="crit">Logo / customization</td>
+            <td>Logo supported</td>
+            <td>Customizable</td>
+            <td class="cellwin"><strong>Full brand customization</strong></td>
+            <td>3,000+ designs</td>
+            <td>Large design library</td>
+            <td>Minimal</td>
+            <td>You control the template</td>
+          </tr>
+          <tr>
+            <td class="crit">Checkout hygiene</td>
+            <td class="cellwin"><strong>Clean — retail pricing, no upsell subscription reported</strong></td>
+            <td class="cellwin"><strong>Clean — retail pricing</strong></td>
+            <td>Clean, but list prices are high without a coupon</td>
+            <td>Handling fees reported</td>
+            <td>Surprise handling fees; SentryShield subscription pre-selected</td>
+            <td class="cellwin"><strong>Clean — it's your bank</strong></td>
+            <td>Clean</td>
+          </tr>
+          <tr>
+            <td class="crit">Speed to hand</td>
+            <td>~1–2 weeks standard</td>
+            <td>~1–2 weeks standard</td>
+            <td>Most items ship in ~3 working days; rush available</td>
+            <td>~1–2 weeks</td>
+            <td>~1–2 weeks</td>
+            <td class="cellwin"><strong>Counter checks same day, $1–5 each</strong></td>
+            <td>Same day once stock is on the shelf</td>
+          </tr>
+          <tr>
+            <td class="crit">Data hand-off risk</td>
+            <td>Moderate — established printer</td>
+            <td>Moderate — established printer</td>
+            <td>Moderate — established printer</td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+            <td class="cellwin"><strong>None — bank already holds it</strong></td>
+            <td class="cellwin"><strong>None — blanks carry no account data</strong></td>
+          </tr>
+          <tr class="vrowfin">
+            <td class="crit">Best for</td>
+            <td>Your default order — both formats, lowest credible price</td>
+            <td>Same role if you're a Sam's member</td>
+            <td>Highest-security stock, brand-matched, when price is secondary</td>
+            <td>Bulk business supplies alongside checks</td>
+            <td>Only with a coupon and a careful checkout read</td>
+            <td>The account you won't risk, and same-day emergencies</td>
+            <td>High AP volume, multiple accounts, cheapest at scale</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Prices are entry/list points, not quotes: check pricing is quantity-tiered, membership-tiered and heavily promo-driven, and every one of these vendors runs coupons. The <em>ranking</em> is stable; the exact cents are not.</p>
+  </section>
+
+  <!-- ===== 04 RATINGS ===== -->
+  <section id="ratings">
+    <div class="sec-eyebrow"><span class="n">04</span> Reputation</div>
+    <h2 class="sec-title">Reputation — every vendor, honestly scored</h2>
+    <p class="sec-sub">Check printers score badly on public review sites almost across the board, for a structural reason worth understanding before you read the numbers.</p>
+    <div class="card">
+      <div class="tscroll">
+        <table>
+          <thead>
+            <tr><th>Vendor</th><th>Trustpilot</th><th>BBB</th><th>What the complaints are about</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Checks Unlimited</strong></td><td class="num">1.5 / 5 — "Bad"</td><td>A+ (accredited); ~50 complaints in 3 years, answered promptly</td><td>Orders not arriving; unreachable support; discount codes not honored; surprise handling fees; SentryShield subscription pre-selected at checkout</td></tr>
+            <tr><td><strong>Checks In The Mail</strong></td><td class="num">1.4 / 5 — "Bad"</td><td>Not BBB accredited</td><td>Short-shipped orders; unreachable support; perforations that don't tear cleanly</td></tr>
+            <tr><td><strong>Carousel Checks</strong></td><td>Not surfaced</td><td class="cellwin"><strong>A+ and accredited</strong></td><td>Value-brand quality trade-offs; mostly positive on price</td></tr>
+            <tr><td><strong>Costco Checks</strong> (Harland Clarke)</td><td>Not surfaced separately</td><td>Rides Costco's returns policy</td><td>Nothing surfaced at the vendor level; Costco's member-satisfaction guarantee is the practical backstop</td></tr>
+            <tr><td><strong>Sam's Club Checks</strong></td><td>Not surfaced separately</td><td>Rides Sam's Club policy</td><td>Nothing surfaced at the vendor level</td></tr>
+            <tr><td><strong>Deluxe</strong></td><td>Not surfaced</td><td>Long-established printer</td><td>Price, not quality — its list prices are the highest in this field</td></tr>
+            <tr><td><strong>Your bank</strong></td><td>n/a</td><td>n/a</td><td>Cost only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="deadend"><b>Dead end, stated plainly:</b> Trustpilot, BBB and PissedConsumer pages could not be opened directly — the network policy blocked them — so only <em>aggregate</em> scores and the summarized complaint themes surfaced through search. No individual customer quote appears in this report, because none could be read in its original form. Treat the two 1.4–1.5 scores as directionally real (they're consistent across sources) but remember the selection effect below.</div>
+      <div class="callout" style="margin-top:16px">
+        <div class="ctitle">⚖ How to read a 1.4-star check printer</div>
+        <p style="margin-bottom:0">Nobody reviews a check order that arrives on time — the product is boring and the purchase is once every two or three years. Review pages for this category collect almost exclusively the failures: the late box, the wrong account number, the subscription nobody noticed. That's why <strong>Checks Unlimited holds an A+ at the BBB and a 1.5 at Trustpilot simultaneously</strong> — one measures whether complaints get resolved, the other collects the complaints. The useful signal isn't the star count; it's <em>what the complaints are about</em>. Late deliveries are annoying. A pre-checked subscription and a surprise handling fee are a business-model choice, and that's the signal I acted on.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 PROFILES ===== -->
+  <section id="profiles">
+    <div class="sec-eyebrow"><span class="n">05</span> The field, ranked</div>
+    <h2 class="sec-title">Vendor profiles</h2>
+    <p class="sec-sub">Ranked for a QuickBooks-run business buying both a hand-written book and printable voucher stock. Each tile links to the vendor's own ordering page.</p>
+
+    <!-- 1 COSTCO -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#0060a9;--bc2:#00396b">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 300 44" role="img" aria-label="Costco Checks">
+            <text x="0" y="31" font-family="Helvetica,Arial,sans-serif" font-size="30" font-weight="700" letter-spacing="1" fill="#ffffff">COSTCO</text>
+            <text x="140" y="31" font-family="Helvetica,Arial,sans-serif" font-size="30" font-weight="300" letter-spacing="1" fill="#e64b3b">Checks</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Printed by Harland Clarke</span>
+          <a class="bb-link" href="https://www.costco.com/f/-/check-services" target="_blank" rel="noopener">Order <span class="u">costco.com/f/-/check-services</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">1</span><h3>Costco Checks</h3> <span class="chip good">Primary pick</span> <span class="chip plain">Membership required</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> Personal and business checks printed by Harland Clarke under the Costco brand. Manual, computer and high-security lines; business logo supported. Entry pricing around <strong>$14.96 / 250</strong> for Executive members and <strong>$18.70 / 250</strong> for Gold Star and Business members; <strong>$17.45 / 400</strong> and <strong>$21.81 / 400</strong> respectively; roughly <strong>11¢ a check</strong> at the 4,800-check tier ($505.09 for 16 boxes). Standard shipping free. <span class="chip warn">Search-derived</span></div>
+      <p><strong>Why it wins.</strong> It is the only source in this field that is simultaneously the cheapest, credible, and carrying real security stock. Multiple independent write-ups put Costco at roughly <em>half</em> of typical bank pricing for the same order, and the free standard shipping matters more than it looks — shipping is where the budget mailers quietly claw back their discount. For Pacific Four Nine specifically it covers both jobs in one order: a 3-on-a-page business book for hand-written one-offs, and software-compatible voucher stock for QuickBooks AP runs.</p>
+      <div class="against">
+        <div class="h">The case against</div>
+        <p>It's gated behind a membership, the design catalogue is thin next to Deluxe's, and Costco's check pages don't publish the deep security-feature breakdowns Deluxe does — so you must confirm at order time that the line you're picking is the <em>high-security</em> one, not the basic stock. Its pricing is also tier-dependent: if you're a Gold Star rather than an Executive member, the gap to Sam's Club narrows.</p>
+      </div>
+      <div class="deadend">Direct page load of <b>costco.com/f/-/check-services</b> was <b>egress-blocked</b> in this environment. Every price above is search-derived from write-ups quoting Costco's own catalogue and is <b>not</b> a rendered quote — confirm at checkout.</div>
+    </div>
+
+    <!-- 2 SAM'S CLUB -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#0067a0;--bc2:#00456c">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 320 44" role="img" aria-label="Sam's Club Checks">
+            <text x="0" y="31" font-family="Georgia,serif" font-size="28" font-style="italic" font-weight="700" fill="#ffffff">Sam&#8217;s Club</text>
+            <text x="168" y="31" font-family="Helvetica,Arial,sans-serif" font-size="27" font-weight="300" letter-spacing="1" fill="#ffd457">Checks</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Business products catalogue</span>
+          <a class="bb-link" href="https://www.samsclubchecks.com/c/business-products/237" target="_blank" rel="noopener">Order <span class="u">samsclubchecks.com</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">2</span><h3>Sam's Club Checks</h3> <span class="chip good">Runner-up</span> <span class="chip plain">Membership required</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> Voucher checks, payroll checks, 3-per-page, desk checks and high-security laser checks. A widely cited datapoint puts simple voucher or desk checks at <strong>$22.98 for 600 singles</strong> and <strong>$37.98 for 1,200</strong> — the lowest per-check figure in this report outside blank stock. <span class="chip bad">Possibly stale — that figure traces to an older review</span></div>
+      <p><strong>Why it's here.</strong> It is Costco's mirror image: same warehouse-club economics, same bulk-first pricing, a broader stated business-format list. If you hold a Sam's membership and not a Costco one, this is your primary pick and nothing in the recommendation changes. If you hold both, order from whichever quotes lower on the exact format you need on the day — the gap is a few dollars, not a decision.</p>
+      <div class="against">
+        <div class="h">The case against</div>
+        <p>The headline per-check figure is the least reliable number in this report — it surfaced through a review whose data appears to predate 2026. Bulk-first pricing also cuts against the reframe in §01: buying 1,200 checks to reach 3¢ each means 1,200 pre-printed instruments of your account sitting in a cupboard for a decade.</p>
+      </div>
+      <div class="deadend">Direct load of <b>samsclubchecks.com</b> was <b>egress-blocked</b>. Prices unconfirmed against the live catalogue.</div>
+    </div>
+
+    <!-- 3 BLANK STOCK -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#116b3c;--bc2:#0a3d22">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 360 44" role="img" aria-label="Blank check stock and print software">
+            <rect x="0" y="8" width="34" height="26" rx="3" fill="#ffffff" opacity=".92"/>
+            <line x1="6" y1="28" x2="28" y2="28" stroke="#116b3c" stroke-width="2"/>
+            <text x="46" y="31" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" letter-spacing="1" fill="#ffffff">BLANK STOCK</text>
+            <text x="250" y="31" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="300" fill="#a8e6bf">+ print</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Online Check Writer · Zil Money · VersaCheck</span>
+          <a class="bb-link" href="https://onlinecheckwriter.com/blank-check-stock/" target="_blank" rel="noopener">Compare <span class="u">onlinecheckwriter.com</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">3</span><h3>Blank high-security stock, printed on demand</h3> <span class="chip good">Cheapest at scale</span> <span class="chip warn">Setup required</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> Buy security paper with no bank data on it; QuickBooks (or Online Check Writer / Zil Money / Checkeeper / VersaCheck) prints the bank line, MICR line, payee and amount. Blank stock runs roughly <strong>$20–50 per 250</strong>; pre-printed business checks run <strong>$50–80 per 250</strong>, so the same spend buys about <strong>1,000 blanks</strong>. VersaCheck's software package is cited at <strong>$89.99</strong>. U.S. banks accept any check meeting <strong>ANSI X9</strong> standards — E-13B MICR font, correct routing and account numbers, proper stock. <span class="chip warn">Search-derived</span></div>
+      <p><strong>Why it ranks this high.</strong> It's the only option that removes the risk instead of pricing it: a box of blanks in your closet is worthless to a thief, and one stock serves every account you hold. At AP volume it's also the cheapest thing on the page. Standard laser toner clears mobile deposit and most ATMs; MICR toner gets the highest acceptance rate at a teller window.</p>
+      <div class="against">
+        <div class="h">The case against</div>
+        <p>It's a project, not a purchase — printer setup, alignment, a toner decision, and a test check your bank actually accepts before you rely on it. It also puts check <em>creation</em> on any workstation that can reach the software, so it needs its own access control. That's why it's ranked third for you rather than first: it's the right answer once check volume justifies the setup, and overkill for a business writing a handful of checks a month.</p>
+      </div>
+      <div class="deadend">Vendor pages were <b>egress-blocked</b>; the $20–50/250, ~1,000-blank and $89.99 figures are search-derived from vendor and comparison pages, not rendered checkouts.</div>
+    </div>
+
+    <!-- 4 DELUXE -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#123a86;--bc2:#0b214c">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 260 44" role="img" aria-label="Deluxe">
+            <text x="0" y="32" font-family="Helvetica,Arial,sans-serif" font-size="32" font-weight="700" letter-spacing="-1" fill="#ffffff">deluxe</text>
+            <circle cx="126" cy="28" r="4" fill="#4fc3f7"/>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Highest-security stock in the field</span>
+          <a class="bb-link" href="https://www.deluxe.com/shopdeluxe/pl/business-checks-banking-products/business-checks/voucher/_/N-wha0kwZxvxq00" target="_blank" rel="noopener">Order <span class="u">deluxe.com</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">4</span><h3>Deluxe</h3> <span class="chip warn">Premium pricing</span> <span class="chip good">Best security &amp; compatibility</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> 3-on-a-page business checks with side-tear vouchers from <strong>$165.99 / 250</strong> and <strong>$192.99 / 500</strong>; laser bottom blank stock with 7.5" voucher from <strong>$192.99 / 500</strong>. Compatible with 80+ accounting packages including every QuickBooks version. Standard security features: chemically sensitive paper, microprint border, invisible fluorescent fibers, erasure protection, security screen and warning box; a hologram tier above that. Most items ship within ~3 working days. Runs standing promotions — 40% off a first order, $50 off $200+. <span class="chip warn">Search-derived</span></div>
+      <p><strong>The role it plays.</strong> If a single check on your account can move a meaningful amount of money, Deluxe's stock is the most fraud-resistant paper in this comparison and its QuickBooks compatibility is the best-documented. With a 40%-off code the $165.99 tier lands within shouting distance of the warehouse clubs.</p>
+      <div class="against">
+        <div class="h">The case against</div>
+        <p>At list price it costs roughly <strong>10× Costco</strong> for a comparable quantity, and that gap only closes if a promo happens to be live when you order. Buying at list because the security copy is persuasive is how a $20 purchase becomes a $200 one.</p>
+      </div>
+      <div class="deadend">Direct load of <b>deluxe.com</b> was <b>egress-blocked</b>; prices are search-derived from Deluxe's own listing pages as surfaced in search.</div>
+    </div>
+
+    <!-- 5 BANK DIRECT -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#3b4657;--bc2:#1b2331">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 300 44" role="img" aria-label="Your bank direct">
+            <path d="M4 30 L22 12 L40 30 Z" fill="#ffffff" opacity=".92"/>
+            <rect x="8" y="30" width="28" height="6" fill="#ffffff" opacity=".92"/>
+            <text x="54" y="31" font-family="Georgia,serif" font-size="25" font-weight="700" letter-spacing="1" fill="#ffffff">YOUR BANK</text>
+            <text x="216" y="31" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="300" fill="#c9d3e4">direct</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Zero data hand-off · same-day counter checks</span>
+          <a class="bb-link" href="https://www.usnews.com/banking/articles/where-should-you-order-checks" target="_blank" rel="noopener">Background <span class="u">usnews.com</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">5</span><h3>Ordering through your own bank</h3> <span class="chip bad">Most expensive</span> <span class="chip good">Lowest risk · fastest emergency path</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> Around <strong>$70–130 per 250</strong> business checks versus <strong>$35–70</strong> direct from a printer. One reported Wells Fargo business order came to <strong>$122</strong> on the default option and <strong>$92</strong> on an alternative <span class="chip bad">anecdotal — a forum report, not a published price</span>. Some account tiers include free or discounted checks: Wells Fargo Premier and Prime Checking include free personal wallet checks; certain Chase relationship tiers include free standard checks ordered in online banking. Counter checks at a branch typically <strong>$1–5 each</strong>, same day. <span class="chip warn">Search-derived</span></div>
+      <p><strong>The role it plays.</strong> Two roles, both narrow but real. First, <em>check your own account terms before you order anywhere</em> — if your business checking already includes free checks, the entire price comparison in this report is moot for the account it covers. Second, when you need a check today, the branch beats any rush shipping on earth.</p>
+      <div class="against">
+        <div class="h">The case against</div>
+        <p>As a routine source it's a 4–8× markup for paper that is functionally identical to what a third-party printer produces to the same ANSI X9 standard. Pay it deliberately for the convenience or the included-free tier, not by default.</p>
+      </div>
+    </div>
+
+    <!-- 6 CONSUMER CHEAP -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#5c2d91;--bc2:#331a52">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 360 44" role="img" aria-label="Carousel Checks and Walmart Checks">
+            <circle cx="18" cy="22" r="13" fill="none" stroke="#ffffff" stroke-width="3"/>
+            <path d="M18 9 v26 M5 22 h26" stroke="#ffffff" stroke-width="2" opacity=".7"/>
+            <text x="42" y="30" font-family="Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#ffffff">Carousel</text>
+            <text x="152" y="30" font-family="Helvetica,Arial,sans-serif" font-size="22" font-weight="300" fill="#d9c7f0">/ Walmart Checks</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Personal-first, business-capable</span>
+          <a class="bb-link" href="https://www.carouselchecks.com/" target="_blank" rel="noopener">Compare <span class="u">carouselchecks.com</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">6</span><h3>Carousel Checks &amp; Walmart Checks</h3> <span class="chip plain">No membership</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> Carousel: duplicates from <strong>$19.99 / 100</strong> and <strong>$39.98 / 200</strong>, 3,000+ designs, <strong>A+ and accredited</strong> at the BBB. Walmart Checks: duplicates from <strong>$11.75 / 120</strong> and <strong>$23.49 / 240</strong>, free shipping, repeatedly named best all-round for online check ordering. Super Value Checks is cheapest at small quantities but charges shipping. <span class="chip warn">Search-derived</span></div>
+      <p><strong>The role they play.</strong> These are the right answer for a <em>personal</em> checkbook or a sole-proprietor writing occasional checks — no membership, no bulk minimum, clean reputations, low prices. For a QuickBooks-run business buying voucher stock they're a step behind the warehouse clubs on business formats and per-check economics, which is the only reason they sit at 6.</p>
+      <div class="deadend">Vendor pages <b>egress-blocked</b>; figures are search-derived from comparison write-ups quoting the vendors' catalogues.</div>
+    </div>
+
+    <!-- 7 CAUTION -->
+    <div class="card">
+      <div class="brandbanner" style="--bc:#7a1f1a;--bc2:#45100d">
+        <div class="bb-logo">
+          <svg class="wm" viewBox="0 0 400 44" role="img" aria-label="Checks In The Mail and Checks Unlimited">
+            <path d="M4 12 h34 v22 h-34 Z" fill="none" stroke="#ffffff" stroke-width="2.4"/>
+            <path d="M4 12 l17 13 l17 -13" fill="none" stroke="#ffffff" stroke-width="2.4"/>
+            <text x="50" y="30" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#ffffff">Checks In The Mail</text>
+            <text x="252" y="30" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="300" fill="#f0c3bf">/ Unlimited</text>
+          </svg>
+        </div>
+        <div class="bb-right">
+          <span class="bb-tag">Low sticker · read the checkout line by line</span>
+          <a class="bb-link" href="https://www.checksinthemail.com/" target="_blank" rel="noopener">Vendor <span class="u">checksinthemail.com</span> ↗</a>
+        </div>
+      </div>
+      <div class="prof-head"><span class="rankbadge">7</span><h3>Checks In The Mail &amp; Checks Unlimited</h3> <span class="chip bad">Fails the elimination rule</span></div>
+      <div class="factsheet"><strong>Fact sheet.</strong> Both are long-established, full-line printers with genuinely low advertised prices — Checks In The Mail is the standing recommendation for <em>bulk</em> business checks with free shipping and also sells tax forms, binders and covers; Checks Unlimited sells CPSA-compliant business checks and has run promotions as low as $6.99 a box with free shipping via code. Trustpilot: <strong>1.4</strong> and <strong>1.5</strong> respectively. Checks Unlimited holds an <strong>A+</strong> BBB rating; Checks In The Mail is <strong>not accredited</strong>. <span class="chip warn">Search-derived</span></div>
+      <p><strong>Why they're last.</strong> Not the star ratings — see the selection-effect note in §04 — but the specific, repeated complaint pattern: <strong>surprise handling fees</strong>, <strong>discount codes not honored</strong>, and a <strong>monitoring subscription pre-selected at checkout</strong>. That's the exact behaviour §02's elimination rule exists to catch. The advertised price is not the price you pay, which makes their headline advantage over Costco unreliable.</p>
+      <div class="against">
+        <div class="h">If you order anyway</div>
+        <p>Read every line of the order summary before paying, un-check any monitoring or protection add-on, screenshot the total, and expect a handling fee on top of the "free shipping" claim. Bulk business orders with a real code are where they genuinely compete.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 06 COST ===== -->
+  <section id="cost">
+    <div class="sec-eyebrow"><span class="n">06</span> The math</div>
+    <h2 class="sec-title">What this should cost you</h2>
+    <p class="sec-sub">Two models. The first is the purchase you asked about. The second is the one that actually moves money.</p>
+
+    <div class="card">
+      <h3 class="blk">Model A — 250 business checks, one order</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>Source</th><th>Price</th><th>Shipping</th><th>Per check</th><th>Basis</th></tr></thead>
+          <tbody>
+            <tr class="cellwin"><td><strong>Costco Checks — Executive</strong></td><td class="num"><strong>$14.96</strong></td><td>Free standard</td><td class="num"><strong>≈6¢</strong></td><td>Sourced entry price, basic security line</td></tr>
+            <tr><td>Costco Checks — Gold Star / Business</td><td class="num">$18.70</td><td>Free standard</td><td class="num">≈7.5¢</td><td>Sourced entry price</td></tr>
+            <tr><td>Blank high-security stock</td><td class="num">$20–50</td><td>Varies</td><td class="num">8–20¢</td><td>Sourced range, + toner and setup</td></tr>
+            <tr><td>Typical third-party printer, business checks</td><td class="num">$35–70</td><td>Often free</td><td class="num">14–28¢</td><td>Sourced market range</td></tr>
+            <tr><td>Deluxe, 3-on-a-page with vouchers</td><td class="num">$165.99</td><td>Paid</td><td class="num">66¢</td><td>List price; 40%-off codes are common</td></tr>
+            <tr><td>Ordered through a bank</td><td class="num">$70–130</td><td>Included</td><td class="num">28–52¢</td><td>Sourced market range</td></tr>
+            <tr class="vrowfin"><td>Spread, worst to best</td><td class="num">≈$151</td><td>—</td><td class="num">≈10×</td><td>The whole prize in this decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">Like-for-like caveat: the $14.96 Costco line is a <em>basic</em> security check and the $165.99 Deluxe line is 3-on-a-page with side-tear vouchers and a deeper feature set. Comparable Costco business/voucher formats will price above $14.96 — the ranking holds, the exact gap narrows. Confirm on the specific SKU.</p>
+
+      <h3 class="blk">Model B — the cost of the payment, not the paper</h3>
+      <p>Say Pacific Four Nine issues <strong>40 checks a month</strong> — 480 a year. Modeled against published median costs:</p>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>Line</th><th>Per unit</th><th>480 payments / yr</th></tr></thead>
+          <tbody>
+            <tr><td>Check stock itself, bought well</td><td class="num">≈7¢</td><td class="num">≈$34</td></tr>
+            <tr><td>All-in cost to <em>issue</em> a check (paper, postage, labour, reconciliation)</td><td class="num">$2.01–4.00</td><td class="num">$965–$1,920</td></tr>
+            <tr class="cellwin"><td>Same payments sent as ACH</td><td class="num"><strong>26–50¢</strong></td><td class="num"><strong>$125–$240</strong></td></tr>
+            <tr class="vrowfin"><td>Modeled annual saving from moving recurring vendors to ACH</td><td>—</td><td class="num">≈$840–$1,680</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">Per-unit costs are published AFP medians reported via Nacha; the 480-payment volume is an assumption for illustration, not your actual count. Pull the real number from QuickBooks before you act on it.</p>
+      <div class="callout">
+        <div class="ctitle">◎ What the two models say together</div>
+        <p style="margin-bottom:0">Shopping well saves you roughly <strong>$100 on the order</strong>. Moving the recurring half of your payables to ACH saves roughly <strong>$840–$1,680 a year</strong>, every year — and removes those payments from the fraud category in §07 entirely. Do the first because it takes ten minutes. Do the second because it's where the money is.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 07 FRAUD ===== -->
+  <section id="policy">
+    <div class="sec-eyebrow"><span class="n">07</span> The fine print</div>
+    <h2 class="sec-title">The fraud layer — the part that actually matters</h2>
+    <p class="sec-sub">Every dollar of the purchase decision is smaller than one washed check. Here's the current threat picture and the controls that answer it.</p>
+
+    <div class="card">
+      <h3 class="blk">What's happening right now</h3>
+      <ul class="tick r">
+        <li><strong>63% of financial institutions</strong> reported check-fraud attempts in the prior 12 months; <strong>32%</strong> saw more counterfeit checks, <strong>21%</strong> more check washing, <strong>18%</strong> more payee forgery.</li>
+        <li><strong>79% of U.S. organizations</strong> faced payment-fraud attempts in 2024, and <strong>63% of those incidents involved checks</strong>; <strong>58%</strong> of organizations reported check fraud in 2025 — still the most-hit payment type, ahead of ACH and wire.</li>
+        <li>Mail-theft-driven check fraud was estimated at <strong>$21 billion in 2023</strong>, with a large majority of incidents never reported. Postal inspectors report intercepting over <strong>$1 billion</strong> in fraudulent checks and money orders annually.</li>
+        <li><strong>Check washing</strong> is low-tech and effective: a stolen check, a solvent, a new payee and a new amount.</li>
+      </ul>
+      <div class="cite">
+        <span class="src">Sources: Federal Reserve Financial Services — 2026 Risk Officer Report · frbservices.org · AFP 2026 Payments Fraud &amp; Control Survey · financialprofessionals.org · FinCEN Financial Trend Analysis on mail-theft check fraud · fincen.gov · <span class="date">read 19 Aug 2026</span></span>
+        <span class="why">(Regulator and industry-body primary research — the strongest available evidence on check-fraud direction. Search-derived; direct loads were egress-blocked.)</span>
+      </div>
+
+      <div class="grid2">
+        <div class="subcard">
+          <h4>Demand these on the stock you order</h4>
+          <ul class="tick g">
+            <li>Chemically sensitive paper that stains visibly when solvents touch it</li>
+            <li>Microprint border — blurs on photocopy or scan</li>
+            <li>Invisible fluorescent fibers</li>
+            <li>Erasure protection and a security screen with warning box</li>
+            <li>Void pantograph that surfaces "VOID" on a copy</li>
+            <li>Hologram tier if a single check can move serious money</li>
+          </ul>
+        </div>
+        <div class="subcard">
+          <h4>Controls that beat any paper</h4>
+          <ul class="tick g">
+            <li><strong>Positive pay</strong> — you send the bank your issued-check file; anything presented that doesn't match on check number, payee or amount is flagged for you to approve or reject before it pays</li>
+            <li>Restrict signing authority to named signers; lock up any signature stamp or plate</li>
+            <li>Store unused stock in a locked cabinet and log the check-number ranges</li>
+            <li>Never leave outgoing checks in a residential mailbox or a blue collection box — hand them to a clerk</li>
+            <li>Write in permanent gel ink; never sign a blank check</li>
+            <li>Reconcile in QuickBooks against the bank feed daily, not monthly — the window to report an altered check is short</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:16px">
+        <div class="ctitle">▲ The one call to make this week</div>
+        <p style="margin-bottom:0">Ask your bank what <strong>positive pay</strong> costs on your business checking account and turn it on. It is the single control that converts check fraud from a loss you discover later into a transaction you decline in advance. Pair it with <strong>ACH-first payables</strong> in QuickBooks and the checkbook becomes what it should be: an exception tool, not a payment system.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 AUDIT ===== -->
+  <section id="audit">
+    <div class="sec-eyebrow"><span class="n">08</span> Claim by claim</div>
+    <h2 class="sec-title">Audit — Costco Checks, the vendor I'm recommending</h2>
+    <p class="sec-sub">A recommendation you can't audit is a rumor. Every claim behind the pick, with its status.</p>
+    <div class="card">
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>Claim</th><th>Status</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr><td>Costco checks are printed by Harland Clarke</td><td><span class="chip good">Consistent across sources</span></td><td>Stated by Costco's own check-services listing and by every independent write-up surfaced</td></tr>
+            <tr><td>250 basic security checks at $14.96 (Executive) / $18.70 (Gold Star, Business)</td><td><span class="chip warn">Search-derived</span></td><td>Quoted from Costco's catalogue in multiple independent write-ups; live page could not be rendered</td></tr>
+            <tr><td>≈11¢ per check at the 4,800-check tier ($505.09)</td><td><span class="chip warn">Search-derived</span></td><td>Single quoted datapoint; not confirmed against the live catalogue</td></tr>
+            <tr><td>Standard shipping is free</td><td><span class="chip warn">Search-derived</span></td><td>Stated consistently; confirm at checkout for your SKU</td></tr>
+            <tr><td>Business formats and logo customization available</td><td><span class="chip good">Consistent across sources</span></td><td>Costco lists manual, computer and high-security business checks with logo support</td></tr>
+            <tr><td>Roughly half the cost of ordering through a bank</td><td><span class="chip good">Supported by two independent ranges</span></td><td>Bank $70–130 / 250 vs printer $35–70 / 250, with Costco below the printer range</td></tr>
+            <tr><td>Specific high-security feature list for Costco's stock</td><td><span class="chip bad">Not verified</span></td><td>Costco does not publish the feature-by-feature breakdown Deluxe does; ask before ordering if this matters</td></tr>
+            <tr><td>Current 2026 prices on the exact business SKU you'll buy</td><td><span class="chip bad">Not verified</span></td><td>Egress-blocked; the entry prices above are for basic lines, and business/voucher formats price higher</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">Nothing in the "not verified" rows changes the ranking — they change the precision of the dollar figure, not which vendor wins.</p>
+    </div>
+  </section>
+
+  <!-- ===== 09 PLAIN ===== -->
+  <section id="plain">
+    <div class="sec-eyebrow"><span class="n">09</span> No jargon</div>
+    <h2 class="sec-title">My assessment, in plain English</h2>
+    <div class="card">
+      <p>You asked where to buy checkbooks. The short answer: <strong>Costco</strong>, or <strong>Sam's Club</strong> if that's the card in your wallet. Both print through the same industrial check printers your bank uses, both cost roughly half what the bank charges, and shipping is free. Order the smallest quantity that covers a year or so.</p>
+      <p>Before you order, check one thing: <strong>whether your business checking account already includes free checks</strong>. Some account tiers do. If yours does, the cheapest place to buy checks is the one you're already paying for.</p>
+      <p>Two formats, and you probably want both. A <strong>3-on-a-page business book</strong> with stubs for checks you write by hand, and <strong>laser voucher checks</strong> that print out of QuickBooks for anything you're paying from your books. Match the voucher stock to your QuickBooks version — Online and Desktop print differently, and the wrong box is unusable.</p>
+      <p>Skip the deep-discount check mailers unless you have a working coupon and the patience to read the order summary line by line. Their advertised prices are real; the totals often aren't, and one of them pre-selects a paid monitoring subscription at checkout.</p>
+      <p>If you need a check <strong>today</strong>, don't pay for rush shipping — walk into your branch and ask for counter checks. A few dollars each, printed while you wait.</p>
+      <p style="margin-bottom:0">And the thing I'd want you to take away even if you ignore the rest: <strong>the checkbook is the cheap part.</strong> Every check you write costs a few dollars all-in and lands in the payment category criminals target hardest right now. Call your bank about positive pay, and move your recurring vendors onto ACH in QuickBooks. That's worth more than the entire price difference in this report, every year.</p>
+    </div>
+  </section>
+
+  <!-- ===== 10 EMAILS ===== -->
+  <section id="emails">
+    <div class="sec-eyebrow"><span class="n">10</span> Ready to send</div>
+    <h2 class="sec-title">Copy-paste: your bank, your printer, your order spec</h2>
+    <p class="sec-sub">Three blocks. Send the first before you order anything — the answer can make the order free.</p>
+
+    <div class="email">
+      <div class="email-bar">
+        <div class="to">To: <b>your business banker</b> · Subject: Check ordering, positive pay and counter-check policy</div>
+        <button class="copybtn" data-copy="mail-bank" type="button">Copy</button>
+      </div>
+      <pre id="mail-bank">Hello,
+
+I'm reviewing how we order and control business checks for Pacific Four
+Nine, and I need four things in writing before I place an order:
+
+1. FREE OR DISCOUNTED CHECKS: does our current business checking product
+   include free or discounted checks, and if so on which check styles and
+   at what quantities? If an account upgrade would include them, please
+   tell me the tier and the monthly cost.
+
+2. YOUR PRICE: what does a box of 250 business checks cost ordered
+   through you — please quote both a 3-on-a-page manual book with stubs
+   and laser voucher checks compatible with QuickBooks.
+
+3. POSITIVE PAY: what does positive pay cost on our account, what is the
+   monthly minimum, how do we submit the issued-check file (QuickBooks
+   export, CSV, direct upload?), and what is the daily cut-off time for
+   reviewing exceptions? Please also confirm whether payee-name matching
+   is included or priced separately.
+
+4. COUNTER CHECKS: what is your policy and fee for counter checks at a
+   branch, and how many can be issued at once?
+
+Finally, please confirm you accept checks printed by a third-party
+printer to the ANSI X9 standard, so there is no question later.
+
+Thank you,
+Pacific Four Nine</pre>
+    </div>
+
+    <div class="email">
+      <div class="email-bar">
+        <div class="to">To: <b>the printer's support desk</b> (Costco Checks / Sam's Club Checks / Deluxe) · Subject: Pre-order questions, business checks</div>
+        <button class="copybtn" data-copy="mail-vendor" type="button">Copy</button>
+      </div>
+      <pre id="mail-vendor">Hello,
+
+Before I place a business check order I need four points confirmed:
+
+1. SECURITY FEATURES: please list the security features included on the
+   specific product I'd be ordering — chemically sensitive paper,
+   microprint border, fluorescent fibers, erasure protection, security
+   screen and warning box, void pantograph. If those are only on a
+   higher tier, tell me which SKU and what it costs.
+
+2. SOFTWARE COMPATIBILITY: confirm the voucher stock is compatible with
+   QuickBooks Online (not only QuickBooks Desktop), and that the layout
+   is guaranteed to align without manual adjustment.
+
+3. TOTAL AT CHECKOUT: confirm the all-in total including any handling
+   fee and shipping, and confirm that no monitoring, protection or
+   subscription product is added to the order by default.
+
+4. DELIVERY AND SECURITY IN TRANSIT: what is the standard delivery
+   window, is the shipment trackable, and is it sent in packaging that
+   does not identify the contents as checks?
+
+Thank you.</pre>
+    </div>
+
+    <div class="email">
+      <div class="email-bar">
+        <div class="to">Order spec — <b>fill this in before you open a checkout</b></div>
+        <button class="copybtn" data-copy="mail-spec" type="button">Copy</button>
+      </div>
+      <pre id="mail-spec">CHECK ORDER SPEC — Pacific Four Nine
+
+Bank / account nickname .......... ____________________
+Routing number ................... ____________________
+Account number ................... ____________________
+Starting check number ............ ______ (continue the existing
+                                   sequence — never restart at 001,
+                                   low numbers get scrutinized)
+
+Format 1 (hand-written) .......... 3-on-a-page business checks with
+                                   side-tear stubs, 7-ring binder
+Quantity ......................... 250  (one year of one-offs)
+
+Format 2 (printed) ............... Laser voucher checks
+QuickBooks version ............... [ ] Online   [ ] Desktop
+Quantity ......................... 500
+
+Security tier .................... HIGH SECURITY — must include
+                                   chemically sensitive paper,
+                                   microprint border, erasure
+                                   protection, void pantograph
+Business name / address as printed ____________________
+Logo ............................. [ ] yes  [ ] no
+
+Before paying:
+[ ] Un-check every add-on, subscription or "protection" product
+[ ] Confirm handling fee + shipping in the total
+[ ] Screenshot the final order summary
+[ ] Diarise: log the check-number range on arrival, store locked</pre>
+    </div>
+  </section>
+
+  <!-- ===== 11 SOURCES ===== -->
+  <section id="sources">
+    <div class="sec-eyebrow"><span class="n">11</span> The paper trail</div>
+    <h2 class="sec-title">Numbered sources</h2>
+    <p class="sec-sub">Every source below was reached by web search on 19 Aug 2026. Direct page loads were blocked by this environment's network policy, so these are the pages the evidence came from, not pages rendered here.</p>
+    <div class="card">
+      <div class="srcgroup">
+        <h4>Vendors &amp; pricing</h4>
+        <ol class="srclist">
+          <li>Costco — Check Services <span class="u">costco.com/f/-/check-services</span><span class="why">Costco's own check-ordering entry point; establishes the Harland Clarke relationship and product range.</span></li>
+          <li>Costco — Business Checks, Forms &amp; Accessories <span class="u">costco.com/business-checks,-forms-&amp;-accessories.product.100417955.html</span><span class="why">Business-specific catalogue listing.</span></li>
+          <li>Top10 — Costco Business Checks Review 2026 <span class="u">top10.com/business-checks/reviews/costco-checks</span><span class="why">Independent summary of Costco's manual, computer and high-security lines.</span></li>
+          <li>Hustler Money Blog — How To Order Checks From Costco <span class="u">hustlermoneyblog.com/order-checks-costco</span><span class="why">Source of the $14.96 / $18.70 / $17.45 / $21.81 membership-tier price points.</span></li>
+          <li>DepositAccounts — Where to Buy Cheap Checks <span class="u">depositaccounts.com/blog/cheap-checks.html</span><span class="why">Source of the 4,800-checks-for-$505.09 (~11¢/check) bulk datapoint.</span></li>
+          <li>The Penny Hoarder — The 6 Best Places to Order Checks Online in 2026 <span class="u">thepennyhoarder.com/bank-accounts/best-place-to-order-checks</span><span class="why">Walmart Checks / Super Value / Sam's Club rankings and price points.</span></li>
+          <li>Sam's Club Checks — Business Checks &amp; Accessories <span class="u">samsclubchecks.com/c/business-products/237</span><span class="why">Business format range: voucher, payroll, 3-per-page, desk, high-security laser.</span></li>
+          <li>Top10 — Sam's Club Business Checks Review <span class="u">top10.com/business-checks/reviews/sams-club</span><span class="why">Source of the $22.98 / 600 and $37.98 / 1,200 figures — flagged as possibly stale.</span></li>
+          <li>Deluxe — Voucher Business Checks <span class="u">deluxe.com/shopdeluxe/pl/business-checks-banking-products/business-checks/voucher</span><span class="why">$165.99 / 250 and $192.99 / 500 list prices.</span></li>
+          <li>Deluxe — QuickBooks Laser Business Checks <span class="u">deluxe.com/shopdeluxe/pl/business-checks-banking-products/business-checks/laser-business-checks</span><span class="why">80+ accounting-package compatibility and laser voucher stock.</span></li>
+          <li>Deluxe — Coupons <span class="u">deluxe.com/shopdeluxe/common/couponPage.jsp</span><span class="why">Standing 40%-off-first-order and $50-off-$200+ promotions.</span></li>
+          <li>Top10 — Best Business Checks 2026 <span class="u">top10.com/business-checks</span><span class="why">Deluxe security-feature list; Checks In The Mail bulk/free-shipping positioning.</span></li>
+          <li>Carousel Checks — Best Place To Order Checks <span class="u">carouselchecks.com/blog/best-place-to-order-checks</span><span class="why">Vendor-side context; $19.99 / 100 duplicate pricing.</span></li>
+          <li>Checksforless — QuickBooks Checks <span class="u">checksforless.com/catalog/ProductCategory.aspx?c=357</span><span class="why">$30–90 per 500 range for QuickBooks-compatible checks.</span></li>
+        </ol>
+      </div>
+      <div class="srcgroup">
+        <h4>Banks, counter checks &amp; the market range</h4>
+        <ol class="srclist">
+          <li>Check-O-Matic — How Much Do Business Checks Cost in 2026 <span class="u">checkomatic.com/how-much-do-business-checks-cost</span><span class="why">$35–70 per 250 from a printer vs $70–130 through a bank.</span></li>
+          <li>U.S. News — Where to Order Cheap or Free Checks <span class="u">usnews.com/banking/articles/where-should-you-order-checks</span><span class="why">Which account tiers include free checks; bank-vs-printer trade-off.</span></li>
+          <li>Bogleheads forum — "Wells Fargo wants $130 for business checks" <span class="u">bogleheads.org/forum/viewtopic.php?t=392756</span><span class="why">Anecdotal $122 default / $92 alternative datapoint — a user report, not a published price.</span></li>
+          <li>The Balance — Counter checks explained · MyBankTracker — Counter check fees <span class="u">thebalancemoney.com/counter-checks-315327</span><span class="why">$1–5 per counter check, same-day at a branch, small quantities only.</span></li>
+        </ol>
+      </div>
+      <div class="srcgroup">
+        <h4>Reputation</h4>
+        <ol class="srclist">
+          <li>Trustpilot — Checks Unlimited <span class="u">trustpilot.com/review/checksunlimited.com</span><span class="why">1.5 / 5 aggregate rating.</span></li>
+          <li>Trustpilot — Checks In The Mail <span class="u">trustpilot.com/review/secure.checksinthemail.com</span><span class="why">1.4 / 5 aggregate rating.</span></li>
+          <li>Top Consumer Reviews — Best Business Check Stores 2026 <span class="u">topconsumerreviews.com/best-business-check-stores/detailed-reviews.php</span><span class="why">Checks Unlimited A+ BBB standing, complaint themes, SentryShield pre-selection, handling fees; Carousel Checks BBB A+.</span></li>
+          <li>BBB — Checks In The Mail business profile <span class="u">bbb.org/us/tx/san-antonio/profile/check-printing/checks-in-the-mail-0825-28222</span><span class="why">Accreditation status and recent complaint themes.</span></li>
+        </ol>
+      </div>
+      <div class="srcgroup">
+        <h4>Fraud, controls &amp; payment economics</h4>
+        <ol class="srclist">
+          <li>Federal Reserve Financial Services — 2026 Risk Officer Report <span class="u">frbservices.org/news/fed360/issues/051426/risk-management-2026-risk-officer-report</span><span class="why">63% of institutions saw check-fraud attempts; counterfeit 32%, washing 21%, payee forgery 18%.</span></li>
+          <li>AFP — 2026 Payments Fraud and Control Survey <span class="u">financialprofessionals.org/training-resources/resources/survey-research-economic-data/details/payments-fraud</span><span class="why">79% of organizations hit by payment-fraud attempts; checks the most-affected instrument; 58% reporting check fraud in 2025.</span></li>
+          <li>FinCEN — Mail Theft-Related Check Fraud: Threat Pattern &amp; Trend Analysis <span class="u">fincen.gov/system/files/shared/FTA-Check-Fraud-FINAL508.pdf</span><span class="why">Federal characterization of mail-theft check fraud; FBI issued a parallel public alert.</span></li>
+          <li>Nacha — ACH Costs are a Fraction of Check Costs for Businesses <span class="u">nacha.org/news/ach-costs-are-fraction-check-costs-businesses-afp-survey-shows</span><span class="why">$2.01–4.00 median to issue a check vs 26–50¢ per ACH.</span></li>
+          <li>AFP — Check Use Drops to All-Time Low for B2B Payments <span class="u">financialprofessionals.org/about/learn-more/press-releases/Details/survey-check-use-drops-to-all-time-low-for-b2b-payments</span><span class="why">B2B check use at 33%, down 40+ points since 2004.</span></li>
+          <li>Washington Post — How to protect yourself from check washing <span class="u">washingtonpost.com/business/2026/06/17/how-protect-yourself-check-washing-widespread-form-fraud</span><span class="why">Mechanics of check washing and consumer-side countermeasures.</span></li>
+          <li>Ramp — What Is Positive Pay · Stifel Bank — How Positive Pay Protects Your Business <span class="u">ramp.com/blog/what-is-positive-pay</span><span class="why">How the issued-check file, exception review and payee matching work.</span></li>
+        </ol>
+      </div>
+      <div class="srcgroup">
+        <h4>Standards &amp; self-printing</h4>
+        <ol class="srclist">
+          <li>ANSI Blog — MICR Specifications for Checks in ASC X9 Standards <span class="u">blog.ansi.org/ansi/micr-specifications-checks-ansi-x9-standards</span><span class="why">The standard that makes any compliant printer's checks bank-acceptable.</span></li>
+          <li>Intuit — Print checks on blank check stock <span class="u">quickbooks.intuit.com/learn-support/en-us/help-article/print-file/print-checks-blank-check-stock</span><span class="why">QuickBooks' own blank-stock printing path and format requirements.</span></li>
+          <li>Online Check Writer — Blank Check Stock · Zil Money — Blank Check Stock <span class="u">onlinecheckwriter.com/blank-check-stock</span><span class="why">$20–50 per 250 blanks; ~1,000 blanks for the price of 250 pre-printed.</span></li>
+          <li>VersaCheck Store <span class="u">versacheckstore.com</span><span class="why">$89.99 software/MICR package cited for self-printing.</span></li>
+          <li>ACOM — How to Set Up a Printer to Print MICR Checks <span class="u">acombusiness.com/blogs/helpful-articles/how-to-set-up-a-printer-to-print-micr-checks</span><span class="why">MICR toner and printer requirements for highest teller acceptance.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 12 FINAL ===== -->
+  <section id="final">
+    <div class="final">
+      <div class="fk">Final verdict</div>
+      <h2>Order from Costco Checks. Order small. Then call your bank about positive pay.</h2>
+      <p class="pick1">Place one order: a 250-check 3-on-a-page business book with stubs, plus voucher stock matched to your QuickBooks version. Confirm the high-security line at checkout, continue your existing check-number sequence, and decline every add-on.</p>
+
+      <p><strong>Why I chose it.</strong> You asked a sourcing question, and on sourcing the answer is unambiguous: the warehouse clubs print through the same industrial check printers the banks use, at roughly half of bank pricing and below the general printer market, with free standard shipping and business formats that cover both of your use cases. Costco edges Sam's Club only because its price points are the better-corroborated of the two — if your wallet holds the other card, take the other card and change nothing else. I weighted three things: verifiable price (the biggest, most durable gap), checkout integrity (a vendor that pre-selects a subscription will do worse things with your account number), and business-format coverage including QuickBooks compatibility. I discounted star ratings almost entirely — this category collects only failure reviews, and the useful signal was the <em>content</em> of the complaints, not the average.</p>
+
+      <h4>Why I eliminated each of the others</h4>
+      <div class="elim"><div class="nm">Sam's Club Checks</div><div class="bd">Genuinely equal on economics and arguably broader on stated business formats. Demoted only because its headline per-check figure traces to an older review and could not be corroborated for 2026. <span class="backup">Straight swap if you're a Sam's member</span></div></div>
+      <div class="elim"><div class="nm">Blank stock + print</div><div class="bd">Cheapest per check, no account data sitting in a cupboard, one stock for every account. Knocked out for now because it's a setup project — printer alignment, MICR toner, a test check — that your current check volume doesn't yet justify. <span class="backup">Revisit above ~100 checks/month</span></div></div>
+      <div class="elim"><div class="nm">Deluxe</div><div class="bd">The best security stock and the best-documented QuickBooks compatibility in the field. Knocked out on price: ~10× Costco at list, and only competitive when a 40%-off code happens to be live. <span class="backup">Use it for a high-value account</span></div></div>
+      <div class="elim"><div class="nm">Your bank</div><div class="bd">Zero data hand-off and same-day counter checks in an emergency. Knocked out as a routine source at 4–8× the price for paper printed to the same standard — unless your account tier includes checks free, which is the one thing to check before ordering anywhere. <span class="backup">Emergencies and included-free tiers</span></div></div>
+      <div class="elim"><div class="nm">Carousel / Walmart Checks</div><div class="bd">Clean reputations, no membership, very low prices. Knocked out for this purchase because they're personal-first: weaker on voucher/payroll business formats and per-check economics at business quantities. <span class="backup">Right answer for a personal checkbook</span></div></div>
+      <div class="elim"><div class="nm">Checks In The Mail / Checks Unlimited</div><div class="bd">Low advertised prices and real bulk business ranges. Knocked out by the elimination rule: surprise handling fees, unhonored discount codes and a pre-selected monitoring subscription mean the advertised price isn't the price. <span class="backup">Only with a verified code and a careful checkout</span></div></div>
+
+      <h4>What would change my mind</h4>
+      <p>One fact: <strong>if your business checking already includes free or discounted checks</strong>, order through the bank for that account and ignore the price comparison entirely. Two others move it: if you hold no warehouse-club membership, the pick becomes a mainstream printer at $35–70 per 250 rather than paying $60+/year for a membership to save $40; and if check volume climbs past roughly 100 a month, blank stock plus in-house printing overtakes everything here.</p>
+
+      <div class="conf">
+        <div class="lab">Confidence &amp; what's still unconfirmed</div>
+        <p style="margin:0; color:#d3e1fb; font-size:14px"><strong>Confidence: high on the ranking, moderate on the exact prices.</strong> The <em>order</em> — warehouse clubs &lt; mainstream printers &lt; banks &lt; Deluxe list — is corroborated by several independent ranges and is robust. Still unconfirmed underneath it: (1) every price is search-derived, because this environment blocked direct page loads to all vendors; (2) the Costco entry prices are for basic lines, so your actual business/voucher SKU will cost more; (3) the Sam's Club per-check figures may predate 2026; (4) whether your own account already includes free checks — unknown to me and decisive. None of these change which vendor to open first. All of them are settled by the three copy-paste blocks in §10.</p>
+      </div>
+    </div>
+    <p class="foot">RAC report · Research · Assessment · Comparison · Sourcing bank checkbooks for Pacific Four Nine · All facts read 19 Aug 2026 and search-derived unless tagged otherwise · Prepared as an internal decision document — confirm live pricing and your own account terms before ordering.</p>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = document.getElementById(btn.getAttribute('data-copy'));
+      if(!el) return;
+      var text = el.innerText;
+      var done = function(){ btn.textContent='Copied ✓'; btn.classList.add('done'); setTimeout(function(){ btn.textContent='Copy'; btn.classList.remove('done'); },1800); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text,done); });
+      } else { fallback(text,done); }
+    });
+  });
+  function fallback(text, cb){
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta); cb();
+  }
+</script>
