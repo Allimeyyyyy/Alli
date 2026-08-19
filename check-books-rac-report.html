@@ -1,0 +1,1928 @@
+<title>Check Books in Three Days</title>
+<style>
+:root{
+  --ground:#eef1f4;
+  --card:#ffffff;
+  --card-2:#f7f9fb;
+  --ink:#141a24;
+  --ink-2:#3d4756;
+  --ink-3:#66717f;
+  --line:#dde3ea;
+  --line-2:#eaeef3;
+  --accent:#17539e;
+  --accent-soft:#e7eef8;
+  --accent-line:#b9cee9;
+  --safety:#dde9e4;
+  --safety-2:#eef4f1;
+  --good:#1a7f4b;
+  --good-bg:#e6f4ec;
+  --good-line:#b5ddc6;
+  --warn:#a5680a;
+  --warn-bg:#fbf1de;
+  --warn-line:#e9d3a4;
+  --bad:#b0322c;
+  --bad-bg:#fbeceb;
+  --bad-line:#eec5c2;
+  --shadow:0 1px 2px rgba(20,26,36,.05), 0 6px 20px -8px rgba(20,26,36,.14);
+  --shadow-sm:0 1px 2px rgba(20,26,36,.06);
+  --radius:14px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#11151b;
+    --card:#191e26;
+    --card-2:#1f252f;
+    --ink:#e8edf4;
+    --ink-2:#bcc6d3;
+    --ink-3:#8b96a5;
+    --line:#2b323d;
+    --line-2:#232a34;
+    --accent:#82b2ec;
+    --accent-soft:#1b2a3d;
+    --accent-line:#33507a;
+    --safety:#20302b;
+    --safety-2:#1b2622;
+    --good:#5fc98d;
+    --good-bg:#12291d;
+    --good-line:#27503a;
+    --warn:#e0ac52;
+    --warn-bg:#2c2312;
+    --warn-line:#584426;
+    --bad:#ef8880;
+    --bad-bg:#301917;
+    --bad-line:#5c302c;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px -10px rgba(0,0,0,.7);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#11151b;
+  --card:#191e26;
+  --card-2:#1f252f;
+  --ink:#e8edf4;
+  --ink-2:#bcc6d3;
+  --ink-3:#8b96a5;
+  --line:#2b323d;
+  --line-2:#232a34;
+  --accent:#82b2ec;
+  --accent-soft:#1b2a3d;
+  --accent-line:#33507a;
+  --safety:#20302b;
+  --safety-2:#1b2622;
+  --good:#5fc98d;
+  --good-bg:#12291d;
+  --good-line:#27503a;
+  --warn:#e0ac52;
+  --warn-bg:#2c2312;
+  --warn-line:#584426;
+  --bad:#ef8880;
+  --bad-bg:#301917;
+  --bad-line:#5c302c;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px -10px rgba(0,0,0,.7);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:16px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:26px 20px 90px;display:flex;flex-direction:column;gap:22px}
+
+h1,h2,h3,h4{text-wrap:balance;margin:0;line-height:1.22;letter-spacing:-.012em}
+h1{font-size:clamp(30px,5.2vw,44px);font-weight:760}
+h2{font-size:clamp(21px,3vw,27px);font-weight:700}
+h3{font-size:18px;font-weight:680}
+h4{font-size:15px;font-weight:680}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+strong{font-weight:650;color:var(--ink)}
+ul,ol{margin:0;padding-left:1.15em;display:flex;flex-direction:column;gap:7px}
+li::marker{color:var(--ink-3)}
+
+.eyebrow{
+  font-size:11.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:26px 28px;display:flex;flex-direction:column;gap:16px;
+}
+.card > .sechead{display:flex;flex-direction:column;gap:5px;padding-bottom:2px}
+.sechead .num{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--accent);
+  font-weight:600;
+}
+.lede{color:var(--ink-2);font-size:16.5px}
+.small{font-size:13.5px;color:var(--ink-2)}
+.tiny{font-size:12.5px;color:var(--ink-3)}
+hr.sep{border:0;border-top:1px solid var(--line-2);margin:4px 0}
+
+/* ---------- confidentiality banner ---------- */
+.conf{
+  background:var(--card);border:1px solid var(--accent-line);
+  border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow-sm);
+  display:flex;flex-direction:column;gap:6px;
+}
+.conf .t{font-size:11.5px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.conf p{font-size:13.5px;color:var(--ink-2)}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);background:var(--card);
+}
+.hero-art{
+  position:relative;
+  background:
+    repeating-linear-gradient(115deg, rgba(23,83,158,.045) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(65deg, rgba(23,83,158,.045) 0 1px, transparent 1px 7px),
+    radial-gradient(120% 150% at 12% 0%, var(--safety-2) 0%, var(--safety) 62%, var(--safety-2) 100%);
+  padding:38px 30px 30px;
+  display:flex;flex-direction:column;gap:16px;
+}
+:root[data-theme="dark"] .hero-art,
+:root:not([data-theme="light"]) .hero-art{}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .hero-art{
+    background:
+      repeating-linear-gradient(115deg, rgba(130,178,236,.06) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(65deg, rgba(130,178,236,.06) 0 1px, transparent 1px 7px),
+      radial-gradient(120% 150% at 12% 0%, var(--safety-2) 0%, var(--safety) 62%, var(--safety-2) 100%);
+  }
+}
+:root[data-theme="dark"] .hero-art{
+  background:
+    repeating-linear-gradient(115deg, rgba(130,178,236,.06) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(65deg, rgba(130,178,236,.06) 0 1px, transparent 1px 7px),
+    radial-gradient(120% 150% at 12% 0%, var(--safety-2) 0%, var(--safety) 62%, var(--safety-2) 100%);
+}
+.perf{
+  height:11px;
+  background-image:radial-gradient(circle at 5px 5.5px, var(--ground) 2.6px, transparent 2.7px);
+  background-size:11px 11px;
+  border-bottom:1px dashed var(--line);
+}
+.hero h1{max-width:20ch}
+.hero-sub{color:var(--ink-2);font-size:16px;max-width:62ch}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.micr{
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  background:var(--card);border-top:1px solid var(--line);
+  padding:11px 30px;color:var(--ink-3);
+  display:flex;flex-wrap:wrap;gap:6px 22px;
+  font-variant-numeric:tabular-nums;
+}
+.micr span b{color:var(--ink-2);font-weight:600}
+
+/* ---------- toc ---------- */
+.toc ol{
+  list-style:none;padding:0;margin:0;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:2px 22px;
+}
+.toc li{border-bottom:1px solid var(--line-2)}
+.toc a{
+  display:flex;gap:11px;align-items:baseline;padding:8px 2px;
+  text-decoration:none;color:var(--ink);font-size:14.5px;
+}
+.toc a:hover{color:var(--accent)}
+.toc a .n{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);min-width:19px}
+
+/* ---------- chips ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:660;letter-spacing:.045em;text-transform:uppercase;
+  padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap;line-height:1.5;
+}
+.chip.v{background:var(--good-bg);color:var(--good);border-color:var(--good-line)}
+.chip.u{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-line)}
+.chip.n{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-line)}
+.chip.a{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-line)}
+.chip.g{background:var(--card-2);color:var(--ink-3);border-color:var(--line)}
+
+/* ---------- verdict box ---------- */
+.verdict{
+  background:var(--good-bg);border:1px solid var(--good-line);border-left:5px solid var(--good);
+  border-radius:var(--radius);padding:24px 26px;display:flex;flex-direction:column;gap:14px;
+}
+.verdict .vh{font-size:11.5px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--good)}
+.verdict h2{font-size:clamp(20px,3vw,25px)}
+.vrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.vcell{background:var(--card);border:1px solid var(--good-line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:5px}
+.vcell .k{font-size:11px;font-weight:720;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.vcell .n{font-weight:700;font-size:16px}
+.vcell p{font-size:13.5px;color:var(--ink-2)}
+
+/* ---------- stat cards ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+.stat{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:17px 18px;
+  box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:6px;
+}
+.stat .fig{font-size:29px;font-weight:740;letter-spacing:-.025em;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.1}
+.stat .lab{font-size:13.5px;font-weight:640}
+.stat .src{font-size:11.5px;color:var(--ink-3);line-height:1.45}
+
+/* ---------- callout ---------- */
+.callout{
+  border-radius:var(--radius);padding:22px 24px;display:flex;flex-direction:column;gap:11px;
+  border:1px solid var(--warn-line);background:var(--warn-bg);border-left:5px solid var(--warn);
+}
+.callout .ch{font-size:11.5px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--warn)}
+.callout h3{font-size:19px}
+.callout p{font-size:15px;color:var(--ink-2)}
+.callout.blue{border-color:var(--accent-line);background:var(--accent-soft);border-left-color:var(--accent)}
+.callout.blue .ch{color:var(--accent)}
+.callout.red{border-color:var(--bad-line);background:var(--bad-bg);border-left-color:var(--bad)}
+.callout.red .ch{color:var(--bad)}
+.callout.green{border-color:var(--good-line);background:var(--good-bg);border-left-color:var(--good)}
+.callout.green .ch{color:var(--good)}
+
+/* ---------- source line ---------- */
+.src-note{
+  border-left:2px solid var(--accent-line);padding:2px 0 2px 12px;
+  display:flex;flex-direction:column;gap:2px;margin:2px 0;
+}
+.src-note .s{font-size:13px;font-weight:600;color:var(--ink-2)}
+.src-note .s a{font-weight:600}
+.src-note .why{font-size:12.5px;font-style:italic;color:var(--ink-3);line-height:1.5}
+
+/* ---------- tables ---------- */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.5}
+thead th{
+  background:var(--safety-2);color:var(--ink);font-weight:700;font-size:12px;
+  letter-spacing:.045em;text-transform:uppercase;border-bottom:1px solid var(--line);
+  position:sticky;top:0;
+}
+tbody th{font-weight:640;color:var(--ink);background:var(--card-2);white-space:nowrap}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:0}
+td.win{background:var(--good-bg);box-shadow:inset 2px 0 0 var(--good)}
+tr.verdict-row th,tr.verdict-row td{background:var(--card-2);font-weight:640;border-top:2px solid var(--line)}
+tr.verdict-row td.win{background:var(--good-bg)}
+.tnote{font-size:12.5px;color:var(--ink-3);font-style:italic}
+
+/* ---------- profiles ---------- */
+.profile{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.profile > .ph{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  padding:15px 19px;background:var(--card-2);border-bottom:1px solid var(--line);
+}
+.profile > .ph .rank{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600}
+.profile > .pb{padding:19px;display:flex;flex-direction:column;gap:15px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:11px}
+.fact{background:var(--card-2);border:1px solid var(--line-2);border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.fact .k{font-size:10.5px;font-weight:720;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.fact .v{font-size:13.5px;font-weight:600}
+blockquote{
+  margin:0;padding:12px 16px;background:var(--card-2);border-left:3px solid var(--accent-line);
+  border-radius:0 9px 9px 0;display:flex;flex-direction:column;gap:6px;
+}
+blockquote p{font-size:14.5px;color:var(--ink-2)}
+blockquote cite{font-style:normal;font-size:12px;color:var(--ink-3)}
+.against{border:1px dashed var(--bad-line);background:var(--bad-bg);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.against .h{font-size:11.5px;font-weight:740;letter-spacing:.1em;text-transform:uppercase;color:var(--bad)}
+.against p,.against li{font-size:14px;color:var(--ink-2)}
+
+/* ---------- email ---------- */
+.email{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.email .eh{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:var(--card-2);border-bottom:1px solid var(--line);
+}
+.email .eh .who{font-size:13.5px;font-weight:660}
+.email pre{
+  margin:0;padding:16px;font-family:var(--mono);font-size:12.5px;line-height:1.62;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink-2);background:var(--card);
+}
+button.copy{
+  font:inherit;font-size:12px;font-weight:640;letter-spacing:.03em;
+  padding:6px 13px;border-radius:7px;cursor:pointer;
+  background:var(--accent);color:#fff;border:1px solid var(--accent);
+}
+:root[data-theme="dark"] button.copy{color:#0d1219}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) button.copy{color:#0d1219}}
+button.copy:hover{filter:brightness(1.08)}
+button.copy[data-done="1"]{background:var(--good);border-color:var(--good)}
+
+/* ---------- sources ---------- */
+.srcgroup{display:flex;flex-direction:column;gap:11px}
+.srcgroup h4{color:var(--accent);font-size:12.5px;letter-spacing:.09em;text-transform:uppercase}
+ol.sources{list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:s}
+ol.sources li{display:flex;gap:11px;font-size:13.5px}
+ol.sources li .no{
+  font-family:var(--mono);font-size:11.5px;color:var(--ink-3);min-width:23px;padding-top:3px;
+  font-variant-numeric:tabular-nums;
+}
+ol.sources li .body{display:flex;flex-direction:column;gap:2px}
+ol.sources li .body .ti{font-weight:620;color:var(--ink)}
+ol.sources li .body .u{font-size:12.5px;word-break:break-all}
+ol.sources li .body .ex{font-size:12.5px;font-style:italic;color:var(--ink-3);line-height:1.5}
+
+/* ---------- final ---------- */
+.final{
+  border:2px solid var(--accent);border-radius:var(--radius);background:var(--card);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.final .fh{
+  background:var(--accent);color:#fff;padding:19px 26px;display:flex;flex-direction:column;gap:3px;
+}
+:root[data-theme="dark"] .final .fh{color:#0d1219}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .final .fh{color:#0d1219}}
+.final .fh .t{font-size:11.5px;font-weight:750;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.final .fh h2{font-size:clamp(22px,3.4vw,29px)}
+.final .fb{padding:26px;display:flex;flex-direction:column;gap:20px}
+.elim{display:flex;flex-direction:column;gap:10px}
+.elim .row{
+  display:grid;grid-template-columns:170px 1fr;gap:4px 16px;
+  padding:12px 0;border-bottom:1px solid var(--line-2);
+}
+.elim .row:last-child{border-bottom:0}
+.elim .row .nm{font-weight:660;font-size:14.5px}
+.elim .row .tx{font-size:14px;color:var(--ink-2)}
+.conf-meter{display:flex;flex-direction:column;gap:8px}
+.bar{height:9px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--good);border-radius:99px}
+
+@media (max-width:640px){
+  .card{padding:20px 17px}
+  .hero-art{padding:28px 18px 22px}
+  .micr{padding:10px 18px;font-size:11px;letter-spacing:.1em}
+  .verdict{padding:19px 17px}
+  .final .fb{padding:19px 17px}
+  .final .fh{padding:17px 18px}
+  .elim .row{grid-template-columns:1fr}
+  .profile > .pb{padding:16px}
+}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:100%;padding:0;gap:14px}
+  .card,.profile,.email,.final,.hero{box-shadow:none;break-inside:avoid}
+  .tscroll{overflow:visible}
+  table{min-width:0;font-size:10.5px}
+  thead th{position:static}
+  button.copy{display:none}
+  a{color:var(--ink);text-decoration:none}
+  h2{break-after:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<!-- ============ 1. CONFIDENTIALITY ============ -->
+<div class="conf">
+  <div class="t">Confidential — prepared for a single reader</div>
+  <p><strong>Prepared for:</strong> the requester, San Jose, CA 95138 · <strong>Subject:</strong> purchase of bank check books, required within three days · <strong>Report date:</strong> Wednesday, 19 August 2026.</p>
+  <p><strong>Every fact in this report was read on 19 August 2026.</strong> Prices, shipping cut-offs and delivery windows for printed checks change without notice and are frequently different at checkout than on the marketing page. Nothing here is a quote. Confirm the landed total and the delivery date on the vendor's own checkout screen before you pay.</p>
+  <p>This document contains no account numbers, routing numbers or bank identifiers, and none should be added to it. Do not forward it with those details attached.</p>
+</div>
+
+<!-- ============ 2. HERO ============ -->
+<div class="hero">
+  <div class="hero-art">
+    <div class="eyebrow">Research · Assessment · Comparison</div>
+    <h1>Bank Check Books RAC</h1>
+    <p class="hero-sub">Nine ways to buy a checkbook, measured against one unforgiving constraint: it has to be in your hands in San Jose by Saturday. Most of them can't do it — and the reason why is not the one the industry advertises.</p>
+    <div class="hero-badges">
+      <span class="chip a">9 candidates screened</span>
+      <span class="chip v">1 pick</span>
+      <span class="chip u">4 eliminated on speed</span>
+      <span class="chip g">27 sources</span>
+    </div>
+  </div>
+  <div class="perf"></div>
+  <div class="micr">
+    <span><b>ORDER BY</b> 2026-08-19</span>
+    <span><b>DEADLINE</b> 2026-08-22</span>
+    <span><b>ZIP</b> 95138</span>
+    <span><b>WINDOW</b> 3 CAL DAYS / 3 BUS DAYS</span>
+    <span><b>READ</b> 2026-08-19</span>
+  </div>
+</div>
+
+<!-- ============ TOC ============ -->
+<div class="card toc">
+  <div class="sechead"><div class="eyebrow">Contents</div></div>
+  <ol>
+    <li><a href="#call"><span class="n">01</span> The call</a></li>
+    <li><a href="#working"><span class="n">02</span> What we're working with</a></li>
+    <li><a href="#matrix"><span class="n">03</span> Comparison matrix</a></li>
+    <li><a href="#ratings"><span class="n">04</span> Ratings, every platform</a></li>
+    <li><a href="#profiles"><span class="n">05</span> Candidate profiles, ranked</a></li>
+    <li><a href="#cost"><span class="n">06</span> What this should cost</a></li>
+    <li><a href="#policy"><span class="n">07</span> The policy layer</a></li>
+    <li><a href="#audit"><span class="n">08</span> Claim-by-claim audit</a></li>
+    <li><a href="#plain"><span class="n">09</span> My assessment, in plain English</a></li>
+    <li><a href="#emails"><span class="n">10</span> Copy-paste emails</a></li>
+    <li><a href="#sources"><span class="n">11</span> Numbered sources</a></li>
+    <li><a href="#final"><span class="n">12</span> Final verdict</a></li>
+  </ol>
+</div>
+
+<!-- ============ 3. THE CALL ============ -->
+<section class="card" id="call">
+  <div class="sechead">
+    <div class="num">01</div>
+    <h2>The call</h2>
+  </div>
+
+  <div class="verdict">
+    <div class="vh">Verdict — decided 19 August 2026</div>
+    <h2>Buy from CheckAdvantage today, before 10:00 AM Pacific, with Rush Production and UPS Next Day Air.</h2>
+    <p class="lede">It is the only vendor in this set that sells a <em>production</em> upgrade separately from a <em>shipping</em> upgrade — which is the only combination that clears a three-day window — and the only one of the fast vendors with an independently checkable business record behind it.</p>
+    <div class="vrow">
+      <div class="vcell">
+        <div class="k">The pick</div>
+        <div class="n">CheckAdvantage <span class="chip v">Buy</span></div>
+        <p>Rush Production (order before 12:00 PM Central) + UPS Next Day Air. Est. landed <strong>$70–$85</strong>. Arrives Fri 21 Aug.</p>
+        <p class="tiny"><a href="https://www.checkadvantage.com/in-plant-rush">checkadvantage.com/in-plant-rush</a></p>
+      </div>
+      <div class="vcell">
+        <div class="k">The runner-up</div>
+        <div class="n">Deluxe <span class="chip u">Hold</span></div>
+        <p>The strongest institution in the category — NYSE-listed, founded 1915 — with published 1–2 business-day shipping at $21.55. Loses on production time, not on trust.</p>
+        <p class="tiny"><a href="https://www.deluxe.com/shopdeluxe/home">deluxe.com/shopdeluxe</a></p>
+      </div>
+      <div class="vcell">
+        <div class="k">The special-role play</div>
+        <div class="n">Your own bank branch <span class="chip a">Do this first</span></div>
+        <p>Counter checks, printed at the teller window, roughly <strong>$3 per sheet of 3</strong>. Costs $3–$9 and removes the deadline entirely. Do this before you order anything.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="fig">3 days</div>
+      <div class="lab">Your window: Wed 19 Aug → Sat 22 Aug 2026</div>
+      <div class="src">Three business days runs to Mon 24 Aug. This report treats Saturday as the target and Monday as the outer edge.</div>
+    </div>
+    <div class="stat">
+      <div class="fig">7–9</div>
+      <div class="lab">Business days for Costco's <em>paid express</em> delivery</div>
+      <div class="src">Roughly three times your window — for the upgrade, not the free option. Read 19 Aug 2026 [1][2].</div>
+    </div>
+    <div class="stat">
+      <div class="fig">$688M</div>
+      <div class="lab">Mail-theft check fraud in 15,417 BSA reports, Feb–Aug 2023</div>
+      <div class="src">FinCEN Financial Trend Analysis. Your checkbook travels by mail. Read 19 Aug 2026 [16].</div>
+    </div>
+    <div class="stat">
+      <div class="fig">$3</div>
+      <div class="lab">Per counter-check sheet at a Chase branch — today</div>
+      <div class="src">Three usable checks per sheet, printed on the spot. Read 19 Aug 2026 [8].</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="ch">The finding that reframes everything</div>
+    <h3>"Express shipping" in the check industry is not a delivery speed. It's a courier upgrade bolted onto a queue you can't skip.</h3>
+    <p>Costco Checks charges <strong>$19.90 for "Express delivery" that arrives in seven to nine business days</strong> — versus nine to twelve for free standard [1][2]. Checks In The Mail sells the same shape of thing at the same price [3]. That is not a shipping problem; a courier can cross the country overnight. It is a <strong>production queue</strong> problem: your order sits in a batch for a week, and then it flies.</p>
+    <p>Which means you are not shopping for shipping. You are shopping for <strong>a factory slot</strong> — a vendor that sells the right to jump the print queue as a separate, priced line item. Only three vendors in this set do: CheckAdvantage ("Rush Production" / In-Plant Rush), Checkomatic ("SuperRush") and ChecksNextDay [4][5][6]. Everyone else, including every bank's standard reorder, is structurally incapable of hitting Saturday no matter how much you pay them.</p>
+    <p>There is a second edge to this. Whatever you buy arrives <em>by mail</em>, in a package carrying your name, your home address, your bank's routing number and your account number — which is precisely the package FinCEN identifies at the centre of the fastest-growing consumer fraud category in the country [16][17]. So the cheap free-bulk-mail tier isn't merely slow. It is also the tier that puts an untracked box of blank checks in an unsecured mailbox. Speed and safety point the same direction here, which is unusual and worth taking advantage of.</p>
+  </div>
+</section>
+
+<!-- ============ 4. WHAT WE'RE WORKING WITH ============ -->
+<section class="card" id="working">
+  <div class="sechead">
+    <div class="num">02</div>
+    <h2>What we're working with</h2>
+    <p class="lede">Your brief is four facts. Each one does real work, and one of them quietly disqualifies most of the market.</p>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="k">The item</div><div class="v">Bank check books — a physical, personalised printed product</div></div>
+    <div class="fact"><div class="k">The clock</div><div class="v">Three days from Wed 19 Aug 2026</div></div>
+    <div class="fact"><div class="k">The place</div><div class="v">San Jose, CA 95138</div></div>
+    <div class="fact"><div class="k">The role</div><div class="v">Buying a product, not hiring a service</div></div>
+  </div>
+
+  <h3>Reading each one closely</h3>
+
+  <p><strong>"Bank check books" is doing more than it looks.</strong> A checkbook is not a commodity print job. It is a personalised financial instrument that carries your routing number and account number in magnetic ink, and it has to satisfy a standards regime before a bank will process it. The relevant standard is <strong>ANSI X9.100-170</strong>, the padlock icon specification — a printer may only display the padlock on a check if it has certified to the Check Payment Systems Association that the check carries <strong>at least three security features defending against both alteration and counterfeiting</strong> [18][19]. That is the floor. It rules out "a print shop can just run these for me," and it is the reason no general San Jose printer appears in this report.</p>
+
+  <div class="src-note">
+    <div class="s">Source: CPSA — <em>Guideline for Use of the Enhanced Check Security Features Padlock Icon</em>, rev. Jan 2025 · <a href="https://www.cpsa-checks.org/Portals/0/Documents/CPSA%20Padlock%20Icon%20Guidelines%20rev%20Jan%202025.pdf">cpsa-checks.org</a> · read 19 Aug 2026</div>
+    <div class="why">(The Check Payment Systems Association is the US trade body for check printers and the body that created and administers the padlock icon; it is the authoritative source for what the icon certifies. Trade association, not a regulator — authoritative on its own standard, not on any member's compliance.)</div>
+  </div>
+  <div class="src-note">
+    <div class="s">Source: ANSI/ASC X9 — <em>ANSI X9.100-170-2010 (R2017), Specifications for the Padlock Icon</em> · <a href="https://webstore.ansi.org/standards/ascx9/ansix91001702004">webstore.ansi.org</a> · read 19 Aug 2026</div>
+    <div class="why">(The Accredited Standards Committee X9 writes the American National Standards for financial services; this is the primary published standard document. Behind a paywall — the abstract and preview pages were read, not the full text.)</div>
+  </div>
+
+  <p><strong>"Three days" is the constraint that eliminates.</strong> Ordering Wednesday 19 August, three calendar days lands on <strong>Saturday 22 August</strong>; three business days lands on <strong>Monday 24 August</strong>. Both readings sit far inside the industry's normal cycle. Chase's own standard mailed reorder is seven to ten business days, and Chase confirms that ordering in a branch does <em>not</em> speed it up, because an outside vendor prints and ships it either way [8]. Bank of America's standard is seven to fourteen business days [10]. Costco's free option is nine to twelve [1]. Carousel's free bulk mail is two to three weeks [7]. Against a Saturday deadline, the default path in this entire category fails by a factor of three to five.</p>
+
+  <p><strong>"San Jose, CA 95138" earns you two things and costs you one.</strong> It earns you same-day access to bank branches and to office-supply retail — both of which turn out to matter. It also puts you in UPS/FedEx air network coverage from the Midwest, which is where the fast printers are (De Pere, Wisconsin for CheckAdvantage [4]). What it costs you is sales tax: California applies sales tax to printed checks, and San Jose's combined rate is in the 9.3–9.4% band. That is <span class="chip u">Unconfirmed</span> here and worth an extra $6–$8 on a $75 order; it shows in the cost table below as a modelled line, not a quote.</p>
+
+  <p><strong>"A product, not a service" changes what evidence counts.</strong> There is no contractor licence to pull, no CSLB record, no workers' comp certificate, no bonding. The regulator layer that would normally anchor a RAC report simply does not exist for check printers — they are ordinary commercial printers, not licensees. What replaces it is thinner and I want to be straight about that: corporate registration and public-company filings for the large players, BBB business profiles, the CPSA padlock certification, and the federal rules that govern what happens after a check goes wrong. Where a licensing record would normally sit, this report has a gap, and no amount of searching fills it.</p>
+
+  <hr class="sep">
+
+  <div class="callout blue">
+    <div class="ch">The rule that eliminates candidates</div>
+    <h3>A vendor survives only if it publishes <em>both</em> a production commitment measured in hours or one business day, <em>and</em> a carrier-tracked air shipping option — as two separately purchasable things.</h3>
+    <p>Not "express shipping." Not "fast delivery." Not "ships in 2–3 days." A named production upgrade, plus a named air service, both visible at checkout, both with a date attached. If a vendor's fastest published option is expressed as <em>"arrives in N business days"</em> as a single blended number, that number includes their print queue and it cannot be compressed by paying more — and it is out, however good and however cheap it is.</p>
+    <p class="small"><strong>Eliminated by this rule alone:</strong> Costco Checks, Checks In The Mail, Carousel Checks, Vistaprint, every bank's standard mailed reorder. Three of those five are genuinely excellent products at genuinely better prices. They are wrong for this week, not wrong.</p>
+  </div>
+</section>
+
+<!-- ============ 5. MATRIX ============ -->
+<section class="card" id="matrix">
+  <div class="sechead">
+    <div class="num">03</div>
+    <h2>Comparison matrix</h2>
+    <p class="lede">Six candidates that cleared initial screening, plus the branch hedge. Winning cell in each row is shaded green. All figures read 19 August 2026.</p>
+  </div>
+
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:170px">Criterion</th>
+          <th>CheckAdvantage</th>
+          <th>Deluxe</th>
+          <th>Checkomatic</th>
+          <th>ChecksNextDay</th>
+          <th>Costco Checks</th>
+          <th>Bank branch counter checks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Can it hit Sat 22 Aug?</th>
+          <td class="win"><span class="chip v">Yes</span><br>Rush before 12:00 CT → out Thu, air → Fri 21 Aug [4]</td>
+          <td><span class="chip n">Unlikely</span><br>1–2 business-day ship is real, but production sits ahead of it [11]</td>
+          <td><span class="chip v">Yes</span><br>SuperRush = same-day processing + overnight [5]</td>
+          <td><span class="chip v">Yes</span><br>Same-day print, next-day ship, Mon–Thu only [6]</td>
+          <td><span class="chip n">No</span><br>Paid express is 7–9 business days [1][2]</td>
+          <td class="win"><span class="chip v">Today</span><br>Printed at the teller window [8][9]</td>
+        </tr>
+        <tr>
+          <th>Production commitment</th>
+          <td class="win">Rush Production — leaves warehouse next business day if ordered before noon CT [4]</td>
+          <td>Not published in any source I could reach <span class="chip u">Unconfirmed</span></td>
+          <td class="win">Same-day processing, first 50 checks [5]</td>
+          <td class="win">Same-day print [6]</td>
+          <td>Batched; not separately purchasable</td>
+          <td>Instant</td>
+        </tr>
+        <tr>
+          <th>Air shipping sold separately</th>
+          <td class="win">UPS Next Day Air / 2nd Day Air, priced at checkout [4]</td>
+          <td class="win">1–2 business day tier, $21.55 flat [11]</td>
+          <td>Bundled into SuperRush [5]</td>
+          <td>Bundled into Rush (+$25) [6]</td>
+          <td>"Express" $19.90 — not an air product [1]</td>
+          <td>n/a</td>
+        </tr>
+        <tr>
+          <th>Est. landed cost, 1 box personal</th>
+          <td>$70–$85 <span class="chip u">Modelled</span></td>
+          <td class="win">$30–$45 <span class="chip u">Modelled</span></td>
+          <td>~$110+ before tax [5]</td>
+          <td>Checks + $25 rush <span class="chip u">Unconfirmed</span></td>
+          <td class="win">~$36 with express [1]</td>
+          <td class="win">$3–$9 total [8][9]</td>
+        </tr>
+        <tr>
+          <th>Cheapest per check</th>
+          <td>From under $7 / 150 singles [11]</td>
+          <td>From under $7 / 150 singles [11]</td>
+          <td>$54.75 listed personal checkbook [5]</td>
+          <td>Not published in reachable sources</td>
+          <td class="win">$13.22–$16.53 / 250; ~11¢ at volume [1]</td>
+          <td>~$1.00 per check [9]</td>
+        </tr>
+        <tr>
+          <th>Entity verifiable</th>
+          <td class="win"><span class="chip v">Yes</span> — CheckAdvantage LLC, De Pere WI, BBB profile [4][12]</td>
+          <td class="win"><span class="chip v">Yes</span> — Deluxe Corp, NYSE: DLX, SEC filings, founded 1915 [13][14]</td>
+          <td><span class="chip u">Partial</span> — trading name only; no BBB profile located</td>
+          <td><span class="chip u">Partial</span> — 18-year-old domain; ownership not public</td>
+          <td class="win"><span class="chip v">Yes</span> — Harland Clarke / Vericast [15]</td>
+          <td class="win"><span class="chip v">Yes</span> — federally regulated bank</td>
+        </tr>
+        <tr>
+          <th>Third-party review depth</th>
+          <td><span class="chip u">Thin</span> — BBB A−; only 2–3 independent ratings located [12]</td>
+          <td class="win"><span class="chip v">Deep</span> — BBB accredited, large complaint and review corpus [13]</td>
+          <td><span class="chip u">Moderate</span> — 4.57/5 across 303 ResellerRatings [21]</td>
+          <td><span class="chip n">Very thin</span> — no credible platform corpus located</td>
+          <td class="win"><span class="chip v">Deep</span> — via Harland Clarke / Costco</td>
+          <td>n/a</td>
+        </tr>
+        <tr>
+          <th>Security features</th>
+          <td class="win">Padlock-class expected <span class="chip u">Unconfirmed</span></td>
+          <td class="win">Padlock-class expected <span class="chip u">Unconfirmed</span></td>
+          <td class="win">Padlock-class expected <span class="chip u">Unconfirmed</span></td>
+          <td class="win">Padlock-class expected <span class="chip u">Unconfirmed</span></td>
+          <td class="win">25+ features claimed on high-security stock [1][15]</td>
+          <td>Minimal — counter checks are deliberately plain</td>
+        </tr>
+        <tr>
+          <th>Delivery is tracked</th>
+          <td class="win"><span class="chip v">Yes</span> — UPS air</td>
+          <td class="win"><span class="chip v">Yes</span> at the $8.55 tier and above [11]</td>
+          <td class="win"><span class="chip v">Yes</span> — overnight carrier</td>
+          <td class="win"><span class="chip v">Yes</span></td>
+          <td><span class="chip v">Yes</span> — free standard is trackable [1]</td>
+          <td class="win"><span class="chip v">n/a</span> — hand-to-hand</td>
+        </tr>
+        <tr>
+          <th>Biggest risk</th>
+          <td>Rush fee not published; thin review corpus</td>
+          <td>Misses the deadline</td>
+          <td>~3× the price; overnight covers only first 50 checks</td>
+          <td>Almost no independent evidence the company performs</td>
+          <td>Misses the deadline by a week</td>
+          <td>Some merchants refuse checks with no pre-printed name</td>
+        </tr>
+        <tr class="verdict-row">
+          <th>Verdict</th>
+          <td class="win"><span class="chip v">Buy</span> — the only fast option with a checkable record</td>
+          <td><span class="chip u">Runner-up</span> — buy this if the deadline slips</td>
+          <td><span class="chip u">Back-up</span> — the emergency lever, at a price</td>
+          <td><span class="chip n">Pass</span> — unverifiable, and you can't afford a surprise</td>
+          <td><span class="chip n">Pass this week</span> — genuinely the best value, wrong month</td>
+          <td><span class="chip a">Do it today</span> — regardless of what else you order</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Green shading marks the best cell in that row against your stated priority — speed first, verifiability second, price third. Two green cells in a row means a genuine tie on the evidence available. "Modelled" totals are built line-by-line in section 06 and are not quotes.</p>
+</section>
+
+<!-- ============ 6. RATINGS ============ -->
+<section class="card" id="ratings">
+  <div class="sechead">
+    <div class="num">04</div>
+    <h2>Ratings, every platform</h2>
+    <p class="lede">All ratings read 19 August 2026. An empty cell is not a bad sign — it usually means the platform doesn't serve this category.</p>
+  </div>
+
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:150px">Platform</th>
+          <th>CheckAdvantage</th>
+          <th>Deluxe</th>
+          <th>Checkomatic</th>
+          <th>ChecksNextDay</th>
+          <th>Carousel Checks</th>
+          <th>Checks Unlimited</th>
+          <th>Checks In The Mail</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>BBB rating</th>
+          <td class="win">A− <span class="chip u">Unconfirmed</span></td>
+          <td>Accredited <span class="chip u">Unconfirmed</span></td>
+          <td>No profile located</td>
+          <td>No profile located</td>
+          <td>No profile located</td>
+          <td>Not accredited [13]</td>
+          <td>Not accredited [13]</td>
+        </tr>
+        <tr>
+          <th>BBB accreditation</th>
+          <td>Not stated in retrieval</td>
+          <td class="win">Yes — Deluxe Corporation has committed to BBB Standards for Trust [13]</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>No [13]</td>
+          <td>No [13]</td>
+        </tr>
+        <tr>
+          <th>Trustpilot</th>
+          <td>Profile exists; score not retrieved</td>
+          <td>Not retrieved</td>
+          <td>No profile located</td>
+          <td>No profile located</td>
+          <td class="win">4.3 / 5 "Excellent"; 16,000+ five-star reviews [7]</td>
+          <td>Not retrieved</td>
+          <td>Not retrieved</td>
+        </tr>
+        <tr>
+          <th>ResellerRatings</th>
+          <td>—</td>
+          <td>—</td>
+          <td class="win">4.57 / 5 [21]</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <th>Trustindex (embedded widget)</th>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>4.9 / 5 <span class="chip n">Weak source</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <th>PissedConsumer</th>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>279 reviews, negative-skewed by design <span class="chip u">Directional only</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <th>Yelp / Google (local)</th>
+          <td colspan="7" class="tnote">Not applicable. None of these are storefronts. Yelp and Google Business ratings — including Yelp's "not recommended" queue — do not meaningfully cover national mail-order check printers, and I could not reach Yelp from this session in any case. <strong>An empty Yelp presence is meaningless here, not a red flag.</strong></td>
+        </tr>
+        <tr>
+          <th>G2 / Capterra / TrustRadius</th>
+          <td colspan="7" class="tnote">Not applicable — these are software review platforms and do not cover printed consumer products.</td>
+        </tr>
+        <tr class="verdict-row">
+          <th>Total independent reviews located</th>
+          <td>≈ 3 <span class="chip n">Very thin</span></td>
+          <td class="win">Thousands (BBB corpus) <span class="chip u">Not counted</span></td>
+          <td>303 [21]</td>
+          <td>≈ 89, widget-hosted <span class="chip n">Not independent</span></td>
+          <td class="win">16,000+ [7]</td>
+          <td>279+ <span class="chip u">Skewed</span></td>
+          <td>Not counted</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout red">
+    <div class="ch">A warning about this table</div>
+    <h3>The two fastest vendors have almost no independent review record — and the deepest review record belongs to a vendor that can't make your deadline.</h3>
+    <p>This is the central tension in the whole report and I am not going to paper over it. Carousel Checks has sixteen thousand five-star Trustpilot reviews and cannot get checks to you before September. CheckAdvantage can be at your door Friday and I located roughly three independent ratings for it in total. Deluxe has the corpus and the corporate filings and is probably a day or two too slow.</p>
+    <p><strong>What I explicitly refused to count.</strong> Searches surfaced ratings from <em>scam-detector.com</em>, <em>scamadviser.com</em>, <em>gridinsoft</em>, <em>scamvoid</em>, <em>trustedrevie.ws</em>, <em>us-reviews.com</em>, <em>myprosandcons</em> and <em>tenereteam</em>. These are algorithmic domain-scoring pages and affiliate aggregators — they score a <em>website</em>, not a business, and several monetise the very links they rate. A "79/100 trust score" from a malware scanner tells you nothing about whether your checkbook arrives. Same for <em>topconsumerreviews.com</em> and <em>top10.com</em>, which are affiliate-monetised ranking sites. None of them appear in the source list.</p>
+  </div>
+</section>
+
+<!-- ============ 7. PROFILES ============ -->
+<section class="card" id="profiles">
+  <div class="sechead">
+    <div class="num">05</div>
+    <h2>Candidate profiles, ranked</h2>
+    <p class="lede">Ranked against your priority: arrive by Saturday, from a vendor whose existence and performance I can check.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ch">Read this before the quotes</div>
+    <h3>I could not open a single vendor page or review page directly from this session.</h3>
+    <p>Every outbound page fetch in this session was refused by the network egress policy — <code>deluxe.com</code>, <code>checkadvantage.com</code>, <code>costcochecks.com</code>, <code>checksnextday.com</code>, <code>checkomatic.com</code>, <code>vistaprint.com</code> and even <code>consumerfinance.gov</code> all returned a proxy block (HTTP 403 on CONNECT). Everything below comes from <strong>search-engine retrieval of those pages</strong> — real indexed text from the real pages, but read at one remove.</p>
+    <p><strong>The consequence:</strong> I have no verbatim customer quotes I can stand behind. Rather than dress up paraphrases as quotations, the profiles below carry <em>characterisations</em> of complaint content, each clearly labelled as such and tagged <span class="chip n">Not verified</span>. I have not invented a single quotation mark. The dead-end list in section 11 gives you the URLs to close these yourself in about ten minutes.</p>
+  </div>
+
+  <!-- P1 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 01</span> &nbsp; <strong>CheckAdvantage LLC</strong></div>
+      <div><span class="chip v">The pick</span></div>
+    </div>
+    <div class="pb">
+      <p class="lede">A 25-year-old Wisconsin check printer that sells the one thing your deadline actually requires — a priced, published jump to the front of the print queue — and has a Better Business Bureau file you can look up.</p>
+
+      <div class="facts">
+        <div class="fact"><div class="k">Legal entity</div><div class="v">CheckAdvantage LLC <span class="chip v">Verified</span></div></div>
+        <div class="fact"><div class="k">Location</div><div class="v">De Pere, Wisconsin [4][12]</div></div>
+        <div class="fact"><div class="k">Operating since</div><div class="v">2001 <span class="chip u">Unconfirmed</span></div></div>
+        <div class="fact"><div class="k">BBB rating</div><div class="v">A− <span class="chip u">Unconfirmed</span></div></div>
+        <div class="fact"><div class="k">Rush mechanism</div><div class="v">Order before 12:00 PM Central → leaves warehouse next business day [4]</div></div>
+        <div class="fact"><div class="k">Shipping</div><div class="v">UPS Next Day Air / 2nd Day Air at extra charge [4]</div></div>
+        <div class="fact"><div class="k">Rush fee</div><div class="v">Not published <span class="chip a">Ask</span></div></div>
+        <div class="fact"><div class="k">Buy at</div><div class="v"><a href="https://www.checkadvantage.com/in-plant-rush">checkadvantage.com/in-plant-rush</a></div></div>
+      </div>
+
+      <h4>Why it wins the deadline, in hours</h4>
+      <p>Order placed Wednesday 19 August before <strong>10:00 AM Pacific</strong> (noon Central) with Rush Production selected. Checks leave De Pere <strong>Thursday 20 August</strong>. UPS Next Day Air from Wisconsin to 95138 delivers <strong>Friday 21 August</strong>. That is one full day of margin against your Saturday target and two business days against Monday. Even if the rush slips a day, 2nd Day Air still lands Monday. Both failure paths still clear the outer edge — which is the actual reason this is the pick rather than the fastest option.</p>
+
+      <div class="src-note">
+        <div class="s">Source: CheckAdvantage — <em>In-Plant Rush</em> · <a href="https://www.checkadvantage.com/in-plant-rush">checkadvantage.com/in-plant-rush</a> · read 19 Aug 2026 via search index</div>
+        <div class="why">(The vendor's own published service page — primary for what they commit to, and the only place the noon-Central cut-off appears. Vendor material, so it is a statement of intent, not an independent performance record. Page could not be opened directly from this session.)</div>
+      </div>
+
+      <h4>What customers say</h4>
+      <blockquote>
+        <p><strong>Characterisation, not a quotation.</strong> Retrieval surfaced two recurring complaint themes: that the <strong>CheckAdvantage logo is printed on the checks themselves</strong>, which several customers found unwelcome; and that <strong>print quality was below expectation</strong>.</p>
+        <cite>Both themes appear only in affiliate-monetised review aggregators, which this report does not cite. Flagged for you to verify, counted as evidence of nothing. <span class="chip n">Not verified</span></cite>
+      </blockquote>
+      <p class="small">The logo allegation is the one to actually check, because it is concrete, falsifiable in thirty seconds on a phone call, and would matter to you. Ask them directly — it is question 4 in the email in section 10.</p>
+
+      <h4>How the owner responds to reviews</h4>
+      <p><span class="chip n">No evidence located.</span> I found no owner responses on any platform, which is unsurprising given the near-empty review corpus. The company does run a self-hosted page at <code>checkadvantage.com/verify</code> titled "Proof You Can Trust CheckAdvantage" — that is self-certification, not engagement with criticism, and I score it as neither good nor bad.</p>
+
+      <div class="against">
+        <div class="h">The honest case against CheckAdvantage</div>
+        <ul>
+          <li><strong>The review record is nearly empty.</strong> Roughly three independent ratings, one of which is a single review. For a company claiming nearly 25 years and a 99% on-time rate, that is a striking absence. It is not evidence of a problem — small B2B-leaning printers often have thin consumer footprints — but it means you are buying on the strength of a BBB letter grade and a self-published claim.</li>
+          <li><strong>The rush fee is not published anywhere I could reach.</strong> The entire recommendation rests on a line item whose price I do not know. If it comes back at $40 rather than $20, the landed total moves from $70 to $90 and Checkomatic's $110 stops looking so far away.</li>
+          <li><strong>"Leaves the warehouse" is not "arrives."</strong> Their commitment ends at the loading dock. The delivery date is UPS's promise, not theirs, and if the rush slips you have no contractual recourse on the date.</li>
+          <li><strong>A− is a B-grade in disguise.</strong> BBB letter grades are BBB's own algorithm, weighted heavily toward complaint volume and responsiveness. On a low-volume file, A− mostly means "few complaints, some friction." It is a floor, not a recommendation.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 02</span> &nbsp; <strong>Deluxe Corporation</strong></div>
+      <div><span class="chip u">Runner-up</span></div>
+    </div>
+    <div class="pb">
+      <p class="lede">The most verifiable business in this entire report, by a distance — and probably one day too slow for your Saturday.</p>
+
+      <div class="facts">
+        <div class="fact"><div class="k">Legal entity</div><div class="v">Deluxe Corporation <span class="chip v">Verified</span></div></div>
+        <div class="fact"><div class="k">Public listing</div><div class="v">NYSE: DLX; SEC filer since at least 2002 [14]</div></div>
+        <div class="fact"><div class="k">Founded</div><div class="v">1915, St. Paul MN, by W.R. Hotchkiss <span class="chip v">Verified</span> [13]</div></div>
+        <div class="fact"><div class="k">Scale</div><div class="v">Partners with 4,000+ banks and credit unions [13]</div></div>
+        <div class="fact"><div class="k">Cheapest checks</div><div class="v">Under $7 per box of 150 singles [11]</div></div>
+        <div class="fact"><div class="k">Fastest shipping</div><div class="v">1–2 business days, $21.55 [11]</div></div>
+        <div class="fact"><div class="k">Production time</div><div class="v">Not published <span class="chip u">Unconfirmed</span></div></div>
+        <div class="fact"><div class="k">Buy at</div><div class="v"><a href="https://www.deluxe.com/shopdeluxe/home">deluxe.com/shopdeluxe</a></div></div>
+      </div>
+
+      <h4>The shipping ladder, in full</h4>
+      <p>Deluxe is the only vendor in this set that publishes a clean, legible shipping ladder for a one-box order of single checks: <strong>$3.55</strong> untracked bulk · <strong>$8.55</strong> for 7–10 calendar days · <strong>$15.55</strong> for 4 business days · <strong>$21.55</strong> for 1–2 business days [11]. That is exactly the transparency the rest of the category lacks, and it is why Deluxe is the runner-up rather than an also-ran.</p>
+      <p>The problem is what sits <em>in front</em> of that ladder. Deluxe does not publish a production time for personal checks on any page I could reach, and the category norm — the number that produces those 7-to-14-day blended estimates everywhere else — is two to three business days in the plant. Two to three days of printing plus one to two days of flying is three to five business days, which lands Monday 24 August at best and Wednesday 26 August at worst. Against Saturday, that fails. Against a three-business-day reading, it is a coin flip.</p>
+
+      <div class="src-note">
+        <div class="s">Source: Deluxe Corporation shipping tiers, as indexed from <a href="https://www.deluxe.com/shopdeluxe/home">deluxe.com/shopdeluxe</a> · read 19 Aug 2026 via search index</div>
+        <div class="why">(Vendor's own published rates — primary for price. Retrieved via search index because deluxe.com was blocked by this session's egress policy; the tier figures are secondary-hand and should be confirmed at checkout.)</div>
+      </div>
+      <div class="src-note">
+        <div class="s">Source: SEC EDGAR — Deluxe Corp, CIK 0000027996 · <a href="https://www.sec.gov/Archives/edgar/data/0000027996/000104596902002026/d424b5.htm">sec.gov/edgar</a> · read 19 Aug 2026</div>
+        <div class="why">(The Securities and Exchange Commission's public filing archive — the authoritative federal record of a listed company's legal existence, name and filings. As close to a regulator record as this category offers.)</div>
+      </div>
+
+      <h4>What customers say</h4>
+      <blockquote>
+        <p><strong>Characterisation, not a quotation.</strong> The BBB complaint file for Deluxe Corporation and its Checks Unlimited brand surfaced two specific matters in retrieval: a <strong>clutch check cover that arrived worn on all edges and looked old and faded</strong>, and a <strong>refund delayed more than 50 days</strong>. Recurring themes across the wider file: unauthorised charges, billing errors, refund delays, bait-and-switch pricing, faded images and bad perforations.</p>
+        <cite>BBB complaint summaries for Deluxe Corporation (Minneapolis MN) and Checks Unlimited (Colorado Springs CO), retrieved via search index 19 Aug 2026. Not opened directly. <span class="chip n">Not verified</span></cite>
+      </blockquote>
+      <p class="small">Read that pattern carefully before you weight it. Billing errors and refund delays on a company shipping tens of millions of orders a year is a base rate, not a signal. What <em>is</em> a signal for you specifically: <strong>refund delays of 50 days</strong>. If your order misses the deadline, that is the timeline you would be fighting.</p>
+
+      <h4>How the owner responds to reviews</h4>
+      <p>Deluxe Corporation holds BBB accreditation, which requires a commitment to BBB Standards for Trust and, in practice, means responding to filed complaints through the BBB process [13]. That is a meaningful, checkable behavioural difference from every fast vendor in this report — none of which appear to be accredited. Notably, its own <strong>Checks Unlimited</strong> and <strong>Checks In The Mail</strong> brands are <em>not</em> accredited [13], so accreditation attaches to the parent, not automatically to the storefront you buy from. Buy from <code>deluxe.com</code> directly, not from a sub-brand, if that protection matters to you.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Deluxe</div>
+        <ul>
+          <li><strong>It probably misses your date.</strong> That is the whole case, and it is enough.</li>
+          <li><strong>The brand family is a maze.</strong> Deluxe, Checks Unlimited, Checks.com and Checks In The Mail circle the same category with different accreditation status and different shipping ladders. It is easy to think you are buying Deluxe and buy an unaccredited sub-brand instead.</li>
+          <li><strong>$21.55 for 1–2 day shipping is a good price attached to an unpublished production time</strong> — which is precisely the "blended number" trap this report was built to catch, just better disguised.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 03</span> &nbsp; <strong>Checkomatic (Check O Matic)</strong></div>
+      <div><span class="chip u">Emergency lever</span></div>
+    </div>
+    <div class="pb">
+      <p class="lede">The fastest published path in the set, at roughly three times the price, from a business I can only partly identify.</p>
+      <div class="facts">
+        <div class="fact"><div class="k">Fast option</div><div class="v">SuperRush, +$54.95 [5]</div></div>
+        <div class="fact"><div class="k">What it buys</div><div class="v">Same-day processing + overnight delivery of the first 50 checks [5]</div></div>
+        <div class="fact"><div class="k">Listed personal checkbook</div><div class="v">$54.75 [5]</div></div>
+        <div class="fact"><div class="k">Standard shipping</div><div class="v">3–5 business days [5]</div></div>
+        <div class="fact"><div class="k">Free shipping</div><div class="v">Orders $150+, code FREE150PLUS [5]</div></div>
+        <div class="fact"><div class="k">Independent rating</div><div class="v">4.57 / 5 across 303 reviews [21]</div></div>
+        <div class="fact"><div class="k">BBB profile</div><div class="v">None located <span class="chip u">Search failed</span></div></div>
+        <div class="fact"><div class="k">Buy at</div><div class="v"><a href="https://www.checkomatic.com/personal-checkbook">checkomatic.com/personal-checkbook</a></div></div>
+      </div>
+
+      <p>The SuperRush clause deserves a slow read: it guarantees <em>same-day processing and overnight delivery <strong>of your first 50 checks</strong></em> [5]. That is not the same as overnight delivery of your order. If you buy 200 checks, the reading that fits the wording is that 50 fly and 150 follow at normal speed. For your purposes that may be perfectly fine — 50 checks arriving Thursday solves the problem — but you should know that is what you are buying, and it is the first thing to confirm on the phone.</p>
+
+      <div class="src-note">
+        <div class="s">Source: Checkomatic — personal checkbook and shipping pages · <a href="https://www.checkomatic.com/shipping">checkomatic.com/shipping</a> · read 19 Aug 2026 via search index</div>
+        <div class="why">(Vendor's own published pricing and shipping terms — primary for what they sell and what it costs. Not independently corroborated; pages could not be opened directly.)</div>
+      </div>
+      <div class="src-note">
+        <div class="s">Source: ResellerRatings — <em>Check O Matic – Business Checks</em>, 4.57/5 from 303 reviews · <a href="https://www.resellerratings.com/store/Check_O_Matic_Business_Checks">resellerratings.com</a> · read 19 Aug 2026</div>
+        <div class="why">(An established merchant review platform operating since 1996 with verified-purchase mechanisms; weaker than BBB or Trustpilot for this category but a genuine third-party corpus, and the only one located for this vendor.)</div>
+      </div>
+
+      <h4>What customers say</h4>
+      <blockquote>
+        <p><strong>No usable quotations located.</strong> The ResellerRatings aggregate (4.57/5, n=303) is the only independent signal I could retrieve. Individual review text was not reachable.</p>
+        <cite>Retrieved 19 Aug 2026. <span class="chip u">Unconfirmed at the individual-review level</span></cite>
+      </blockquote>
+      <h4>How the owner responds to reviews</h4>
+      <p><span class="chip n">No evidence located.</span> ResellerRatings supports merchant responses; whether Checkomatic uses that feature could not be determined from retrieval.</p>
+
+      <div class="against">
+        <div class="h">The honest case against Checkomatic</div>
+        <ul>
+          <li><strong>$54.75 + $54.95 = $109.70 before tax</strong> for what CheckAdvantage should do for roughly $75. You are paying a ~$35 premium for one extra day of margin.</li>
+          <li><strong>The 50-check cap</strong> on the overnight guarantee is a genuine asterisk on the headline promise.</li>
+          <li><strong>No BBB profile located and no corporate identity retrieved.</strong> "Checkomatic" is a trading name; who stands behind it is not something I could establish. A failed search is not proof of absence — but it is also not comfort.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 04</span> &nbsp; <strong>Your own bank's branch — counter checks</strong></div>
+      <div><span class="chip a">Special role: do this today</span></div>
+    </div>
+    <div class="pb">
+      <p class="lede">Not a competitor to the others. A $3–$9 insurance policy that makes the entire deadline optional.</p>
+      <div class="facts">
+        <div class="fact"><div class="k">Chase</div><div class="v">$3 per page, 3 checks per page, printed on the spot [8]</div></div>
+        <div class="fact"><div class="k">Wells Fargo</div><div class="v">~$3 per sheet (~$1 per check) at a branch [9]</div></div>
+        <div class="fact"><div class="k">Bank of America</div><div class="v">"Check Reorder Express" produces and ships in 24–48 hours; expedited fee waived at Preferred Rewards Platinum Honors / Premier [10]</div></div>
+        <div class="fact"><div class="k">Turnaround</div><div class="v">Immediate, at the teller window</div></div>
+        <div class="fact"><div class="k">Limit</div><div class="v">Usually a handful of sheets per visit <span class="chip u">Unconfirmed</span></div></div>
+        <div class="fact"><div class="k">Catch</div><div class="v">Some payees decline checks without a pre-printed name and address</div></div>
+      </div>
+      <p>Chase's own published position is unusually useful here, because it tells you two things at once: counter checks are $3 a page and available immediately, <em>and</em> ordering in a branch does not accelerate a normal reorder, because an outside vendor prints it regardless [8]. So the branch is worth a trip for exactly one reason — walking out with paper today — and worth nothing at all for the reason most people go.</p>
+      <div class="src-note">
+        <div class="s">Source: Chase — <em>Deposit Account Agreement, Additional Banking Services and Fees</em> (PDF) · <a href="https://www.chase.com/content/dam/chase-ux/documents/personal/checking/ABSF-en.pdf">chase.com</a> · read 19 Aug 2026</div>
+        <div class="why">(The bank's own binding fee schedule, incorporated into the deposit account contract — the authoritative published record of what Chase charges. Retrieved via search index; the counter-check price was reported secondarily and should be confirmed against the current PDF.)</div>
+      </div>
+      <div class="src-note">
+        <div class="s">Source: Wells Fargo — <em>Order Checks, Stop Payment and Other Requests</em> · <a href="https://www.wellsfargo.com/help/checking-savings/order-checks-faqs/">wellsfargo.com</a> · read 19 Aug 2026</div>
+        <div class="why">(The bank's own customer help documentation — primary for its own procedures and fee treatment by account type. The ~$3-per-sheet figure came from secondary reporting, not this page.)</div>
+      </div>
+      <div class="against">
+        <div class="h">The honest case against relying on counter checks</div>
+        <ul>
+          <li><strong>They are visibly temporary.</strong> No pre-printed name, address or sequential numbering in the usual position. Landlords, the DMV, title companies and some utilities refuse them outright.</li>
+          <li><strong>Quantity is limited</strong> and typically at teller discretion.</li>
+          <li><strong>They are not a checkbook</strong> and do not satisfy your actual request. This is a bridge, not a destination.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 05</span> &nbsp; <strong>Costco Checks (Harland Clarke / Vericast)</strong></div>
+      <div><span class="chip n">Best value in the report — wrong week</span></div>
+    </div>
+    <div class="pb">
+      <p class="lede">If you had two weeks, this would be the recommendation and the report would be four pages shorter.</p>
+      <div class="facts">
+        <div class="fact"><div class="k">Price</div><div class="v">From $16.53 / 250 (Gold Star or Business); $13.22 (Executive) [1]</div></div>
+        <div class="fact"><div class="k">At volume</div><div class="v">~11¢ per check at 4,800 checks [1]</div></div>
+        <div class="fact"><div class="k">Standard shipping</div><div class="v">Free, trackable, 9–12 business days [1][2]</div></div>
+        <div class="fact"><div class="k">"Express"</div><div class="v">$19.90, 7–9 business days [1][2]</div></div>
+        <div class="fact"><div class="k">Security</div><div class="v">25+ features claimed — heat-sensitive ink, holograms, watermarks, fluorescent fibres [1][15]</div></div>
+        <div class="fact"><div class="k">Printed by</div><div class="v">Harland Clarke, part of Vericast [15]</div></div>
+        <div class="fact"><div class="k">Requirement</div><div class="v">Active Costco membership</div></div>
+        <div class="fact"><div class="k">Buy at</div><div class="v"><a href="https://www.costcochecks.com/home">costcochecks.com</a></div></div>
+      </div>
+      <p>Two things are true simultaneously. Costco Checks is, on price and security features per dollar, the strongest product in this report — eleven cents a check with holograms and thermochromic ink is not a thing the fast vendors can approach. And its paid express option arrives in seven to nine business days, which for a Wednesday order is <strong>Friday 28 August at the earliest and Tuesday 1 September at the realistic end</strong>. Six to ten days past your deadline.</p>
+      <div class="src-note">
+        <div class="s">Source: Costco Checks (operated by Harland Clarke Check Printing) · <a href="https://www.costcochecks.com/home">costcochecks.com</a> · read 19 Aug 2026 via search index</div>
+        <div class="why">(The vendor's own storefront — primary for member pricing and shipping tiers. Harland Clarke relaunched as Vericast in February 2020 and remains the fulfilment printer, which is why the Costco storefront and Bank of America's check-ordering domain share an operator.)</div>
+      </div>
+      <div class="against">
+        <div class="h">The honest case against Costco Checks — for this week only</div>
+        <ul>
+          <li><strong>Its fastest option is ~3× your window.</strong> There is no lever to pull; no production upgrade is offered.</li>
+          <li><strong>Membership gate.</strong> If you are not a member, add $65/year to the comparison and it stops being cheapest for a single box.</li>
+          <li><strong>Calling a 7–9 business-day service "Express" is the single most misleading piece of marketing in this category</strong>, and it is the thing that would have cost you the deadline if you had trusted the label.</li>
+        </ul>
+      </div>
+      <p class="small"><strong>Be fair to Costco:</strong> nothing here is a quality criticism. Set a calendar reminder for next month, order 500 checks for about $30 with free trackable shipping, and never think about this again. It is the right long-run answer and the wrong three-day answer.</p>
+    </div>
+  </div>
+
+  <!-- P6 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 06</span> &nbsp; <strong>ChecksNextDay</strong></div>
+      <div><span class="chip n">Pass</span></div>
+    </div>
+    <div class="pb">
+      <p class="lede">Sells exactly the product you need. I could not establish that anyone has ever successfully received it.</p>
+      <div class="facts">
+        <div class="fact"><div class="k">Claim</div><div class="v">Same-day print, next-day ship [6]</div></div>
+        <div class="fact"><div class="k">Rush fee</div><div class="v">+$25.00, order before 5:00 PM ET [6]</div></div>
+        <div class="fact"><div class="k">Availability</div><div class="v">Next-day only Monday–Thursday [6]</div></div>
+        <div class="fact"><div class="k">Domain age</div><div class="v">~18.4 years</div></div>
+        <div class="fact"><div class="k">Ownership</div><div class="v">Not public <span class="chip n">Not verified</span></div></div>
+        <div class="fact"><div class="k">Independent reviews</div><div class="v">None on a credible platform</div></div>
+      </div>
+      <p>An eighteen-year-old domain is a real signal — spun-up scam storefronts do not have eighteen-year-old domains — and a $25 rush fee is far more reasonable than Checkomatic's $54.95. On paper this is the value pick among the fast vendors. But the only "ratings" I could find for it were a self-hosted Trustindex widget (89 reviews, 4.9 stars — a widget the merchant installs and controls, not an independent corpus) and a set of algorithmic domain-trust scanners that this report does not count. No BBB profile located. No Trustpilot profile located. No ownership record.</p>
+      <p><strong>That is not an accusation.</strong> It is a statement about what I could and could not verify, and a failed search is not proof of anything. But you are about to hand a company your routing number and account number against a hard deadline, and "probably fine" is the wrong standard for that. Pass — and if CheckAdvantage's rush fee comes back absurd, this is the one to re-open with a phone call first.</p>
+      <div class="against">
+        <div class="h">The honest case against ChecksNextDay</div>
+        <ul>
+          <li><strong>No independent evidence of performance.</strong> Not bad reviews — <em>no</em> reviews on any platform I trust.</li>
+          <li><strong>Mon–Thu next-day window</strong> is a real operational constraint, though it happens to work for a Wednesday order.</li>
+          <li><strong>No published personal-check pricing</strong> reachable, so the landed cost is unknowable in advance.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P7 -->
+  <div class="profile">
+    <div class="ph">
+      <div><span class="rank">RANK 07</span> &nbsp; <strong>Also screened and set aside</strong></div>
+      <div><span class="chip g">Eliminated</span></div>
+    </div>
+    <div class="pb">
+      <div class="facts">
+        <div class="fact"><div class="k">Carousel Checks</div><div class="v">Trustpilot 4.3/5, 16,000+ five-star reviews; from under $7/150. <strong>Bulk mail 2–3 weeks; Priority Mail 6–10 business days</strong> [7]. Eliminated on speed only — and it is the best-reviewed vendor here.</div></div>
+        <div class="fact"><div class="k">Checks In The Mail</div><div class="v">25 singles for $7.25 (29¢/check); express $19.90 at 7–9 business days [3]. Eliminated on speed. Not BBB accredited [13].</div></div>
+        <div class="fact"><div class="k">Vistaprint</div><div class="v">Advertises shipping "in as few as 3 business days" with express — but that is a <em>ship</em> estimate, not a delivery date, with production ahead of it. Too tight to bet a deadline on.</div></div>
+        <div class="fact"><div class="k">VersaCheck blank stock (Staples / Office Depot, San Jose)</div><div class="v">Same-day pickup today. Real security features — microprinting, artificial watermark, erasure protection, warning bands [20]. But you must print it yourself, and <strong>some banks require MICR ink</strong> [20], which an ordinary home printer does not produce. Genuine last resort, real acceptance risk.</div></div>
+        <div class="fact"><div class="k">Local San Jose print shops</div><div class="v">FedEx Office (830 Blossom Hill Rd), Cal Printing, Up 2 U Printing and others all offer same-day work. <strong>None advertises MICR bank check printing</strong> and general commercial printers do not hold CPSA padlock certification. Dead end — see section 11.</div></div>
+        <div class="fact"><div class="k">Bank standard reorders</div><div class="v">Chase 7–10 business days [8]; Bank of America 7–14 [10]. Eliminated. BofA's 24–48-hour "Check Reorder Express" is the one exception worth a phone call if you bank there.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. COST ============ -->
+<section class="card" id="cost">
+  <div class="sechead">
+    <div class="num">06</div>
+    <h2>What this should cost</h2>
+    <p class="lede">Line-by-line for the recommended purchase. Published figures are cited; modelled figures are labelled. Nothing here is a quote.</p>
+  </div>
+
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr><th style="min-width:200px">Line item</th><th>Low</th><th>Likely</th><th>High</th><th style="min-width:230px">Basis</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Personal checks, 1 box duplicates</th>
+          <td>$6.99</td><td>$14.99</td><td>$24.99</td>
+          <td>Category floor is "under $7 for 150 singles"; duplicates run slightly higher [11]. <span class="chip u">Unconfirmed for CheckAdvantage specifically</span></td>
+        </tr>
+        <tr>
+          <th>Rush Production fee</th>
+          <td>$9.95</td><td>$19.99</td><td>$39.99</td>
+          <td>Not published anywhere reachable. Modelled from the visible market band — ChecksNextDay charges $25, Checkomatic $54.95 [5][6]. <span class="chip a">Ask</span></td>
+        </tr>
+        <tr>
+          <th>UPS Next Day Air, WI → 95138</th>
+          <td>$22.00</td><td>$35.00</td><td>$48.00</td>
+          <td>UPS Next Day Air starts around $35 for a standard package in 2026; a check box is under 1 lb, so the low end is plausible. <span class="chip u">Directional</span></td>
+        </tr>
+        <tr>
+          <th>Handling / order fee</th>
+          <td>$0.00</td><td>$3.50</td><td>$5.95</td>
+          <td>Peers charge one: Carousel adds $5 handling, and a worked Carousel example showed $3.60 handling on top of shipping [7]. Assume one exists.</td>
+        </tr>
+        <tr>
+          <th>California sales tax, San Jose 95138</th>
+          <td>$3.60</td><td>$6.88</td><td>$11.25</td>
+          <td>Modelled at ~9.375% combined state + county + district on the taxable subtotal. <span class="chip u">Unconfirmed — verify at checkout</span></td>
+        </tr>
+        <tr class="verdict-row">
+          <th>Landed total — the pick</th>
+          <td class="win">$42.54</td><td class="win">$80.36</td><td class="win">$130.18</td>
+          <td>Plan for <strong>$70–$85</strong>. Treat anything over $100 as a signal to stop and call.</td>
+        </tr>
+        <tr>
+          <th>+ Counter checks today (hedge)</th>
+          <td>$3.00</td><td>$6.00</td><td>$9.00</td>
+          <td>One to three sheets at ~$3 each [8][9]. Buy this regardless.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Two-sided sanity check on that total</h3>
+  <div class="vrow">
+    <div class="vcell" style="border-color:var(--line)">
+      <div class="k">Pressure from above — is $80 too much?</div>
+      <p>Yes, measured against the product. Costco will sell you <strong>250 checks for $16.53 with free trackable shipping</strong> [1]. You are proposing to pay roughly five times that for fewer checks. If the only thing that mattered were checks-per-dollar, this recommendation would be indefensible.</p>
+      <p>It survives because <strong>about $55 of the $80 is not buying checks — it is buying a date.</strong> Strip the rush fee and the air freight and you are at $25, right in line with the market. The premium is a deadline surcharge, and it is the right size for one: roughly the cost of a rush-shipped anything.</p>
+    </div>
+    <div class="vcell" style="border-color:var(--line)">
+      <div class="k">Pressure from below — is $80 too little?</div>
+      <p>Also plausibly yes. The only comparable-speed quote I could obtain in full is Checkomatic's, and it totals <strong>$109.70 before tax and before shipping on anything past the first 50 checks</strong> [5]. If a genuine same-day-print-plus-overnight service really costs $110, then an $80 estimate for the same outcome is optimistic by $30 — most likely because the rush fee is higher than modelled.</p>
+      <p><strong>The two pressures bracket the estimate rather than break it.</strong> $80 sits sensibly below the one full fast quote available and sensibly above the slow-market price plus a normal freight premium. That is what a defensible number looks like.</p>
+    </div>
+  </div>
+  <p class="small"><strong>The number that would change this table:</strong> CheckAdvantage's published Rush Production fee. It is the single largest unknown and the only one that can move the total by $30 in either direction. Get it before you pay.</p>
+</section>
+
+<!-- ============ 9. POLICY LAYER ============ -->
+<section class="card" id="policy">
+  <div class="sechead">
+    <div class="num">07</div>
+    <h2>The policy layer</h2>
+    <p class="lede">What the law actually gives you when a check goes wrong, what each vendor promises, and where the real exposure sits. This section matters more than the price section.</p>
+  </div>
+
+  <h3>The governing law, and what you lose if it goes wrong</h3>
+
+  <h4>California Commercial Code § 4406 — the one-year cliff</h4>
+  <p>California's enactment of UCC Article 4 imposes a duty on <em>you</em>, not just your bank. Under § 4406, when your bank makes a statement and the paid items available, you must <strong>exercise reasonable care and promptness to examine them and discover any unauthorised signature or alteration, and promptly notify the bank</strong>. If you fail that duty, the bank stops being absolutely liable: for an initial one-year period the loss falls on the bank only if the bank was itself negligent — and <strong>after one year you are barred from asserting the forgery or alteration at all</strong>, no matter how real it was. Each statement carries its own one-year clock.</p>
+  <div class="src-note">
+    <div class="s">Source: California Commercial Code § 4406, as analysed in <em>Defense of Common Claims Under the California Commercial Code</em> (Carleton R. Burch) · <a href="https://www.amclaw.com/wp-content/uploads/Defense-of-Common-Claims-Under-the-California-Commercial-Code-by-Carleton-R-Burch.pdf">amclaw.com</a> · read 19 Aug 2026</div>
+    <div class="why">(A practitioner treatment of the statute published by a California defence firm. Secondary legal commentary, not the statute text — reliable on the doctrine, but read Cal. Com. Code § 4406 itself before relying on it. Legal information, not legal advice.)</div>
+  </div>
+  <div class="src-note">
+    <div class="s">Source: California Lawyers Association, Business Law Section — <em>Summary Judgment Exonerating Bank Accepting Forged Checks Reversed</em> · <a href="https://calawyers.org/business-law/summary-judgment-exonerating-bank-accepting-forged-checks-reversed/">calawyers.org</a> · read 19 Aug 2026</div>
+    <div class="why">(The State Bar-adjacent professional association for California lawyers; its section commentary is a credible secondary source on how California courts are actually applying § 4406.)</div>
+  </div>
+  <p><strong>What you lose:</strong> everything, eventually. This is the harshest rule in the whole report. Checks have no equivalent of the Electronic Fund Transfer Act's consumer protections — <strong>Regulation E does not cover paper checks</strong>. Your protection is § 4406 plus your bank's discretion, and § 4406 runs against you.</p>
+
+  <h4>Check 21 and Regulation CC — effective 28 October 2004</h4>
+  <p>The Check Clearing for the 21st Century Act was enacted in October 2003 and took effect <strong>28 October 2004</strong>. It made a properly-created <em>substitute check</em> — a paper reproduction printed from a digital image — legally equivalent to the original. It also created the one genuinely consumer-friendly mechanism in check law: <strong>expedited recredit</strong>, at 12 CFR § 229.54.</p>
+  <p>The mechanics, exactly: you must get your claim to the bank <strong>by the end of the 40th calendar day</strong> after the later of the statement date or delivery of the substitute check. The bank then has <strong>10 business days</strong> to investigate. If it can't finish in that time it must provisionally recredit you <strong>the lesser of your loss or $2,500, plus interest</strong> if the account earns it. It has until <strong>the 45th calendar day</strong> after receiving the claim to recredit the remainder or deny you.</p>
+  <div class="src-note">
+    <div class="s">Source: eCFR — <em>12 CFR § 229.54, Expedited recredit for consumers</em> · <a href="https://www.ecfr.gov/current/title-12/chapter-II/subchapter-A/part-229/subpart-D/section-229.54">ecfr.gov</a> · read 19 Aug 2026</div>
+    <div class="why">(The Electronic Code of Federal Regulations, published by the National Archives' Office of the Federal Register — the authoritative continuously-updated text of federal regulation. This is the primary source for the deadlines and dollar caps above.)</div>
+  </div>
+  <div class="src-note">
+    <div class="s">Source: Federal Reserve Board — <em>Consumer Affairs Laws and Regulations: Regulation CC</em>, CA Letter 04-9 attachment · <a href="https://www.federalreserve.gov/boarddocs/CALETTERS/2004/0409/CA04-9Attach1.pdf">federalreserve.gov</a> · read 19 Aug 2026</div>
+    <div class="why">(The Federal Reserve Board writes and administers Regulation CC; this is the supervisory guidance issued at the time Check 21 took effect. Primary regulator material.)</div>
+  </div>
+  <p><strong>What you lose:</strong> the $2,500 provisional cap is a cap on <em>speed</em>, not on recovery — but if a washed check drains $9,000, you are living on $2,500 for up to 45 days while it is sorted out. And the 40-day clock is unforgiving: miss it and the expedited route closes, leaving you with § 4406 and its one-year cliff.</p>
+
+  <hr class="sep">
+
+  <h3>Vendor policies, side by side</h3>
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr><th style="min-width:170px">Policy</th><th>CheckAdvantage</th><th>Deluxe</th><th>Checkomatic</th><th>Costco Checks</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Accuracy / reprint guarantee</th>
+          <td>Claims 99.9% error-free; formal guarantee terms not retrieved <span class="chip a">Ask</span></td>
+          <td class="win">Backed by BBB accreditation and a formal complaint channel [13]</td>
+          <td>Not retrieved <span class="chip a">Ask</span></td>
+          <td class="win">Costco's own member satisfaction policy applies <span class="chip u">Unconfirmed</span></td>
+        </tr>
+        <tr>
+          <th>On-time delivery guarantee</th>
+          <td>None. "Leaves the warehouse next business day" is a dispatch commitment, not a delivery one [4]</td>
+          <td>None located</td>
+          <td class="win">SuperRush is worded as a guarantee of overnight delivery for the first 50 checks [5]</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <th>Refund behaviour, observed</th>
+          <td>No data</td>
+          <td>BBB file includes a refund delayed 50+ days <span class="chip n">Not verified</span></td>
+          <td>No data</td>
+          <td>No data</td>
+        </tr>
+        <tr>
+          <th>Complaint escalation route</th>
+          <td>BBB (Wisconsin) [12]</td>
+          <td class="win">BBB accredited — obliged to engage [13]</td>
+          <td>None located</td>
+          <td class="win">Costco membership services</td>
+        </tr>
+        <tr>
+          <th>Security certification</th>
+          <td colspan="4">None of the four publishes an explicit CPSA padlock certification statement that I could reach. All four are established printers and padlock-class stock is the category norm — but this is <span class="chip u">Unconfirmed</span> across the board and is question 5 in the emails.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Third-party risk — the part nobody mentions</h3>
+  <div class="callout red">
+    <div class="ch">The structural exposure</div>
+    <h3>Ordering checks requires no authorisation from your bank. Anyone with your routing number, account number and name can have a checkbook printed.</h3>
+    <p>That is how the industry works and it is why this purchase is different from buying a lamp. The printer holds, in one record, every field needed to draw on your account. You are extending trust to a commercial printer with no licensing regime, no bonding requirement and no regulator, on the strength of a BBB letter grade.</p>
+    <p>Set against that, the federal fraud picture is bad and getting worse. FinCEN recorded <strong>15,417 BSA filings tied to mail-theft-related check fraud between 27 February and 31 August 2023, covering more than $688 million in transactions</strong> [16]. Separately, FinCEN received <strong>over 680,000 check-fraud suspicious activity reports in 2022, nearly double the prior year</strong>, and reports of theft from mail receptacles rose <strong>139% between 2019 and 2023</strong> [16][17]. The FBI's Internet Crime Complaint Center issued a public service announcement on 27 January 2025 specifically on mail-theft-related check fraud rising [17].</p>
+    <div class="src-note">
+      <div class="s">Source: FinCEN — <em>Financial Trend Analysis: Mail Theft-Related Check Fraud</em> (PDF) · <a href="https://www.fincen.gov/system/files/shared/FTA-Check-Fraud-FINAL508.pdf">fincen.gov</a> · read 19 Aug 2026</div>
+      <div class="why">(The Financial Crimes Enforcement Network is the US Treasury bureau that collects Bank Secrecy Act filings; this trend analysis is built from the actual SAR corpus. The authoritative federal dataset on this fraud type — a primary government record, not an estimate.)</div>
+    </div>
+    <div class="src-note">
+      <div class="s">Source: FBI IC3 — <em>Public Service Announcement: Mail Theft-Related Check Fraud is on the Rise</em>, 27 Jan 2025 · <a href="https://www.ic3.gov/PSA/2025/PSA250127">ic3.gov</a> · read 19 Aug 2026</div>
+      <div class="why">(The FBI's Internet Crime Complaint Center — the federal clearinghouse for cyber-enabled crime reporting. Its PSAs are official law-enforcement advisories.)</div>
+    </div>
+    <p class="small"><strong>The operational conclusion:</strong> never let a box of blank checks sit in an unsecured mailbox. This is a second, independent reason to buy the air-freight option — UPS Next Day Air is tracked, and you can watch it land. It is also a reason to prefer a smaller check count: order 100–150 now, not 800.</p>
+  </div>
+
+  <h3>Warranty terms — what "warranty" means for a printed product</h3>
+  <p>There is no manufacturer's warranty on a checkbook in the sense you would get with an appliance. What exists is three things, and you should get all three in writing:</p>
+  <ol>
+    <li><strong>Accuracy guarantee</strong> — if the routing number, account number, name or address is printed wrong, the vendor reprints at no cost and expedites the replacement. This is the one that actually matters, because a MICR error makes the entire box worthless.</li>
+    <li><strong>Fitness-for-processing</strong> — the checks will be accepted and processed by your bank's reader. Tied to MICR line accuracy and paper stock; a vendor confident in its work will confirm it.</li>
+    <li><strong>Security-feature representation</strong> — a written statement of which ANSI X9.100-170 features the stock carries and whether it is padlock-certified [18][19].</li>
+  </ol>
+  <p>None of the four vendors publishes all three in a form I could retrieve. All three are asked for explicitly in the emails in section 10.</p>
+
+  <h3>Your contract protections</h3>
+  <ul>
+    <li><strong>Pay by credit card, not debit, not ACH.</strong> The Fair Credit Billing Act gives you a written billing-dispute right against the card issuer for goods not delivered or not as described — 60 days from the statement. Paying by check or ACH surrenders that entirely. On an $80 order from a thinly-reviewed vendor, this is the single cheapest protection available and it costs nothing.</li>
+    <li><strong>Get the delivery date in writing before you pay</strong> — a screenshot of the checkout page showing the promised date is worth more than any marketing claim, and it is what a chargeback rests on.</li>
+    <li><strong>Ship to an address where someone signs.</strong> Given the FinCEN data, a signature-required delivery or a workplace address beats a residential mailbox. Most air services allow it at no extra cost.</li>
+    <li><strong>Check the MICR line the moment the box arrives</strong> — routing number, account number, and your name and address — against a statement. Do not wait. An error found on day one is a reprint; an error found on day thirty is a missed payment.</li>
+    <li><strong>Keep the § 4406 clock in view.</strong> Review statements monthly. It is not optional diligence in California; it is the condition on which your recovery rights survive.</li>
+  </ul>
+</section>
+
+<!-- ============ 10. AUDIT ============ -->
+<section class="card" id="audit">
+  <div class="sechead">
+    <div class="num">08</div>
+    <h2>Claim-by-claim audit: CheckAdvantage</h2>
+    <p class="lede">The vendor I'm recommending gets the hardest look. Every marketing claim I could retrieve, tested against an independent record. All checks performed 19 August 2026.</p>
+  </div>
+
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr><th style="min-width:250px">The claim</th><th style="min-width:110px">Status</th><th style="min-width:300px">What I could and couldn't establish</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Place your order before noon Central Time and select Rush Production, and your checks will leave the warehouse the very next business day."</td>
+          <td><span class="chip u">Unconfirmed</span></td>
+          <td>Appears on the vendor's own <code>/in-plant-rush</code> page as indexed [4]. I could not open the page to confirm current wording or exclusions. <strong>Read the verb:</strong> "leave the warehouse" is a dispatch commitment. It says nothing about arrival, and no delivery guarantee attaches to it.</td>
+        </tr>
+        <tr>
+          <td>"Over nearly 25 years in business, we've delivered more than 99% of our orders on time."</td>
+          <td><span class="chip n">Not verified</span></td>
+          <td>Self-reported, with no definition of "on time," no measurement period, no methodology and no third-party audit. Nothing corroborates it. Note the internal tension: a rate stated to that precision implies tens of thousands of orders, yet I located roughly three independent customer ratings for this company in total. That is not proof the claim is false — small printers genuinely do have thin consumer footprints — but a claim with no external corroboration is a claim, not a fact.</td>
+        </tr>
+        <tr>
+          <td>"99.9% of orders error-free."</td>
+          <td><span class="chip n">Not verified</span></td>
+          <td>Same defect as above. Unsourced, unaudited, undefined. Treat as marketing.</td>
+        </tr>
+        <tr>
+          <td>"Printing and shipping personal checks from our Wisconsin headquarters since 2001."</td>
+          <td><span class="chip v">Verified</span> (location) / <span class="chip u">Unconfirmed</span> (date)</td>
+          <td>A BBB business profile exists for <strong>CheckAdvantage LLC, De Pere, Wisconsin</strong> [12] — the entity and the location are real and independently listed. The 2001 founding date came from retrieval and I could not open the BBB profile to confirm the "date of incorporation" field.</td>
+        </tr>
+        <tr>
+          <td>BBB rating of A−.</td>
+          <td><span class="chip u">Unconfirmed</span></td>
+          <td>Retrieved from the BBB profile, not read on it. <strong>And read it correctly:</strong> a BBB letter grade is BBB's own proprietary algorithm — weighted toward complaint volume, complaint resolution and time in business. BBB is not a regulator and does not inspect anything. On a low-volume file, A− means "few complaints, some friction," not "verified good."</td>
+        </tr>
+        <tr>
+          <td>"Proof You Can Trust CheckAdvantage" — vendor-hosted verification page.</td>
+          <td><span class="chip a">Ask</span></td>
+          <td>A self-hosted page titled "proof" is self-certification. It may well contain genuine third-party badges; I could not open it to see. Until someone reads it, it carries no evidential weight in either direction.</td>
+        </tr>
+        <tr>
+          <td>Express shipping options "such as Next Day Air or Second Day Air via UPS" available with additional charges.</td>
+          <td><span class="chip u">Unconfirmed</span></td>
+          <td>Indexed from the vendor's own page [4]. Prices are not published — quoted at checkout. This is the load-bearing claim for the entire recommendation and it is the first thing to verify on the checkout screen.</td>
+        </tr>
+        <tr>
+          <td>Implicit: checks carry padlock-class security features.</td>
+          <td><span class="chip a">Ask</span></td>
+          <td>No CPSA certification statement located for this vendor. Padlock-class stock is the category norm and an established printer almost certainly has it, but "almost certainly" is not verification [18][19].</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="ch">Contradictions surfaced across the whole candidate set</div>
+    <ul>
+      <li><strong>"Express" that isn't.</strong> Costco Checks and Checks In The Mail both sell a $19.90 upgrade labelled <em>Express delivery</em> that arrives in 7–9 business days [1][2][3]. Against the ordinary meaning of the word, that is the widest marketing-to-reality gap in this category, and it is the trap this report exists to defuse.</li>
+      <li><strong>Accreditation that doesn't travel.</strong> Deluxe Corporation is BBB accredited; its own Checks Unlimited and Checks In The Mail brands are not [13]. The trust signal attaches to the parent, not the storefront.</li>
+      <li><strong>"Next day" with a cap.</strong> Checkomatic's SuperRush guarantees overnight delivery <em>of the first 50 checks</em> [5] — not of your order. A buyer skimming the checkout would not catch that.</li>
+      <li><strong>A 4.9-star rating that isn't a rating.</strong> ChecksNextDay's headline score sits in a Trustindex widget the merchant installs on its own site. That is a display surface, not an independent platform.</li>
+      <li><strong>Branch ordering that doesn't help.</strong> Chase is unusually honest about this — going into a branch to order checks does not speed anything up, because an outside vendor prints and ships regardless [8]. Most people believe the opposite.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 11. PLAIN ENGLISH ============ -->
+<section class="card" id="plain">
+  <div class="sechead">
+    <div class="num">09</div>
+    <h2>My assessment, in plain English</h2>
+  </div>
+
+  <h3>The situation, simply</h3>
+  <p>You need a checkbook by Saturday. Almost nobody in this business can do that.</p>
+  <p>Printing checks is fast. Getting them out the door is not. Most check companies print in big batches once a week or so. Your order waits in line. Then they mail it. When they sell you "express shipping," they are only speeding up the mail part — the waiting-in-line part stays. That is why Costco charges twenty dollars for express and still takes seven to nine business days.</p>
+  <p>A few companies sell something different. They let you pay to skip the line. That is a separate fee, on top of shipping. Those are the only companies that can help you this week.</p>
+
+  <h3>Why your deadline beats price</h3>
+  <p>You could get 250 checks from Costco for about $17. You are going to pay around $80 for fewer checks. That is five times more.</p>
+  <p>But look at where the money goes. About $25 buys checks. About $55 buys the date. You are not overpaying for checks — you are paying rush freight, the same way you would for anything else you needed in three days.</p>
+  <p>And there is a second reason speed wins. You said three days. If you have a payment due, a deposit to make, a landlord waiting — missing that date costs more than $55. A late fee alone often costs more than $55. Buying certainty here is not indulgent. It is the cheap option.</p>
+
+  <h3>The recommendation</h3>
+  <p><strong>Buy from CheckAdvantage today, before 10:00 in the morning Pacific time, with Rush Production and UPS Next Day Air.</strong></p>
+  <p><strong>The headline reason:</strong> it is the only company that can hit your date <em>and</em> whose existence I could independently check.</p>
+  <p>Three more, in order:</p>
+  <ol>
+    <li><strong>It has a day of slack.</strong> Order Wednesday, ships Thursday, arrives Friday. Your deadline is Saturday. If something slips one day, you still make it. None of the alternatives give you that cushion.</li>
+    <li><strong>There is a real company behind it.</strong> CheckAdvantage LLC, De Pere, Wisconsin, with a Better Business Bureau file rated A−. That sounds like a small thing. It is not. Two of the three fast companies in this report, I could not identify at all.</li>
+    <li><strong>It is the cheapest fast option.</strong> Around $80 against Checkomatic's $110-plus. Same outcome, thirty dollars less.</li>
+  </ol>
+  <p><strong>The honest catch:</strong> I do not know what the rush fee costs. It is not published anywhere I could reach. I have estimated $20. If it turns out to be $45, my price advantage over Checkomatic disappears and you should call both before choosing. Ask for that number first.</p>
+
+  <h3>The runner-up</h3>
+  <p><strong>Deluxe.</strong> The oldest and most solid company here — started in 1915, listed on the New York Stock Exchange, works with over four thousand banks. Their shipping prices are published honestly, all the way up to $21.55 for one-to-two-day delivery. If you had five days instead of three, this would be my answer without hesitation.</p>
+  <p>The problem is they do not say how long they take to print. Everything I know about the industry says two to three days. Add shipping and you are looking at Monday or Tuesday. Probably too late.</p>
+
+  <h3>Who I didn't pick, and why</h3>
+  <ul>
+    <li><strong>Costco Checks</strong> — the best product in this report and the best price by a mile. Eleven cents a check with holograms and heat-sensitive ink. Their fastest option takes seven to nine business days. Nothing wrong with them; wrong week. Order from them next month.</li>
+    <li><strong>Carousel Checks</strong> — sixteen thousand five-star reviews, which is more genuine customer goodwill than everyone else here combined. Their fast option is six to ten business days. Wrong week too.</li>
+    <li><strong>Checkomatic</strong> — genuinely fast, and it stays as your back-up. But $110, and their overnight promise only covers the first fifty checks.</li>
+    <li><strong>ChecksNextDay</strong> — the right service at the right price, $25 to rush. I could not find one credible independent review of them. Not a criticism of the company. But you are handing over your account number against a hard deadline, and I would not do that on no evidence.</li>
+    <li><strong>Print it yourself with VersaCheck paper from Staples</strong> — available in San Jose today. But some banks want magnetic ink, which your printer does not have, and a rejected check is worse than a late one.</li>
+    <li><strong>A local San Jose print shop</strong> — I checked. They do banners and business cards. Bank checks need certified security paper and magnetic ink. Nobody local advertises it.</li>
+  </ul>
+
+  <h3>The uncomfortable part</h3>
+  <p>Two things you should know before you spend the money.</p>
+  <p><strong>First: I could not open a single one of these websites.</strong> This session's network blocked every outbound page request — the vendors' sites, the Better Business Bureau, even a government consumer site. Everything in this report came from search results showing me what those pages say. That is real information from the real pages, but I read it through a window rather than in the room. Every price here should be treated as a strong indication, not a quote. Verify at checkout.</p>
+  <p><strong>Second: your checkbook is going to arrive in the mail.</strong> The Treasury Department's financial crimes unit logged more than fifteen thousand reports of mail-theft check fraud in six months of 2023, covering $688 million. Mail theft is up 139% since 2019. A box of blank checks with your name, address and account number on them is the single best thing a mailbox thief can find. Watch the tracking, and be there when it lands.</p>
+
+  <h3>What I'd actually do, in order</h3>
+  <ol>
+    <li><strong>This morning — go to your bank branch.</strong> Ask for counter checks. Three dollars a sheet, three checks a sheet. Buy two or three sheets. You now have working checks today and your deadline is no longer scary. Do this even if everything else goes perfectly.</li>
+    <li><strong>Before 10:00 AM Pacific — call CheckAdvantage.</strong> Ask exactly two things: what does Rush Production cost, and what does UPS Next Day Air to 95138 cost. If the two together are under $60, order immediately.</li>
+    <li><strong>Pay with a credit card.</strong> Not debit, not a check. The card gives you a dispute right if the order never shows.</li>
+    <li><strong>Screenshot the checkout page</strong> showing the promised delivery date, before you click pay.</li>
+    <li><strong>If the rush fee comes back over $45</strong> — call Checkomatic and ask what SuperRush delivers to 95138 and whether the fifty-check cap applies to your order. Buy whichever is cheaper.</li>
+    <li><strong>Watch the tracking Friday.</strong> Be home, or have it delivered somewhere with a person.</li>
+    <li><strong>When the box arrives, check the numbers immediately</strong> against a bank statement — routing number, account number, name, address. If anything is wrong, call the same day.</li>
+    <li><strong>Next month, order a big box from Costco</strong> for about $17 and never think about this again.</li>
+  </ol>
+</section>
+
+<!-- ============ 12. EMAILS ============ -->
+<section class="card" id="emails">
+  <div class="sechead">
+    <div class="num">10</div>
+    <h2>Copy-paste emails to the top vendors</h2>
+    <p class="lede">Identical scope in all three, so the quotes are actually comparable. Each asks for itemised pricing, insurance evidence direct from the insurer, and the guarantee in writing.</p>
+  </div>
+
+  <div class="callout blue">
+    <div class="ch">One honest adjustment</div>
+    <p>You asked for an insurance certificate sent directly by the vendor's broker. That is exactly right for a contractor and it is the wrong instrument for a mail-order printer — they carry no liability policy naming you, because they are not working on your property. So each email asks for <strong>both</strong>: the certificate, if they carry anything relevant (commercial general liability, cyber liability covering your account data, and carrier declared-value coverage), sent by their broker or carrier rather than by them; <strong>and</strong> the substantive equivalent, which is written confirmation of declared-value coverage on the shipment and their liability for a MICR misprint. If a vendor pushes back on the certificate, the second half is the part that actually protects you. Send by email or through the contact form on each site.</p>
+  </div>
+
+  <div class="email">
+    <div class="eh">
+      <div class="who">1 · CheckAdvantage — <span class="tiny">contact form at checkadvantage.com</span></div>
+      <button class="copy" data-t="e1">Copy</button>
+    </div>
+    <pre id="e1">Subject: Rush order to San Jose CA 95138 — need delivery by Fri 21 Aug, itemized quote requested
+
+Hello,
+
+I need one box of personal checks delivered to San Jose, California 95138, arriving no later than Friday 21 August 2026. I am ready to order today. Please reply with the following, itemized.
+
+SCOPE (identical request sent to two other vendors so I can compare like for like)
+1. One box of personal duplicate checks, standard size, single design.
+2. Padlock-icon security stock if you offer it.
+3. Rush / In-Plant Rush production.
+4. UPS Next Day Air to ZIP 95138, signature on delivery.
+
+PRICING — please itemize, do not give me a single total
+a) Price of the checks themselves, per box, with the quantity stated.
+b) Rush Production fee, as a separate line.
+c) UPS Next Day Air to 95138, as a separate line. Also quote 2nd Day Air.
+d) Any handling, setup or order fee.
+e) California sales tax as you will calculate it for 95138.
+f) The landed total.
+
+DELIVERY
+g) If I place this order today before 12:00 PM Central, what is the exact date it leaves your facility, and the exact date UPS commits to deliver?
+h) Is there any circumstance in which a rush order does not ship the next business day? Please describe it.
+
+GUARANTEES — in writing, please
+i) Your written accuracy guarantee. Specifically: if the MICR line, account number, routing number, name or address is printed incorrectly, what do you do, how fast, and at whose cost?
+j) Do you guarantee the delivery date, or only the dispatch date? Please be explicit.
+k) Written confirmation that the checks meet ANSI X9.100-170 and whether they carry the CPSA Enhanced Check Security Features padlock icon. Please list the security features on the stock.
+l) Your return and refund policy, and your typical refund turnaround in days.
+
+INSURANCE AND DATA
+m) Please have your broker or insurer send me, directly from them, a certificate of insurance showing any commercial general liability and cyber liability coverage that would respond to a breach of customer bank account data. If you do not carry coverage relevant to this, please say so plainly.
+n) What declared value / carrier insurance will be on this shipment, and what is your liability if the package is lost or stolen in transit?
+o) How long do you retain my routing and account numbers after the order ships, and how are they stored?
+
+ONE DIRECT QUESTION
+p) Is your company name or logo printed anywhere on the checks themselves? I have seen this reported and would like a straight answer before I order.
+
+I am buying today. Whoever answers first and completely gets the order.
+
+Thank you.
+</pre>
+  </div>
+
+  <div class="email">
+    <div class="eh">
+      <div class="who">2 · Deluxe — <span class="tiny">deluxe.com/shopdeluxe customer service</span></div>
+      <button class="copy" data-t="e2">Copy</button>
+    </div>
+    <pre id="e2">Subject: Can you deliver personal checks to San Jose CA 95138 by Sat 22 Aug? Itemized quote requested
+
+Hello,
+
+I need one box of personal checks delivered to San Jose, California 95138, arriving no later than Saturday 22 August 2026. I am ready to order today. Please reply with the following, itemized.
+
+THE CRITICAL QUESTION FIRST
+Your site publishes shipping tiers up to $21.55 for 1-2 business day delivery, but I cannot find your PRODUCTION time anywhere. How many business days does it take you to print and release a personal check order before shipping begins? If the honest answer is that you cannot make Saturday 22 August, please tell me that directly — I will order from you next month instead and I would rather know now.
+
+SCOPE (identical request sent to two other vendors so I can compare like for like)
+1. One box of personal duplicate checks, standard size, single design.
+2. Padlock-icon security stock if you offer it.
+3. Any rush or expedited production option you offer, as a separate line item.
+4. Your fastest trackable shipping to ZIP 95138, signature on delivery.
+
+PRICING — please itemize, do not give me a single total
+a) Price of the checks themselves, per box, with the quantity stated.
+b) Rush or expedited production fee, as a separate line.
+c) Shipping at your 1-2 business day tier to 95138. Confirm the $21.55 figure.
+d) Any handling, setup or order fee.
+e) California sales tax as you will calculate it for 95138.
+f) The landed total.
+
+DELIVERY
+g) If I order today, what is the exact ship date and the exact delivery date?
+h) Am I buying from Deluxe Corporation directly, or from Checks Unlimited, Checks.com or Checks In The Mail? I would like to know which legal entity is on the receipt, because I understand BBB accreditation attaches to Deluxe Corporation and not to the sub-brands.
+
+GUARANTEES — in writing, please
+i) Your written accuracy guarantee. If the MICR line, account number, routing number, name or address is printed incorrectly, what do you do, how fast, and at whose cost?
+j) Do you guarantee the delivery date, or only the dispatch date?
+k) Written confirmation that the checks meet ANSI X9.100-170 and whether they carry the CPSA padlock icon. Please list the security features.
+l) Your return and refund policy, and your typical refund turnaround in days. I have seen a BBB complaint describing a refund taking more than 50 days and would like your current stated timeline.
+
+INSURANCE AND DATA
+m) Please have your broker or insurer send me, directly from them, a certificate of insurance showing commercial general liability and cyber liability coverage that would respond to a breach of customer bank account data.
+n) What declared value or carrier insurance will be on this shipment, and what is your liability if it is lost or stolen in transit?
+o) How long do you retain my routing and account numbers after the order ships, and how are they stored?
+
+Thank you.
+</pre>
+  </div>
+
+  <div class="email">
+    <div class="eh">
+      <div class="who">3 · Checkomatic — <span class="tiny">checkomatic.com customer service</span></div>
+      <button class="copy" data-t="e3">Copy</button>
+    </div>
+    <pre id="e3">Subject: SuperRush to San Jose CA 95138 — scope of the overnight guarantee, itemized quote requested
+
+Hello,
+
+I need personal checks delivered to San Jose, California 95138, arriving no later than Friday 21 August 2026. I am ready to order today. Please reply with the following, itemized.
+
+THE CRITICAL QUESTION FIRST
+Your SuperRush option is described as guaranteeing same-day processing and overnight delivery of the FIRST 50 CHECKS. Please clarify exactly what that means. If I order one box of 150 or 200 checks, do all of them arrive overnight, or only 50, with the remainder following at standard speed? This determines whether SuperRush actually solves my problem.
+
+SCOPE (identical request sent to two other vendors so I can compare like for like)
+1. One box of personal duplicate checks, standard size, single design.
+2. Padlock-icon security stock if you offer it.
+3. SuperRush production.
+4. Overnight carrier delivery to ZIP 95138, signature on delivery.
+
+PRICING — please itemize, do not give me a single total
+a) Price of the checks themselves, per box, with the quantity stated. Your site lists $54.75 for a personal checkbook — please confirm what quantity that buys.
+b) SuperRush fee, as a separate line. Your site shows $54.95.
+c) Shipping to 95138, as a separate line, if it is not included in SuperRush.
+d) Any handling, setup or order fee.
+e) California sales tax as you will calculate it for 95138.
+f) The landed total.
+
+DELIVERY
+g) If I order today, what is the exact ship date and the exact delivery date?
+h) What is your order cut-off time, in Pacific time, for same-day processing?
+
+GUARANTEES — in writing, please
+i) Your written accuracy guarantee. If the MICR line, account number, routing number, name or address is printed incorrectly, what do you do, how fast, and at whose cost?
+j) Your SuperRush page uses the word "guarantee." What is the remedy if the checks do not arrive overnight — full refund of the SuperRush fee, refund of the whole order, or something else?
+k) Written confirmation that the checks meet ANSI X9.100-170 and whether they carry the CPSA padlock icon. Please list the security features.
+l) Your return and refund policy, and your typical refund turnaround in days.
+
+COMPANY AND INSURANCE
+m) What is the registered legal entity name behind Checkomatic, and in which state is it registered? I could not locate this and would like it for my records before sending account details.
+n) Please have your broker or insurer send me, directly from them, a certificate of insurance showing commercial general liability and cyber liability coverage that would respond to a breach of customer bank account data.
+o) What declared value or carrier insurance will be on this shipment, and what is your liability if it is lost or stolen in transit?
+p) How long do you retain my routing and account numbers after the order ships, and how are they stored?
+
+Thank you.
+</pre>
+  </div>
+</section>
+
+<!-- ============ 13. SOURCES ============ -->
+<section class="card" id="sources">
+  <div class="sechead">
+    <div class="num">11</div>
+    <h2>Numbered sources</h2>
+    <p class="lede">Grouped by type, highest tier first. Every entry retrieved 19 August 2026. <strong>Important limitation:</strong> this session's network egress policy refused every direct page fetch, so all of these were read through a search index rather than opened. Treat all pricing as strongly indicative and confirm at checkout.</p>
+  </div>
+
+  <div class="srcgroup">
+    <h4>Tier 1 — Government, regulator and standards records</h4>
+    <ol class="sources">
+      <li><span class="no">[16]</span><span class="body">
+        <span class="ti">FinCEN — Financial Trend Analysis: Mail Theft-Related Check Fraud</span>
+        <span class="u"><a href="https://www.fincen.gov/system/files/shared/FTA-Check-Fraud-FINAL508.pdf">fincen.gov/system/files/shared/FTA-Check-Fraud-FINAL508.pdf</a> · read 19 Aug 2026</span>
+        <span class="ex">(The Financial Crimes Enforcement Network is the US Treasury bureau that receives Bank Secrecy Act filings; this analysis is built from the actual SAR corpus — 15,417 filings, $688M, Feb–Aug 2023. The authoritative federal dataset on this fraud type.)</span>
+      </span></li>
+      <li><span class="no">[17]</span><span class="body">
+        <span class="ti">FBI Internet Crime Complaint Center — PSA: Mail Theft-Related Check Fraud is on the Rise, 27 Jan 2025</span>
+        <span class="u"><a href="https://www.ic3.gov/PSA/2025/PSA250127">ic3.gov/PSA/2025/PSA250127</a> · read 19 Aug 2026</span>
+        <span class="ex">(The FBI's federal clearinghouse for cyber-enabled crime reporting; its public service announcements are official law-enforcement advisories, not commentary.)</span>
+      </span></li>
+      <li><span class="no">[22]</span><span class="body">
+        <span class="ti">eCFR — 12 CFR § 229.54, Expedited recredit for consumers (Regulation CC, Subpart D)</span>
+        <span class="u"><a href="https://www.ecfr.gov/current/title-12/chapter-II/subchapter-A/part-229/subpart-D/section-229.54">ecfr.gov · 12 CFR 229.54</a> · read 19 Aug 2026</span>
+        <span class="ex">(The Electronic Code of Federal Regulations, published by the National Archives' Office of the Federal Register — the authoritative, continuously-updated text of federal regulation. Primary source for the 40-day, 10-business-day, $2,500 and 45-day figures.)</span>
+      </span></li>
+      <li><span class="no">[23]</span><span class="body">
+        <span class="ti">Federal Reserve Board — Consumer Affairs Laws and Regulations: Regulation CC (CA Letter 04-9 attachment)</span>
+        <span class="u"><a href="https://www.federalreserve.gov/boarddocs/CALETTERS/2004/0409/CA04-9Attach1.pdf">federalreserve.gov</a> · read 19 Aug 2026</span>
+        <span class="ex">(The Federal Reserve Board writes and administers Regulation CC; this is the supervisory guidance issued as Check 21 took effect on 28 October 2004. Primary regulator material.)</span>
+      </span></li>
+      <li><span class="no">[24]</span><span class="body">
+        <span class="ti">OCC / OTS — Regulatory Bulletin RB 37-10, Check 21, February 2005</span>
+        <span class="u"><a href="https://comptrollerofthecurrency.gov/static/ots/bulletins/regulatory-bulletin/ots-rb-37-10.pdf">comptrollerofthecurrency.gov</a> · read 19 Aug 2026</span>
+        <span class="ex">(The Office of the Comptroller of the Currency is the federal regulator of national banks; this bulletin is its supervisory statement on Check 21 implementation. Primary regulator material, historical.)</span>
+      </span></li>
+      <li><span class="no">[14]</span><span class="body">
+        <span class="ti">SEC EDGAR — Deluxe Corporation, CIK 0000027996, Form 424B5</span>
+        <span class="u"><a href="https://www.sec.gov/Archives/edgar/data/0000027996/000104596902002026/d424b5.htm">sec.gov/Archives/edgar/data/0000027996</a> · read 19 Aug 2026</span>
+        <span class="ex">(The Securities and Exchange Commission's public filing archive — the authoritative federal record of a listed company's legal existence, name and filing history. The closest thing to a regulator record available for any vendor in this report.)</span>
+      </span></li>
+      <li><span class="no">[18]</span><span class="body">
+        <span class="ti">ANSI/ASC X9 — ANSI X9.100-170-2010 (R2017), Specifications for the Padlock Icon</span>
+        <span class="u"><a href="https://webstore.ansi.org/standards/ascx9/ansix91001702004">webstore.ansi.org</a> · read 19 Aug 2026 (preview and abstract only — full text is paywalled)</span>
+        <span class="ex">(Accredited Standards Committee X9 writes the American National Standards for financial services. This is the primary published standard governing the padlock icon; the full normative text was not accessible.)</span>
+      </span></li>
+    </ol>
+  </div>
+
+  <div class="srcgroup">
+    <h4>Tier 2 — Vendor and institution primary material</h4>
+    <ol class="sources">
+      <li><span class="no">[4]</span><span class="body">
+        <span class="ti">CheckAdvantage — In-Plant Rush</span>
+        <span class="u"><a href="https://www.checkadvantage.com/in-plant-rush">checkadvantage.com/in-plant-rush</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The vendor's own service page — primary for the noon-Central cut-off, the next-business-day dispatch commitment and the availability of UPS Next Day Air / 2nd Day Air. Vendor material: a statement of intent, not an independent performance record.)</span>
+      </span></li>
+      <li><span class="no">[25]</span><span class="body">
+        <span class="ti">CheckAdvantage — "Proof You Can Trust CheckAdvantage"</span>
+        <span class="u"><a href="https://www.checkadvantage.com/verify">checkadvantage.com/verify</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(A vendor-hosted verification page. Self-certification by definition — listed for completeness and given no evidential weight in this report.)</span>
+      </span></li>
+      <li><span class="no">[11]</span><span class="body">
+        <span class="ti">Deluxe — Shop Deluxe storefront, pricing and shipping tiers</span>
+        <span class="u"><a href="https://www.deluxe.com/shopdeluxe/home">deluxe.com/shopdeluxe/home</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The vendor's own storefront — primary for the $3.55 / $8.55 / $15.55 / $21.55 shipping ladder and the sub-$7 entry price. Direct access was blocked; figures came through the search index and must be confirmed at checkout.)</span>
+      </span></li>
+      <li><span class="no">[26]</span><span class="body">
+        <span class="ti">Deluxe — Rush Orders support page</span>
+        <span class="u"><a href="https://www.deluxe.com/products/support/rush-orders/">deluxe.com/products/support/rush-orders/</a> · <span style="color:var(--bad)">FETCH FAILED — egress blocked</span>, 19 Aug 2026</span>
+        <span class="ex">(This is the page that would have settled Deluxe's production time and rush fee — the single most important unanswered question about the runner-up. Listed as a dead end, not as a source. Open it yourself; it takes thirty seconds.)</span>
+      </span></li>
+      <li><span class="no">[5]</span><span class="body">
+        <span class="ti">Checkomatic — personal checkbook and shipping pages</span>
+        <span class="u"><a href="https://www.checkomatic.com/personal-checkbook">checkomatic.com/personal-checkbook</a> · <a href="https://www.checkomatic.com/shipping">/shipping</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(Vendor's own pricing and shipping terms — primary for the $54.75 checkbook price, the $54.95 SuperRush fee, the first-50-checks wording and the 3–5 business day standard.)</span>
+      </span></li>
+      <li><span class="no">[6]</span><span class="body">
+        <span class="ti">ChecksNextDay — personal checks and shipping/returns pages</span>
+        <span class="u"><a href="https://www.checksnextday.com/personal-checks">checksnextday.com/personal-checks</a> · <a href="https://www.checksnextday.com/shipping-returns">/shipping-returns</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(Vendor's own pages — primary for the +$25 rush fee, the 5pm ET cut-off and the Monday–Thursday next-day restriction. No independent corroboration of performance was located.)</span>
+      </span></li>
+      <li><span class="no">[1]</span><span class="body">
+        <span class="ti">Costco Checks (operated by Harland Clarke Check Printing)</span>
+        <span class="u"><a href="https://www.costcochecks.com/home">costcochecks.com/home</a> · <a href="https://www.costco.com/f/-/check-services">costco.com/f/-/check-services</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The member storefront and Costco's own category page — primary for member pricing ($13.22 / $16.53 per 250), the free 9–12 business day standard shipping, the $19.90 / 7–9 business day "express" tier, and the 25+ security features claim.)</span>
+      </span></li>
+      <li><span class="no">[8]</span><span class="body">
+        <span class="ti">Chase — Deposit Account Agreement: Additional Banking Services and Fees (PDF)</span>
+        <span class="u"><a href="https://www.chase.com/content/dam/chase-ux/documents/personal/checking/ABSF-en.pdf">chase.com · ABSF-en.pdf</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The bank's own binding fee schedule, incorporated by reference into the deposit account contract — the authoritative published record of Chase's charges. The $3-per-counter-check-page figure was reported secondarily and should be confirmed against the current PDF.)</span>
+      </span></li>
+      <li><span class="no">[9]</span><span class="body">
+        <span class="ti">Wells Fargo — Order Checks, Stop Payment on a Check, and Other Requests</span>
+        <span class="u"><a href="https://www.wellsfargo.com/help/checking-savings/order-checks-faqs/">wellsfargo.com/help/checking-savings/order-checks-faqs/</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The bank's own customer help documentation — primary for its own procedures and for the fact that check pricing varies by account type. The ~$3-per-sheet counter-check figure came from secondary reporting, not this page.)</span>
+      </span></li>
+      <li><span class="no">[10]</span><span class="body">
+        <span class="ti">Bank of America — Harland Clarke customer service FAQ (order process) and Personal Schedule of Fees, effective 7 Aug 2026</span>
+        <span class="u"><a href="https://checks.bankofamerica.com/content/customer_help/customer_faq_orderprocess.html">checks.bankofamerica.com</a> · <a href="https://www.bankofamerica.com/salesservices/deposits/resources/personal-schedule-fees/">bankofamerica.com fee schedule</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The bank's own check-ordering portal — note the domain is operated by Harland Clarke — and its current published fee schedule. Primary for the 24–48 hour Check Reorder Express production window and the Preferred Rewards expedited-fee waiver.)</span>
+      </span></li>
+      <li><span class="no">[7]</span><span class="body">
+        <span class="ti">Carousel Checks — storefront and shipping prices</span>
+        <span class="u"><a href="https://www.carouselchecks.com/">carouselchecks.com</a> · <a href="https://www.carouselchecks.com/shipping">/shipping</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(Vendor's own pages — primary for the sub-$7 entry price, the $5 handling charge, the 2–3 week bulk mail window and the 6–10 business day Priority Mail window.)</span>
+      </span></li>
+      <li><span class="no">[20]</span><span class="body">
+        <span class="ti">VersaCheck blank check stock — Staples and Office Depot product listings</span>
+        <span class="u"><a href="https://www.staples.com/services/printing/custom-checks/">staples.com</a> · <a href="https://www.officedepot.com/b/checks/Brand--VersaCheck/N-535959">officedepot.com</a> · <a href="https://versacheckstore.com/pages/checks">versacheckstore.com</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(Retailer product listings and the manufacturer's own store — primary for what the stock is, its security features, and the manufacturer's own caveat that some banks require MICR ink.)</span>
+      </span></li>
+      <li><span class="no">[27]</span><span class="body">
+        <span class="ti">FedEx Office — San Jose printing and copying services, 830 Blossom Hill Rd</span>
+        <span class="u"><a href="https://local.fedex.com/en-us/ca/san-jose/office-2905/printing-copying-services">local.fedex.com · San Jose office 2905</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The operator's own location page — checked to establish whether same-day local printing extends to bank checks. It does not; no MICR or check printing is listed. Included as a documented dead end.)</span>
+      </span></li>
+    </ol>
+  </div>
+
+  <div class="srcgroup">
+    <h4>Tier 3 — Review platforms and accreditation bodies</h4>
+    <ol class="sources">
+      <li><span class="no">[12]</span><span class="body">
+        <span class="ti">Better Business Bureau — CheckAdvantage LLC, De Pere WI (business profile and customer reviews)</span>
+        <span class="u"><a href="https://www.bbb.org/us/wi/de-pere/profile/check-printing/checkadvantage-llc-0694-44153195">bbb.org · CheckAdvantage LLC</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The BBB is a private non-profit that maintains business profiles and mediates complaints. It is not a regulator and inspects nothing; its letter grades are a proprietary algorithm weighted to complaint volume and responsiveness. Useful for confirming an entity exists at a stated address; weak as a quality signal.)</span>
+      </span></li>
+      <li><span class="no">[13]</span><span class="body">
+        <span class="ti">Better Business Bureau — Deluxe Corporation (Minneapolis MN), Deluxe for Business, Checks Unlimited (Colorado Springs CO), Checks In The Mail Inc (New Braunfels TX)</span>
+        <span class="u"><a href="https://www.bbb.org/us/mn/minneapolis/profile/business-forms-and-systems/deluxe-corporation-0704-332">Deluxe Corporation</a> · <a href="https://www.bbb.org/us/co/colorado-springs/profile/check-printing/checks-unlimited-0573-37050555">Checks Unlimited</a> · <a href="https://www.bbb.org/us/tx/new-braunfels/profile/check-printing/checks-in-the-mail-inc-0825-28222">Checks In The Mail</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(Same caveats as above. Used here for the accreditation split — Deluxe Corporation accredited, Checks Unlimited and Checks In The Mail not — and for the complaint themes characterised in the profiles. Individual complaint text was not opened.)</span>
+      </span></li>
+      <li><span class="no">[21]</span><span class="body">
+        <span class="ti">ResellerRatings — Check O Matic (Business Checks), 4.57/5 from 303 reviews</span>
+        <span class="u"><a href="https://www.resellerratings.com/store/Check_O_Matic_Business_Checks">resellerratings.com</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(An established merchant-review platform operating since 1996 with verified-purchase mechanisms. Weaker than BBB or Trustpilot for this category, but a genuine third-party corpus and the only one located for this vendor.)</span>
+      </span></li>
+      <li><span class="no">[28]</span><span class="body">
+        <span class="ti">Trustpilot — Carousel Checks, 4.3/5 "Excellent"</span>
+        <span class="u"><a href="https://www.trustpilot.com/review/www.carouselchecks.com">trustpilot.com/review/www.carouselchecks.com</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(A large open review platform with published moderation policies and a verified-invitation mechanism. Open platforms are gameable in both directions, but at 16,000+ reviews the aggregate is meaningful. The single strongest customer-satisfaction signal in this report — attached to a vendor that cannot meet the deadline.)</span>
+      </span></li>
+      <li><span class="no">[19]</span><span class="body">
+        <span class="ti">Check Payment Systems Association — Guideline for Use of the Enhanced Check Security Features Padlock Icon, rev. January 2025</span>
+        <span class="u"><a href="https://www.cpsa-checks.org/Portals/0/Documents/CPSA%20Padlock%20Icon%20Guidelines%20rev%20Jan%202025.pdf">cpsa-checks.org</a> · read 19 Aug 2026 via search index</span>
+        <span class="ex">(The US trade association for check printers, and the body that created and administers the padlock icon. Authoritative on what the icon certifies — a minimum of three security features against alteration and counterfeiting. A trade body, not a regulator: authoritative on its own standard, not on any member's compliance.)</span>
+      </span></li>
+    </ol>
+  </div>
+
+  <div class="srcgroup">
+    <h4>Tier 4 — Trade, industry and reputable press (supporting, clearly secondary)</h4>
+    <ol class="sources">
+      <li><span class="no">[2]</span><span class="body">
+        <span class="ti">U.S. News &amp; World Report — <em>Where Should You Order Checks?</em></span>
+        <span class="u"><a href="https://www.usnews.com/banking/articles/where-should-you-order-checks">usnews.com/banking</a> · read 19 Aug 2026</span>
+        <span class="ex">(An established news organisation with a staffed personal-finance desk and editorial standards. Corroborated the Costco free-versus-express shipping windows. Secondary reporting on vendor pricing, not an independent test — treat as directional.)</span>
+      </span></li>
+      <li><span class="no">[3]</span><span class="body">
+        <span class="ti">The Penny Hoarder — <em>The Best Places to Order Checks Online</em> and <em>5 Places to Get Cheap Checks</em></span>
+        <span class="u"><a href="https://www.thepennyhoarder.com/bank-accounts/best-place-to-order-checks/">thepennyhoarder.com</a> · read 19 Aug 2026</span>
+        <span class="ex">(A personal-finance publication with named staff writers; the source of the Checks In The Mail per-check pricing. Consumer publication, likely carrying affiliate relationships in this category — treat as directional and confirm at the vendor. Not load-bearing for any conclusion here.)</span>
+      </span></li>
+      <li><span class="no">[15]</span><span class="body">
+        <span class="ti">Harland Clarke / Vericast — corporate site; and John H. Harland Company / M&amp;F Worldwide corporate histories</span>
+        <span class="u"><a href="https://www.harlandclarke.com/">harlandclarke.com</a> · <a href="https://en.wikipedia.org/wiki/John_H._Harland_Company">Wikipedia · John H. Harland Company</a> · read 19 Aug 2026</span>
+        <span class="ex">(The operator's own site is primary for the fact that Harland Clarke fulfils Costco Checks and relaunched as Vericast in February 2020. The encyclopaedia entries are tertiary and used only for uncontroversial corporate history.)</span>
+      </span></li>
+      <li><span class="no">[29]</span><span class="body">
+        <span class="ti">Forbes — <em>From Mailbox to Bank Fraud: Check Theft Is Surging</em> (Steve Weisman, 25 Jan 2026)</span>
+        <span class="u"><a href="https://www.forbes.com/sites/steveweisman/2026/01/25/from-mailbox-to-bank-fraud-check-theft-is-surging-and-how-to-stop-it/">forbes.com</a> · read 19 Aug 2026</span>
+        <span class="ex">(Forbes contributor column, not staff reporting — the weakest tier of Forbes content and not independently fact-checked to the same standard. Source of the $21 billion and 139% figures, which are secondary restatements of USPIS/FinCEN data. Directional; the FinCEN figures at [16] are the load-bearing ones.)</span>
+      </span></li>
+      <li><span class="no">[30]</span><span class="body">
+        <span class="ti">California Lawyers Association, Business Law Section — <em>Summary Judgment Exonerating Bank Accepting Forged Checks Reversed</em>; and Carleton R. Burch, <em>Defense of Common Claims Under the California Commercial Code</em></span>
+        <span class="u"><a href="https://calawyers.org/business-law/summary-judgment-exonerating-bank-accepting-forged-checks-reversed/">calawyers.org</a> · <a href="https://www.amclaw.com/wp-content/uploads/Defense-of-Common-Claims-Under-the-California-Commercial-Code-by-Carleton-R-Burch.pdf">amclaw.com (PDF)</a> · read 19 Aug 2026</span>
+        <span class="ex">(The professional association for California lawyers, and a practitioner treatise from a California defence firm. Credible secondary legal commentary on how Cal. Com. Code § 4406 is applied — but secondary. Read the statute itself before relying on it. Legal information, not legal advice.)</span>
+      </span></li>
+    </ol>
+  </div>
+
+  <div class="srcgroup">
+    <h4>Dead ends — the searches and fetches that failed, with the URL to close them yourself</h4>
+    <ol class="sources">
+      <li><span class="no">[D1]</span><span class="body">
+        <span class="ti">Every direct page fetch in this session was refused</span>
+        <span class="u">deluxe.com · checkadvantage.com · costcochecks.com · checksnextday.com · checkomatic.com · vistaprint.com · consumerfinance.gov — all returned HTTP 403 on CONNECT from the network egress proxy, 19 Aug 2026</span>
+        <span class="ex">(This is a limitation of the environment this report was researched in, not of the sites. Every one of them is publicly reachable from an ordinary browser. It is the reason no figure in this report is stated as a quote.)</span>
+      </span></li>
+      <li><span class="no">[D2]</span><span class="body">
+        <span class="ti">CheckAdvantage Rush Production fee — not published in any reachable source</span>
+        <span class="u">Close it: <a href="https://www.checkadvantage.com/in-plant-rush">checkadvantage.com/in-plant-rush</a>, or add a box to the cart and read the checkout screen</span>
+        <span class="ex">(The single most important unknown in this report. It can move the recommended total by $30 in either direction.)</span>
+      </span></li>
+      <li><span class="no">[D3]</span><span class="body">
+        <span class="ti">Deluxe production time for personal checks — not published in any reachable source</span>
+        <span class="u">Close it: <a href="https://www.deluxe.com/products/support/rush-orders/">deluxe.com/products/support/rush-orders/</a></span>
+        <span class="ex">(If Deluxe turns out to offer same-day or next-day production, it becomes the pick — see "What would change my mind" in the final verdict.)</span>
+      </span></li>
+      <li><span class="no">[D4]</span><span class="body">
+        <span class="ti">BBB profile for Checkomatic — search returned no profile</span>
+        <span class="u">Close it: <a href="https://www.bbb.org/search">bbb.org/search</a></span>
+        <span class="ex">(A failed search is not proof the profile does not exist. BBB's search is name-sensitive and the company may be filed under a registered entity name I do not know.)</span>
+      </span></li>
+      <li><span class="no">[D5]</span><span class="body">
+        <span class="ti">BBB profile and corporate ownership for ChecksNextDay — search returned neither</span>
+        <span class="u">Close it: <a href="https://www.bbb.org/search">bbb.org/search</a></span>
+        <span class="ex">(Again: not proof of absence. But it is the reason this vendor is a pass rather than a contender.)</span>
+      </span></li>
+      <li><span class="no">[D6]</span><span class="body">
+        <span class="ti">Yelp — including the "not recommended" review queue</span>
+        <span class="u">Close it: <a href="https://www.yelp.com/search?find_desc=Same+Day+Printing&amp;find_loc=San+Jose%2C+CA">yelp.com · Same Day Printing, San Jose CA</a></span>
+        <span class="ex">(Unreachable from this session. Note that Yelp is a poor fit for national mail-order check printers in any case — an absent Yelp presence for these vendors is meaningless, not a red flag. It is relevant only for the local print-shop line of enquiry, which was a dead end on other grounds.)</span>
+      </span></li>
+      <li><span class="no">[D7]</span><span class="body">
+        <span class="ti">MICR bank-check printing at any San Jose print shop — no evidence located</span>
+        <span class="u">Close it: <a href="https://www.calprinting.com/">calprinting.com</a> · <a href="https://printingsanjose.com/next-day-printing/">printingsanjose.com</a> · <a href="https://local.fedex.com/en-us/ca/san-jose/office-2905/printing-copying-services">FedEx Office, 830 Blossom Hill Rd</a></span>
+        <span class="ex">(All three offer same-day general printing. None advertises MICR or bank check work, and general commercial printers do not hold CPSA padlock certification. Worth one phone call if you want to close it personally, but I would not expect a different answer.)</span>
+      </span></li>
+      <li><span class="no">[D8]</span><span class="body">
+        <span class="ti">California combined sales tax rate for ZIP 95138 — not verified against the state record</span>
+        <span class="u">Close it: <a href="https://www.cdtfa.ca.gov/">cdtfa.ca.gov</a> — the Department of Tax and Fee Administration's rate lookup</span>
+        <span class="ex">(Modelled at ~9.375% in the cost table. Worth $6–$8 on this order; not worth delaying the purchase over, since checkout will calculate it for you.)</span>
+      </span></li>
+      <li><span class="no">[D9]</span><span class="body">
+        <span class="ti">Sources deliberately excluded, not failed</span>
+        <span class="u">topconsumerreviews.com · top10.com · scam-detector.com · scamadviser.com · gridinsoft.com · scamvoid.net · trustedrevie.ws · us-reviews.com · myprosandcons.com · tenereteam.com · wizelyfinance.com · allaboutfinance.org · reference.com · financenewstalk.com</span>
+        <span class="ex">(All surfaced in search and all rejected. The first two are affiliate-monetised ranking sites; the next six are algorithmic domain-scoring pages that rate a website's malware risk rather than a business's performance; the rest are SEO content farms. Two further results were spam injections on otherwise legitimate domains — a hydrology research site and a university lab page — which is itself a useful reminder of how this category's search results are polluted.)</span>
+      </span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 14. FINAL VERDICT ============ -->
+<section class="final" id="final">
+  <div class="fh">
+    <div class="t">Section 12 — the last word</div>
+    <h2>Final verdict</h2>
+  </div>
+  <div class="fb">
+
+    <div>
+      <h3>The pick</h3>
+      <p class="lede" style="margin-top:8px"><strong>Buy one box of personal checks from CheckAdvantage today, before 10:00 AM Pacific, with Rush Production and UPS Next Day Air to 95138 — and stop at your bank branch on the way to buy three sheets of counter checks for $9.</strong></p>
+      <p class="small" style="margin-top:8px">Call first and get the rush fee. Order on a credit card. Screenshot the promised date. <a href="https://www.checkadvantage.com/in-plant-rush">checkadvantage.com/in-plant-rush</a></p>
+    </div>
+
+    <hr class="sep">
+
+    <div>
+      <h3>Why I chose it</h3>
+      <p>You gave me one hard constraint and I let it govern everything. Not "fast" — <em>Saturday</em>. Once you treat a date as a requirement rather than a preference, most of this market stops being a choice at all, because most of it cannot produce a date. It produces a range that includes your deadline at the optimistic end, which is not the same thing.</p>
+      <p>The evidence that moved me most, and roughly how much weight I gave each piece:</p>
+      <ul>
+        <li><strong>Heaviest — the structure of CheckAdvantage's offer.</strong> They sell production and transit as two separately purchasable things: order before noon Central, it leaves the building the next business day; then you pick your air service. That decomposition is what makes a date calculable rather than hoped for. Wednesday order → Thursday dispatch → Friday delivery, with a day of slack. Every other vendor except two sells a blended number that hides the queue.</li>
+        <li><strong>Heavy — the second failure path also works.</strong> This is what actually decided it over the faster options. If the rush slips a day, 2nd Day Air still lands Monday. If UPS misses a day, you are still inside the three-business-day reading. A recommendation that only works when everything goes right is not a recommendation, it is a bet.</li>
+        <li><strong>Moderate — the BBB file.</strong> CheckAdvantage LLC, De Pere, Wisconsin, rated A−. I want to be careful not to oversell this: BBB is not a regulator, the grade is a proprietary algorithm, and A− on a thin file means "few complaints" more than "verified good." But it establishes that a real company exists at a real address in a real state, which is more than I could establish for two of the three fast vendors. Against a category with no licensing regime at all, that floor did real work.</li>
+        <li><strong>Moderate — price discipline.</strong> Roughly $80 against Checkomatic's $110-plus for the same outcome. Not decisive on its own, but when two options both clear the deadline, the cheaper one wins.</li>
+        <li><strong>Light — the self-reported performance claims.</strong> 99% on time, 99.9% error-free. Unaudited, undefined, uncorroborated. I gave them essentially no weight and audited them accordingly in section 08.</li>
+      </ul>
+      <p>The counter-check hedge is not a hedge against CheckAdvantage. It is a hedge against the whole plan, and it costs less than lunch. Nine dollars buys you the right to be relaxed about a UPS delay. I would make that trade every time.</p>
+    </div>
+
+    <hr class="sep">
+
+    <div>
+      <h3>Why each of the others is out</h3>
+      <div class="elim">
+        <div class="row">
+          <div class="nm">Deluxe</div>
+          <div class="tx"><strong>Genuinely good at:</strong> being the most trustworthy institution in the category — 1915, NYSE-listed, four thousand banking partners, BBB accredited, and the only shipping ladder in this report published honestly enough to plan around. <strong>What knocked it out:</strong> it publishes no production time, and the category norm of two to three days in the plant pushes delivery to Monday or later. It lost on a number it does not disclose, which is a frustrating way to lose. <strong>Stays as:</strong> yes — the named runner-up, and my recommendation the moment your deadline moves.</div>
+        </div>
+        <div class="row">
+          <div class="nm">Checkomatic</div>
+          <div class="tx"><strong>Genuinely good at:</strong> the most explicit speed promise anyone makes — same-day processing plus overnight delivery, written as a guarantee. <strong>What knocked it out:</strong> $109.70 before tax for an outcome CheckAdvantage should reach for $80, and an overnight guarantee capped at the first fifty checks. Paying a third more for a promise with an asterisk. <strong>Stays as:</strong> yes — the emergency lever. If CheckAdvantage's rush fee comes back above $45, call Checkomatic and buy whichever is cheaper.</div>
+        </div>
+        <div class="row">
+          <div class="nm">ChecksNextDay</div>
+          <div class="tx"><strong>Genuinely good at:</strong> pricing the rush honestly at $25 — half of Checkomatic's — behind an eighteen-year-old domain, which is not nothing. <strong>What knocked it out:</strong> not one independent review on a platform I trust. The 4.9 stars sit in a widget the merchant installs on its own site. I am not calling them anything; I am saying I could not verify them, and you are about to send someone your routing and account numbers against a deadline you cannot miss. <strong>Stays as:</strong> only as a third call if both the others fail.</div>
+        </div>
+        <div class="row">
+          <div class="nm">Costco Checks</div>
+          <div class="tx"><strong>Genuinely good at:</strong> being the best product here, full stop. Eleven cents a check at volume, twenty-five-plus security features, free trackable shipping, Harland Clarke behind it. <strong>What knocked it out:</strong> its paid "express" is seven to nine business days — roughly three times your window, with no production upgrade available at any price. <strong>Stays as:</strong> not a back-up, a follow-up. Order 500 checks from them in September for about $30.</div>
+        </div>
+        <div class="row">
+          <div class="nm">Carousel Checks</div>
+          <div class="tx"><strong>Genuinely good at:</strong> keeping customers happy — 4.3 on Trustpilot across more than sixteen thousand five-star reviews, the strongest satisfaction signal in this report by an order of magnitude. <strong>What knocked it out:</strong> Priority Mail at six to ten business days, bulk at two to three weeks. Nothing faster exists. <strong>Stays as:</strong> the one I would recommend to someone with no deadline at all.</div>
+        </div>
+        <div class="row">
+          <div class="nm">Checks In The Mail</div>
+          <div class="tx"><strong>Genuinely good at:</strong> low entry pricing — twenty-nine cents a check on a small pad — at real scale. <strong>What knocked it out:</strong> $19.90 "express" that takes seven to nine business days, and no BBB accreditation. <strong>Stays as:</strong> no. Costco and Carousel both beat it on the axes where it competes.</div>
+        </div>
+        <div class="row">
+          <div class="nm">Bank standard reorder (Chase / BofA / Wells Fargo)</div>
+          <div class="tx"><strong>Genuinely good at:</strong> convenience and correctness — the bank already has your details, so a MICR error is near-impossible, and some account tiers make it free. <strong>What knocked it out:</strong> seven to fourteen business days, and Chase states plainly that ordering in a branch does not speed it up. <strong>One exception worth a call:</strong> if you bank with Bank of America, their Check Reorder Express is documented as producing and shipping in 24–48 hours, and Preferred Rewards Platinum Honors and Premier tiers waive the expedited fee. If that is you, phone them before you order anything — it could be free and fast. <strong>Stays as:</strong> the counter-check hedge only, which you should do regardless.</div>
+        </div>
+        <div class="row">
+          <div class="nm">VersaCheck blank stock, printed at home</div>
+          <div class="tx"><strong>Genuinely good at:</strong> being available in San Jose within the hour, with real security features on the paper. <strong>What knocked it out:</strong> the manufacturer's own caveat that some banks require MICR ink, which a home printer does not produce. A rejected check is worse than a late one. <strong>Stays as:</strong> a true last resort if everything else collapses.</div>
+        </div>
+        <div class="row">
+          <div class="nm">Local San Jose print shops</div>
+          <div class="tx"><strong>Genuinely good at:</strong> same-day turnaround on commercial print — Cal Printing has forty years in the Bay Area and FedEx Office on Blossom Hill turns most jobs the same day. <strong>What knocked it out:</strong> bank checks are not commercial print. They need certified security stock and magnetic ink, and no local shop advertises either. <strong>Stays as:</strong> no. Closed as a dead end at [D7].</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <div class="callout blue" style="margin:0">
+      <div class="ch">What would change my mind</div>
+      <h3>One fact: Deluxe's production time.</h3>
+      <p>If Deluxe publishes — or tells you on the phone — that it can print and release a personal check order in <strong>one business day or less</strong>, my recommendation flips to <strong>Deluxe</strong> immediately, at their $21.55 one-to-two-business-day tier, for a landed total in the $30–$45 range. That would mean roughly half the price, from a 111-year-old NYSE-listed company with BBB accreditation and a formal complaint channel, arriving inside the same window.</p>
+      <p>I could not obtain that number — <code>deluxe.com/products/support/rush-orders/</code> was blocked from this session [D3]. It is one page load for you. If it comes back "next business day," buy Deluxe. If it comes back "2–3 business days," or if it is not stated at all, buy CheckAdvantage and do not look back.</p>
+      <p class="small"><strong>A second, weaker trigger:</strong> if CheckAdvantage's rush fee plus air freight exceeds $65, the price gap to Checkomatic's guaranteed overnight narrows to under $20 — and at that margin I would take the explicit written guarantee over the cheaper dispatch commitment. Buy Checkomatic instead.</p>
+    </div>
+
+    <hr class="sep">
+
+    <div class="conf-meter">
+      <h3>Confidence, and what sits underneath it</h3>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-bottom:6px">
+          <span><strong>That the recommended route delivers by Saturday 22 August</strong></span><span><strong>High — 80%</strong></span>
+        </div>
+        <div class="bar"><i style="width:80%"></i></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-bottom:6px">
+          <span><strong>That CheckAdvantage is the right vendor among those that can hit the date</strong></span><span><strong>Moderate-high — 70%</strong></span>
+        </div>
+        <div class="bar"><i style="width:70%;background:var(--good)"></i></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-bottom:6px">
+          <span><strong>That the landed total lands in the $70–$85 band</strong></span><span><strong>Moderate — 55%</strong></span>
+        </div>
+        <div class="bar"><i style="width:55%;background:var(--warn)"></i></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-bottom:6px">
+          <span><strong>That the counter-check hedge works and costs under $10</strong></span><span><strong>Very high — 92%</strong></span>
+        </div>
+        <div class="bar"><i style="width:92%"></i></div>
+      </div>
+
+      <p class="small" style="margin-top:6px"><strong>Still unconfirmed underneath this call:</strong> the Rush Production fee, which I have modelled rather than read. Deluxe's production time, which would flip the recommendation if it came back short. CheckAdvantage's padlock certification, which I assume from category norms rather than a certificate. The 2001 founding date and the A− grade, both retrieved rather than read on BBB's page. Whether the reported CheckAdvantage logo-on-checks issue is real. And the structural caveat that runs under every figure in this report — <strong>not one vendor page was opened directly; all of it came through a search index because this session's network refused every outbound fetch.</strong></p>
+      <p class="small">None of those unknowns move the shape of the decision. Only one of them — Deluxe's production time — could move the name. Everything else moves the price by twenty or thirty dollars, and you will see the real number on the checkout screen before you pay.</p>
+      <p class="small" style="color:var(--ink-3)"><em>Every fact in this report was read on 19 August 2026. Prices and delivery windows in this category change without notice. This is research, not financial or legal advice.</em></p>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<script>
+document.querySelectorAll("button.copy").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var el = document.getElementById(btn.dataset.t);
+    if(!el){ return; }
+    var text = el.textContent;
+    var done = function(){
+      btn.textContent = "Copied";
+      btn.dataset.done = "1";
+      setTimeout(function(){ btn.textContent = "Copy"; btn.dataset.done = ""; }, 1900);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+});
+function fallback(text, done){
+  var ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.top = "-1000px";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); done(); } catch(e){ /* clipboard unavailable */ }
+  document.body.removeChild(ta);
+}
+</script>
